@@ -1,0 +1,22 @@
+export default {
+    // global-error-boundary.tsx
+    'Oops, something went wrong': 'Oops, something went wrong',
+    'More likely there are some issues with the tool': 'More likely there are some issues with the tool',
+    'What has happened?': 'What has happened?',
+    'Program error has just occured': 'Program error has just occured',
+    'Error message': 'Error message',
+    'What should I do?': 'What should I do?',
+    'Copy': 'Copy',
+    'the error message to clipboard': 'the error message to clipboard',
+    'Notify an administrator or submit the issue directly on': 'Notify an administrator or submit the issue directly on',
+    'Please, provide also:': 'Please, provide also:',
+    'Steps to reproduce the issue': 'Steps to reproduce the issue',
+    'Your operating system and browser version': 'Your operating system and browser version',
+    'CVAT version': 'CVAT version',
+    'Update': 'Update',
+    'update': 'update',
+    'the page': 'the page',
+    'Press': 'Press',
+    'here': 'here',
+    'if you wish CVAT tried to restore your annotation progress or': 'if you wish CVAT tried to restore your annotation progress or',
+  }
