@@ -1,5 +1,5 @@
 export default {
-    // model-runner-modal.tsx
+    // detector-runner.tsx
     'The selected model does not include any lables': 'The selected model does not include any lables',
     'Model:': 'Model:',
     'Select a model': 'Select a model',
@@ -10,5 +10,7 @@ export default {
     'Maximum distance': 'Maximum distance',
     'Maximum distance between shapes that can be merged': 'Maximum distance between shapes that can be merged',
     'Clean old annotations': 'Clean old annotations',
+    'Annotate': 'Annotate',
+    // model-runner-dialog.tsx
     'Automatic annotation': 'Automatic annotation',
   }

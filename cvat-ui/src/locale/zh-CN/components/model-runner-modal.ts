@@ -1,5 +1,5 @@
 export default {
-    // model-runner-modal.tsx
+    // detector-runner.tsx
     'The selected model does not include any lables': '选中的模型不包含任何labels',
     'Model:': '模型：',
     'Select a model': '选择一个模型',
@@ -10,5 +10,7 @@ export default {
     'Maximum distance': '最大距离',
     'Maximum distance between shapes that can be merged': '可合并形状之间的最大距离',
     'Clean old annotations': '清空旧的标注',
+    'Annotate': '标注',
+    // model-runner-dialog.tsx
     'Automatic annotation': '自动化标注',
   }

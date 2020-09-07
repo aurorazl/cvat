@@ -47,6 +47,15 @@ export default {
     'Tag': 'Tag',
     //annotation-page\standard-workspace\controls-side-bar\split-control.tsx
     'Split a track ${switchSplitShortcut}': 'Split a track ${switchSplitShortcut}',
+    // annotation-page\standard-workspace\controls-side-bar\tools-control.tsx
+    'Canvas raises event "canvas.interacted" when interaction is off': 'Canvas raises event "canvas.interacted" when interaction is off',
+    'Interaction error occured': 'Interaction error occured',
+    'Interactor': 'Interactor',
+    'Interact': 'Interact',
+    'Detection error occured': 'Detection error occured',
+    'AI Tools': 'AI Tools',
+    'Making a server request': 'Making a server request',
+    'Waiting for a server response..': 'Waiting for a server response..',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\color-picker.tsx
     'Select color': 'Select color',
