@@ -11,6 +11,8 @@ import DumpSubmenu from './dump-submenu';
 import LoadSubmenu from './load-submenu';
 import ExportSubmenu from './export-submenu';
 
+import { useTranslation } from 'react-i18next';
+
 interface Props {
     taskID: number;
     taskMode: string;
@@ -35,6 +37,7 @@ export enum Actions {
 }
 
 export default function ActionsMenuComponent(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         taskID,
         taskMode,
@@ -61,15 +64,15 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
             if (action === Actions.LOAD_TASK_ANNO) {
                 if (file) {
                     Modal.confirm({
-                        title: 'Current annotation will be lost',
-                        content: 'You are going to upload new annotations to this task. Continue?',
+                        title: t('Current annotation will be lost'),
+                        content: t('You are going to upload new annotations to this task. Continue?'),
                         onOk: () => {
                             onClickMenu(copyParams, file);
                         },
                         okButtonProps: {
                             type: 'danger',
                         },
-                        okText: 'Update',
+                        okText: t('Update'),
                     });
                 }
             } else {
@@ -77,15 +80,15 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
             }
         } else if (copyParams.key === Actions.DELETE_TASK) {
             Modal.confirm({
-                title: `The task ${taskID} will be deleted`,
-                content: 'All related data (images, annotations) will be lost. Continue?',
+                title: t(`The task ${taskID} will be deleted`),
+                content: t('All related data (images, annotations) will be lost. Continue?'),
                 onOk: () => {
                     onClickMenu(copyParams);
                 },
                 okButtonProps: {
                     type: 'danger',
                 },
-                okText: 'Delete',
+                okText: t('Delete'),
             });
         } else {
             onClickMenu(copyParams);
@@ -123,15 +126,15 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
                     menuKey: Actions.EXPORT_TASK_DATASET,
                 })
             }
-            {!!bugTracker && <Menu.Item key={Actions.OPEN_BUG_TRACKER}>Open bug tracker</Menu.Item>}
+            {!!bugTracker && <Menu.Item key={Actions.OPEN_BUG_TRACKER}>{t('Open bug tracker')}</Menu.Item>}
             <Menu.Item
                 disabled={inferenceIsActive}
                 key={Actions.RUN_AUTO_ANNOTATION}
             >
-                Automatic annotation
+                {t('Automatic annotation')}
             </Menu.Item>
             <hr />
-            <Menu.Item key={Actions.DELETE_TASK}>Delete</Menu.Item>
+            <Menu.Item key={Actions.DELETE_TASK}>{t('Delete')}</Menu.Item>
         </Menu>
     );
 }

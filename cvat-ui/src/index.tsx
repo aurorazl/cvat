@@ -36,6 +36,8 @@ import {
     NotificationsState,
 } from './reducers/interfaces';
 
+import './i18n';
+
 createCVATStore(createRootReducer);
 const cvatStore = getCVATStore();
 

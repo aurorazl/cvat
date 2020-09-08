@@ -12,11 +12,14 @@ export default {
     'From': '起始',
     'To:': '终止:',
     'Step:': '步长:',
+    // annotation-page\attribute-annotation-workspace\attribute-annotation-sidebar\attribute-switcher.tsx
+    'Previous attribute ${normalizedKeyMap.PREVIOUS_ATTRIBUTE}': '前一个属性 ${normalizedKeyMap.PREVIOUS_ATTRIBUTE}',
+    'Next attribute ${normalizedKeyMap.NEXT_ATTRIBUTE}': '后一个属性 ${normalizedKeyMap.NEXT_ATTRIBUTE}',
     //annotation-page\attribute-annotation-workspace\attribute-annotation-sidebar\object-switcher.tsx
     'Previous object ${normalizedKeyMap.PREVIOUS_OBJECT}': '上一个对象 ${normalizedKeyMap.PREVIOUS_OBJECT}',
     'Next object ${normalizedKeyMap.NEXT_OBJECT}': '下一个对象 ${normalizedKeyMap.NEXT_OBJECT}',
     //annotation-page\standard-workspace\controls-side-bar\cursor-control.tsx
-    'Cursor ${cursorShortkey}': '光标 ${cursorShortkey}',
+    'Cursor ${cursorShortkey}': '光标 {{cursorShortkey}}',
     //annotation-page\standard-workspace\controls-side-bar\draw-shape-popover.tsx
     'Draw new ${shapeType}': '绘制新的 ${shapeType}',
     'Label': 'Label',
@@ -31,7 +34,7 @@ export default {
     'Fit the image [Double Click]': '适应图片[双击]',
     //annotation-page\standard-workspace\controls-side-bar\group-control.tsx
     'Group shapes/tracks ${switchGroupShortcut}.': '分组 shapes/tracks ${switchGroupShortcut}.',
-    'Select and press ${resetGroupShortcut} to reset a group': '选中并按下${resetGroupShortcut}重置分组',
+    ' Select and press ${resetGroupShortcut} to reset a group': '选中并按下${resetGroupShortcut}重置分组',
     //annotation-page\standard-workspace\controls-side-bar\merge-control.tsx
     'Merge shapes/tracks ${switchMergeShortcut}': '合并 shapes/tracks ${switchMergeShortcut}',
     //annotation-page\standard-workspace\controls-side-bar\move-control.tsx

@@ -10,6 +10,8 @@ import { GroupIcon } from 'icons';
 import { Canvas } from 'cvat-canvas-wrapper';
 import { ActiveControl } from 'reducers/interfaces';
 
+import { useTranslation } from 'react-i18next';
+
 interface Props {
     canvasInstance: Canvas;
     activeControl: ActiveControl;
@@ -19,6 +21,7 @@ interface Props {
 }
 
 function GroupControl(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         switchGroupShortcut,
         resetGroupShortcut,
@@ -42,8 +45,8 @@ function GroupControl(props: Props): JSX.Element {
             },
         };
 
-    const title = `Group shapes/tracks ${switchGroupShortcut}.`
-        + ` Select and press ${resetGroupShortcut} to reset a group`;
+    const title = t('Group shapes/tracks ${switchGroupShortcut}.').replace('${switchGroupShortcut}', `${switchGroupShortcut}`)
+        + t(' Select and press ${resetGroupShortcut} to reset a group').replace('${resetGroupShortcut}', `${resetGroupShortcut}`);
     return (
         <Tooltip title={title} placement='right' mouseLeaveDelay={0}>
             <Icon {...dynamicIconProps} component={GroupIcon} />

@@ -10,6 +10,8 @@ import { SplitIcon } from 'icons';
 import { Canvas } from 'cvat-canvas-wrapper';
 import { ActiveControl } from 'reducers/interfaces';
 
+import { useTranslation } from 'react-i18next';
+
 interface Props {
     canvasInstance: Canvas;
     activeControl: ActiveControl;
@@ -18,6 +20,7 @@ interface Props {
 }
 
 function SplitControl(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         switchSplitShortcut,
         activeControl,
@@ -41,7 +44,7 @@ function SplitControl(props: Props): JSX.Element {
         };
 
     return (
-        <Tooltip title={`Split a track ${switchSplitShortcut}`} placement='right' mouseLeaveDelay={0}>
+        <Tooltip title={t('Split a track ${switchSplitShortcut}').replace('${switchSplitShortcut}', `${switchSplitShortcut}`)} placement='right' mouseLeaveDelay={0}>
             <Icon {...dynamicIconProps} component={SplitIcon} />
         </Tooltip>
     );

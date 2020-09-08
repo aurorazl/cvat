@@ -8,6 +8,7 @@ import Text from 'antd/lib/typography/Text';
 import Tooltip from 'antd/lib/tooltip';
 import Button from 'antd/lib/button';
 
+import { useTranslation } from 'react-i18next';
 interface Props {
     currentLabel: string;
     clientID: number;
@@ -19,6 +20,7 @@ interface Props {
 }
 
 function ObjectSwitcher(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         currentLabel,
         clientID,
@@ -32,7 +34,7 @@ function ObjectSwitcher(props: Props): JSX.Element {
     const title = `${currentLabel} ${clientID} [${currentIndex + 1}/${objectsCount}]`;
     return (
         <div className='attribute-annotation-sidebar-object-switcher'>
-            <Tooltip title={`Previous object ${normalizedKeyMap.PREVIOUS_OBJECT}`} mouseLeaveDelay={0}>
+            <Tooltip title={t('Previous object ${normalizedKeyMap.PREVIOUS_OBJECT}').replace('${normalizedKeyMap.PREVIOUS_OBJECT}', `${normalizedKeyMap.PREVIOUS_OBJECT}`)} mouseLeaveDelay={0}>
                 <Button disabled={objectsCount <= 1} onClick={() => nextObject(-1)}>
                     <Icon type='left' />
                 </Button>
@@ -42,7 +44,7 @@ function ObjectSwitcher(props: Props): JSX.Element {
                 <Text className='cvat-text'>{` ${clientID} `}</Text>
                 <Text strong>{`[${currentIndex + 1}/${objectsCount}]`}</Text>
             </Tooltip>
-            <Tooltip title={`Next object ${normalizedKeyMap.NEXT_OBJECT}`} mouseLeaveDelay={0}>
+            <Tooltip title={t('Next object ${normalizedKeyMap.NEXT_OBJECT}').replace('${normalizedKeyMap.NEXT_OBJECT}', `${normalizedKeyMap.NEXT_OBJECT}`)} mouseLeaveDelay={0}>
                 <Button disabled={objectsCount <= 1} onClick={() => nextObject(1)}>
                     <Icon type='right' />
                 </Button>

@@ -12,6 +12,7 @@ import Input from 'antd/lib/input';
 
 import consts from 'consts';
 
+import { useTranslation } from 'react-i18next';
 interface InputElementParameters {
     clientID: number;
     attrID: number;
@@ -22,6 +23,7 @@ interface InputElementParameters {
 }
 
 function renderInputElement(parameters: InputElementParameters): JSX.Element {
+    const { t } = useTranslation();
     const {
         inputType,
         attrID,
@@ -47,7 +49,7 @@ function renderInputElement(parameters: InputElementParameters): JSX.Element {
 
     const renderSelect = (): JSX.Element => (
         <>
-            <Text strong>Values: </Text>
+            <Text strong>{t('Values:')} </Text>
             <div className='attribute-annotation-sidebar-attr-elem-wrapper'>
                 <Select
                     value={currentValue}
@@ -69,7 +71,7 @@ function renderInputElement(parameters: InputElementParameters): JSX.Element {
 
     const renderRadio = (): JSX.Element => (
         <>
-            <Text strong>Values: </Text>
+            <Text strong>{t('Values:')} </Text>
             <div className='attribute-annotation-sidebar-attr-elem-wrapper'>
                 <Radio.Group
                     value={currentValue}
@@ -101,7 +103,7 @@ function renderInputElement(parameters: InputElementParameters): JSX.Element {
 
     const renderText = (): JSX.Element => (
         <>
-            {inputType === 'number' ? <Text strong>Number: </Text> : <Text strong>Text: </Text>}
+            {inputType === 'number' ? <Text strong>{t('Number:')} </Text> : <Text strong>{t('Text:')} </Text>}
             <div className='attribute-annotation-sidebar-attr-elem-wrapper'>
                 <Input
                     autoFocus
@@ -151,6 +153,7 @@ interface ListParameters {
 }
 
 function renderList(parameters: ListParameters): JSX.Element | null {
+    const { t } = useTranslation();
     const { inputType, values, onChange } = parameters;
 
     if (inputType === 'checkbox') {
@@ -240,15 +243,15 @@ function renderList(parameters: ListParameters): JSX.Element | null {
         return (
             <div className='attribute-annotation-sidebar-attr-list-wrapper'>
                 <div>
-                    <Text strong>From:</Text>
+                    <Text strong>{t('From:')}</Text>
                     <Text>{` ${values[0]}`}</Text>
                 </div>
                 <div>
-                    <Text strong>To:</Text>
+                    <Text strong>{t('To:')}</Text>
                     <Text>{` ${values[1]}`}</Text>
                 </div>
                 <div>
-                    <Text strong>Step:</Text>
+                    <Text strong>{t('Step:')}</Text>
                     <Text>{` ${values[2]}`}</Text>
                 </div>
             </div>

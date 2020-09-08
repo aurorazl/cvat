@@ -29,6 +29,7 @@ import AttributeSwitcher from './attribute-switcher';
 import ObjectBasicsEditor from './object-basics-edtior';
 import AttributeEditor from './attribute-editor';
 
+import { useTranslation } from 'react-i18next';
 
 interface StateToProps {
     activatedStateID: number | null;
@@ -108,6 +109,7 @@ function mapDispatchToProps(dispatch: ThunkDispatch): DispatchToProps {
 }
 
 function AttributeAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Element {
+    const { t } = useTranslation();
     const {
         labels,
         states,
@@ -304,8 +306,8 @@ function AttributeAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.
                         ant-layout-sider-zero-width-trigger-left`}
                     onClick={collapse}
                 >
-                    {sidebarCollapsed ? <Icon type='menu-fold' title='Show' />
-                        : <Icon type='menu-unfold' title='Hide' />}
+                    {sidebarCollapsed ? <Icon type='menu-fold' title={t('Show')} />
+                        : <Icon type='menu-unfold' title={t('Hide')} />}
                 </span>
                 <GlobalHotKeys keyMap={subKeyMap} handlers={handlers} allowChanges />
                 <Row className='cvat-objects-sidebar-filter-input'>
@@ -373,7 +375,7 @@ function AttributeAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.
                             </>
                         ) : (
                             <div className='attribute-annotations-sidebar-not-found-wrapper'>
-                                <Text strong>No attributes found</Text>
+                                <Text strong>{t('No attributes found')}</Text>
                             </div>
                         )
                 }
@@ -392,8 +394,8 @@ function AttributeAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.
                     ant-layout-sider-zero-width-trigger-left`}
                 onClick={collapse}
             >
-                {sidebarCollapsed ? <Icon type='menu-fold' title='Show' />
-                    : <Icon type='menu-unfold' title='Hide' />}
+                {sidebarCollapsed ? <Icon type='menu-fold' title={t('Show')} />
+                    : <Icon type='menu-unfold' title={t('Hide')} />}
             </span>
             <Row className='cvat-objects-sidebar-filter-input'>
                 <Col>
@@ -401,7 +403,7 @@ function AttributeAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.
                 </Col>
             </Row>
             <div className='attribute-annotations-sidebar-not-found-wrapper'>
-                <Text strong>No objects found</Text>
+                <Text strong>{t('No objects found')}</Text>
             </div>
         </Layout.Sider>
     );

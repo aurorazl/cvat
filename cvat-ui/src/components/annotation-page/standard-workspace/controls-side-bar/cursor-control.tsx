@@ -10,6 +10,8 @@ import { CursorIcon } from 'icons';
 import { ActiveControl } from 'reducers/interfaces';
 import { Canvas } from 'cvat-canvas-wrapper';
 
+import { useTranslation } from 'react-i18next';
+
 interface Props {
     canvasInstance: Canvas;
     cursorShortkey: string;
@@ -17,6 +19,7 @@ interface Props {
 }
 
 function CursorControl(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         canvasInstance,
         activeControl,
@@ -24,7 +27,7 @@ function CursorControl(props: Props): JSX.Element {
     } = props;
 
     return (
-        <Tooltip title={`Cursor ${cursorShortkey}`} placement='right' mouseLeaveDelay={0}>
+        <Tooltip title={t('Cursor ${cursorShortkey}', {cursorShortkey: `${cursorShortkey}`})} placement='right' mouseLeaveDelay={0}>
             <Icon
                 component={CursorIcon}
                 className={activeControl === ActiveControl.CURSOR

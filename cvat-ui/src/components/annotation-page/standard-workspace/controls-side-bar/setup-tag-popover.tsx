@@ -8,6 +8,7 @@ import Select from 'antd/lib/select';
 import Button from 'antd/lib/button';
 import Tooltip from 'antd/lib/tooltip';
 import Text from 'antd/lib/typography/Text';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     labels: any[];
@@ -20,6 +21,7 @@ interface Props {
 }
 
 function SetupTagPopover(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         labels,
         selectedLabeID,
@@ -32,12 +34,12 @@ function SetupTagPopover(props: Props): JSX.Element {
         <div className='cvat-draw-shape-popover-content'>
             <Row type='flex' justify='start'>
                 <Col>
-                    <Text className='cvat-text-color' strong>Setup tag</Text>
+                    <Text className='cvat-text-color' strong>{t('Setup tag')}</Text>
                 </Col>
             </Row>
             <Row type='flex' justify='start'>
                 <Col>
-                    <Text className='cvat-text-color'>Label</Text>
+                    <Text className='cvat-text-color'>{t('Label')}</Text>
                 </Col>
             </Row>
             <Row type='flex' justify='center'>
@@ -61,9 +63,9 @@ function SetupTagPopover(props: Props): JSX.Element {
             </Row>
             <Row type='flex' justify='space-around'>
                 <Col span={24}>
-                    <Tooltip title={`Press ${repeatShapeShortcut} to add a tag again`} mouseLeaveDelay={0}>
+                    <Tooltip title={t('Press ${repeatShapeShortcut} to add a tag again').replace('${repeatShapeShortcut}', `${repeatShapeShortcut}`)} mouseLeaveDelay={0}>
                         <Button onClick={() => onSetup(selectedLabeID)}>
-                            Tag
+                        {t('Tag')}
                         </Button>
                     </Tooltip>
                 </Col>

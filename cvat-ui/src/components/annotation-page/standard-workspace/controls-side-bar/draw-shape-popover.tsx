@@ -15,6 +15,8 @@ import { RectDrawingMethod, CuboidDrawingMethod } from 'cvat-canvas-wrapper';
 import { ShapeType } from 'reducers/interfaces';
 import { clamp } from 'utils/math';
 
+import { useTranslation } from 'react-i18next';
+
 interface Props {
     shapeType: ShapeType;
     labels: any[];
@@ -33,6 +35,7 @@ interface Props {
 }
 
 function DrawShapePopoverComponent(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         labels,
         shapeType,
@@ -54,12 +57,12 @@ function DrawShapePopoverComponent(props: Props): JSX.Element {
         <div className='cvat-draw-shape-popover-content'>
             <Row type='flex' justify='start'>
                 <Col>
-                    <Text className='cvat-text-color' strong>{`Draw new ${shapeType}`}</Text>
+                    <Text className='cvat-text-color' strong>{t('Draw new ${shapeType}').replace('${shapeType}', `${shapeType}`)}</Text>
                 </Col>
             </Row>
             <Row type='flex' justify='start'>
                 <Col>
-                    <Text className='cvat-text-color'>Label</Text>
+                    <Text className='cvat-text-color'>{t('Label')}</Text>
                 </Col>
             </Row>
             <Row type='flex' justify='center'>
@@ -95,7 +98,7 @@ function DrawShapePopoverComponent(props: Props): JSX.Element {
                     <>
                         <Row>
                             <Col>
-                                <Text className='cvat-text-color'> Drawing method </Text>
+                                <Text className='cvat-text-color'> {t('Drawing method')} </Text>
                             </Col>
                         </Row>
                         <Row type='flex' justify='space-around'>
@@ -109,13 +112,13 @@ function DrawShapePopoverComponent(props: Props): JSX.Element {
                                         value={RectDrawingMethod.CLASSIC}
                                         style={{ width: 'auto' }}
                                     >
-                                        By 2 Points
+                                        {t('By 2 Points')}
                                     </Radio>
                                     <Radio
                                         value={RectDrawingMethod.EXTREME_POINTS}
                                         style={{ width: 'auto' }}
                                     >
-                                        By 4 Points
+                                        {t('By 4 Points')}
                                     </Radio>
                                 </Radio.Group>
                             </Col>
@@ -128,7 +131,7 @@ function DrawShapePopoverComponent(props: Props): JSX.Element {
                     <>
                         <Row>
                             <Col>
-                                <Text className='cvat-text-color'> Drawing method </Text>
+                                <Text className='cvat-text-color'> {t('Drawing method')} </Text>
                             </Col>
                         </Row>
                         <Row type='flex' justify='space-around'>
@@ -142,13 +145,13 @@ function DrawShapePopoverComponent(props: Props): JSX.Element {
                                         value={CuboidDrawingMethod.CLASSIC}
                                         style={{ width: 'auto' }}
                                     >
-                                        From rectangle
+                                        {t('From rectangle')}
                                     </Radio>
                                     <Radio
                                         value={CuboidDrawingMethod.CORNER_POINTS}
                                         style={{ width: 'auto' }}
                                     >
-                                        By 4 Points
+                                        {t('By 4 Points')}
                                     </Radio>
                                 </Radio.Group>
                             </Col>
@@ -160,7 +163,7 @@ function DrawShapePopoverComponent(props: Props): JSX.Element {
                 shapeType !== ShapeType.RECTANGLE && shapeType !== ShapeType.CUBOID && (
                     <Row type='flex' justify='space-around' align='middle'>
                         <Col span={14}>
-                            <Text className='cvat-text-color'> Number of points: </Text>
+                            <Text className='cvat-text-color'> {t('Number of points:')} </Text>
                         </Col>
                         <Col span={10}>
                             <InputNumber
@@ -184,16 +187,16 @@ function DrawShapePopoverComponent(props: Props): JSX.Element {
             }
             <Row type='flex' justify='space-around'>
                 <Col span={12}>
-                    <Tooltip title={`Press ${repeatShapeShortcut} to draw again`} mouseLeaveDelay={0}>
+                    <Tooltip title={t('Press ${repeatShapeShortcut} to draw again').replace('${repeatShapeShortcut}', `${repeatShapeShortcut}`)} mouseLeaveDelay={0}>
                         <Button onClick={onDrawShape}>
-                            Shape
+                        {t('Shape')}
                         </Button>
                     </Tooltip>
                 </Col>
                 <Col span={12}>
-                    <Tooltip title={`Press ${repeatShapeShortcut} to draw again`} mouseLeaveDelay={0}>
+                    <Tooltip title={t('Press ${repeatShapeShortcut} to draw again').replace('${repeatShapeShortcut}', `${repeatShapeShortcut}`)} mouseLeaveDelay={0}>
                         <Button onClick={onDrawTrack}>
-                            Track
+                        {t('Track')}
                         </Button>
                     </Tooltip>
                 </Col>

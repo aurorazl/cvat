@@ -12,11 +12,14 @@ export default {
     'From': 'From',
     'To:': 'To:',
     'Step:': 'Step:',
+    // annotation-page\attribute-annotation-workspace\attribute-annotation-sidebar\attribute-switcher.tsx
+    'Previous attribute ${normalizedKeyMap.PREVIOUS_ATTRIBUTE}': 'Previous attribute ${normalizedKeyMap.PREVIOUS_ATTRIBUTE}',
+    'Next attribute ${normalizedKeyMap.NEXT_ATTRIBUTE}': 'Next attribute ${normalizedKeyMap.NEXT_ATTRIBUTE}',
     //annotation-page\attribute-annotation-workspace\attribute-annotation-sidebar\object-switcher.tsx
     'Previous object ${normalizedKeyMap.PREVIOUS_OBJECT}': 'Previous object ${normalizedKeyMap.PREVIOUS_OBJECT}',
     'Next object ${normalizedKeyMap.NEXT_OBJECT}': 'Next object ${normalizedKeyMap.NEXT_OBJECT}',
     //annotation-page\standard-workspace\controls-side-bar\cursor-control.tsx
-    'Cursor ${cursorShortkey}': 'Cursor ${cursorShortkey}',
+    'Cursor ${cursorShortkey}': 'Cursor {{cursorShortkey}}',
     //annotation-page\standard-workspace\controls-side-bar\draw-shape-popover.tsx
     'Draw new ${shapeType}': 'Draw new ${shapeType}',
     'Label': 'Label',
@@ -31,7 +34,7 @@ export default {
     'Fit the image [Double Click]': 'Fit the image [Double Click]',
     //annotation-page\standard-workspace\controls-side-bar\group-control.tsx
     'Group shapes/tracks ${switchGroupShortcut}.': 'Group shapes/tracks ${switchGroupShortcut}.',
-    'Select and press ${resetGroupShortcut} to reset a group': 'Select and press ${resetGroupShortcut} to reset a group',
+    ' Select and press ${resetGroupShortcut} to reset a group': 'Select and press ${resetGroupShortcut} to reset a group',
     //annotation-page\standard-workspace\controls-side-bar\merge-control.tsx
     'Merge shapes/tracks ${switchMergeShortcut}': 'Merge shapes/tracks ${switchMergeShortcut}',
     //annotation-page\standard-workspace\controls-side-bar\move-control.tsx

@@ -7,6 +7,8 @@ import Menu from 'antd/lib/menu';
 import Icon from 'antd/lib/icon';
 import Text from 'antd/lib/typography/Text';
 
+import { useTranslation } from 'react-i18next';
+
 function isDefaultFormat(dumperName: string, taskMode: string): boolean {
     return (dumperName === 'CVAT for video 1.1' && taskMode === 'interpolation')
     || (dumperName === 'CVAT for images 1.1' && taskMode === 'annotation');
@@ -20,6 +22,7 @@ interface Props {
 }
 
 export default function DumpSubmenu(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         taskMode,
         menuKey,
@@ -28,7 +31,7 @@ export default function DumpSubmenu(props: Props): JSX.Element {
     } = props;
 
     return (
-        <Menu.SubMenu key={menuKey} title='Dump annotations'>
+        <Menu.SubMenu key={menuKey} title={t('Dump annotations')}>
             {
                 dumpers
                     .sort((a: any, b: any) => a.name.localeCompare(b.name))

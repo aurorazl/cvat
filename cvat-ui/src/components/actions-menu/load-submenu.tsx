@@ -8,6 +8,7 @@ import Icon from 'antd/lib/icon';
 import Upload from 'antd/lib/upload';
 import Button from 'antd/lib/button';
 import Text from 'antd/lib/typography/Text';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     menuKey: string;
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export default function LoadSubmenu(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         menuKey,
         loaders,
@@ -25,7 +27,7 @@ export default function LoadSubmenu(props: Props): JSX.Element {
     } = props;
 
     return (
-        <Menu.SubMenu key={menuKey} title='Upload annotations'>
+        <Menu.SubMenu key={menuKey} title={t('Upload annotations')}>
             {
                 loaders
                     .sort((a: any, b: any) => a.name.localeCompare(b.name))
