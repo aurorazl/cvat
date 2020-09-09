@@ -11,7 +11,7 @@ import Tooltip from 'antd/lib/tooltip';
 
 import AnnotationsFiltersInput from 'components/annotation-page/annotations-filters-input';
 import { StatesOrdering } from 'reducers/interfaces';
-
+import { useTranslation } from 'react-i18next';
 
 interface StatesOrderingSelectorComponentProps {
     statesOrdering: StatesOrdering;
@@ -19,6 +19,7 @@ interface StatesOrderingSelectorComponentProps {
 }
 
 function StatesOrderingSelectorComponent(props: StatesOrderingSelectorComponentProps): JSX.Element {
+    const { t } = useTranslation();
     const {
         statesOrdering,
         changeStatesOrdering,
@@ -26,7 +27,7 @@ function StatesOrderingSelectorComponent(props: StatesOrderingSelectorComponentP
 
     return (
         <Col span={16}>
-            <Text strong>Sort by</Text>
+            <Text strong>{t('Sort by')}</Text>
             <Select value={statesOrdering} onChange={changeStatesOrdering}>
                 <Select.Option
                     key={StatesOrdering.ID_DESCENT}
@@ -70,6 +71,7 @@ interface Props {
 }
 
 function ObjectListHeader(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         statesHidden,
         statesLocked,
@@ -95,21 +97,21 @@ function ObjectListHeader(props: Props): JSX.Element {
             </Row>
             <Row type='flex' justify='space-between' align='middle'>
                 <Col span={2}>
-                    <Tooltip title={`Switch lock property for all ${switchLockAllShortcut}`} mouseLeaveDelay={0}>
+                    <Tooltip title={t('Switch lock property for all ${switchLockAllShortcut}').replace('${switchLockAllShortcut}', `${switchLockAllShortcut}`)} mouseLeaveDelay={0}>
                         { statesLocked
                             ? <Icon type='lock' onClick={unlockAllStates} theme='filled' />
                             : <Icon type='unlock' onClick={lockAllStates} />}
                     </Tooltip>
                 </Col>
                 <Col span={2}>
-                    <Tooltip title={`Switch hidden property for all ${switchHiddenAllShortcut}`} mouseLeaveDelay={0}>
+                    <Tooltip title={t('Switch hidden property for all ${switchHiddenAllShortcut}', {switchHiddenAllShortcut: `${switchHiddenAllShortcut}`})} mouseLeaveDelay={0}>
                         { statesHidden
                             ? <Icon type='eye-invisible' onClick={showAllStates} />
                             : <Icon type='eye' onClick={hideAllStates} />}
                     </Tooltip>
                 </Col>
                 <Col span={2}>
-                    <Tooltip title='Expand/collapse all' mouseLeaveDelay={0}>
+                    <Tooltip title={t('Expand/collapse all')} mouseLeaveDelay={0}>
                         { statesCollapsed
                             ? <Icon type='caret-down' onClick={expandAllStates} />
                             : <Icon type='caret-up' onClick={collapseAllStates} />}

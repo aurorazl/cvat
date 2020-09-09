@@ -11,6 +11,7 @@ import { changePasswordAsync } from 'actions/auth-actions';
 import { CombinedState } from 'reducers/interfaces';
 import ChangePasswordForm, { ChangePasswordData } from './change-password-form';
 
+import { useTranslation } from 'react-i18next';
 
 interface StateToProps {
     fetching: boolean;
@@ -47,6 +48,7 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
 }
 
 function ChangePasswordComponent(props: ChangePasswordPageComponentProps): JSX.Element {
+    const { t } = useTranslation();
     const {
         fetching,
         onChangePassword,
@@ -56,7 +58,7 @@ function ChangePasswordComponent(props: ChangePasswordPageComponentProps): JSX.E
 
     return (
         <Modal
-            title={<Title level={3}>Change password</Title>}
+            title={<Title level={3}>{t('Change password')}</Title>}
             okType='primary'
             okText='Submit'
             footer={null}

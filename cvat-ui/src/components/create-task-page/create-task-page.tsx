@@ -12,6 +12,8 @@ import TextArea from 'antd/lib/input/TextArea';
 
 import CreateTaskContent, { CreateTaskData } from './create-task-content';
 
+import { useTranslation } from 'react-i18next';
+
 interface Props {
     onCreate: (data: CreateTaskData) => void;
     status: string;
@@ -21,6 +23,7 @@ interface Props {
 }
 
 export default function CreateTaskPage(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         error,
         status,
@@ -46,14 +49,14 @@ export default function CreateTaskPage(props: Props): JSX.Element {
             if (sshKeys.length) {
                 Modal.error({
                     width: 800,
-                    title: 'Could not clone the repository',
+                    title: t('Could not clone the repository'),
                     content: (
                         <>
                             <Paragraph>
-                                <Text>Please make sure it exists and you have access</Text>
+                                <Text>{t('Please make sure it exists and you have access')}</Text>
                             </Paragraph>
                             <Paragraph>
-                                <Text>Consider adding the following public ssh keys to git: </Text>
+                                <Text>{t('Consider adding the following public ssh keys to git:')}</Text>
                             </Paragraph>
                             <TextArea rows={10} value={sshKeys.join('\n\n')} />
                         </>
@@ -66,7 +69,7 @@ export default function CreateTaskPage(props: Props): JSX.Element {
     return (
         <Row type='flex' justify='center' align='top' className='cvat-create-task-form-wrapper'>
             <Col md={20} lg={16} xl={14} xxl={9}>
-                <Text className='cvat-title'>Create a new task</Text>
+                <Text className='cvat-title'>{t('Create a new task')}</Text>
                 <CreateTaskContent
                     taskId={taskId}
                     status={status}

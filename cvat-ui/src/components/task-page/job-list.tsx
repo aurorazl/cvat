@@ -17,6 +17,8 @@ import copy from 'copy-to-clipboard';
 import getCore from 'cvat-core-wrapper';
 import UserSelector from './user-selector';
 
+import { useTranslation } from 'react-i18next';
+
 const core = getCore();
 
 const baseURL = core.config.backendAPI.slice(0, -7);
@@ -28,6 +30,7 @@ interface Props {
 }
 
 function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
+    const { t } = useTranslation();
     const {
         taskInstance,
         registeredUsers,
@@ -57,12 +60,12 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
             </div>
         ),
     }, {
-        title: 'Frames',
+        title: t('Frames'),
         dataIndex: 'frames',
         key: 'frames',
         className: 'cvat-text-color',
     }, {
-        title: 'Status',
+        title: t('Status'),
         dataIndex: 'status',
         key: 'status',
         render: (status: string): JSX.Element => {
@@ -80,17 +83,17 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
             );
         },
     }, {
-        title: 'Started on',
+        title: t('Started on'),
         dataIndex: 'started',
         key: 'started',
         className: 'cvat-text-color',
     }, {
-        title: 'Duration',
+        title: t('Duration'),
         dataIndex: 'duration',
         key: 'duration',
         className: 'cvat-text-color',
     }, {
-        title: 'Assignee',
+        title: t('Assignee'),
         dataIndex: 'assignee',
         key: 'assignee',
         render: (jobInstance: any): JSX.Element => {
@@ -165,13 +168,13 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
                             }}
                         >
                             <Icon type='copy' theme='twoTone' />
-                            Copy
+                            {t('Copy')}
                         </Button>
                     </Tooltip>
                 </Col>
                 <Col>
                     <Text className='cvat-text-color'>
-                        {`${completed} of ${data.length} jobs`}
+                        {t('${completed} of ${data.length} jobs').replace('${completed}', `${completed}`).replace('${data.length}', `${data.length}`)}
                     </Text>
                 </Col>
             </Row>

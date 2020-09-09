@@ -11,6 +11,7 @@ import { Row, Col } from 'antd/lib/grid';
 
 import LoginForm, { LoginData } from './login-form';
 import CookieDrawer from './cookie-policy-drawer';
+import { useTranslation } from 'react-i18next';
 
 interface LoginPageComponentProps {
     fetching: boolean;
@@ -19,6 +20,7 @@ interface LoginPageComponentProps {
 }
 
 function LoginPageComponent(props: LoginPageComponentProps & RouteComponentProps): JSX.Element {
+    const { t } = useTranslation();
     const sizes = {
         xs: { span: 14 },
         sm: { span: 14 },
@@ -37,7 +39,7 @@ function LoginPageComponent(props: LoginPageComponentProps & RouteComponentProps
         <>
             <Row type='flex' justify='center' align='middle'>
                 <Col {...sizes}>
-                    <Title level={2}> Login </Title>
+                    <Title level={2}> {t('Login')} </Title>
                     <LoginForm
                         fetching={fetching}
                         onSubmit={(loginData: LoginData): void => {
@@ -47,8 +49,8 @@ function LoginPageComponent(props: LoginPageComponentProps & RouteComponentProps
                     <Row type='flex' justify='start' align='top'>
                         <Col>
                             <Text strong>
-                                New to CVAT? Create
-                                <Link to='/auth/register'> an account</Link>
+                            {t('New to CVAT? Create')}
+                                <Link to='/auth/register'> {t('an account')}</Link>
                             </Text>
                         </Col>
                     </Row>
@@ -57,7 +59,7 @@ function LoginPageComponent(props: LoginPageComponentProps & RouteComponentProps
                             <Row type='flex' justify='start' align='top'>
                                 <Col>
                                     <Text strong>
-                                        <Link to='/auth/password/reset'>Forgot your password?</Link>
+                                        <Link to='/auth/password/reset'>{t('Forgot your password?')}</Link>
                                     </Text>
                                 </Col>
                             </Row>

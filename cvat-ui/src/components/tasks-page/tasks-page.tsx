@@ -17,8 +17,9 @@ import TaskListContainer from 'containers/tasks-page/tasks-list';
 import TopBar from './top-bar';
 import EmptyListComponent from './empty-list';
 
+import { withTranslation, WithTranslation  } from 'react-i18next';
 
-interface TasksPageProps {
+interface TasksPageProps extends WithTranslation {
     tasksFetching: boolean;
     gettingQuery: TasksQuery;
     numberOfTasks: number;
@@ -81,11 +82,11 @@ class TasksPageComponent extends React.PureComponent<TasksPageProps & RouteCompo
             location,
             onGetTasks,
         } = this.props;
-
+        
         const query = updateQuery(gettingQuery, location.search);
         onGetTasks(query);
     }
-
+    
     public componentDidUpdate(prevProps: TasksPageProps & RouteComponentProps): void {
         const {
             location,
@@ -93,6 +94,7 @@ class TasksPageComponent extends React.PureComponent<TasksPageProps & RouteCompo
             onGetTasks,
             numberOfHiddenTasks,
             hideEmptyTasks,
+            t,
         } = this.props;
 
         if (prevProps.location.search !== location.search) {
@@ -108,7 +110,7 @@ class TasksPageComponent extends React.PureComponent<TasksPageProps & RouteCompo
             message.info(
                 <>
                     <Text>
-                        Some tasks have not been showed because they do not have any data.
+                    {t('Some tasks have not been showed because they do not have any data.')}
                     </Text>
                     <Button
                         type='link'
@@ -117,7 +119,7 @@ class TasksPageComponent extends React.PureComponent<TasksPageProps & RouteCompo
                             message.destroy();
                         }}
                     >
-                        Show all
+                        {t('Show all')}
                     </Button>
                 </>, 7,
             );
@@ -227,4 +229,4 @@ class TasksPageComponent extends React.PureComponent<TasksPageProps & RouteCompo
     }
 }
 
-export default withRouter(TasksPageComponent);
+export default withRouter(withTranslation()(TasksPageComponent));

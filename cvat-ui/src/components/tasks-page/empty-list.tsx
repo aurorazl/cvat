@@ -10,7 +10,10 @@ import Icon from 'antd/lib/icon';
 
 import { EmptyTasksIcon } from 'icons';
 
+import { useTranslation } from 'react-i18next';
+
 export default function EmptyListComponent(): JSX.Element {
+    const { t } = useTranslation();
     return (
         <div className='cvat-empty-tasks-list'>
             <Row type='flex' justify='center' align='middle'>
@@ -20,17 +23,17 @@ export default function EmptyListComponent(): JSX.Element {
             </Row>
             <Row type='flex' justify='center' align='middle'>
                 <Col>
-                    <Text strong>No tasks created yet ...</Text>
+                    <Text strong>{t('No tasks created yet ...')}</Text>
                 </Col>
             </Row>
             <Row type='flex' justify='center' align='middle'>
                 <Col>
-                    <Text type='secondary'>To get started with your annotation project</Text>
+                    <Text type='secondary'>{t('To get started with your annotation project')}</Text>
                 </Col>
             </Row>
             <Row type='flex' justify='center' align='middle'>
                 <Col>
-                    <Link to='/tasks/create'>create a new task</Link>
+                    <Link to='/tasks/create'>{t('create a new task')}</Link>
                 </Col>
             </Row>
         </div>

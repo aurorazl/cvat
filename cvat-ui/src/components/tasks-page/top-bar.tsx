@@ -10,12 +10,15 @@ import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
 import Text from 'antd/lib/typography/Text';
 
+import { useTranslation } from 'react-i18next';
+
 interface VisibleTopBarProps {
     onSearch: (value: string) => void;
     searchValue: string;
 }
 
 function TopBarComponent(props: VisibleTopBarProps & RouteComponentProps): JSX.Element {
+    const { t } = useTranslation();
     const {
         searchValue,
         history,
@@ -26,12 +29,12 @@ function TopBarComponent(props: VisibleTopBarProps & RouteComponentProps): JSX.E
         <>
             <Row type='flex' justify='center' align='middle'>
                 <Col md={22} lg={18} xl={16} xxl={14}>
-                    <Text strong>Default project</Text>
+                    <Text strong>{t('Default project')}</Text>
                 </Col>
             </Row>
             <Row type='flex' justify='center' align='middle'>
                 <Col md={11} lg={9} xl={8} xxl={7}>
-                    <Text className='cvat-title'>Tasks</Text>
+                    <Text className='cvat-title'>{t('Tasks')}</Text>
                     <Input.Search
                         defaultValue={searchValue}
                         onSearch={onSearch}
@@ -54,7 +57,7 @@ function TopBarComponent(props: VisibleTopBarProps & RouteComponentProps): JSX.E
                         }
                         icon='plus'
                     >
-                         Create new task
+                         {t('Create new task')}
                     </Button>
                 </Col>
             </Row>

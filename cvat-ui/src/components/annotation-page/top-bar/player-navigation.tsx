@@ -13,6 +13,8 @@ import Text from 'antd/lib/typography/Text';
 
 import { clamp } from 'utils/math';
 
+import { useTranslation } from 'react-i18next';
+
 interface Props {
     startFrame: number;
     stopFrame: number;
@@ -26,6 +28,7 @@ interface Props {
 }
 
 function PlayerNavigation(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         startFrame,
         stopFrame,
@@ -67,14 +70,14 @@ function PlayerNavigation(props: Props): JSX.Element {
                         </Tooltip>
                     </Col>
                     <Col offset={1}>
-                        <Tooltip title='Create frame URL' mouseLeaveDelay={0}>
+                        <Tooltip title={t('Create frame URL')} mouseLeaveDelay={0}>
                             <Icon className='cvat-player-frame-url-icon' type='link' onClick={onURLIconClick} />
                         </Tooltip>
                     </Col>
                 </Row>
             </Col>
             <Col>
-                <Tooltip title={`Press ${focusFrameInputShortcut} to focus here`} mouseLeaveDelay={0}>
+                <Tooltip title={t('Press ${focusFrameInputShortcut} to focus here').replace('${focusFrameInputShortcut}', `${focusFrameInputShortcut}`)} mouseLeaveDelay={0}>
                     <InputNumber
                         className='cvat-player-frame-selector'
                         type='number'

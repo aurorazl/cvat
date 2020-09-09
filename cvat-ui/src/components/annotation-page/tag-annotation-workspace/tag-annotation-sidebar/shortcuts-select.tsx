@@ -11,6 +11,7 @@ import Select from 'antd/lib/select';
 
 import { CombinedState } from 'reducers/interfaces';
 import { shift } from 'utils/math';
+import { useTranslation } from 'react-i18next';
 
 interface ShortcutLabelMap {
     [index: number]: any;
@@ -34,6 +35,7 @@ const defaultShortcutLabelMap = {
 } as ShortcutLabelMap;
 
 const ShortcutsSelect = (props: Props): JSX.Element => {
+    const { t } = useTranslation();
     const { onAddTag } = props;
     const { labels } = useSelector((state: CombinedState) => state.annotation.job);
     const [shortcutLabelMap, setShortcutLabelMap] = useState(defaultShortcutLabelMap);
@@ -83,7 +85,7 @@ const ShortcutsSelect = (props: Props): JSX.Element => {
             <GlobalHotKeys keyMap={keyMap as KeyMap} handlers={handlers} allowChanges />
             <Row>
                 <Col>
-                    <Text strong>Shortcuts for labels:</Text>
+                    <Text strong>{t('Shortcuts for labels:')}</Text>
                 </Col>
             </Row>
             {
@@ -103,7 +105,7 @@ const ShortcutsSelect = (props: Props): JSX.Element => {
                                 >
                                     <Select.Option value=''>
                                         <Text type='secondary'>
-                                            None
+                                        {t('None')}
                                         </Text>
                                     </Select.Option>
                                     {

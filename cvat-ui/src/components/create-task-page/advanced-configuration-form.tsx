@@ -12,6 +12,7 @@ import Form, { FormComponentProps } from 'antd/lib/form/Form';
 import Text from 'antd/lib/typography/Text';
 
 import patterns from 'utils/validation-patterns';
+import { useTranslation } from 'react-i18next';
 
 export interface AdvancedConfiguration {
     bugTracker?: string;
@@ -35,6 +36,7 @@ type Props = FormComponentProps & {
 };
 
 function isPositiveInteger(_: any, value: any, callback: any): void {
+    const { t } = useTranslation();
     if (!value) {
         callback();
         return;
@@ -43,13 +45,14 @@ function isPositiveInteger(_: any, value: any, callback: any): void {
     const intValue = +value;
     if (Number.isNaN(intValue)
         || !Number.isInteger(intValue) || intValue < 1) {
-        callback('Value must be a positive integer');
+        callback(t('Value must be a positive integer'));
     }
 
     callback();
 }
 
 function isNonNegativeInteger(_: any, value: any, callback: any): void {
+    const { t } = useTranslation();
     if (!value) {
         callback();
         return;
@@ -57,13 +60,14 @@ function isNonNegativeInteger(_: any, value: any, callback: any): void {
 
     const intValue = +value;
     if (Number.isNaN(intValue) || intValue < 0) {
-        callback('Value must be a non negative integer');
+        callback(t('Value must be a non negative integer'));
     }
 
     callback();
 }
 
 function isIntegerRange(min: number, max: number, _: any, value: any, callback: any): void {
+    const { t } = useTranslation();
     if (!value) {
         callback();
         return;
@@ -74,7 +78,7 @@ function isIntegerRange(min: number, max: number, _: any, value: any, callback: 
         || !Number.isInteger(intValue)
         || intValue < min || intValue > max
     ) {
-        callback(`Value must be an integer [${min}, ${max}]`);
+        callback(t('Value must be an integer [${min}, ${max}]').replace('${min}', `${min}`).replace('${max}', `${max}`));
     }
 
     callback();

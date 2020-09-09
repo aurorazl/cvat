@@ -14,6 +14,8 @@ import { resetPasswordAsync } from 'actions/auth-actions';
 
 import ResetPasswordConfirmForm, { ResetPasswordConfirmData } from './reset-password-confirm-form';
 
+import { useTranslation } from 'react-i18next';
+
 interface StateToProps {
     fetching: boolean;
 }
@@ -44,6 +46,7 @@ const mapDispatchToProps: DispatchToProps = {
 function ResetPasswordPagePageComponent(
     props: ResetPasswordConfirmPageComponentProps,
 ): JSX.Element {
+    const { t } = useTranslation();
     const sizes = {
         xs: { span: 14 },
         sm: { span: 14 },
@@ -60,7 +63,7 @@ function ResetPasswordPagePageComponent(
     return (
         <Row type='flex' justify='center' align='middle'>
             <Col {...sizes}>
-                <Title level={2}> Change password </Title>
+                <Title level={2}> {t('Change password')} </Title>
                 <ResetPasswordConfirmForm
                     fetching={fetching}
                     onSubmit={(resetPasswordConfirmData: ResetPasswordConfirmData): void => {

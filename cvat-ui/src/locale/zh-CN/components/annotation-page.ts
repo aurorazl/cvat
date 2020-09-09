@@ -71,7 +71,7 @@ export default {
     'Switch outside property ${switchOutsideShortcut}': '切换外部属性 ${switchOutsideShortcut}',
     'Switch lock property ${switchLockShortcut}': '切换锁定属性 ${switchLockShortcut}',
     'Switch occluded property ${switchOccludedShortcut}': '切换遮挡属性 ${switchOccludedShortcut}',
-    'Switch hidden property ${switchHiddenShortcut}': '切换隐藏属性 ${switchHiddenShortcut}',
+    'Switch hidden property ${switchHiddenShortcut}': '切换隐藏属性 {{switchHiddenShortcut}}',
     'Switch keyframe property ${switchKeyFrameShortcut}': '切换关键帧属性 ${switchKeyFrameShortcut}',
     'Switch pinned property': '切换固定属性',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\object-item-details.tsx
@@ -89,9 +89,10 @@ export default {
     'Are you sure you want to remove it?': '确定要移除？',
     'Remove': '移除',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\objects-list-header.tsx
-    'Switch lock property for all ${switchLockAllShortcut}': '对所有${switchLockAllShortcut}切换锁定属性',
-    'Switch hidden property for all ${switchHiddenAllShortcut}': '对所有${switchLockAllShortcut}切换隐藏属性',
+    'Switch lock property for all ${switchLockAllShortcut}': '对所有切换锁定属性${switchLockAllShortcut}',
+    'Switch hidden property for all ${switchHiddenAllShortcut}': '对所有切换隐藏属性{{switchLockAllShortcut}}',
     'Expand/collapse all': '展开/折叠所有',
+    'Sort by': '排序',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\objects-side-bar.tsx
     'Objects': '对象',
     'Labels': 'Labels',
@@ -118,7 +119,7 @@ export default {
     'Add tag': '添加 tag',
     'Skip frame': '跳过帧',
     'Automatically go to the next frame': '自动跳转到下一帧',
-    'Frame tags': '帧 tags',
+    'Frame tags:': '帧 tags',
     'Use': '使用',
     'or digits': '或数字',
     'to add selected tag': '添加选中的 tag',
@@ -141,6 +142,8 @@ export default {
     'Save': '保存',
     'Saving changes on the server': '保存修改至服务器',
     'Pending..': 'Pending..',
+    'Undo': '撤销',
+    'Redo': '恢复',
     // cvat-ui\src\components\annotation-page\top-bar\player-buttons.tsx
     'Go to the first frame': '跳转到第一帧',
     'Go back with a step ${backwardShortcut}': '以步长值回退 ${backwardShortcut}',
@@ -172,6 +175,8 @@ export default {
     'Frames': '帧',
     'Bug tracker': 'Bug 跟踪',
     'Annotations statistics': '标注统计',
+    // src\containers\annotation-page\top-bar\top-bar.tsx
+    'You have unsaved changes, please confirm leaving this page.': '尚未保存更改，请确认离开此页面。',    
     // cvat-ui\src\components\annotation-page\annotation-page.tsx
     'Sorry, but this job was not found': '抱歉，job未找到',
     'Please, be sure information you tried to get exist and you have access': '请确认要获取的信息存在，并且可以访问',
@@ -194,7 +199,8 @@ export default {
     'Color by': '颜色',
     'Opacity': '不透明度',
     'Selected opacity': '选择不透明度',
-    'Black borders': '黑色边线',
+    // 'Black borders': '黑色边线',
     'Show bitmap': '显示位图',
     'Show projections': 'Show projections',
+    'Outlined borders': '外边线',
   }

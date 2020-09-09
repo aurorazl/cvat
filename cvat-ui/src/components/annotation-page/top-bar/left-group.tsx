@@ -17,6 +17,7 @@ import {
     UndoIcon,
     RedoIcon,
 } from 'icons';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     saving: boolean;
@@ -32,6 +33,7 @@ interface Props {
 }
 
 function LeftGroup(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         saving,
         savingStatuses,
@@ -50,11 +52,11 @@ function LeftGroup(props: Props): JSX.Element {
             <Dropdown overlay={<AnnotationMenuContainer />}>
                 <Button type='link' className='cvat-annotation-header-button'>
                     <Icon component={MainMenuIcon} />
-                    Menu
+                    {t('Menu')}
                 </Button>
             </Dropdown>
             <Button
-                title={`Save current changes ${saveShortcut}`}
+                title={t('Save current changes ${saveShortcut}').replace('${saveShortcut}', `${saveShortcut}`)}
                 onClick={saving ? undefined : onSaveAnnotation}
                 type='link'
                 className={saving
@@ -62,14 +64,14 @@ function LeftGroup(props: Props): JSX.Element {
                     : 'cvat-annotation-header-button'}
             >
                 <Icon component={SaveIcon} />
-                { saving ? 'Saving...' : 'Save' }
+                { saving ? t('Saving...') : t('Save') }
                 <Modal
-                    title='Saving changes on the server'
+                    title={t('Saving changes on the server')}
                     visible={saving}
                     footer={[]}
                     closable={false}
                 >
-                    <Timeline pending={savingStatuses[savingStatuses.length - 1] || 'Pending..'}>
+                    <Timeline pending={savingStatuses[savingStatuses.length - 1] || t('Pending..')}>
                         {
                             savingStatuses.slice(0, -1)
                                 .map((
@@ -82,7 +84,7 @@ function LeftGroup(props: Props): JSX.Element {
                 </Modal>
             </Button>
             <Button
-                title={`Undo: ${undoAction} ${undoShortcut}`}
+                title={t('Undo: ${undoAction} ${undoShortcut}', {undoAction: `${undoAction}`, undoShortcut: `${undoShortcut}`})}
                 disabled={!undoAction}
                 style={{ pointerEvents: undoAction ? 'initial' : 'none', opacity: undoAction ? 1 : 0.5 }}
                 type='link'
@@ -90,7 +92,7 @@ function LeftGroup(props: Props): JSX.Element {
                 onClick={onUndoClick}
             >
                 <Icon component={UndoIcon} />
-                <span>Undo</span>
+                <span>{t('Undo')}</span>
             </Button>
             <Button
                 title={`Redo: ${redoAction} ${redoShortcut}`}
@@ -101,7 +103,7 @@ function LeftGroup(props: Props): JSX.Element {
                 onClick={onRedoClick}
             >
                 <Icon component={RedoIcon} />
-                Redo
+                {t('Redo')}
             </Button>
         </Col>
     );

@@ -26,6 +26,7 @@ import { CombinedState, ObjectType } from 'reducers/interfaces';
 import Tag from 'antd/lib/tag';
 import getCore from 'cvat-core-wrapper';
 import ShortcutsSelect from './shortcuts-select';
+import { useTranslation } from 'react-i18next';
 
 const cvat = getCore();
 
@@ -100,6 +101,7 @@ function mapDispatchToProps(dispatch: ThunkDispatch<CombinedState, {}, Action>):
 }
 
 function TagAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Element {
+    const { t } = useTranslation();
     const {
         states,
         labels,
@@ -219,12 +221,12 @@ function TagAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Elemen
                         ant-layout-sider-zero-width-trigger-left`}
                     onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
                 >
-                    {sidebarCollapsed ? <Icon type='menu-fold' title='Show' />
-                        : <Icon type='menu-unfold' title='Hide' />}
+                    {sidebarCollapsed ? <Icon type='menu-fold' title={t('Show')} />
+                        : <Icon type='menu-unfold' title={t('Hide')} />}
                 </span>
                 <Row type='flex' justify='start' className='cvat-tag-annotation-sidebar-label-select'>
                     <Col>
-                        <Text strong>Tag label</Text>
+                        <Text strong>{t('Tag label')}</Text>
                         <Select
                             value={`${selectedLabelID}`}
                             onChange={onChangeLabel}
@@ -246,10 +248,10 @@ function TagAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Elemen
                 </Row>
                 <Row type='flex' justify='space-around' className='cvat-tag-annotation-sidebar-buttons'>
                     <Col span={8}>
-                        <Button onClick={() => onAddTag(selectedLabelID)}>Add tag</Button>
+                        <Button onClick={() => onAddTag(selectedLabelID)}>{t('Add tag')}</Button>
                     </Col>
                     <Col span={8}>
-                        <Button onClick={onChangeFrame}>Skip frame</Button>
+                        <Button onClick={onChangeFrame}>{t('Skip frame')}</Button>
                     </Col>
                 </Row>
                 <Row type='flex' className='cvat-tag-anntation-sidebar-checkbox-skip-frame'>
@@ -260,13 +262,13 @@ function TagAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Elemen
                                 setSkipFrame(event.target.checked);
                             }}
                         >
-                            Automatically go to the next frame
+                            {t('Automatically go to the next frame')}
                         </Checkbox>
                     </Col>
                 </Row>
                 <Row type='flex' justify='start'>
                     <Col>
-                        <Text strong>Frame tags:&nbsp;</Text>
+                        <Text strong>{t('Frame tags:')}&nbsp;</Text>
                         {frameTags.map((tag: any) => (
                             <Tag
                                 color={tag.label.color}

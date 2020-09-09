@@ -33,7 +33,9 @@ import getCore from 'cvat-core-wrapper';
 import { NotificationsState } from 'reducers/interfaces';
 import Modal from 'antd/lib/modal';
 
-interface CVATAppProps {
+import { withTranslation, WithTranslation  } from 'react-i18next';
+
+interface CVATAppProps extends WithTranslation {
     loadFormats: () => void;
     loadUsers: () => void;
     loadAbout: () => void;
@@ -248,6 +250,7 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
             switchSettingsDialog,
             user,
             keyMap,
+            t,
         } = this.props;
 
         const readyForRender = (userInitialized && (user == null || !user.isVerified))
@@ -276,7 +279,7 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
             stopNotifications(false);
             const info = platformInfo();
             Modal.warning({
-                title: 'Unsupported platform detected',
+                title: t('Unsupported platform detected'),
                 content: (
                     <>
                         <Row>
@@ -291,7 +294,7 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
                         <Row>
                             <Col>
                                 <Text type='secondary'>
-                                    {`The operating system is ${info.os}`}
+                                    {t('The operating system is ${info.os}').replace('${info.os}', `${info.os}`)}
                                 </Text>
                             </Col>
                         </Row>
@@ -347,4 +350,4 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
     }
 }
 
-export default withRouter(CVATApplication);
+export default withRouter(withTranslation()(CVATApplication));

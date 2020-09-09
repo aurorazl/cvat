@@ -11,6 +11,8 @@ import Button from 'antd/lib/button';
 import { Workspace } from 'reducers/interfaces';
 import { InfoIcon, FullscreenIcon } from 'icons';
 
+import { useTranslation } from 'react-i18next';
+
 interface Props {
     workspace: Workspace;
     showStatistics(): void;
@@ -18,6 +20,7 @@ interface Props {
 }
 
 function RightGroup(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const { showStatistics, changeWorkspace, workspace } = props;
 
     return (
@@ -36,11 +39,11 @@ function RightGroup(props: Props): JSX.Element {
                 }}
             >
                 <Icon component={FullscreenIcon} />
-                Fullscreen
+                {t('Fullscreen')}
             </Button>
             <Button type='link' className='cvat-annotation-header-button' onClick={showStatistics}>
                 <Icon component={InfoIcon} />
-                Info
+                {t('Info')}
             </Button>
             <div>
                 <Select

@@ -20,6 +20,7 @@ import {
     updateTabContentHeight as updateTabContentHeightAction,
 } from 'actions/annotation-actions';
 import AppearanceBlock, { computeHeight } from 'components/annotation-page/appearance-block';
+import { useTranslation } from 'react-i18next';
 
 interface StateToProps {
     sidebarCollapsed: boolean;
@@ -60,6 +61,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>): DispatchToProps {
 }
 
 function ObjectsSideBar(props: StateToProps & DispatchToProps): JSX.Element {
+    const { t } = useTranslation();
     const {
         sidebarCollapsed,
         canvasInstance,
@@ -117,19 +119,19 @@ function ObjectsSideBar(props: StateToProps & DispatchToProps): JSX.Element {
                     ant-layout-sider-zero-width-trigger-left`}
                 onClick={collapseSidebar}
             >
-                {sidebarCollapsed ? <Icon type='menu-fold' title='Show' />
-                    : <Icon type='menu-unfold' title='Hide' />}
+                {sidebarCollapsed ? <Icon type='menu-fold' title={t('Show')} />
+                    : <Icon type='menu-unfold' title={t('Hide')} />}
             </span>
 
             <Tabs type='card' defaultActiveKey='objects' className='cvat-objects-sidebar-tabs'>
                 <Tabs.TabPane
-                    tab={<Text strong>Objects</Text>}
+                    tab={<Text strong>{t('Objects')}</Text>}
                     key='objects'
                 >
                     <ObjectsListContainer />
                 </Tabs.TabPane>
                 <Tabs.TabPane
-                    tab={<Text strong>Labels</Text>}
+                    tab={<Text strong>{t('Labels')}</Text>}
                     key='labels'
                 >
                     <LabelsListContainer />

@@ -16,7 +16,9 @@ import ModelRunnerModal from 'components/model-runner-modal/model-runner-dialog'
 import { Task } from 'reducers/interfaces';
 import TopBarComponent from './top-bar';
 
-interface TaskPageComponentProps {
+import { withTranslation, WithTranslation  } from 'react-i18next';
+
+interface TaskPageComponentProps extends WithTranslation {
     task: Task | null | undefined;
     fetching: boolean;
     deleteActivity: boolean | null;
@@ -43,6 +45,7 @@ class TaskPageComponent extends React.PureComponent<Props> {
             task,
             fetching,
             getTask,
+            t,
         } = this.props;
 
         if (task === null) {
@@ -60,8 +63,8 @@ class TaskPageComponent extends React.PureComponent<Props> {
                 <Result
                     className='cvat-not-found'
                     status='404'
-                    title='Sorry, but this task was not found'
-                    subTitle='Please, be sure information you tried to get exist and you have access'
+                    title={t('Sorry, but this task was not found')}
+                    subTitle={t('Please, be sure information you tried to get exist and you have access')}
                 />
             );
         }
@@ -81,4 +84,4 @@ class TaskPageComponent extends React.PureComponent<Props> {
     }
 }
 
-export default withRouter(TaskPageComponent);
+export default withRouter(withTranslation()(TaskPageComponent));

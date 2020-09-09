@@ -18,6 +18,8 @@ import {
 } from 'actions/annotation-actions';
 import { CombinedState } from 'reducers/interfaces';
 
+import { useTranslation } from 'react-i18next';
+
 interface StateToProps {
     annotationsFilters: string[];
     annotationsFiltersHistory: string[];
@@ -72,10 +74,11 @@ function filtersHelpModalContent(
     searchForwardShortcut: string,
     searchBackwardShortcut: string,
 ): JSX.Element {
+    const { t } = useTranslation();
     return (
         <>
             <Paragraph>
-                <Title level={3}>General</Title>
+                <Title level={3}>{t('General')}</Title>
             </Paragraph>
             <Paragraph>
                 You can use filters to display only subset of objects on a frame
@@ -104,7 +107,7 @@ function filtersHelpModalContent(
                 CVAT uses json queries to perform search.
             </Paragraph>
             <Paragraph>
-                <Title level={3}>Examples</Title>
+                <Title level={3}>{t('Examples')}</Title>
                 <ul>
                     <li>label==&quot;car&quot; | label==[&quot;road sign&quot;]</li>
                     <li>shape == &quot;polygon&quot;</li>
@@ -127,6 +130,7 @@ function filtersHelpModalContent(
 }
 
 function AnnotationsFiltersInput(props: StateToProps & DispatchToProps): JSX.Element {
+    const { t } = useTranslation();
     const {
         annotationsFilters,
         annotationsFiltersHistory,
@@ -147,14 +151,14 @@ function AnnotationsFiltersInput(props: StateToProps & DispatchToProps): JSX.Ele
             placeholder={
                 underCursor ? (
                     <>
-                        <Tooltip title='Click to open help' mouseLeaveDelay={0}>
+                        <Tooltip title={t('Click to open help')} mouseLeaveDelay={0}>
                             <Icon
                                 type='filter'
                                 onClick={(e: React.MouseEvent) => {
                                     e.stopPropagation();
                                     Modal.info({
                                         width: 700,
-                                        title: 'How to use filters?',
+                                        title: t('How to use filters?'),
                                         content: filtersHelpModalContent(
                                             searchForwardShortcut,
                                             searchBackwardShortcut,
@@ -167,7 +171,7 @@ function AnnotationsFiltersInput(props: StateToProps & DispatchToProps): JSX.Ele
                 ) : (
                     <>
                         <Icon style={{ transform: 'scale(0.9)' }} type='filter' />
-                        <span style={{ marginLeft: 5 }}>Annotations filters</span>
+                        <span style={{ marginLeft: 5 }}>{t('Annotations filters')}</span>
                     </>
                 )
             }

@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 
 import { CombinedState, ContextMenuType } from 'reducers/interfaces';
 import { updateAnnotationsAsync, updateCanvasContextMenu } from 'actions/annotation-actions';
+import { useTranslation } from 'react-i18next';
 
 interface StateToProps {
     activatedState: any | null;
@@ -69,6 +70,7 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
 type Props = StateToProps & DispatchToProps;
 
 function CanvasPointContextMenu(props: Props): React.ReactPortal | null {
+    const { t } = useTranslation();
     const {
         onCloseContextMenu,
         onUpdateAnnotations,
@@ -111,14 +113,14 @@ function CanvasPointContextMenu(props: Props): React.ReactPortal | null {
     return visible && contextMenuFor && type === ContextMenuType.CANVAS_SHAPE_POINT
         ? (ReactDOM.createPortal(
             <div className='cvat-canvas-point-context-menu' style={{ top, left }}>
-                <Tooltip title='Delete point [Ctrl + dblclick]' mouseLeaveDelay={0}>
+                <Tooltip title={t('Delete point [Ctrl + dblclick]')} mouseLeaveDelay={0}>
                     <Button type='link' icon='delete' onClick={onPointDelete}>
-                        Delete point
+                    {t('Delete point')}
                     </Button>
                 </Tooltip>
                 {contextMenuFor && contextMenuFor.shapeType === 'polygon' && (
                     <Button type='link' icon='environment' onClick={onSetStartPoint}>
-                        Set start point
+                        {t('Set start point')}
                     </Button>
                 )}
             </div>,

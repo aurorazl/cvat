@@ -71,7 +71,7 @@ export default {
     'Switch outside property ${switchOutsideShortcut}': 'Switch outside property ${switchOutsideShortcut}',
     'Switch lock property ${switchLockShortcut}': 'Switch lock property ${switchLockShortcut}',
     'Switch occluded property ${switchOccludedShortcut}': 'Switch occluded property ${switchOccludedShortcut}',
-    'Switch hidden property ${switchHiddenShortcut}': 'Switch hidden property ${switchHiddenShortcut}',
+    'Switch hidden property ${switchHiddenShortcut}': 'Switch hidden property {{switchHiddenShortcut}}',
     'Switch keyframe property ${switchKeyFrameShortcut}': 'Switch keyframe property ${switchKeyFrameShortcut}',
     'Switch pinned property': 'Switch pinned property',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\object-item-details.tsx
@@ -90,8 +90,9 @@ export default {
     'Remove': 'Remove',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\objects-list-header.tsx
     'Switch lock property for all ${switchLockAllShortcut}': 'Switch lock property for all ${switchLockAllShortcut}',
-    'Switch hidden property for all ${switchHiddenAllShortcut}': 'Switch hidden property for all ${switchHiddenAllShortcut}',
+    'Switch hidden property for all ${switchHiddenAllShortcut}': 'Switch hidden property for all {{switchHiddenAllShortcut}}',
     'Expand/collapse all': 'Expand/collapse all',
+    'Sort by': 'Sort by',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\objects-side-bar.tsx
     'Objects': 'Objects',
     'Labels': 'Labels',
@@ -118,7 +119,7 @@ export default {
     'Add tag': 'Add tag',
     'Skip frame': 'Skip frame',
     'Automatically go to the next frame': 'Automatically go to the next frame',
-    'Frame tags': 'Frame tags',
+    'Frame tags:': 'Frame tags:',
     'Use': 'Use',
     'or digits': 'or digits',
     'to add selected tag': 'to add selected tag',
@@ -141,6 +142,9 @@ export default {
     'Save': 'Save',
     'Saving changes on the server': 'Saving changes on the server',
     'Pending..': 'Pending..',
+    'Undo': 'Undo',
+    'Redo': 'Redo',
+    'Undo: ${undoAction} ${undoShortcut}': 'Undo: {{undoAction}} {{undoShortcut}}',
     // cvat-ui\src\components\annotation-page\top-bar\player-buttons.tsx
     'Go to the first frame': 'Go to the first frame',
     'Go back with a step ${backwardShortcut}': 'Go back with a step ${backwardShortcut}',
@@ -172,6 +176,8 @@ export default {
     'Frames': 'Frames',
     'Bug tracker': 'Bug tracker',
     'Annotations statistics': 'Annotations statistics',
+    // src\containers\annotation-page\top-bar\top-bar.tsx
+    'You have unsaved changes, please confirm leaving this page.': 'You have unsaved changes, please confirm leaving this page.',
     // cvat-ui\src\components\annotation-page\annotation-page.tsx
     'Sorry, but this job was not found': 'Sorry, but this job was not found',
     'Please, be sure information you tried to get exist and you have access': 'Please, be sure information you tried to get exist and you have access',
@@ -194,7 +200,8 @@ export default {
     'Color by': 'Color by',
     'Opacity': 'Opacity',
     'Selected opacity': 'Selected opacity',
-    'Black borders': 'Black borders',
+    // 'Black borders': 'Black borders',
     'Show bitmap': 'Show bitmap',
     'Show projections': 'Show projections',
+    'Outlined borders': 'Outlined borders',
   }

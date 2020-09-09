@@ -22,12 +22,13 @@ import { LogType } from 'cvat-logger';
 import { Canvas } from 'cvat-canvas-wrapper';
 import getCore from 'cvat-core-wrapper';
 import consts from 'consts';
+import { withTranslation, WithTranslation  } from 'react-i18next';
 
 const cvat = getCore();
 
 const MAX_DISTANCE_TO_OPEN_SHAPE = 50;
 
-interface Props {
+interface Props extends WithTranslation {
     sidebarCollapsed: boolean;
     canvasInstance: Canvas;
     jobInstance: any;
@@ -97,7 +98,7 @@ interface Props {
     onFetchAnnotation(): void;
 }
 
-export default class CanvasWrapperComponent extends React.PureComponent<Props> {
+class CanvasWrapperComponent extends React.PureComponent<Props> {
     public componentDidMount(): void {
         const {
             automaticBordering,
@@ -749,6 +750,7 @@ export default class CanvasWrapperComponent extends React.PureComponent<Props> {
             onChangeGridOpacity,
             onSwitchGrid,
             onSwitchAutomaticBordering,
+            t,
         } = this.props;
 
         const preventDefault = (event: KeyboardEvent | undefined): void => {
@@ -880,7 +882,7 @@ export default class CanvasWrapperComponent extends React.PureComponent<Props> {
                         defaultValue={0}
                         onChange={(value: SliderValue): void => onSwitchZLayer(value as number)}
                     />
-                    <Tooltip title={`Add new layer ${maxZLayer + 1} and switch to it`} mouseLeaveDelay={0}>
+                    <Tooltip title={t('Add new layer ${maxZLayer + 1} and switch to it').replace('${maxZLayer + 1}', `${maxZLayer + 1}`)} mouseLeaveDelay={0}>
                         <Icon type='plus-circle' onClick={onAddZLayer} />
                     </Tooltip>
                 </div>
@@ -888,3 +890,5 @@ export default class CanvasWrapperComponent extends React.PureComponent<Props> {
         );
     }
 }
+
+export default withTranslation()(CanvasWrapperComponent);

@@ -19,7 +19,8 @@ import ActionsMenuContainer from 'containers/actions-menu/actions-menu';
 import { ActiveInference } from 'reducers/interfaces';
 import { MenuIcon } from 'icons';
 
-export interface TaskItemProps {
+import { withTranslation, WithTranslation  } from 'react-i18next';
+export interface TaskItemProps extends WithTranslation {
     taskInstance: any;
     previewImage: string;
     deleted: boolean;
@@ -39,10 +40,10 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
             </Col>
         );
     }
-
+    
     private renderDescription(): JSX.Element {
         // Task info
-        const { taskInstance } = this.props;
+        const { taskInstance, t } = this.props;
         const { id } = taskInstance;
         const owner = taskInstance.owner ? taskInstance.owner.username : null;
         const updated = moment(taskInstance.updatedDate).fromNow();
@@ -65,7 +66,7 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
                             <br />
                         </>
                     )}
-                <Text type='secondary'>{`Last updated ${updated}`}</Text>
+                <Text type='secondary'>{t('Last updated ${updated}').replace('${updated}', `${updated}`)}</Text>
             </Col>
         );
     }
@@ -75,6 +76,7 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
             taskInstance,
             activeInference,
             cancelAutoAnnotation,
+            t,
         } = this.props;
         // Count number of jobs and performed jobs
         const numOfJobs = taskInstance.jobs.length;
@@ -87,13 +89,13 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
         let progressText = null;
         if (numOfCompleted === numOfJobs) {
             progressColor = 'cvat-task-completed-progress';
-            progressText = <Text strong className={progressColor}>Completed</Text>;
+            progressText = <Text strong className={progressColor}>{t('Completed')}</Text>;
         } else if (numOfCompleted) {
             progressColor = 'cvat-task-progress-progress';
-            progressText = <Text strong className={progressColor}>In Progress</Text>;
+            progressText = <Text strong className={progressColor}>{t('In Progress')}</Text>;
         } else {
             progressColor = 'cvat-task-pending-progress';
-            progressText = <Text strong className={progressColor}>Pending</Text>;
+            progressText = <Text strong className={progressColor}>{t('Pending')}</Text>;
         }
 
         const jobsProgress = numOfCompleted / numOfJobs;
@@ -108,7 +110,7 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
                         { progressText }
                     </Col>
                     <Col>
-                        <Text type='secondary'>{`${numOfCompleted} of ${numOfJobs} jobs`}</Text>
+                        <Text type='secondary'>{t('${numOfCompleted} of ${numOfJobs} jobs').replace('${numOfCompleted}', `${numOfCompleted}`).replace('${numOfJobs}', `${numOfJobs}`)}</Text>
                     </Col>
                 </Row>
                 <Row>
@@ -128,7 +130,7 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
                         <>
                             <Row>
                                 <Col>
-                                    <Text strong>Automatic annotation</Text>
+                                    <Text strong>{t('Automatic annotation')}</Text>
                                 </Col>
                             </Row>
                             <Row type='flex' justify='space-between'>
@@ -150,8 +152,8 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
                                             type='close'
                                             onClick={() => {
                                                 Modal.confirm({
-                                                    title: 'You are going to cancel automatic annotation?',
-                                                    content: 'Reached progress will be lost. Continue?',
+                                                    title: t('You are going to cancel automatic annotation?'),
+                                                    content: t('Reached progress will be lost. Continue?'),
                                                     okType: 'danger',
                                                     onOk() {
                                                         cancelAutoAnnotation();
@@ -172,6 +174,7 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
         const {
             taskInstance,
             history,
+            t,
         } = this.props;
         const { id } = taskInstance;
 
@@ -190,13 +193,13 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
                                 history.push(`/tasks/${id}`);
                             }}
                         >
-                            Open
+                            {t('Open')}
                         </Button>
                     </Col>
                 </Row>
                 <Row type='flex' justify='end'>
                     <Col className='cvat-item-open-task-actions'>
-                        <Text className='cvat-text-color'>Actions</Text>
+                        <Text className='cvat-text-color'>{t('Actions')}</Text>
                         <Dropdown overlay={<ActionsMenuContainer taskInstance={taskInstance} />}>
                             <Icon className='cvat-menu-icon' component={MenuIcon} />
                         </Dropdown>
@@ -232,4 +235,4 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
     }
 }
 
-export default withRouter(TaskItemComponent);
+export default withRouter(withTranslation()(TaskItemComponent));

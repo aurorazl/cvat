@@ -26,7 +26,18 @@ export default {
     'Close': 'Close',
     'Player': 'Player',
     'Workspace': 'Workspace',
-
+    'Settings': 'Settings',
+    // src\components\header\settings-modal\workspace-settings.tsx
+    'Enable auto save': 'Enable auto save',
+    'Auto save every': 'Auto save every',
+    'minutes': 'minutes',
+    'Show all interpolation tracks': 'Show all interpolation tracks',
+    'Show hidden interpolated objects in the side panel': 'Show hidden interpolated objects in the side panel',
+    'Always show object details': 'Always show object details',
+    'Show text for an object on the canvas not only when the object is activated': 'Show text for an object on the canvas not only when the object is activated',
+    'Automatic bordering': 'Automatic bordering',
+    'Enable automatic bordering for polygons and polylines during drawing/editing': 'Enable automatic bordering for polygons and polylines during drawing/editing',
+    'Attribute annotation mode (AAM) zoom margin': 'Attribute annotation mode (AAM) zoom margin',
     // header.tsx
     'Server version:': 'Server version:',
     'Core version:': 'Core version:',
@@ -36,7 +47,6 @@ export default {
     'Need help?': 'Need help?',
     'Forum on Intel Developer Zone': 'Forum on Intel Developer Zone',
     'Admin page': 'Admin page',
-    'Settings': 'Settings',
     'About': 'About',
     'Change password': 'Change password',
     'Logout': 'Logout',

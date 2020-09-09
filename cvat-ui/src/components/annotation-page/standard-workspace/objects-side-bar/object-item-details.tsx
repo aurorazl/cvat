@@ -7,6 +7,7 @@ import { Row } from 'antd/lib/grid';
 import Collapse from 'antd/lib/collapse';
 
 import ItemAttribute from './object-item-attribute';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     collapsed: boolean;
@@ -37,6 +38,7 @@ function attrAreTheSame(
 }
 
 function ItemAttributesComponent(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         collapsed,
         attributes,
@@ -56,7 +58,7 @@ function ItemAttributesComponent(props: Props): JSX.Element {
                 onChange={collapse}
             >
                 <Collapse.Panel
-                    header={<span style={{ fontSize: '11px' }}>Details</span>}
+                    header={<span style={{ fontSize: '11px' }}>{t('Details')}</span>}
                     key='details'
                 >
                     { sorted.map((attribute: any): JSX.Element => (

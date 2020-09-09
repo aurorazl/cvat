@@ -10,6 +10,8 @@ import Input from 'antd/lib/input';
 
 import patterns from 'utils/validation-patterns';
 
+// import { withTranslation, WithTranslation  } from 'react-i18next';
+
 export interface ChangePasswordData {
     oldPassword: string;
     newPassword1: string;

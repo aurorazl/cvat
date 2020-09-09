@@ -8,6 +8,7 @@ import Modal from 'antd/lib/modal';
 import InputNumber from 'antd/lib/input-number';
 import Text from 'antd/lib/typography/Text';
 import { clamp } from 'utils/math';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     visible: boolean;
@@ -22,6 +23,7 @@ interface Props {
 }
 
 export default function PropagateConfirmComponent(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         visible,
         propagateFrames,
@@ -39,15 +41,15 @@ export default function PropagateConfirmComponent(props: Props): JSX.Element {
     return (
         <Modal
             okType='primary'
-            okText='Yes'
-            cancelText='Cancel'
+            okText={t('Yes')}
+            cancelText={t('Cancel')}
             onOk={propagateObject}
             onCancel={cancel}
-            title='Confirm propagation'
+            title={t('Confirm propagation')}
             visible={visible}
         >
             <div className='cvat-propagate-confirm'>
-                <Text>Do you want to make a copy of the object on</Text>
+                <Text>{t('Do you want to make a copy of the object on')}</Text>
                 <InputNumber
                     size='small'
                     min={minPropagateFrames}
@@ -62,10 +64,10 @@ export default function PropagateConfirmComponent(props: Props): JSX.Element {
                 />
                 {
                     propagateFrames > 1
-                        ? <Text> frames </Text>
-                        : <Text> frame </Text>
+                        ? <Text> {t('frames')} </Text>
+                        : <Text> {t('frame')} </Text>
                 }
-                <Text>up to the </Text>
+                <Text>{t('up to the')} </Text>
                 <InputNumber
                     size='small'
                     value={propagateUpToFrame}
@@ -79,7 +81,7 @@ export default function PropagateConfirmComponent(props: Props): JSX.Element {
                         }
                     }}
                 />
-                <Text>frame</Text>
+                <Text>{t('frame')}</Text>
             </div>
         </Modal>
     );

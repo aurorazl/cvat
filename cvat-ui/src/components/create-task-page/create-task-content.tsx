@@ -17,6 +17,7 @@ import BasicConfigurationForm, { BaseConfiguration } from './basic-configuration
 import AdvancedConfigurationForm, { AdvancedConfiguration } from './advanced-configuration-form';
 import LabelsEditor from '../labels-editor/labels-editor';
 import { Files } from '../file-manager/file-manager';
+import { withTranslation, WithTranslation  } from 'react-i18next';
 
 export interface CreateTaskData {
     basic: BaseConfiguration;
@@ -25,7 +26,7 @@ export interface CreateTaskData {
     files: Files;
 }
 
-interface Props {
+interface Props extends WithTranslation {
     onCreate: (data: CreateTaskData) => void;
     status: string;
     taskId: number | null;
@@ -63,19 +64,19 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
     }
 
     public componentDidUpdate(prevProps: Props): void {
-        const { status, history, taskId } = this.props;
+        const { status, history, taskId, t } = this.props;
 
         if (status === 'CREATED' && prevProps.status !== 'CREATED') {
             const btn = (
                 <Button
                     onClick={() => history.push(`/tasks/${taskId}`)}
                 >
-                    Open task
+                    {t('Open task')}
                 </Button>
             );
 
             notification.info({
-                message: 'The task has been created',
+                message: t('The task has been created'),
                 btn,
             });
 
@@ -122,18 +123,19 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
     };
 
     private handleSubmitClick = (): void => {
+        const { t } = this.props;
         if (!this.validateLabels()) {
             notification.error({
-                message: 'Could not create a task',
-                description: 'A task must contain at least one label',
+                message: t('Could not create a task'),
+                description: t('A task must contain at least one label'),
             });
             return;
         }
 
         if (!this.validateFiles()) {
             notification.error({
-                message: 'Could not create a task',
-                description: 'A task must contain at least one file',
+                message: t('Could not create a task'),
+                description: t('A task must contain at least one file'),
             });
             return;
         }
@@ -152,7 +154,7 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
                 onCreate(this.state);
             }).catch((error: Error): void => {
                 notification.error({
-                    message: 'Could not create a task',
+                    message: t('Could not create a task'),
                     description: error.toString(),
                 });
             });
@@ -173,11 +175,12 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
 
     private renderLabelsBlock(): JSX.Element {
         const { labels } = this.state;
+        const { t } = this.props;
 
         return (
             <Col span={24}>
                 <Text type='danger'>* </Text>
-                <Text className='cvat-text-color'>Labels:</Text>
+                <Text className='cvat-text-color'>{t('Labels:')}</Text>
                 <LabelsEditor
                     labels={labels}
                     onSubmit={
@@ -193,10 +196,11 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
     }
 
     private renderFilesBlock(): JSX.Element {
+        const { t } = this.props;
         return (
             <Col span={24}>
                 <Text type='danger'>* </Text>
-                <Text className='cvat-text-color'>Select files:</Text>
+                <Text className='cvat-text-color'>{t('Select files:')}</Text>
                 <ConnectedFileManager
                     ref={
                         (container: any): void => { this.fileManagerContainer = container; }
@@ -208,14 +212,14 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
     }
 
     private renderAdvancedBlock(): JSX.Element {
-        const { installedGit } = this.props;
+        const { installedGit, t } = this.props;
         return (
             <Col span={24}>
                 <Collapse>
                     <Collapse.Panel
                         key='1'
                         header={
-                            <Text className='cvat-title'>Advanced configuration</Text>
+                            <Text className='cvat-title'>{t('Advanced configuration')}</Text>
                         }
                     >
                         <AdvancedConfigurationForm
@@ -234,13 +238,13 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
     }
 
     public render(): JSX.Element {
-        const { status } = this.props;
+        const { status, t } = this.props;
         const loading = !!status && status !== 'CREATED' && status !== 'FAILED';
 
         return (
             <Row type='flex' justify='start' align='middle' className='cvat-create-task-content'>
                 <Col span={24}>
-                    <Text className='cvat-title'>Basic configuration</Text>
+                    <Text className='cvat-title'>{t('Basic configuration')}</Text>
                 </Col>
 
                 { this.renderBasicBlock() }
@@ -258,7 +262,7 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
                         type='primary'
                         onClick={this.handleSubmitClick}
                     >
-                        Submit
+                        {t('Submit')}
                     </Button>
                 </Col>
             </Row>
@@ -266,4 +270,4 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
     }
 }
 
-export default withRouter(CreateTaskContent);
+export default withRouter(withTranslation()(CreateTaskContent));

@@ -12,6 +12,8 @@ import Spin from 'antd/lib/spin';
 import Icon from 'antd/lib/icon';
 import Text from 'antd/lib/typography/Text';
 
+import { useTranslation } from 'react-i18next';
+
 interface Props {
     collecting: boolean;
     data: any;
@@ -28,6 +30,7 @@ interface Props {
 }
 
 export default function StatisticsModalComponent(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         collecting,
         data,
@@ -96,7 +99,7 @@ export default function StatisticsModalComponent(props: Props): JSX.Element {
     );
 
     const columns = [{
-        title: <Text strong> Label </Text>,
+        title: <Text strong> {t('Label')} </Text>,
         dataIndex: 'label',
         key: 'label',
     }, {
@@ -116,19 +119,19 @@ export default function StatisticsModalComponent(props: Props): JSX.Element {
         dataIndex: 'points',
         key: 'points',
     }, {
-        title: <Text strong> Tags </Text>,
+        title: <Text strong> {t('Tags')} </Text>,
         dataIndex: 'tags',
         key: 'tags',
     }, {
-        title: <Text strong> Manually </Text>,
+        title: <Text strong> {t('Manually')} </Text>,
         dataIndex: 'manually',
         key: 'manually',
     }, {
-        title: <Text strong> Interpolated </Text>,
+        title: <Text strong> {t('Interpolated')} </Text>,
         dataIndex: 'interpolated',
         key: 'interpolated',
     }, {
-        title: <Text strong> Total </Text>,
+        title: <Text strong> {t('Total')} </Text>,
         dataIndex: 'total',
         key: 'total',
     }];
@@ -140,35 +143,35 @@ export default function StatisticsModalComponent(props: Props): JSX.Element {
             <div className='cvat-job-info-modal-window'>
                 <Row type='flex' justify='start'>
                     <Col>
-                        <Text strong className='cvat-text'>Job status</Text>
+                        <Text strong className='cvat-text'>{t('Job status')}</Text>
                         <Select value={jobStatus} onChange={changeJobStatus}>
-                            <Select.Option key='1' value='annotation'>annotation</Select.Option>
-                            <Select.Option key='2' value='validation'>validation</Select.Option>
-                            <Select.Option key='3' value='completed'>completed</Select.Option>
+                            <Select.Option key='1' value='annotation'>{t('annotation')}</Select.Option>
+                            <Select.Option key='2' value='validation'>{t('validation')}</Select.Option>
+                            <Select.Option key='3' value='completed'>{t('completed')}</Select.Option>
                         </Select>
                         {savingJobStatus && <Icon type='loading' />}
                     </Col>
                 </Row>
                 <Row type='flex' justify='start'>
                     <Col>
-                        <Text className='cvat-text'>Overview</Text>
+                        <Text className='cvat-text'>{t('Overview')}</Text>
                     </Col>
                 </Row>
                 <Row type='flex' justify='start'>
                     <Col span={5}>
-                        <Text strong className='cvat-text'>Assignee</Text>
+                        <Text strong className='cvat-text'>{t('Assignee')}</Text>
                         <Text className='cvat-text'>{assignee}</Text>
                     </Col>
                     <Col span={5}>
-                        <Text strong className='cvat-text'>Start frame</Text>
+                        <Text strong className='cvat-text'>{t('Start frame')}</Text>
                         <Text className='cvat-text'>{startFrame}</Text>
                     </Col>
                     <Col span={5}>
-                        <Text strong className='cvat-text'>Stop frame</Text>
+                        <Text strong className='cvat-text'>{t('Stop frame')}</Text>
                         <Text className='cvat-text'>{stopFrame}</Text>
                     </Col>
                     <Col span={5}>
-                        <Text strong className='cvat-text'>Frames</Text>
+                        <Text strong className='cvat-text'>{t('Frames')}</Text>
                         <Text className='cvat-text'>{stopFrame - startFrame + 1}</Text>
                     </Col>
                     <Col span={4}>
@@ -179,14 +182,14 @@ export default function StatisticsModalComponent(props: Props): JSX.Element {
                 { !!bugTracker && (
                     <Row type='flex' justify='start' className='cvat-job-info-bug-tracker'>
                         <Col>
-                            <Text strong className='cvat-text'>Bug tracker</Text>
+                            <Text strong className='cvat-text'>{t('Bug tracker')}</Text>
                             <a href={bugTracker}>{bugTracker}</a>
                         </Col>
                     </Row>
                 )}
                 <Row type='flex' justify='space-around' className='cvat-job-info-statistics'>
                     <Col span={24}>
-                        <Text className='cvat-text'>Annotations statistics</Text>
+                        <Text className='cvat-text'>{t('Annotations statistics')}</Text>
                         <Table
                             scroll={{ y: 400 }}
                             bordered

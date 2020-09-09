@@ -19,5 +19,8 @@ export default {
     'Some tasks have not been showed because they do not have any data.': '因为没有任何数据，某些任务未显示。',
     'Show all': '显示所有',
     //top-bar.tsx
-    'You have unsaved changes, please confirm leaving this page.': '尚未保存更改，请确认离开此页面。',
+    // 'You have unsaved changes, please confirm leaving this page.': '尚未保存更改，请确认离开此页面。',
+    'Default project': '默认项目',
+    'Tasks': '任务',
+    'Create new task': '创建新任务',
   }

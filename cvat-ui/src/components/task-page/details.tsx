@@ -18,10 +18,11 @@ import patterns from 'utils/validation-patterns';
 import { getReposData, syncRepos } from 'utils/git-utils';
 import UserSelector from './user-selector';
 import LabelsEditorComponent from '../labels-editor/labels-editor';
+import { withTranslation, WithTranslation  } from 'react-i18next';
 
 const core = getCore();
 
-interface Props {
+interface Props extends WithTranslation {
     previewImage: string;
     taskInstance: any;
     installedGit: boolean; // change to git repos url
@@ -37,7 +38,7 @@ interface State {
     repositoryStatus: string;
 }
 
-export default class DetailsComponent extends React.PureComponent<Props, State> {
+class DetailsComponent extends React.PureComponent<Props, State> {
     private mounted: boolean;
     private previewImageElement: HTMLImageElement;
     private previewWrapperRef: React.RefObject<HTMLDivElement>;
@@ -60,7 +61,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
     }
 
     public componentDidMount(): void {
-        const { taskInstance, previewImage } = this.props;
+        const { taskInstance, previewImage, t } = this.props;
         const { previewImageElement, previewWrapperRef } = this;
         this.mounted = true;
 
@@ -84,7 +85,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
                 if (data !== null && this.mounted) {
                     if (data.status.error) {
                         notification.error({
-                            message: 'Could not receive repository status',
+                            message: t('Could not receive repository status'),
                             description: data.status.error,
                         });
                     } else {
@@ -100,7 +101,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
             }).catch((error): void => {
                 if (this.mounted) {
                     notification.error({
-                        message: 'Could not receive repository status',
+                        message: t('Could not receive repository status'),
                         description: error.toString(),
                     });
                 }
@@ -160,7 +161,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
     }
 
     private renderParameters(): JSX.Element {
-        const { taskInstance } = this.props;
+        const { taskInstance, t } = this.props;
         const { overlap } = taskInstance;
         const { segmentSize } = taskInstance;
         const { imageQuality } = taskInstance;
@@ -170,19 +171,19 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
             <>
                 <Row type='flex' justify='start' align='middle'>
                     <Col span={12}>
-                        <Text strong className='cvat-text-color'>Overlap size</Text>
+                        <Text strong className='cvat-text-color'>{t('Overlap size')}</Text>
                         <br />
                         <Text className='cvat-text-color'>{overlap}</Text>
                     </Col>
                     <Col span={12}>
-                        <Text strong className='cvat-text-color'>Segment size</Text>
+                        <Text strong className='cvat-text-color'>{t('Segment size')}</Text>
                         <br />
                         <Text className='cvat-text-color'>{segmentSize}</Text>
                     </Col>
                 </Row>
                 <Row type='flex' justify='space-between' align='middle'>
                     <Col span={12}>
-                        <Text strong className='cvat-text-color'>Image quality</Text>
+                        <Text strong className='cvat-text-color'>{t('Image quality')}</Text>
                         <br />
                         <Text className='cvat-text-color'>{imageQuality}</Text>
                     </Col>
@@ -201,6 +202,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
             taskInstance,
             registeredUsers,
             onTaskUpdate,
+            t,
         } = this.props;
         const owner = taskInstance.owner ? taskInstance.owner.username : null;
         const assignee = taskInstance.assignee ? taskInstance.assignee.username : null;
@@ -236,7 +238,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
                 </Col>
                 <Col span={10}>
                     <Text type='secondary'>
-                        Assigned to
+                    {t('Assigned to')}
                         { assigneeSelect }
                     </Text>
                 </Col>
@@ -245,7 +247,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
     }
 
     private renderDatasetRepository(): JSX.Element | boolean {
-        const { taskInstance } = this.props;
+        const { taskInstance, t } = this.props;
         const {
             repository,
             repositoryStatus,
@@ -256,28 +258,28 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
                 && (
                     <Row>
                         <Col className='cvat-dataset-repository-url'>
-                            <Text strong className='cvat-text-color'>Dataset Repository</Text>
+                            <Text strong className='cvat-text-color'>{t('Dataset Repository')}</Text>
                             <br />
                             <a href={repository} rel='noopener noreferrer' target='_blank'>{repository}</a>
                             {repositoryStatus === 'sync'
                                 && (
                                     <Tag color='blue'>
                                         <Icon type='check-circle' />
-                                        Synchronized
+                                        {t('Synchronized')}
                                     </Tag>
                                 )}
                             {repositoryStatus === 'merged'
                                 && (
                                     <Tag color='green'>
                                         <Icon type='check-circle' />
-                                        Merged
+                                        {t('Merged')}
                                     </Tag>
                                 )}
                             {repositoryStatus === 'syncing'
                                 && (
                                     <Tag color='purple'>
                                         <Icon type='loading' />
-                                        Syncing
+                                        {t('Syncing')}
                                     </Tag>
                                 )}
                             {repositoryStatus === '!sync'
@@ -299,7 +301,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
                                                 if (this.mounted) {
                                                     Modal.error({
                                                         width: 800,
-                                                        title: 'Could not synchronize the repository',
+                                                        title: t('Could not synchronize the repository'),
                                                         content: error.toString(),
                                                     });
 
@@ -311,7 +313,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
                                         }}
                                     >
                                         <Icon type='warning' />
-                                        Synchronize
+                                        {t('Synchronize')}
                                     </Tag>
                                 )}
                         </Col>
@@ -324,6 +326,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
         const {
             taskInstance,
             onTaskUpdate,
+            t,
         } = this.props;
         const { bugTracker, bugTrackerEditing } = this.state;
 
@@ -337,8 +340,8 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
             if (value && !patterns.validateURL.pattern.test(value)) {
                 if (!shown) {
                     Modal.error({
-                        title: `Could not update the task ${taskInstance.id}`,
-                        content: 'Issue tracker is expected to be URL',
+                        title: t('Could not update the task ${taskInstance.id}').replace('${taskInstance.id}', `${taskInstance.id}`),
+                        content: t('Issue tracker is expected to be URL'),
                         onOk: (() => {
                             shown = false;
                         }),
@@ -360,7 +363,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
             return (
                 <Row>
                     <Col>
-                        <Text strong className='cvat-text-color'>Issue Tracker</Text>
+                        <Text strong className='cvat-text-color'>{t('Issue Tracker')}</Text>
                         <br />
                         <Text editable={{ onChange: onChangeValue }}>{bugTracker}</Text>
                         <Button
@@ -373,7 +376,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
                             }}
                             className='cvat-open-bug-tracker-button'
                         >
-                                Open the issue
+                                {t('Open the issue')}
                         </Button>
                     </Col>
                 </Row>
@@ -383,7 +386,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
         return (
             <Row>
                 <Col>
-                    <Text strong className='cvat-text-color'>Issue Tracker</Text>
+                    <Text strong className='cvat-text-color'>{t('Issue Tracker')}</Text>
                     <br />
                     <Text
                         editable={{
@@ -392,7 +395,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
                             onChange: onChangeValue,
                         }}
                     >
-                        {bugTrackerEditing ? '' : 'Not specified'}
+                        {bugTrackerEditing ? '' : t('Not specified')}
                     </Text>
                 </Col>
             </Row>
@@ -455,3 +458,5 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
         );
     }
 }
+
+export default withTranslation()(DetailsComponent);

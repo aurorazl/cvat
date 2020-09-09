@@ -27,6 +27,7 @@ import {
     changeShowProjections as changeShowProjectionsAction,
 } from 'actions/settings-actions';
 import Button from 'antd/lib/button';
+import { useTranslation } from 'react-i18next';
 
 interface StateToProps {
     appearanceCollapsed: boolean;
@@ -140,6 +141,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>): DispatchToProps {
 type Props = StateToProps & DispatchToProps;
 
 function AppearanceBlock(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         appearanceCollapsed,
         colorBy,
@@ -166,25 +168,25 @@ function AppearanceBlock(props: Props): JSX.Element {
         >
             <Collapse.Panel
                 header={
-                    <Text strong>Appearance</Text>
+                    <Text strong>{t('Appearance')}</Text>
                 }
                 key='appearance'
             >
                 <div className='cvat-objects-appearance-content'>
-                    <Text type='secondary'>Color by</Text>
+                    <Text type='secondary'>{t('Color by')}</Text>
                     <Radio.Group value={colorBy} onChange={changeShapesColorBy}>
                         <Radio.Button value={ColorBy.LABEL}>{ColorBy.LABEL}</Radio.Button>
                         <Radio.Button value={ColorBy.INSTANCE}>{ColorBy.INSTANCE}</Radio.Button>
                         <Radio.Button value={ColorBy.GROUP}>{ColorBy.GROUP}</Radio.Button>
                     </Radio.Group>
-                    <Text type='secondary'>Opacity</Text>
+                    <Text type='secondary'>{t('Opacity')}</Text>
                     <Slider
                         onChange={changeShapesOpacity}
                         value={opacity}
                         min={0}
                         max={100}
                     />
-                    <Text type='secondary'>Selected opacity</Text>
+                    <Text type='secondary'>{t('Selected opacity')}</Text>
                     <Slider
                         onChange={changeSelectedShapesOpacity}
                         value={selectedOpacity}
@@ -197,7 +199,7 @@ function AppearanceBlock(props: Props): JSX.Element {
                         }}
                         checked={outlined}
                     >
-                        Outlined borders
+                        {t('Outlined borders')}
                         <ColorPicker
                             onChange={(color) => changeShapesOutlinedBorders(outlined, color)}
                             value={outlineColor}
@@ -213,13 +215,13 @@ function AppearanceBlock(props: Props): JSX.Element {
                         onChange={changeShowBitmap}
                         checked={showBitmap}
                     >
-                        Show bitmap
+                        {t('Show bitmap')}
                     </Checkbox>
                     <Checkbox
                         onChange={changeShowProjections}
                         checked={showProjections}
                     >
-                        Show projections
+                        {t('Show projections')}
                     </Checkbox>
                 </div>
             </Collapse.Panel>

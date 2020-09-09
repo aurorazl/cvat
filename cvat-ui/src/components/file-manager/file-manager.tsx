@@ -14,6 +14,7 @@ import Empty from 'antd/lib/empty';
 import Tree, { AntTreeNode, TreeNodeNormal } from 'antd/lib/tree/Tree';
 
 import consts from 'consts';
+// import { withTranslation, WithTranslation  } from 'react-i18next';
 
 export interface Files {
     local: File[];

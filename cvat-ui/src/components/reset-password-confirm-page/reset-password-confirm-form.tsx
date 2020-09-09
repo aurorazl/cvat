@@ -10,6 +10,7 @@ import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
 
 import patterns from 'utils/validation-patterns';
+// import { withTranslation, WithTranslation  } from 'react-i18next';
 
 export interface ResetPasswordConfirmData {
     newPassword1: string;

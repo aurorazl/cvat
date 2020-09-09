@@ -19,5 +19,7 @@ export default {
     'Some tasks have not been showed because they do not have any data.': 'Some tasks have not been showed because they do not have any data.',
     'Show all': 'Show all',
     //top-bar.tsx
-    'You have unsaved changes, please confirm leaving this page.': 'You have unsaved changes, please confirm leaving this page.',
+    'Default project': 'Default project',
+    'Tasks': 'Tasks',
+    'Create new task': 'Create new task',
   }

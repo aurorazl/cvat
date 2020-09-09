@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import { shortcutsActions } from 'actions/shortcuts-actions';
 import { CombinedState } from 'reducers/interfaces';
+import { useTranslation } from 'react-i18next';
 
 interface StateToProps {
     visible: boolean;
@@ -36,6 +37,7 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
 }
 
 function ShorcutsDialog(props: StateToProps & DispatchToProps): JSX.Element | null {
+    const { t } = useTranslation();
     const { visible, switchShortcutsDialog } = props;
     const keyMap = getApplicationKeyMap();
 
@@ -50,21 +52,21 @@ function ShorcutsDialog(props: StateToProps & DispatchToProps): JSX.Element | nu
     );
 
     const columns = [{
-        title: 'Name',
+        title: t('Name'),
         dataIndex: 'name',
         key: 'name',
     }, {
-        title: 'Shortcut',
+        title: t('Shortcut'),
         dataIndex: 'shortcut',
         key: 'shortcut',
         render: splitToRows,
     }, {
-        title: 'Action',
+        title: t('Action'),
         dataIndex: 'action',
         key: 'action',
         render: splitToRows,
     }, {
-        title: 'Description',
+        title: t('Description'),
         dataIndex: 'description',
         key: 'description',
     }];
@@ -79,7 +81,7 @@ function ShorcutsDialog(props: StateToProps & DispatchToProps): JSX.Element | nu
 
     return (
         <Modal
-            title='Active list of shortcuts'
+            title={t('Active list of shortcuts')}
             visible={visible}
             closable={false}
             width={800}

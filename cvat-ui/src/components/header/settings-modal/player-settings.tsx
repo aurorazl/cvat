@@ -20,6 +20,7 @@ import { BackJumpIcon, ForwardJumpIcon } from 'icons';
 import { FrameSpeed, GridColor } from 'reducers/interfaces';
 import consts from 'consts';
 
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     frameStep: number;
@@ -49,6 +50,7 @@ interface Props {
 }
 
 export default function PlayerSettingsComponent(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         frameStep,
         frameSpeed,
@@ -85,7 +87,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
         <div className='cvat-player-settings'>
             <Row type='flex' align='bottom' className='cvat-player-settings-step'>
                 <Col>
-                    <Text className='cvat-text-color'> Player step </Text>
+                    <Text className='cvat-text-color'> {t('Player step')} </Text>
                     <InputNumber
                         min={minFrameStep}
                         max={maxFrameStep}
@@ -103,28 +105,28 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                 </Col>
                 <Col offset={1}>
                     <Text type='secondary'>
-                        Number of frames skipped when selecting
+                    {t('Number of frames skipped when selecting')}
                         <Icon component={BackJumpIcon} />
-                        or
+                        {t('or')}
                         <Icon component={ForwardJumpIcon} />
                     </Text>
                 </Col>
             </Row>
             <Row type='flex' align='middle' className='cvat-player-settings-speed'>
                 <Col>
-                    <Text className='cvat-text-color'> Player speed </Text>
+                    <Text className='cvat-text-color'> {t('Player speed')} </Text>
                     <Select
                         value={frameSpeed}
                         onChange={(speed: FrameSpeed): void => {
                             onChangeFrameSpeed(speed);
                         }}
                     >
-                        <Select.Option key='fastest' value={FrameSpeed.Fastest}>Fastest</Select.Option>
-                        <Select.Option key='fast' value={FrameSpeed.Fast}>Fast</Select.Option>
-                        <Select.Option key='usual' value={FrameSpeed.Usual}>Usual</Select.Option>
-                        <Select.Option key='slow' value={FrameSpeed.Slow}>Slow</Select.Option>
-                        <Select.Option key='slower' value={FrameSpeed.Slower}>Slower</Select.Option>
-                        <Select.Option key='slowest' value={FrameSpeed.Slowest}>Slowest</Select.Option>
+                        <Select.Option key='fastest' value={FrameSpeed.Fastest}>{t('Fastest')}</Select.Option>
+                        <Select.Option key='fast' value={FrameSpeed.Fast}>{t('Fast')}</Select.Option>
+                        <Select.Option key='usual' value={FrameSpeed.Usual}>{t('Usual')}</Select.Option>
+                        <Select.Option key='slow' value={FrameSpeed.Slow}>{t('Slow')}</Select.Option>
+                        <Select.Option key='slower' value={FrameSpeed.Slower}>{t('Slower')}</Select.Option>
+                        <Select.Option key='slowest' value={FrameSpeed.Slowest}>{t('Slowest')}</Select.Option>
                     </Select>
                 </Col>
             </Row>
@@ -141,7 +143,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                         overlayClassName='canvas-background-color-picker-popover'
                         trigger='click'
                     >
-                        <Button type='default'>Select canvas background color</Button>
+                        <Button type='default'>{t('Select canvas background color')}</Button>
                     </Popover>
                 </Col>
             </Row>
@@ -154,13 +156,13 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                             onSwitchGrid(event.target.checked);
                         }}
                     >
-                        Show grid
+                        {t('Show grid')}
                     </Checkbox>
                 </Col>
             </Row>
             <Row type='flex' justify='space-between'>
                 <Col span={8} className='cvat-player-settings-grid-size'>
-                    <Text className='cvat-text-color'> Grid size </Text>
+                    <Text className='cvat-text-color'> {t('Grid size')} </Text>
                     <InputNumber
                         min={minGridSize}
                         max={maxGridSize}
@@ -176,7 +178,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                     />
                 </Col>
                 <Col span={8} className='cvat-player-settings-grid-color'>
-                    <Text className='cvat-text-color'> Grid color </Text>
+                    <Text className='cvat-text-color'> {t('Grid color')} </Text>
                     <Select
                         value={gridColor}
                         disabled={!grid}
@@ -192,7 +194,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                     </Select>
                 </Col>
                 <Col span={8} className='cvat-player-settings-grid-opacity'>
-                    <Text className='cvat-text-color'> Grid opacity </Text>
+                    <Text className='cvat-text-color'> {t('Grid opacity')} </Text>
                     <Slider
                         min={0}
                         max={100}
@@ -216,11 +218,11 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                                     onSwitchResetZoom(event.target.checked);
                                 }}
                             >
-                                Reset zoom
+                                {t('Reset zoom')}
                             </Checkbox>
                         </Col>
                         <Col>
-                            <Text type='secondary'> Fit image after changing frame </Text>
+                            <Text type='secondary'> {t('Fit image after changing frame')} </Text>
                         </Col>
                     </Row>
                 </Col>
@@ -234,11 +236,11 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                                     onSwitchRotateAll(event.target.checked);
                                 }}
                             >
-                                Rotate all images
+                                {t('Rotate all images')}
                             </Checkbox>
                         </Col>
                         <Col>
-                            <Text type='secondary'> Rotate all images simultaneously </Text>
+                            <Text type='secondary'> {t('Rotate all images simultaneously')} </Text>
                         </Col>
                     </Row>
                 </Col>
@@ -247,7 +249,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                 <Col span={12}>
                     <Row className='cvat-player-settings-brightness'>
                         <Col className='cvat-text-color'>
-                            Brightness
+                        {t('Brightness')}
                         </Col>
                         <Col>
                             <Slider
@@ -262,7 +264,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                     </Row>
                     <Row className='cvat-player-settings-contrast'>
                         <Col className='cvat-text-color'>
-                            Contrast
+                        {t('Contrast')}
                         </Col>
                         <Col>
                             <Slider
@@ -277,7 +279,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                     </Row>
                     <Row className='cvat-player-settings-saturation'>
                         <Col className='cvat-text-color'>
-                            Saturation
+                        {t('Saturation')}
                         </Col>
                         <Col>
                             <Slider
@@ -299,7 +301,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                                     onChangeSaturationLevel(100);
                                 }}
                             >
-                                Reset color settings
+                                {t('Reset color settings')}
                             </Button>
                         </Col>
                     </Row>

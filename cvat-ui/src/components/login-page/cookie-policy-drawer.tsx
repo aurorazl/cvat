@@ -9,9 +9,10 @@ import Paragraph from 'antd/lib/typography/Paragraph';
 import Button from 'antd/lib/button/button';
 
 import { isPublic } from 'utils/enviroment';
-
+import { useTranslation } from 'react-i18next';
 
 function CookieDrawer(): JSX.Element {
+    const { t } = useTranslation();
     const [drawerVisible, setDrawerVisible] = useState(false);
 
     useEffect(() => {
@@ -28,7 +29,7 @@ function CookieDrawer(): JSX.Element {
 
     return (
         <Drawer
-            title='About Cookies on this site:'
+            title={t('About Cookies on this site:')}
             placement='bottom'
             closable={false}
             visible={drawerVisible}
@@ -43,7 +44,7 @@ function CookieDrawer(): JSX.Element {
                 . By continuing to use our website, you agree to our use of cookies.
             </Paragraph>
             <Button onClick={onClose} size='large' type='primary'>
-                Accept
+            {t('Accept')}
             </Button>
         </Drawer>
     );

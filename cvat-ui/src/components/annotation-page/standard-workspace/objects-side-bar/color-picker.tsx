@@ -12,6 +12,8 @@ import Tooltip from 'antd/lib/tooltip';
 
 import getCore from 'cvat-core-wrapper';
 
+import { useTranslation } from 'react-i18next';
+
 const core = getCore();
 
 interface Props {
@@ -25,6 +27,7 @@ interface Props {
 }
 
 function ColorPicker(props: Props, ref: React.Ref<any>): JSX.Element {
+    const { t } = useTranslation();
     const {
         children,
         value,
@@ -68,7 +71,7 @@ function ColorPicker(props: Props, ref: React.Ref<any>): JSX.Element {
                                         changeVisible(false);
                                     }}
                                 >
-                                    Reset
+                                    {t('Reset')}
                                 </Button>
                             )}
                         </Col>
@@ -78,7 +81,7 @@ function ColorPicker(props: Props, ref: React.Ref<any>): JSX.Element {
                                     changeVisible(false);
                                 }}
                             >
-                                Cancel
+                                {t('Cancel')}
                             </Button>
                         </Col>
                         <Col span={6}>
@@ -89,7 +92,7 @@ function ColorPicker(props: Props, ref: React.Ref<any>): JSX.Element {
                                     changeVisible(false);
                                 }}
                             >
-                                Ok
+                                {t('Ok')}
                             </Button>
                         </Col>
                     </Row>
@@ -99,7 +102,7 @@ function ColorPicker(props: Props, ref: React.Ref<any>): JSX.Element {
                 <Row type='flex' justify='space-between' align='middle'>
                     <Col span={12}>
                         <Text strong>
-                            Select color
+                        {t('Select color')}
                         </Text>
                     </Col>
                     <Col span={4}>
