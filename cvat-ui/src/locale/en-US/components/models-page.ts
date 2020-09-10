@@ -7,4 +7,9 @@ export default {
     'Type': 'Type',
     'Description': 'Description',
     'Labels': 'Labels',
+    // src\components\models-page\empty-list.tsx
+    'No models deployed yet...': 'No models deployed yet...',
+    'To annotate your tasks automatically': 'To annotate your tasks automatically',
+    'deploy a model with': 'deploy a model with',
+
   }
