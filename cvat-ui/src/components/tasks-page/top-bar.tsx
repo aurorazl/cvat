@@ -39,7 +39,7 @@ function TopBarComponent(props: VisibleTopBarProps & RouteComponentProps): JSX.E
                         defaultValue={searchValue}
                         onSearch={onSearch}
                         size='large'
-                        placeholder='Search'
+                        placeholder={t('Search')}
                     />
                 </Col>
                 <Col

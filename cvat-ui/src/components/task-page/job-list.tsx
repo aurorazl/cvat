@@ -18,10 +18,12 @@ import getCore from 'cvat-core-wrapper';
 import UserSelector from './user-selector';
 
 import { useTranslation } from 'react-i18next';
+import { transMoment } from 'utils/lang-utils';
 
 const core = getCore();
 
 const baseURL = core.config.backendAPI.slice(0, -7);
+
 
 interface Props {
     taskInstance: any;
@@ -133,7 +135,7 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
             job: job.id,
             frames: `${job.startFrame}-${job.stopFrame}`,
             status: `${job.status}`,
-            started: `${created.format('MMMM Do YYYY HH:MM')}`,
+            started: transMoment(created),
             duration: `${moment.duration(moment(moment.now()).diff(created)).humanize()}`,
             assignee: job,
         });
@@ -174,7 +176,7 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
                 </Col>
                 <Col>
                     <Text className='cvat-text-color'>
-                        {t('${completed} of ${data.length} jobs').replace('${completed}', `${completed}`).replace('${data.length}', `${data.length}`)}
+                        {t('${completed} of ${data.length} jobs', { completed: `${completed}`, dataLength: `${data.length}`})}
                     </Text>
                 </Col>
             </Row>

@@ -43,6 +43,7 @@ export default {
     'Core version:': 'Core version:',
     'Canvas version:': 'Canvas version:',
     'UI version:': 'UI version:',
+    'License': 'License',
     "What\'s new?": "What\'s new?",
     'Need help?': 'Need help?',
     'Forum on Intel Developer Zone': 'Forum on Intel Developer Zone',
@@ -54,4 +55,6 @@ export default {
     'Models': 'Models',
     'Analytics': 'Analytics',
     'Help': 'Help',
+    'Press ${switchSettingsShortcut} to switch': 'Press ${switchSettingsShortcut} to switch',
+    'OK': 'OK'
   }

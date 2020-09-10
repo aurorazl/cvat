@@ -14,7 +14,7 @@ import Empty from 'antd/lib/empty';
 import Tree, { AntTreeNode, TreeNodeNormal } from 'antd/lib/tree/Tree';
 
 import consts from 'consts';
-// import { withTranslation, WithTranslation  } from 'react-i18next';
+import { withTranslation, WithTranslation  } from 'react-i18next';
 
 export interface Files {
     local: File[];
@@ -34,8 +34,8 @@ interface Props {
     onLoadData: (key: string, success: () => void, failure: () => void) => void;
 }
 
-export default class FileManager extends React.PureComponent<Props, State> {
-    public constructor(props: Props) {
+class FileManager extends React.PureComponent<Props & WithTranslation, State> {
+    public constructor(props: Props & WithTranslation) {
         super(props);
 
         this.state = {
@@ -87,9 +87,10 @@ export default class FileManager extends React.PureComponent<Props, State> {
 
     private renderLocalSelector(): JSX.Element {
         const { files } = this.state;
+        const { t } = this.props;
 
         return (
-            <Tabs.TabPane key='local' tab='My computer'>
+            <Tabs.TabPane key='local' tab={t('My computer')}>
                 <Upload.Dragger
                     multiple
                     listType='text'
@@ -110,9 +111,9 @@ export default class FileManager extends React.PureComponent<Props, State> {
                     <p className='ant-upload-drag-icon'>
                         <Icon type='inbox' />
                     </p>
-                    <p className='ant-upload-text'>Click or drag files to this area</p>
+                    <p className='ant-upload-text'>{t('Click or drag files to this area')}</p>
                     <p className='ant-upload-hint'>
-                        Support for a bulk images or a single video
+                    {t('Support for a bulk images or a single video')}
                     </p>
                 </Upload.Dragger>
                 { files.local.length >= 5
@@ -151,14 +152,14 @@ export default class FileManager extends React.PureComponent<Props, State> {
         }
 
         const { SHARE_MOUNT_GUIDE_URL } = consts;
-        const { treeData } = this.props;
+        const { treeData, t } = this.props;
         const {
             expandedKeys,
             files,
         } = this.state;
 
         return (
-            <Tabs.TabPane key='share' tab='Connected file share'>
+            <Tabs.TabPane key='share' tab={t('Connected file share')}>
                 { treeData[0].children && treeData[0].children.length
                     ? (
                         <Tree
@@ -197,11 +198,11 @@ export default class FileManager extends React.PureComponent<Props, State> {
                         <div className='cvat-empty-share-tree'>
                             <Empty />
                             <Paragraph className='cvat-text-color'>
-                                Please, be sure you had
+                            {t('Please, be sure you had')}
                                 <Text strong>
-                                    <a href={SHARE_MOUNT_GUIDE_URL}> mounted </a>
+                                    <a href={SHARE_MOUNT_GUIDE_URL}> {t('mounted')} </a>
                                 </Text>
-                                share before you built CVAT and the shared storage contains files
+                                {t('share before you built CVAT and the shared storage contains files')}
                             </Paragraph>
                         </div>
                     )}
@@ -211,11 +212,12 @@ export default class FileManager extends React.PureComponent<Props, State> {
 
     private renderRemoteSelector(): JSX.Element {
         const { files } = this.state;
+        const { t } = this.props;
 
         return (
-            <Tabs.TabPane key='remote' tab='Remote sources'>
+            <Tabs.TabPane key='remote' tab={t('Remote sources')}>
                 <Input.TextArea
-                    placeholder='Enter one URL per line'
+                    placeholder={t('Enter one URL per line')}
                     rows={6}
                     value={[...files.remote].join('\n')}
                     onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -255,3 +257,5 @@ export default class FileManager extends React.PureComponent<Props, State> {
         );
     }
 }
+
+export default withTranslation()(FileManager);

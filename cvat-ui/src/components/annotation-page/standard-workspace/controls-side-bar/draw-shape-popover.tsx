@@ -16,6 +16,7 @@ import { ShapeType } from 'reducers/interfaces';
 import { clamp } from 'utils/math';
 
 import { useTranslation } from 'react-i18next';
+import { transShapeType } from 'utils/lang-utils';
 
 interface Props {
     shapeType: ShapeType;
@@ -57,7 +58,7 @@ function DrawShapePopoverComponent(props: Props): JSX.Element {
         <div className='cvat-draw-shape-popover-content'>
             <Row type='flex' justify='start'>
                 <Col>
-                    <Text className='cvat-text-color' strong>{t('Draw new ${shapeType}').replace('${shapeType}', `${shapeType}`)}</Text>
+                    <Text className='cvat-text-color' strong>{t('Draw new ${shapeType}').replace('${shapeType}', transShapeType(`${shapeType}`))}</Text>
                 </Col>
             </Row>
             <Row type='flex' justify='start'>

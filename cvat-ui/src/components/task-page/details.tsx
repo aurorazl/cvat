@@ -19,6 +19,7 @@ import { getReposData, syncRepos } from 'utils/git-utils';
 import UserSelector from './user-selector';
 import LabelsEditorComponent from '../labels-editor/labels-editor';
 import { withTranslation, WithTranslation  } from 'react-i18next';
+import { transMoment } from 'utils/lang-utils';
 
 const core = getCore();
 
@@ -206,7 +207,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
         } = this.props;
         const owner = taskInstance.owner ? taskInstance.owner.username : null;
         const assignee = taskInstance.assignee ? taskInstance.assignee.username : null;
-        const created = moment(taskInstance.createdDate).format('MMMM Do YYYY');
+        const created = moment(taskInstance.createdDate);
         const assigneeSelect = (
             <UserSelector
                 users={registeredUsers}
@@ -232,7 +233,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
                 <Col span={12}>
                     { owner && (
                         <Text type='secondary'>
-                            {`Created by ${owner} on ${created}`}
+                            {t('Created by ${owner} on ${created}', { owner: owner, created: transMoment(created) })}
                         </Text>
                     )}
                 </Col>

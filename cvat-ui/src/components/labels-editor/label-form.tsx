@@ -25,6 +25,7 @@ import {
     Attribute,
 } from './common';
 
+import { withTranslation, WithTranslation  } from 'react-i18next';
 
 export enum AttributeType {
     SELECT = 'SELECT',
@@ -38,7 +39,7 @@ type Props = FormComponentProps & {
     label: Label | null;
     labelNames?: string[];
     onSubmit: (label: Label | null) => void;
-};
+} & WithTranslation;
 
 class LabelForm extends React.PureComponent<Props, {}> {
     private continueAfterSubmit: boolean;
@@ -115,7 +116,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
     private renderAttributeNameInput(key: number, attr: Attribute | null): JSX.Element {
         const locked = attr ? attr.id >= 0 : false;
         const value = attr ? attr.name : '';
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
             <Col span={5}>
@@ -124,7 +125,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
                         initialValue: value,
                         rules: [{
                             required: true,
-                            message: 'Please specify a name',
+                            message: t('Please specify a name'),
                         }, {
                             pattern: patterns.validateAttributeName.pattern,
                             message: patterns.validateAttributeName.message,
@@ -138,12 +139,12 @@ class LabelForm extends React.PureComponent<Props, {}> {
     private renderAttributeTypeInput(key: number, attr: Attribute | null): JSX.Element {
         const locked = attr ? attr.id >= 0 : false;
         const type = attr ? attr.input_type.toUpperCase() : AttributeType.SELECT;
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
             <Col span={4}>
                 <Form.Item>
-                    <Tooltip title='An HTML element representing the attribute' mouseLeaveDelay={0}>
+                    <Tooltip title={t('An HTML element representing the attribute')} mouseLeaveDelay={0}>
                         { form.getFieldDecorator(`type[${key}]`, {
                             initialValue: type,
                         })(
@@ -174,18 +175,18 @@ class LabelForm extends React.PureComponent<Props, {}> {
     private renderAttributeValuesInput(key: number, attr: Attribute | null): JSX.Element {
         const locked = attr ? attr.id >= 0 : false;
         const existedValues = attr ? attr.values : [];
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         const validator = (_: any, values: string[], callback: any): void => {
             if (locked && existedValues) {
                 if (!equalArrayHead(existedValues, values)) {
-                    callback('You can only append new values');
+                    callback(t('You can only append new values'));
                 }
             }
 
             for (const value of values) {
                 if (!patterns.validateAttributeValue.pattern.test(value)) {
-                    callback(`Invalid attribute value: "${value}"`);
+                    callback(t('Invalid attribute value: "${value}"').replace('${value}', `${value}`));
                 }
             }
 
@@ -193,13 +194,13 @@ class LabelForm extends React.PureComponent<Props, {}> {
         };
 
         return (
-            <Tooltip title='Press enter to add a new value' mouseLeaveDelay={0}>
+            <Tooltip title={t('Press enter to add a new value')} mouseLeaveDelay={0}>
                 <Form.Item>
                     { form.getFieldDecorator(`values[${key}]`, {
                         initialValue: existedValues,
                         rules: [{
                             required: true,
-                            message: 'Please specify values',
+                            message: t('Please specify values'),
                         }, {
                             validator,
                         }],
@@ -207,7 +208,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
                         <Select
                             mode='tags'
                             dropdownMenuStyle={{ display: 'none' }}
-                            placeholder='Attribute values'
+                            placeholder={t('Attribute values')}
                         />,
                     )}
                 </Form.Item>
@@ -217,10 +218,10 @@ class LabelForm extends React.PureComponent<Props, {}> {
 
     private renderBooleanValueInput(key: number, attr: Attribute | null): JSX.Element {
         const value = attr ? attr.values[0] : 'false';
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
-            <Tooltip title='Specify a default value' mouseLeaveDelay={0}>
+            <Tooltip title={t('Specify a default value')} mouseLeaveDelay={0}>
                 <Form.Item>
                     { form.getFieldDecorator(`values[${key}]`, {
                         initialValue: value,
@@ -238,14 +239,14 @@ class LabelForm extends React.PureComponent<Props, {}> {
     private renderNumberRangeInput(key: number, attr: Attribute | null): JSX.Element {
         const locked = attr ? attr.id >= 0 : false;
         const value = attr ? attr.values.join(';') : '';
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         const validator = (_: any, strNumbers: string, callback: any): void => {
             const numbers = strNumbers
                 .split(';')
                 .map((number): number => Number.parseFloat(number));
             if (numbers.length !== 3) {
-                callback('Three numbers are expected');
+                callback(t('Three numbers are expected'));
             }
 
             for (const number of numbers) {
@@ -257,15 +258,15 @@ class LabelForm extends React.PureComponent<Props, {}> {
             const [min, max, step] = numbers;
 
             if (min >= max) {
-                callback('Minimum must be less than maximum');
+                callback(t('Minimum must be less than maximum'));
             }
 
             if (max - min < step) {
-                callback('Step must be less than minmax difference');
+                callback(t('Step must be less than minmax difference'));
             }
 
             if (step <= 0) {
-                callback('Step must be a positive number');
+                callback(t('Step must be a positive number'));
             }
 
             callback();
@@ -277,12 +278,12 @@ class LabelForm extends React.PureComponent<Props, {}> {
                     initialValue: value,
                     rules: [{
                         required: true,
-                        message: 'Please set a range',
+                        message: t('Please set a range'),
                     }, {
                         validator,
                     }],
                 })(
-                    <Input disabled={locked} placeholder='min;max;step' />,
+                    <Input disabled={locked} placeholder={t('min;max;step')} />,
                 )}
             </Form.Item>
         );
@@ -290,14 +291,14 @@ class LabelForm extends React.PureComponent<Props, {}> {
 
     private renderDefaultValueInput(key: number, attr: Attribute | null): JSX.Element {
         const value = attr ? attr.values[0] : '';
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
             <Form.Item>
                 { form.getFieldDecorator(`values[${key}]`, {
                     initialValue: value,
                 })(
-                    <Input placeholder='Default value' />,
+                    <Input placeholder={t('Default value')} />,
                 )}
             </Form.Item>
         );
@@ -306,16 +307,16 @@ class LabelForm extends React.PureComponent<Props, {}> {
     private renderMutableAttributeInput(key: number, attr: Attribute | null): JSX.Element {
         const locked = attr ? attr.id >= 0 : false;
         const value = attr ? attr.mutable : false;
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
             <Form.Item>
-                <Tooltip title='Can this attribute be changed frame to frame?' mouseLeaveDelay={0}>
+                <Tooltip title={t('Can this attribute be changed frame to frame?')} mouseLeaveDelay={0}>
                     { form.getFieldDecorator(`mutable[${key}]`, {
                         initialValue: value,
                         valuePropName: 'checked',
                     })(
-                        <Checkbox disabled={locked}> Mutable </Checkbox>,
+                        <Checkbox disabled={locked}> {t('Mutable')} </Checkbox>,
                     )}
                 </Tooltip>
             </Form.Item>
@@ -324,10 +325,11 @@ class LabelForm extends React.PureComponent<Props, {}> {
 
     private renderDeleteAttributeButton(key: number, attr: Attribute | null): JSX.Element {
         const locked = attr ? attr.id >= 0 : false;
+        const { t } = this.props;
 
         return (
             <Form.Item>
-                <Tooltip title='Delete the attribute' mouseLeaveDelay={0}>
+                <Tooltip title={t('Delete the attribute')} mouseLeaveDelay={0}>
                     <Button
                         type='link'
                         className='cvat-delete-attribute-button'
@@ -391,6 +393,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
             label,
             form,
             labelNames,
+            t,
         } = this.props;
         const value = label ? label.name : '';
         const locked = label ? label.id >= 0 : false;
@@ -402,7 +405,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
                         initialValue: value,
                         rules: [{
                             required: true,
-                            message: 'Please specify a name',
+                            message: t('Please specify a name'),
                         }, {
                             pattern: patterns.validateAttributeName.pattern,
                             message: patterns.validateAttributeName.message,
@@ -410,17 +413,18 @@ class LabelForm extends React.PureComponent<Props, {}> {
                             validator:
                                 async (_rule: any, labelName: string, callback: Function) => {
                                     if (labelNames && labelNames.includes(labelName)) {
-                                        callback('Label name must be unique for the task');
+                                        callback(t('Label name must be unique for the task'));
                                     }
                                 },
                         }],
-                    })(<Input disabled={locked} placeholder='Label name' />)}
+                    })(<Input disabled={locked} placeholder={t('Label name')} />)}
                 </Form.Item>
             </Col>
         );
     }
 
     private renderNewAttributeButton(): JSX.Element {
+        const { t } = this.props;
         return (
             <Col span={6}>
                 <Form.Item>
@@ -429,7 +433,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
                         onClick={this.addAttribute}
                         className='cvat-new-attribute-button'
                     >
-                        Add an attribute
+                        {t('Add an attribute')}
                         <Icon type='plus' />
                     </Button>
                 </Form.Item>
@@ -438,9 +442,10 @@ class LabelForm extends React.PureComponent<Props, {}> {
     }
 
     private renderDoneButton(): JSX.Element {
+        const { t } = this.props;
         return (
             <Col>
-                <Tooltip title='Save the label and return' mouseLeaveDelay={0}>
+                <Tooltip title={t('Save the label and return')} mouseLeaveDelay={0}>
                     <Button
                         style={{ width: '150px' }}
                         type='primary'
@@ -449,7 +454,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
                             this.continueAfterSubmit = false;
                         }}
                     >
-                        Done
+                        {t('Done')}
                     </Button>
                 </Tooltip>
             </Col>
@@ -457,13 +462,13 @@ class LabelForm extends React.PureComponent<Props, {}> {
     }
 
     private renderContinueButton(): JSX.Element {
-        const { label } = this.props;
+        const { label, t } = this.props;
 
         return (
             label ? <div />
                 : (
                     <Col offset={1}>
-                        <Tooltip title='Save the label and create one more' mouseLeaveDelay={0}>
+                        <Tooltip title={t('Save the label and create one more')} mouseLeaveDelay={0}>
                             <Button
                                 style={{ width: '150px' }}
                                 type='primary'
@@ -472,7 +477,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
                                     this.continueAfterSubmit = true;
                                 }}
                             >
-                                Continue
+                                {t('Continue')}
                             </Button>
                         </Tooltip>
                     </Col>
@@ -481,11 +486,11 @@ class LabelForm extends React.PureComponent<Props, {}> {
     }
 
     private renderCancelButton(): JSX.Element {
-        const { onSubmit } = this.props;
+        const { onSubmit, t } = this.props;
 
         return (
             <Col offset={1}>
-                <Tooltip title='Do not save the label and return' mouseLeaveDelay={0}>
+                <Tooltip title={t('Do not save the label and return')} mouseLeaveDelay={0}>
                     <Button
                         style={{ width: '150px' }}
                         type='danger'
@@ -493,7 +498,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
                             onSubmit(null);
                         }}
                     >
-                        Cancel
+                        {t('Cancel')}
                     </Button>
                 </Tooltip>
             </Col>
@@ -501,7 +506,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
     }
 
     private renderChangeColorButton(): JSX.Element {
-        const { label, form } = this.props;
+        const { label, form, t } = this.props;
 
         return (
             <Col span={3}>
@@ -511,7 +516,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
                             initialValue: (label && label.color) ? label.color : undefined,
                         })(
                             <ColorPicker placement='bottom'>
-                                <Tooltip title='Change color of the label'>
+                                <Tooltip title={t('Change color of the label')}>
                                     <Button
                                         type='default'
                                         className='cvat-change-task-label-color-button'
@@ -535,6 +540,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
         const {
             label,
             form,
+            t,
         } = this.props;
 
         form.getFieldDecorator('keys', {
@@ -559,7 +565,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
                     && (
                         <Row type='flex' justify='start' align='middle'>
                             <Col>
-                                <Text>Attributes</Text>
+                                <Text>{t('Attributes')}</Text>
                             </Col>
                         </Row>
                     )}
@@ -574,4 +580,4 @@ class LabelForm extends React.PureComponent<Props, {}> {
     }
 }
 
-export default Form.create<Props>()(LabelForm);
+export default Form.create<Props>()(withTranslation()(LabelForm));

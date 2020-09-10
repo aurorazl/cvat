@@ -21,7 +21,7 @@ export default {
     //annotation-page\standard-workspace\controls-side-bar\cursor-control.tsx
     'Cursor ${cursorShortkey}': '光标 {{cursorShortkey}}',
     //annotation-page\standard-workspace\controls-side-bar\draw-shape-popover.tsx
-    'Draw new ${shapeType}': '绘制新的 ${shapeType}',
+    'Draw new ${shapeType}': '绘制新的${shapeType}',
     'Label': 'Label',
     'Drawing method': '绘制方法',
     'By 2 Points': '2个点',

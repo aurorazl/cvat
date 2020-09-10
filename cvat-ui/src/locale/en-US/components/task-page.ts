@@ -16,6 +16,7 @@ export default {
     'Issue tracker': 'Issue tracker',
     'Open the issue': 'Open the issue',
     'Not specified': 'Not specified',
+    'Created by ${owner} on ${created}': 'Created by {{owner}} on {{created}}',
     //job-list.tsx
     'Copy': 'Copy',
     'Frames': 'Frames',
@@ -25,7 +26,7 @@ export default {
     'Assignee': 'Assignee',
     'Jobs': 'Jobs',
     'Copied to clipboard!': 'Copied to clipboard!',
-    '${completed} of ${data.length} jobs': '${completed} of ${data.length} jobs',
+    '${completed} of ${data.length} jobs': '{{completed}} of {{dataLength}} jobs',
     //task-page.tsx
     'Sorry, but this task was not found': 'Sorry, but this task was not found',
     'Please, be sure information you tried to get exist and you have access': 'Please, be sure information you tried to get exist and you have access',

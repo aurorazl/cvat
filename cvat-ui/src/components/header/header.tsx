@@ -24,6 +24,7 @@ import { switchSettingsDialog as switchSettingsDialogAction } from 'actions/sett
 import { logoutAsync, authActions } from 'actions/auth-actions';
 import { SupportedPlugins, CombinedState } from 'reducers/interfaces';
 import SettingsModal from './settings-modal/settings-modal';
+import { useTranslation } from 'react-i18next';
 
 const core = getCore();
 
@@ -129,6 +130,7 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
 type Props = StateToProps & DispatchToProps;
 
 function HeaderContainer(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         user,
         tool,
@@ -163,7 +165,7 @@ function HeaderContainer(props: Props): JSX.Element {
                     </p>
                     <p>
                         <Text strong>
-                            Server version:
+                        {t('Server version:')}
                         </Text>
                         <Text type='secondary'>
                             {` ${tool.server.version}`}
@@ -171,7 +173,7 @@ function HeaderContainer(props: Props): JSX.Element {
                     </p>
                     <p>
                         <Text strong>
-                            Core version:
+                        {t('Core version:')}
                         </Text>
                         <Text type='secondary'>
                             {` ${tool.core.version}`}
@@ -179,7 +181,7 @@ function HeaderContainer(props: Props): JSX.Element {
                     </p>
                     <p>
                         <Text strong>
-                            Canvas version:
+                        {t('Canvas version:')}
                         </Text>
                         <Text type='secondary'>
                             {` ${tool.canvas.version}`}
@@ -187,17 +189,17 @@ function HeaderContainer(props: Props): JSX.Element {
                     </p>
                     <p>
                         <Text strong>
-                            UI version:
+                        {t('UI version:')}
                         </Text>
                         <Text type='secondary'>
                             {` ${tool.ui.version}`}
                         </Text>
                     </p>
                     <Row type='flex' justify='space-around'>
-                        <Col><a href={CHANGELOG_URL} target='_blank' rel='noopener noreferrer'>{'What\'s new?'}</a></Col>
-                        <Col><a href={LICENSE_URL} target='_blank' rel='noopener noreferrer'>License</a></Col>
-                        <Col><a href={GITTER_URL} target='_blank' rel='noopener noreferrer'>Need help?</a></Col>
-                        <Col><a href={FORUM_URL} target='_blank' rel='noopener noreferrer'>Forum on Intel Developer Zone</a></Col>
+                        <Col><a href={CHANGELOG_URL} target='_blank' rel='noopener noreferrer'>{t('What\'s new?')}</a></Col>
+                        <Col><a href={LICENSE_URL} target='_blank' rel='noopener noreferrer'>{t('License')}</a></Col>
+                        <Col><a href={GITTER_URL} target='_blank' rel='noopener noreferrer'>{t('Need help?')}</a></Col>
+                        <Col><a href={FORUM_URL} target='_blank' rel='noopener noreferrer'>{t('Forum on Intel Developer Zone')}</a></Col>
                     </Row>
                 </div>
             ),
@@ -207,6 +209,7 @@ function HeaderContainer(props: Props): JSX.Element {
                     width: '100px',
                 },
             },
+            okText: t('OK'),
         });
     }
 
@@ -221,20 +224,20 @@ function HeaderContainer(props: Props): JSX.Element {
                     }}
                 >
                     <Icon type='control' />
-                    Admin page
+                    {t('Admin page')}
                 </Menu.Item>
             )}
 
             <Menu.Item
-                title={`Press ${switchSettingsShortcut} to switch`}
+                title={t('Press ${switchSettingsShortcut} to switch').replace('${switchSettingsShortcut}', `${switchSettingsShortcut}`)}
                 onClick={() => switchSettingsDialog(true)}
             >
                 <Icon type='setting' />
-                Settings
+                {t('Settings')}
             </Menu.Item>
             <Menu.Item onClick={showAboutModal}>
                 <Icon type='info-circle' />
-                About
+                {t('About')}
             </Menu.Item>
             {renderChangePasswordItem && (
                 <Menu.Item
@@ -242,7 +245,7 @@ function HeaderContainer(props: Props): JSX.Element {
                     disabled={changePasswordFetching}
                 >
                     {changePasswordFetching ? <Icon type='loading' /> : <Icon type='edit' />}
-                    Change password
+                    {t('Change password')}
                 </Menu.Item>
             )}
 
@@ -251,7 +254,7 @@ function HeaderContainer(props: Props): JSX.Element {
                 disabled={logoutFetching}
             >
                 {logoutFetching ? <Icon type='loading' /> : <Icon type='logout' />}
-                Logout
+                {t('Logout')}
             </Menu.Item>
 
         </Menu>
@@ -274,7 +277,7 @@ function HeaderContainer(props: Props): JSX.Element {
                         }
                     }
                 >
-                    Tasks
+                    {t('Tasks')}
                 </Button>
                 <Button
                     className='cvat-header-button'
@@ -288,7 +291,7 @@ function HeaderContainer(props: Props): JSX.Element {
                         }
                     }
                 >
-                    Models
+                    {t('Models')}
                 </Button>
                 { installedAnalytics
                     && (
@@ -305,7 +308,7 @@ function HeaderContainer(props: Props): JSX.Element {
                                 }
                             }
                         >
-                            Analytics
+                            {t('Analytics')}
                         </Button>
                     )}
             </div>
@@ -340,7 +343,7 @@ function HeaderContainer(props: Props): JSX.Element {
                     }
                 >
                     <Icon type='question-circle' />
-                    Help
+                    {t('Help')}
                 </Button>
                 <Dropdown overlay={menu} className='cvat-header-menu-dropdown'>
                     <span>

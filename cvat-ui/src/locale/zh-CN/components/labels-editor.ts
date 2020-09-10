@@ -2,7 +2,7 @@ export default {
     // common.ts(TODO)
     'Type of attribute name must be a string. Got value ${attr.name}': '属性名称的类型必须是字符串。获取${attr.name}的值。',
     //constructor-viewer.tsx
-    'Add label': '添加 label',
+    'Add label': '添加标签',
     //label-form.tsx
     'Please specify a name': '指定名称',
     'An HTML element representing the attribute': '表示属性的HTML元素',

@@ -24,6 +24,8 @@ export default {
     'Issue tracker must be URL': 'Issue tracker must be URL',
     'Force to use zip chunks as compressed data. Actual for videos only.': 'Force to use zip chunks as compressed data. Actual for videos only.',
     'Use zip chunks': 'Use zip chunks',
+    'Using cache to store data.': 'Using cache to store data.',
+    'Use cache': 'Use cache',
     'Defines a number of frames to be packed in a chunk when send from client to server. Server defines automatically if empty.': 'Defines a number of frames to be packed in a chunk when send from client to server. Server defines automatically if empty.',
     'Recommended values:': 'Recommended values:',
     '1080p or less: 36': '1080p or less: 36',

@@ -19,6 +19,7 @@ import tasksPage from './zh-CN/components/tasks-page';
 import cvatStore from './zh-CN/utils/cvat-store';
 import gitUtils from './zh-CN/utils/git-utils';
 import validationPatterns from './zh-CN/utils/validation-patterns';
+import reducersUtils from './zh-CN/reducers/index';
 
 export default {
   actionsMenu,
@@ -42,4 +43,5 @@ export default {
   ...cvatStore,
   ...gitUtils,
   ...validationPatterns,
+  ...reducersUtils,
 }

@@ -4,7 +4,8 @@ export default {
     'To get started with your annotation project': 'To get started with your annotation project',
     'create a new task': 'create a new task',
     //task-item.tsx
-    // {`Created ${owner ? `by ${owner}` : ''} on ${created}`}
+    'Created by ${owner} on ${created}': 'Created by {{owner}} on {{created}}',
+    'Created on ${created}': 'Created on {{created}}',
     'Last updated ${updated}': 'Last updated ${updated}',
     'Completed': 'Completed',
     'In Progress': 'In Progress',
@@ -22,4 +23,5 @@ export default {
     'Default project': 'Default project',
     'Tasks': 'Tasks',
     'Create new task': 'Create new task',
+    'Search': 'Search',
   }

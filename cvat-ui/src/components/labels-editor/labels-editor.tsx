@@ -23,6 +23,8 @@ import {
     Attribute,
 } from './common';
 
+import { withTranslation, WithTranslation  } from 'react-i18next';
+
 enum ConstructorMode {
     SHOW = 'SHOW',
     CREATE = 'CREATE',
@@ -41,9 +43,9 @@ interface LabelsEditorState {
     labelForUpdate: Label | null;
 }
 
-export default class LabelsEditor
-    extends React.PureComponent<LabelsEditortProps, LabelsEditorState> {
-    public constructor(props: LabelsEditortProps) {
+class LabelsEditor
+    extends React.PureComponent<LabelsEditortProps & WithTranslation, LabelsEditorState> {
+    public constructor(props: LabelsEditortProps & WithTranslation) {
         super(props);
 
         this.state = {
@@ -170,11 +172,13 @@ export default class LabelsEditor
     };
 
     private handleDelete = (label: Label): void => {
+        const { t } = this.props;
+
         // the label is saved on the server, cannot delete it
         if (typeof (label.id) !== 'undefined' && label.id >= 0) {
             notification.error({
-                message: 'Could not delete the label',
-                description: 'It has been already saved on the server',
+                message: t('Could not delete the label'),
+                description: t('It has been already saved on the server'),
             });
         }
 
@@ -223,7 +227,7 @@ export default class LabelsEditor
     }
 
     public render(): JSX.Element {
-        const { labels } = this.props;
+        const { labels, t } = this.props;
         const {
             savedLabels,
             unsavedLabels,
@@ -238,7 +242,7 @@ export default class LabelsEditor
                 tabBarStyle={{ marginBottom: '0px' }}
                 tabBarExtraContent={(
                     <>
-                        <Tooltip title='Copied to clipboard!' trigger='click' mouseLeaveDelay={0}>
+                        <Tooltip title={t('Copied to clipboard!')} trigger='click' mouseLeaveDelay={0}>
                             <Button
                                 type='link'
                                 icon='copy'
@@ -255,7 +259,7 @@ export default class LabelsEditor
                                     ));
                                 }}
                             >
-                                Copy
+                                {t('Copy')}
                             </Button>
                         </Tooltip>
                     </>
@@ -266,7 +270,7 @@ export default class LabelsEditor
                         (
                             <span>
                                 <Icon type='edit' />
-                                <Text>Raw</Text>
+                                <Text>{t('Raw')}</Text>
                             </span>
                         )
                     }
@@ -283,7 +287,7 @@ export default class LabelsEditor
                         (
                             <span>
                                 <Icon type='build' />
-                                <Text>Constructor</Text>
+                                <Text>{t('Constructor')}</Text>
                             </span>
                         )
                     }
@@ -332,3 +336,5 @@ export default class LabelsEditor
         );
     }
 }
+
+export default withTranslation()(LabelsEditor);

@@ -4,7 +4,8 @@ export default {
     'To get started with your annotation project': '开始你的标注项目',
     'create a new task': '创建新的任务',
     //task-item.tsx
-    // {`Created ${owner ? `by ${owner}` : ''} on ${created}`}
+    'Created by ${owner} on ${created}': '{{owner}} 创建于 {{created}}',
+    'Created on ${created}': '创建于 {{created}}',
     'Last updated ${updated}': '上次更新时间${updated}',
     'Completed': '已完成',
     'In Progress': '进行中',
@@ -23,4 +24,6 @@ export default {
     'Default project': '默认项目',
     'Tasks': '任务',
     'Create new task': '创建新任务',
+    'Search': '查找',
+    
   }

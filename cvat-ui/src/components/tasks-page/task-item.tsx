@@ -20,6 +20,7 @@ import { ActiveInference } from 'reducers/interfaces';
 import { MenuIcon } from 'icons';
 
 import { withTranslation, WithTranslation  } from 'react-i18next';
+import { transMoment } from 'utils/lang-utils';
 export interface TaskItemProps extends WithTranslation {
     taskInstance: any;
     previewImage: string;
@@ -47,7 +48,7 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
         const { id } = taskInstance;
         const owner = taskInstance.owner ? taskInstance.owner.username : null;
         const updated = moment(taskInstance.updatedDate).fromNow();
-        const created = moment(taskInstance.createdDate).format('MMMM Do YYYY');
+        const created = moment(taskInstance.createdDate);
 
         // Get and truncate a task name
         const name = `${taskInstance.name.substring(0, 70)}${taskInstance.name.length > 70 ? '...' : ''}`;
@@ -61,7 +62,7 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
                     && (
                         <>
                             <Text type='secondary'>
-                                {`Created ${owner ? `by ${owner}` : ''} on ${created}`}
+                                { owner ? t('Created by ${owner} on ${created}', { owner : owner, created : transMoment(created) }) : t('Created on ${created}', { created : transMoment(created) })}
                             </Text>
                             <br />
                         </>

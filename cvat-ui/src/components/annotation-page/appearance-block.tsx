@@ -175,9 +175,9 @@ function AppearanceBlock(props: Props): JSX.Element {
                 <div className='cvat-objects-appearance-content'>
                     <Text type='secondary'>{t('Color by')}</Text>
                     <Radio.Group value={colorBy} onChange={changeShapesColorBy}>
-                        <Radio.Button value={ColorBy.LABEL}>{ColorBy.LABEL}</Radio.Button>
-                        <Radio.Button value={ColorBy.INSTANCE}>{ColorBy.INSTANCE}</Radio.Button>
-                        <Radio.Button value={ColorBy.GROUP}>{ColorBy.GROUP}</Radio.Button>
+                        <Radio.Button value={ColorBy.LABEL}>{t(ColorBy.LABEL)}</Radio.Button>
+                        <Radio.Button value={ColorBy.INSTANCE}>{t(ColorBy.INSTANCE)}</Radio.Button>
+                        <Radio.Button value={ColorBy.GROUP}>{t(ColorBy.GROUP)}</Radio.Button>
                     </Radio.Group>
                     <Text type='secondary'>{t('Opacity')}</Text>
                     <Slider

@@ -15,22 +15,24 @@ import {
     validateParsedLabel,
     idGenerator,
 } from './common';
+import { withTranslation, WithTranslation  } from 'react-i18next';
 
 type Props = FormComponentProps & {
     labels: Label[];
     onSubmit: (labels: Label[]) => void;
-};
+} & WithTranslation;
 
 class RawViewer extends React.PureComponent<Props> {
     private validateLabels = (_: any, value: string, callback: any): void => {
+        const { t } = this.props;
         try {
             const parsed = JSON.parse(value);
             if (!Array.isArray(parsed)) {
-                callback('Field is expected to be a JSON array');
+                callback(t('Field is expected to be a JSON array'));
             }
             const labelNames = parsed.map((label: Label) => label.name);
             if (new Set(labelNames).size !== labelNames.length) {
-                callback('Label names must be unique for the task');
+                callback(t('Label names must be unique for the task'));
             }
 
             for (const label of parsed) {
@@ -84,7 +86,7 @@ class RawViewer extends React.PureComponent<Props> {
         ));
 
         const textLabels = JSON.stringify(convertedLabels, null, 2);
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
             <Form onSubmit={this.handleSubmit}>
@@ -98,18 +100,18 @@ class RawViewer extends React.PureComponent<Props> {
                 </Form.Item>
                 <Row type='flex' justify='start' align='middle'>
                     <Col>
-                        <Tooltip title='Save labels and return' mouseLeaveDelay={0}>
+                        <Tooltip title={t('Save labels and return')} mouseLeaveDelay={0}>
                             <Button
                                 style={{ width: '150px' }}
                                 type='primary'
                                 htmlType='submit'
                             >
-                                Done
+                                {t('Done')}
                             </Button>
                         </Tooltip>
                     </Col>
                     <Col offset={1}>
-                        <Tooltip title='Do not save the label and return' mouseLeaveDelay={0}>
+                        <Tooltip title={t('Do not save the label and return')} mouseLeaveDelay={0}>
                             <Button
                                 style={{ width: '150px' }}
                                 type='danger'
@@ -117,7 +119,7 @@ class RawViewer extends React.PureComponent<Props> {
                                     form.resetFields();
                                 }}
                             >
-                                Reset
+                                {t('Reset')}
                             </Button>
                         </Tooltip>
                     </Col>
@@ -127,4 +129,4 @@ class RawViewer extends React.PureComponent<Props> {
     }
 }
 
-export default Form.create<Props>()(RawViewer);
+export default Form.create<Props>()(withTranslation()(RawViewer));

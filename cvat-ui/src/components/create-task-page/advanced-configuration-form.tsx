@@ -12,7 +12,7 @@ import Form, { FormComponentProps } from 'antd/lib/form/Form';
 import Text from 'antd/lib/typography/Text';
 
 import patterns from 'utils/validation-patterns';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, withTranslation, WithTranslation  } from 'react-i18next';
 
 export interface AdvancedConfiguration {
     bugTracker?: string;
@@ -33,7 +33,7 @@ export interface AdvancedConfiguration {
 type Props = FormComponentProps & {
     onSubmit(values: AdvancedConfiguration): void;
     installedGit: boolean;
-};
+} & WithTranslation;
 
 function isPositiveInteger(_: any, value: any, callback: any): void {
     const { t } = useTranslation();
@@ -86,6 +86,7 @@ function isIntegerRange(min: number, max: number, _: any, value: any, callback: 
 
 class AdvancedConfigurationForm extends React.PureComponent<Props> {
     public submit(): Promise<void> {
+        const { t } = this.props;
         return new Promise((resolve, reject) => {
             const {
                 form,
@@ -98,13 +99,13 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
                     delete filteredValues.frameStep;
 
                     if (values.overlapSize && +values.segmentSize <= +values.overlapSize) {
-                        reject(new Error('Segment size must be more than overlap size'));
+                        reject(new Error(t('Segment size must be more than overlap size')));
                     }
 
                     if (typeof (values.startFrame) !== 'undefined' && typeof (values.stopFrame) !== 'undefined'
                         && +values.stopFrame < +values.startFrame
                     ) {
-                        reject(new Error('Stop frame must be more or equal start frame'));
+                        reject(new Error(t('Stop frame must be more or equal start frame')));
                     }
 
                     onSubmit({
@@ -125,9 +126,9 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderZOrder(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
         return (
-            <Form.Item help='Enables order for shapes. Useful for segmentation tasks'>
+            <Form.Item help={t('Enables order for shapes. Useful for segmentation tasks')}>
                 {form.getFieldDecorator('zOrder', {
                     initialValue: false,
                     valuePropName: 'checked',
@@ -143,16 +144,16 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderImageQuality(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
-            <Form.Item label={<span>Image quality</span>}>
-                <Tooltip title='Defines image quality level' mouseLeaveDelay={0}>
+            <Form.Item label={<span>{t('Image quality')}</span>}>
+                <Tooltip title={t('Defines image quality level')} mouseLeaveDelay={0}>
                     {form.getFieldDecorator('imageQuality', {
                         initialValue: 70,
                         rules: [{
                             required: true,
-                            message: 'The field is required.',
+                            message: t('The field is required.'),
                         }, {
                             validator: isIntegerRange.bind(null, 5, 100),
                         }],
@@ -169,11 +170,11 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderOverlap(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
-            <Form.Item label={<span>Overlap size</span>}>
-                <Tooltip title='Defines a number of intersected frames between different segments' mouseLeaveDelay={0}>
+            <Form.Item label={<span>{t('Overlap size')}</span>}>
+                <Tooltip title={t('Defines a number of intersected frames between different segments')} mouseLeaveDelay={0}>
                     {form.getFieldDecorator('overlapSize', {
                         rules: [{
                             validator: isNonNegativeInteger,
@@ -187,11 +188,11 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderSegmentSize(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
-            <Form.Item label={<span>Segment size</span>}>
-                <Tooltip title='Defines a number of frames in a segment' mouseLeaveDelay={0}>
+            <Form.Item label={<span>{t('Segment size')}</span>}>
+                <Tooltip title={t('Defines a number of frames in a segment')} mouseLeaveDelay={0}>
                     {form.getFieldDecorator('segmentSize', {
                         rules: [{
                             validator: isPositiveInteger,
@@ -205,10 +206,10 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderStartFrame(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
-            <Form.Item label={<span>Start frame</span>}>
+            <Form.Item label={<span>{t('Start frame')}</span>}>
                 {form.getFieldDecorator('startFrame', {
                     rules: [{
                         validator: isNonNegativeInteger,
@@ -226,10 +227,10 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderStopFrame(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
-            <Form.Item label={<span>Stop frame</span>}>
+            <Form.Item label={<span>{t('Stop frame')}</span>}>
                 {form.getFieldDecorator('stopFrame', {
                     rules: [{
                         validator: isNonNegativeInteger,
@@ -247,10 +248,10 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderFrameStep(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
-            <Form.Item label={<span>Frame step</span>}>
+            <Form.Item label={<span>{t('Frame step')}</span>}>
                 {form.getFieldDecorator('frameStep', {
                     rules: [{
                         validator: isPositiveInteger,
@@ -268,17 +269,17 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderGitLFSBox(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
-            <Form.Item help='If annotation files are large, you can use git LFS feature'>
+            <Form.Item help={t('If annotation files are large, you can use git LFS feature')}>
                 {form.getFieldDecorator('lfs', {
                     valuePropName: 'checked',
                     initialValue: false,
                 })(
                     <Checkbox>
                         <Text className='cvat-text-color'>
-                            Use LFS (Large File Support):
+                        {t('Use LFS (Large File Support):')}
                         </Text>
                     </Checkbox>,
                 )}
@@ -287,13 +288,13 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderGitRepositoryURL(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
             <Form.Item
                 hasFeedback
-                label={<span>Dataset repository URL</span>}
-                extra='Attach a repository to store annotations there'
+                label={<span>{t('Dataset repository URL')}</span>}
+                extra={t('Attach a repository to store annotations there')}
             >
                 {form.getFieldDecorator('repository', {
                     rules: [{
@@ -303,11 +304,11 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
                             } else {
                                 const [url, path] = value.split(/\s+/);
                                 if (!patterns.validateURL.pattern.test(url)) {
-                                    callback('Git URL is not a valid');
+                                    callback(t('Git URL is not a valid'));
                                 }
 
                                 if (path && !patterns.validatePath.pattern.test(path)) {
-                                    callback('Git path is not a valid');
+                                    callback(t('Git path is not a valid'));
                                 }
 
                                 callback();
@@ -342,19 +343,19 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderBugTracker(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
             <Form.Item
                 hasFeedback
-                label={<span>Issue tracker</span>}
-                extra='Attach issue tracker where the task is described'
+                label={<span>{t('Issue tracker')}</span>}
+                extra={t('Attach issue tracker where the task is described')}
             >
                 {form.getFieldDecorator('bugTracker', {
                     rules: [{
                         validator: (_, value, callback): void => {
                             if (value && !patterns.validateURL.pattern.test(value)) {
-                                callback('Issue tracker must be URL');
+                                callback(t('Issue tracker must be URL'));
                             } else {
                                 callback();
                             }
@@ -368,16 +369,16 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderUzeZipChunks(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
         return (
-            <Form.Item help='Force to use zip chunks as compressed data. Actual for videos only.'>
+            <Form.Item help={t('Force to use zip chunks as compressed data. Actual for videos only.')}>
                 {form.getFieldDecorator('useZipChunks', {
                     initialValue: true,
                     valuePropName: 'checked',
                 })(
                     <Checkbox>
                         <Text className='cvat-text-color'>
-                            Use zip chunks
+                        {t('Use zip chunks')}
                         </Text>
                     </Checkbox>,
                 )}
@@ -386,16 +387,16 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderCreateTaskMethod(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
         return (
-            <Form.Item help='Using cache to store data.'>
+            <Form.Item help={t('Using cache to store data.')}>
                 {form.getFieldDecorator('useCache', {
                     initialValue: false,
                     valuePropName: 'checked',
                 })(
                     <Checkbox>
                         <Text className='cvat-text-color'>
-                            Use cache
+                        {t('Use cache')}
                         </Text>
                     </Checkbox>,
                 )}
@@ -404,10 +405,10 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderChunkSize(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
-            <Form.Item label={<span>Chunk size</span>}>
+            <Form.Item label={<span>{t('Chunk size')}</span>}>
                 <Tooltip
                     title={(
                         <>
@@ -505,4 +506,4 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 }
 
-export default Form.create<Props>()(AdvancedConfigurationForm);
+export default Form.create<Props>()(withTranslation()(AdvancedConfigurationForm));

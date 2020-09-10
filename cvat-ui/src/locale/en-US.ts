@@ -19,6 +19,7 @@ import tasksPage from './en-US/components/tasks-page';
 import cvatStore from './en-US/utils/cvat-store';
 import gitUtils from './en-US/utils/git-utils';
 import validationPatterns from './en-US/utils/validation-patterns';
+import reducersUtils from './en-US/reducers/index';
 
 export default {
   actionsMenu,
@@ -42,4 +43,5 @@ export default {
   ...cvatStore,
   ...gitUtils,
   ...validationPatterns,
+  ...reducersUtils,
 }

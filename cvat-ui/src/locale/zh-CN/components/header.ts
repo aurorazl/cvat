@@ -43,6 +43,7 @@ export default {
     'Core version:': 'Core 版本:',
     'Canvas version:': 'Canvas 版本:',
     'UI version:': 'UI 版本:',
+    'License': '许可',
     "What\'s new?": "什么是新的？",
     'Need help?': '需要帮助？',
     'Forum on Intel Developer Zone': 'Intel开发者专区论坛',
@@ -54,4 +55,6 @@ export default {
     'Models': '模型',
     'Analytics': '分析',
     'Help': '帮助',
+    'Press ${switchSettingsShortcut} to switch': '按${switchSettingsShortcut}开关',
+    'OK': '确定'
   }

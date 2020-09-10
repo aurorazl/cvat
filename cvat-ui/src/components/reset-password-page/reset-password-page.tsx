@@ -12,6 +12,7 @@ import { Row, Col } from 'antd/lib/grid';
 import { requestPasswordResetAsync } from 'actions/auth-actions';
 import { CombinedState } from 'reducers/interfaces';
 import ResetPasswordForm, { ResetPasswordData } from './reset-password-form';
+import { withTranslation, WithTranslation  } from 'react-i18next';
 
 interface StateToProps {
     fetching: boolean;
@@ -36,7 +37,7 @@ const mapDispatchToProps: DispatchToProps = {
     onResetPassword: requestPasswordResetAsync,
 };
 
-function ResetPasswordPagePageComponent(props: ResetPasswordPageComponentProps): JSX.Element {
+function ResetPasswordPagePageComponent(props: ResetPasswordPageComponentProps & WithTranslation): JSX.Element {
     const sizes = {
         xs: { span: 14 },
         sm: { span: 14 },
@@ -48,12 +49,13 @@ function ResetPasswordPagePageComponent(props: ResetPasswordPageComponentProps):
     const {
         fetching,
         onResetPassword,
+        t,
     } = props;
 
     return (
         <Row type='flex' justify='center' align='middle'>
             <Col {...sizes}>
-                <Title level={2}> Reset password </Title>
+                <Title level={2}> {t('Reset password')} </Title>
                 <ResetPasswordForm
                     fetching={fetching}
                     onSubmit={(resetPasswordData: ResetPasswordData): void => {
@@ -63,8 +65,8 @@ function ResetPasswordPagePageComponent(props: ResetPasswordPageComponentProps):
                 <Row type='flex' justify='start' align='top'>
                     <Col>
                         <Text strong>
-                            Go to
-                            <Link to='/auth/login'> login page </Link>
+                        {t('Go to')}
+                            <Link to='/auth/login'> {t('login page')} </Link>
                         </Text>
                     </Col>
                 </Row>
@@ -76,4 +78,4 @@ function ResetPasswordPagePageComponent(props: ResetPasswordPageComponentProps):
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(ResetPasswordPagePageComponent);
+)(withTranslation()(ResetPasswordPagePageComponent));

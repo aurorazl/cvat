@@ -7,6 +7,7 @@ import Form, { FormComponentProps } from 'antd/lib/form/Form';
 import Button from 'antd/lib/button';
 import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
+import { withTranslation, WithTranslation  } from 'react-i18next';
 
 export interface ResetPasswordData {
     email: string;
@@ -17,7 +18,7 @@ type ResetPasswordFormProps = {
     onSubmit(resetPasswordData: ResetPasswordData): void;
 } & FormComponentProps;
 
-class ResetPasswordFormComponent extends React.PureComponent<ResetPasswordFormProps> {
+class ResetPasswordFormComponent extends React.PureComponent<ResetPasswordFormProps & WithTranslation> {
     private handleSubmit = (e: React.FormEvent): void => {
         e.preventDefault();
         const {
@@ -33,23 +34,23 @@ class ResetPasswordFormComponent extends React.PureComponent<ResetPasswordFormPr
     };
 
     private renderEmailField(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
             <Form.Item hasFeedback>
                 {form.getFieldDecorator('email', {
                     rules: [{
                         type: 'email',
-                        message: 'The input is not valid E-mail!',
+                        message: t('The input is not valid E-mail!'),
                     }, {
                         required: true,
-                        message: 'Please specify an email address',
+                        message: t('Please specify an email address'),
                     }],
                 })(
                     <Input
                         autoComplete='email'
                         prefix={<Icon type='mail' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
-                        placeholder='Email address'
+                        placeholder={t('Email address')}
                     />,
                 )}
             </Form.Item>
@@ -57,7 +58,7 @@ class ResetPasswordFormComponent extends React.PureComponent<ResetPasswordFormPr
     }
 
     public render(): JSX.Element {
-        const { fetching } = this.props;
+        const { fetching, t } = this.props;
         return (
             <Form onSubmit={this.handleSubmit} className='cvat-reset-password-form'>
                 {this.renderEmailField()}
@@ -70,7 +71,7 @@ class ResetPasswordFormComponent extends React.PureComponent<ResetPasswordFormPr
                         htmlType='submit'
                         className='cvat-reset-password-form-button'
                     >
-                        Reset password
+                        {t('Reset password')}
                     </Button>
                 </Form.Item>
             </Form>
@@ -78,4 +79,4 @@ class ResetPasswordFormComponent extends React.PureComponent<ResetPasswordFormPr
     }
 }
 
-export default Form.create<ResetPasswordFormProps>()(ResetPasswordFormComponent);
+export default Form.create<ResetPasswordFormProps>()(withTranslation()(ResetPasswordFormComponent));
