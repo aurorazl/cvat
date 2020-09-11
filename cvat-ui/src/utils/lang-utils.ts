@@ -11,6 +11,10 @@ export function transShapeType(shapeType: string): string {
     return i18n.t(shapeType);
 }
 
+export function transStatesOrdering(statesOrdering: string): string {
+    return i18n.t(statesOrdering);
+}
+
 export function transMoment(date: Moment): string {
     return isZh() ? date.format('YYYY-MM-DD HH:mm') : date.format('MMMM Do YYYY HH:MM');
 }

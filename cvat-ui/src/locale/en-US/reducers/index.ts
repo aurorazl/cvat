@@ -8,5 +8,13 @@ export default {
     'polygon': 'polygon',
     'polyline': 'polyline',    
     'points': 'points',
-    'cuboid': 'cuboid',    
+    'cuboid': 'cuboid',
+    // StatesOrdering
+    'ID - descent': 'ID - descent',
+    'ID - ascent': 'ID - ascent',
+    'Updated time': 'Updated time',
+    // Workspace
+    'Standard': 'Standard',
+    'Attribute annotation': 'Attribute annotation',
+    'Tag annotation': 'Tag annotation',   
   }

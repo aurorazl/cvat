@@ -449,7 +449,7 @@ class AnnotationTopBarContainer extends React.PureComponent<Props> {
     private beforeUnloadCallback = (event: BeforeUnloadEvent): string | undefined => {
         const { jobInstance } = this.props;
         if (jobInstance.annotations.hasUnsavedChanges()) {
-            const confirmationMessage = 'You have unsaved changes, please confirm leaving this page.';
+            const confirmationMessage = t('You have unsaved changes, please confirm leaving this page.');
             // eslint-disable-next-line no-param-reassign
             event.returnValue = confirmationMessage;
             return confirmationMessage;

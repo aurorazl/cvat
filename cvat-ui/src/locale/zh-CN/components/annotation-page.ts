@@ -30,6 +30,7 @@ export default {
     'Number of points:': '点数量:',
     'Shape': 'Shape',
     'Track': 'Track',
+    'Press ${repeatShapeShortcut} to draw again': '再次绘制${repeatShapeShortcut}',
     //annotation-page\standard-workspace\controls-side-bar\fit-control.tsx
     'Fit the image [Double Click]': '适应图片[双击]',
     //annotation-page\standard-workspace\controls-side-bar\group-control.tsx
@@ -46,7 +47,7 @@ export default {
     'Rotate the image clockwise ${clockwiseShortcut}': '顺时针旋转图片 ${clockwiseShortcut}',
     //annotation-page\standard-workspace\controls-side-bar\setup-tag-popover.tsx
     'Setup tag': '设置tag',
-    'Press ${repeatShapeShortcut} to add a tag again': 'Press ${repeatShapeShortcut} to add a tag again',
+    'Press ${repeatShapeShortcut} to add a tag again': '按下${repeatShapeShortcut}再次添加tag',
     'Tag': 'Tag',
     //annotation-page\standard-workspace\controls-side-bar\split-control.tsx
     'Split a track ${switchSplitShortcut}': '分割 track ${switchSplitShortcut}',
@@ -197,11 +198,11 @@ export default {
     'Annotations filters': '标注过滤器',
     // cvat-ui\src\components\annotation-page\appearance-block.tsx
     'Appearance': '外观',
-    'Color by': '颜色',
+    'Color by': '颜色依据',
     'Opacity': '不透明度',
     'Selected opacity': '选择不透明度',
     // 'Black borders': '黑色边线',
     'Show bitmap': '显示位图',
-    'Show projections': 'Show projections',
+    'Show projections': '显示投影',
     'Outlined borders': '外边线',
   }
