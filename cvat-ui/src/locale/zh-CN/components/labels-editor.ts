@@ -39,7 +39,7 @@ export default {
     'It has been already saved on the server': '已经保存在服务器上',
     'Copied to clipboard!': '复制到剪贴板！',
     'Copy': '复制',
-    'Raw': '原生',
+    'Raw': '原始',
     'Constructor': '构造器',
     //raw-viewer.tsx
     'Field is expected to be a JSON array': '字段必须是JSON数组',

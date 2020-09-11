@@ -25,6 +25,7 @@ export default {
     'Duration': 'Duration',
     'Assignee': 'Assignee',
     'Jobs': 'Jobs',
+    'Job': 'Job',
     'Copied to clipboard!': 'Copied to clipboard!',
     '${completed} of ${data.length} jobs': '{{completed}} of {{dataLength}} jobs',
     //task-page.tsx

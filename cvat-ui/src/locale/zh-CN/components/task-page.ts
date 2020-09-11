@@ -25,7 +25,8 @@ export default {
     'Started on': '开始时间',
     'Duration': '时长',
     'Assignee': '执行人',
-    'Jobs': 'Jobs',
+    'Jobs': '作业',
+    'Job': '作业',
     'Copied to clipboard!': '复制到剪贴板！',
     '${completed} of ${data.length} jobs': '{{completed}} / {{dataLength}} 作业',
     //task-page.tsx

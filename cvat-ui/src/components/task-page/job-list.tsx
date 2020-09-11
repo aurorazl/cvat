@@ -44,7 +44,7 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
 
     const { jobs, id: taskId } = taskInstance;
     const columns = [{
-        title: 'Job',
+        title: t('Job'),
         dataIndex: 'job',
         key: 'job',
         render: (id: number): JSX.Element => (
@@ -147,7 +147,7 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
         <div className='cvat-task-job-list'>
             <Row type='flex' justify='space-between' align='middle'>
                 <Col>
-                    <Text className='cvat-text-color cvat-jobs-header'> Jobs </Text>
+                    <Text className='cvat-text-color cvat-jobs-header'> {t('Jobs')} </Text>
                     <Tooltip trigger='click' title='Copied to clipboard!' mouseLeaveDelay={0}>
                         <Button
                             type='link'
