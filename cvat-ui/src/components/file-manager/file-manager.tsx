@@ -12,9 +12,14 @@ import Paragraph from 'antd/lib/typography/Paragraph';
 import Upload, { RcFile } from 'antd/lib/upload';
 import Empty from 'antd/lib/empty';
 import Tree, { AntTreeNode, TreeNodeNormal } from 'antd/lib/tree/Tree';
+import zhCN from 'antd/lib/locale-provider/zh_CN';
+import enUS from 'antd/lib/locale-provider/en_US';
+import { LocaleProvider } from 'antd';
 
 import consts from 'consts';
+
 import { withTranslation, WithTranslation  } from 'react-i18next';
+import { isZh } from 'utils/lang-utils';
 
 export interface Files {
     local: File[];
@@ -196,13 +201,26 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State> {
                         </Tree>
                     ) : (
                         <div className='cvat-empty-share-tree'>
-                            <Empty />
+                            <LocaleProvider locale={ isZh() ? zhCN : enUS}>
+                                <Empty />
+                            </LocaleProvider>
                             <Paragraph className='cvat-text-color'>
-                            {t('Please, be sure you had')}
-                                <Text strong>
-                                    <a href={SHARE_MOUNT_GUIDE_URL}> {t('mounted')} </a>
-                                </Text>
-                                {t('share before you built CVAT and the shared storage contains files')}
+                                { !isZh() ?
+                                    (<>
+                                        Please, be sure you had
+                                        <Text strong>
+                                            <a href={SHARE_MOUNT_GUIDE_URL}> mounted </a>
+                                        </Text>
+                                        share before you built CVAT and the shared storage contains files.
+                                    </>) :
+                                    (<>
+                                        请确保在构建CVAT之前已
+                                        <Text strong>
+                                            <a href={SHARE_MOUNT_GUIDE_URL}> 加载 </a>
+                                        </Text>
+                                        了共享，并且共享存储中包含文件。
+                                    </>)
+                                }
                             </Paragraph>
                         </div>
                     )}
