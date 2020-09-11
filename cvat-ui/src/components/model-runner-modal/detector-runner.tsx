@@ -17,6 +17,7 @@ import InputNumber from 'antd/lib/input-number';
 import { Model, StringObject } from 'reducers/interfaces';
 import Button from 'antd/lib/button';
 
+import { useTranslation } from 'react-i18next';
 
 function colorGenerator(): () => string {
     const values = [
@@ -47,6 +48,7 @@ interface Props {
 }
 
 function DetectorRunner(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         task,
         models,
@@ -83,7 +85,7 @@ function DetectorRunner(props: Props): JSX.Element {
 
     if (model && model.type !== 'reid' && !model.labels.length) {
         notification.warning({
-            message: 'The selected model does not include any lables',
+            message: t('The selected model does not include any lables'),
         });
     }
 
@@ -149,7 +151,7 @@ function DetectorRunner(props: Props): JSX.Element {
     return (
         <div className='cvat-run-model-content'>
             <Row type='flex' align='middle'>
-                <Col span={4}>Model:</Col>
+                <Col span={4}>{t('Model:')}</Col>
                 <Col span={20}>
                     <Select
                         placeholder='Select a model'
@@ -189,7 +191,7 @@ function DetectorRunner(props: Props): JSX.Element {
                             <Tag color={colors[modelLabel]}>{mapping[modelLabel]}</Tag>
                         </Col>
                         <Col offset={1}>
-                            <Tooltip title='Remove the mapped values' mouseLeaveDelay={0}>
+                            <Tooltip title={t('Remove the mapped values')} mouseLeaveDelay={0}>
                                 <Icon
                                     className='cvat-danger-circle-icon'
                                     type='close-circle'
@@ -224,7 +226,7 @@ function DetectorRunner(props: Props): JSX.Element {
                             )}
                         </Col>
                         <Col span={1} offset={1}>
-                            <Tooltip title='Specify a label mapping between model labels and task labels' mouseLeaveDelay={0}>
+                            <Tooltip title={t('Specify a label mapping between model labels and task labels')} mouseLeaveDelay={0}>
                                 <Icon className='cvat-info-circle-icon' type='question-circle' />
                             </Tooltip>
                         </Col>
@@ -237,7 +239,7 @@ function DetectorRunner(props: Props): JSX.Element {
                         checked={cleanup}
                         onChange={(e: CheckboxChangeEvent): void => setCleanup(e.target.checked)}
                     >
-                        Clean old annotations
+                        {t('Clean old annotations')}
                     </Checkbox>
                 </div>
             )}
@@ -245,10 +247,10 @@ function DetectorRunner(props: Props): JSX.Element {
                 <div>
                     <Row type='flex' align='middle' justify='start'>
                         <Col>
-                            <Text>Threshold</Text>
+                            <Text>{t('Threshold')}</Text>
                         </Col>
                         <Col offset={1}>
-                            <Tooltip title='Minimum similarity value for shapes that can be merged'>
+                            <Tooltip title={t('Minimum similarity value for shapes that can be merged')}>
                                 <InputNumber
                                     min={0.01}
                                     step={0.01}
@@ -265,12 +267,12 @@ function DetectorRunner(props: Props): JSX.Element {
                     </Row>
                     <Row type='flex' align='middle' justify='start'>
                         <Col>
-                            <Text>Maximum distance</Text>
+                            <Text>{t('Maximum distance')}</Text>
                         </Col>
                         <Col offset={1}>
-                            <Tooltip title='Maximum distance between shapes that can be merged'>
+                            <Tooltip title={t('Maximum distance between shapes that can be merged')}>
                                 <InputNumber
-                                    placeholder='Threshold'
+                                    placeholder={t('Threshold')}
                                     min={1}
                                     value={distance}
                                     onChange={(value: number | undefined) => {
@@ -300,7 +302,7 @@ function DetectorRunner(props: Props): JSX.Element {
                             );
                         }}
                     >
-                        Annotate
+                        {t('Annotate')}
                     </Button>
                 </Col>
             </Row>

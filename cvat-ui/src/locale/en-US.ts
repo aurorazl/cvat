@@ -22,7 +22,7 @@ import validationPatterns from './en-US/utils/validation-patterns';
 import reducersUtils from './en-US/reducers/index';
 
 export default {
-  actionsMenu,
+  ...actionsMenu,
   ...annotationPage,
   ...changePasswordModal,
   ...createTaskPage,

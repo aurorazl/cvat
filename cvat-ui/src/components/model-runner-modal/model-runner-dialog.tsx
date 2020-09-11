@@ -11,7 +11,7 @@ import { ThunkDispatch } from 'utils/redux';
 import { modelsActions, startInferenceAsync } from 'actions/models-actions';
 import { Model, CombinedState } from 'reducers/interfaces';
 import DetectorRunner from './detector-runner';
-
+import { useTranslation } from 'react-i18next';
 
 interface StateToProps {
     visible: boolean;
@@ -49,6 +49,7 @@ function mapDispatchToProps(dispatch: ThunkDispatch): DispatchToProps {
 }
 
 function ModelRunnerDialog(props: StateToProps & DispatchToProps): JSX.Element {
+    const { t } = useTranslation();
     const {
         reid,
         detectors,
@@ -67,7 +68,7 @@ function ModelRunnerDialog(props: StateToProps & DispatchToProps): JSX.Element {
             footer={[]}
             onCancel={(): void => closeDialog()}
             maskClosable
-            title='Automatic annotation'
+            title={t('Automatic annotation')}
         >
             <DetectorRunner
                 withCleanup

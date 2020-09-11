@@ -22,7 +22,7 @@ import validationPatterns from './zh-CN/utils/validation-patterns';
 import reducersUtils from './zh-CN/reducers/index';
 
 export default {
-  actionsMenu,
+  ...actionsMenu,
   ...annotationPage,
   ...changePasswordModal,
   ...createTaskPage,
