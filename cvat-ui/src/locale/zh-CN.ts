@@ -20,6 +20,7 @@ import cvatStore from './zh-CN/utils/cvat-store';
 import gitUtils from './zh-CN/utils/git-utils';
 import validationPatterns from './zh-CN/utils/validation-patterns';
 import reducersUtils from './zh-CN/reducers/index';
+import notificationsReducers from './zh-CN/reducers/notifications-reducer';
 
 export default {
   ...actionsMenu,
@@ -44,4 +45,5 @@ export default {
   ...gitUtils,
   ...validationPatterns,
   ...reducersUtils,
+  ...notificationsReducers,
 }
