@@ -27,7 +27,7 @@ export default {
     'Assignee': '执行人',
     'Jobs': 'Jobs',
     'Copied to clipboard!': '复制到剪贴板！',
-    '${completed} of ${data.length} jobs': '{{completed}} / {{dataLength}} jobs',
+    '${completed} of ${data.length} jobs': '{{completed}} / {{dataLength}} 作业',
     //task-page.tsx
     'Sorry, but this task was not found': '抱歉，找不到此任务',
     'Please, be sure information you tried to get exist and you have access': '请确保尝试获取的信息存在并且可以访问',

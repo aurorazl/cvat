@@ -39,7 +39,7 @@ export default {
     'Open task': '打开任务',
     'The task has been created': '任务已经创建',
     'Could not create a task': '无法创建任务',
-    'A task must contain at least one label': '任务必须包含至少一个label',
+    'A task must contain at least one label': '任务必须包含至少一个标签',
     'A task must contain at least one file': '任务必须包含至少一个文件',
     'Select files:': '选择文件：',
     'Advanced configuration': '高级配置',

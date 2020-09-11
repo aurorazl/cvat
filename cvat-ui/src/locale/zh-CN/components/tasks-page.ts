@@ -9,7 +9,7 @@ export default {
     'Last updated ${updated}': '上次更新时间${updated}',
     'Completed': '已完成',
     'In Progress': '进行中',
-    '${numOfCompleted} of ${numOfJobs} jobs': '${numOfCompleted} / ${numOfJobs} jobs',
+    '${numOfCompleted} of ${numOfJobs} jobs': '${numOfCompleted} / ${numOfJobs} 作业',
     'Automatic annotation': '自动标注',
     'Cancel automatic annotation': '取消自动标注',
     'You are going to cancel automatic annotation?': '你要取消自动注释吗？',

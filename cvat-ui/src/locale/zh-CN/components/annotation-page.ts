@@ -128,10 +128,10 @@ export default {
     // cvat-ui\src\components\annotation-page\top-bar
     // cvat-ui\src\components\annotation-page\top-bar\annotation-menu.tsx
     'Current annotation will be lost': '当前标注将会丢失',
-    'You are going to upload new annotations to this job. Continue?': '您正在上传新的标注到该任务。是否继续？',
+    'You are going to upload new annotations to this job. Continue?': '您正在上传新的标注到该作业。是否继续？',
     'All annotations will be removed': '所有标注将会被移除',
     'You are going to remove all annotations from the client.': '你正在从客户端移除所有标注。',
-    'It will stay on the server till you save a job. Continue?': '保存任务时将会保存到服务器。是否继续？',
+    'It will stay on the server till you save a job. Continue?': '保存作业时将会保存到服务器。是否继续？',
     'Delete': '删除',
     'Remove annotations': '移除标注',
     'Open the task': '打开任务',
@@ -164,7 +164,7 @@ export default {
     'Manually': '手工',
     'Interpolated': '内插',
     'Total': '总共',
-    'Job status': 'Job 状态',
+    'Job status': '作业状态',
     'annotation': '标注',
     'validation': '校验',
     'completed': '完成',
@@ -178,7 +178,7 @@ export default {
     // src\containers\annotation-page\top-bar\top-bar.tsx
     'You have unsaved changes, please confirm leaving this page.': '尚未保存更改，请确认离开此页面。',    
     // cvat-ui\src\components\annotation-page\annotation-page.tsx
-    'Sorry, but this job was not found': '抱歉，job未找到',
+    'Sorry, but this job was not found': '抱歉，作业未找到',
     'Please, be sure information you tried to get exist and you have access': '请确认要获取的信息存在，并且可以访问',
     // cvat-ui\src\components\annotation-page\annotations-filters-input.tsx
     'General': '通用',
