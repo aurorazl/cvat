@@ -13,7 +13,7 @@ import { Row, Col } from 'antd/lib/grid';
 import { UserAgreement } from 'reducers/interfaces';
 import CookieDrawer from 'components/login-page/cookie-policy-drawer';
 import RegisterForm, { RegisterData, UserConfirmation } from './register-form';
-
+import { useTranslation } from 'react-i18next';
 interface RegisterPageComponentProps {
     fetching: boolean;
     userAgreements: UserAgreement[];
@@ -26,6 +26,7 @@ interface RegisterPageComponentProps {
 function RegisterPageComponent(
     props: RegisterPageComponentProps & RouteComponentProps,
 ): JSX.Element {
+    const { t } = useTranslation();
     const sizes = {
         xs: { span: 14 },
         sm: { span: 14 },
@@ -44,7 +45,7 @@ function RegisterPageComponent(
         <>
             <Row type='flex' justify='center' align='middle'>
                 <Col {...sizes}>
-                    <Title level={2}> Create an account </Title>
+                    <Title level={2}> {t('Create an account')} </Title>
                     <RegisterForm
                         fetching={fetching}
                         userAgreements={userAgreements}
@@ -63,8 +64,8 @@ function RegisterPageComponent(
                     <Row type='flex' justify='start' align='top'>
                         <Col>
                             <Text strong>
-                                Already have an account?
-                                <Link to='/auth/login'> Login </Link>
+                            {t('Already have an account?')}
+                                <Link to='/auth/login'> {t('Login')} </Link>
                             </Text>
                         </Col>
                     </Row>

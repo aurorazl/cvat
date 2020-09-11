@@ -11,9 +11,10 @@ export default {
     'Username': '用户名',
     'Please specify a password': '请指定密码',
     'Password': '密码',
-    'Sign in': '注册',
+    'Sign in': '登录',
     //login-page.tsx
     'Login': '登录',
     'New to CVAT? Create': '首次使用CVAT？创建',
     'an account': '一个账号',
+    'Forgot your password?': '忘记密码？',
   }

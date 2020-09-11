@@ -16,4 +16,5 @@ export default {
     'Login': 'Login',
     'New to CVAT? Create': 'New to CVAT? Create',
     'an account': 'an account',
+    'Forgot your password?': 'Forgot your password?',
   }
