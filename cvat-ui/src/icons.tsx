@@ -43,8 +43,12 @@ import SVGCubeIcon from './assets/cube-icon.svg';
 import SVGResetPerspectiveIcon from './assets/reset-perspective.svg';
 import SVGColorizeIcon from './assets/colorize-icon.svg';
 import SVGAITools from './assets/ai-tools-icon.svg';
+import SVGApulisLogo from './assets/apulis.svg';
 
 
+export const ApulisLogo = React.memo(
+    (): JSX.Element => <SVGApulisLogo />,
+);
 export const CVATLogo = React.memo(
     (): JSX.Element => <SVGCVATLogo />,
 );

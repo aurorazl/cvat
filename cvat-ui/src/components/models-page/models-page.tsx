@@ -37,7 +37,7 @@ export default function ModelsPageComponent(props: Props): JSX.Element {
                 ) : (
                     <EmptyListComponent />
                 )}
-            <FeedbackComponent />
+            {/* <FeedbackComponent /> */}
         </div>
     );
 }

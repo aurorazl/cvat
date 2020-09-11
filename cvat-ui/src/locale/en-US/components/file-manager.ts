@@ -9,4 +9,5 @@ export default {
   'Please, be sure you had': 'Please, be sure you had',
   'mounted': 'mounted',
   'share before you built CVAT and the shared storage contains files': 'share before you built CVAT and the shared storage contains files',
+  'emptyShareTip':'Please, be sure you had <1><2> mounted </2></1>share before you built CVAT and the shared storage contains files'
 }

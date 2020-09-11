@@ -12,7 +12,7 @@ import Form, { FormComponentProps } from 'antd/lib/form/Form';
 import Text from 'antd/lib/typography/Text';
 
 import patterns from 'utils/validation-patterns';
-import { useTranslation, withTranslation, WithTranslation  } from 'react-i18next';
+import { useTranslation, withTranslation, WithTranslation, Trans } from 'react-i18next';
 
 export interface AdvancedConfiguration {
     bugTracker?: string;
@@ -411,7 +411,7 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
             <Form.Item label={<span>{t('Chunk size')}</span>}>
                 <Tooltip
                     title={(
-                        <>
+                        <Trans i18nKey="chunkSizeTip">
                             Defines a number of frames to be packed in
                             a chunk when send from client to server.
                             Server defines automatically if empty.
@@ -425,7 +425,7 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
                             4k or less: 4 - 8
                             <br />
                             More: 1 - 4
-                        </>
+                        </Trans>
                     )}
                     mouseLeaveDelay={0}
                 >

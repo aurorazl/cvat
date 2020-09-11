@@ -20,7 +20,7 @@ import { BackJumpIcon, ForwardJumpIcon } from 'icons';
 import { FrameSpeed, GridColor } from 'reducers/interfaces';
 import consts from 'consts';
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 
 interface Props {
     frameStep: number;
@@ -105,10 +105,12 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                 </Col>
                 <Col offset={1}>
                     <Text type='secondary'>
-                    {t('Number of frames skipped when selecting')}
-                        <Icon component={BackJumpIcon} />
-                        {t('or')}
-                        <Icon component={ForwardJumpIcon} />
+                        <Trans i18nKey="skippedFramesTip">
+                            Number of frames skipped when selecting
+                            <Icon component={BackJumpIcon} />
+                            or
+                            <Icon component={ForwardJumpIcon} />
+                        </Trans>
                     </Text>
                 </Col>
             </Row>

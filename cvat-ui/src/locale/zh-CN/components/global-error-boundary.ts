@@ -18,6 +18,5 @@ export default {
     'the page': '页面',
     'Press': '按下',
     'here': '这里',
-    'if you wish CVAT tried to restore your': '如果希望CVAT尝试恢复您的',
-    'annotation progress or': '标注进度或',
+    'if you wish CVAT tried to restore your annotation progress or': '如果希望CVAT尝试恢复您的标注进度或',
   }

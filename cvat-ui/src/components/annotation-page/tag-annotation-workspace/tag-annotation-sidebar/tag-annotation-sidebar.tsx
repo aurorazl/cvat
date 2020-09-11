@@ -26,7 +26,7 @@ import { CombinedState, ObjectType } from 'reducers/interfaces';
 import Tag from 'antd/lib/tag';
 import getCore from 'cvat-core-wrapper';
 import ShortcutsSelect from './shortcuts-select';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 
 const cvat = getCore();
 
@@ -289,6 +289,7 @@ function TagAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Elemen
                 <Row type='flex' justify='center' className='cvat-tag-annotation-sidebar-shortcut-help'>
                     <Col>
                         <Text>
+                        <Trans i18nKey="skippedFramesTip">
                             Use&nbsp;
                             <Text code>N</Text>
                             &nbsp;or digits&nbsp;
@@ -298,6 +299,7 @@ function TagAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Elemen
                             or&nbsp;
                             <Text code>→</Text>
                             &nbsp;to skip frame
+                        </Trans>
                         </Text>
                     </Col>
                 </Row>

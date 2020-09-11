@@ -26,12 +26,8 @@ export default {
     'Use zip chunks': 'Use zip chunks',
     'Using cache to store data.': 'Using cache to store data.',
     'Use cache': 'Use cache',
-    'Defines a number of frames to be packed in a chunk when send from client to server. Server defines automatically if empty.': 'Defines a number of frames to be packed in a chunk when send from client to server. Server defines automatically if empty.',
-    'Recommended values:': 'Recommended values:',
-    '1080p or less: 36': '1080p or less: 36',
-    '2k or less: 8 - 16': '2k or less: 8 - 16',
-    '4k or less: 4 - 8': '4k or less: 4 - 8',
-    'More: 1 - 4': 'More: 1 - 4',
+    'Chunk size': 'Chunk size',
+    'chunkSizeTip': 'Defines a number of frames to be packed in a chunk when send from client to server. Server defines automatically if empty.<1/>Recommended values:<3/>1080p or less: 36<5/>2k or less: 8 - 16<7/>4k or less: 4 - 8<9/>More: 1 - 4',
     //basic-configuration-form.tsx
     'Name': 'Name',
     'Please, specify a name': 'Please, specify a name',
@@ -45,6 +41,7 @@ export default {
     'Advanced configuration': 'Advanced configuration',
     'Basic configuration': 'Basic configuration',
     'Submit': 'Submit',
+    'Labels:': 'Labels:',
     //create-task-page.tsx
     'Please make sure it exists and you have access': 'Please make sure it exists and you have access',
     'Could not clone the repository': 'Could not clone the repository',

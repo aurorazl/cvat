@@ -125,6 +125,7 @@ export default {
     'to add selected tag': '添加选中的 tag',
     'or': '或者',
     'to skip frame': '跳过帧',
+    'tagAnnotationSidebarShortcutHelp': '使用<1>N</1>或数字<3>0-9</3>来添加选中的tag<5/>或者<7>→</7>跳过帧',
     // cvat-ui\src\components\annotation-page\top-bar
     // cvat-ui\src\components\annotation-page\top-bar\annotation-menu.tsx
     'Current annotation will be lost': '当前标注将会丢失',

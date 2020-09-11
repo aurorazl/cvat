@@ -18,7 +18,7 @@ import Text from 'antd/lib/typography/Text';
 import getCore from 'cvat-core-wrapper';
 import consts from 'consts';
 
-import { CVATLogo, AccountIcon } from 'icons';
+import { CVATLogo, AccountIcon, ApulisLogo } from 'icons';
 import ChangePasswordDialog from 'components/change-password-modal/change-password-modal';
 import { switchSettingsDialog as switchSettingsDialogAction } from 'actions/settings-actions';
 import { logoutAsync, authActions } from 'actions/auth-actions';
@@ -263,7 +263,7 @@ function HeaderContainer(props: Props): JSX.Element {
     return (
         <Layout.Header className='cvat-header'>
             <div className='cvat-left-header'>
-                <Icon className='cvat-logo-icon' component={CVATLogo} />
+                <Icon className='cvat-logo-icon' component={ApulisLogo} />
 
                 <Button
                     className='cvat-header-button'
@@ -313,7 +313,7 @@ function HeaderContainer(props: Props): JSX.Element {
                     )}
             </div>
             <div className='cvat-right-header'>
-                <Button
+                {/* <Button
                     className='cvat-header-button'
                     type='link'
                     href={GITHUB_URL}
@@ -328,7 +328,7 @@ function HeaderContainer(props: Props): JSX.Element {
                 >
                     <Icon type='github' />
                     <Text className='cvat-text-color'>GitHub</Text>
-                </Button>
+                </Button> */}
                 <Button
                     className='cvat-header-button'
                     type='link'
