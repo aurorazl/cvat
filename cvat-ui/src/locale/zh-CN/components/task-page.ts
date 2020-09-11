@@ -17,6 +17,7 @@ export default {
     'Open the issue': '打开问题',
     'Not specified': '未指定',
     'Created by ${owner} on ${created}': '{{owner}} 创建于 {{created}}',
+    'Issue Tracker': '问题跟踪',
     //job-list.tsx
     'Copy': '复制',
     'Frames': '帧',
