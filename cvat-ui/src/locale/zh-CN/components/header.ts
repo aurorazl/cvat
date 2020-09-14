@@ -30,7 +30,7 @@ export default {
     'Enable auto save': '启用自动保存',
     'Auto save every': '自动保存每',
     'minutes': '分钟',
-    'Show all interpolation tracks': '显示所有内插的tracks',
+    'Show all interpolation tracks': '显示所有的插值轨迹',
     'Show hidden interpolated objects in the side panel': '在侧面板显示隐藏的内插对象',
     'Always show object details': '始终显示对象细节',
     'Show text for an object on the canvas not only when the object is activated': '在画布上显示该对象的文本，而不仅仅是对象激活时',

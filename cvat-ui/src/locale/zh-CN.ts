@@ -1,3 +1,5 @@
+import controlsSidebar from './zh-CN/components/ns/controls-side-bar';
+import objectsSidebar from './zh-CN/components/ns/objects-side-bar';
 import actionsMenu from './zh-CN/components/actions-menu';
 import annotationPage from './zh-CN/components/annotation-page';
 import changePasswordModal from './zh-CN/components/change-password-modal';
@@ -23,6 +25,8 @@ import reducersUtils from './zh-CN/reducers/index';
 import notificationsReducers from './zh-CN/reducers/notifications-reducer';
 
 export default {
+  controlsSidebar,
+  objectsSidebar,
   ...actionsMenu,
   ...annotationPage,
   ...changePasswordModal,

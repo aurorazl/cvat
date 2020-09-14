@@ -131,7 +131,7 @@ function ObjectsSideBar(props: StateToProps & DispatchToProps): JSX.Element {
                     <ObjectsListContainer />
                 </Tabs.TabPane>
                 <Tabs.TabPane
-                    tab={<Text strong>{t('Labels')}</Text>}
+                    tab={<Text strong>{t('objectsSidebar::Labels')}</Text>}
                     key='labels'
                 >
                     <LabelsListContainer />

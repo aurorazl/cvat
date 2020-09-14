@@ -53,6 +53,7 @@ export default function StatisticsModalComponent(props: Props): JSX.Element {
         width: 1000,
         visible,
         closable: false,
+        okText: t('OK'),
     };
 
     if (collecting || !data) {
@@ -80,7 +81,7 @@ export default function StatisticsModalComponent(props: Props): JSX.Element {
 
     rows.push({
         key: '___total',
-        label: 'Total',
+        label: t('Total'),
         rectangle: `${data.total.rectangle.shape} / ${data.total.rectangle.track}`,
         polygon: `${data.total.polygon.shape} / ${data.total.polygon.track}`,
         polyline: `${data.total.polyline.shape} / ${data.total.polyline.track}`,
@@ -99,19 +100,19 @@ export default function StatisticsModalComponent(props: Props): JSX.Element {
     );
 
     const columns = [{
-        title: <Text strong> {t('Label')} </Text>,
+        title: <Text strong> {t('controlsSidebar::Label')} </Text>,
         dataIndex: 'label',
         key: 'label',
     }, {
-        title: makeShapesTracksTitle('Rectangle'),
+        title: makeShapesTracksTitle(t('Rectangle')),
         dataIndex: 'rectangle',
         key: 'rectangle',
     }, {
-        title: makeShapesTracksTitle('Polygon'),
+        title: makeShapesTracksTitle(t('Polygon')),
         dataIndex: 'polygon',
         key: 'polygon',
     }, {
-        title: makeShapesTracksTitle('Polyline'),
+        title: makeShapesTracksTitle(t('Polyline')),
         dataIndex: 'polyline',
         key: 'polyline',
     }, {

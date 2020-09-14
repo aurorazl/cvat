@@ -178,6 +178,11 @@ export default {
     'Frames': 'Frames',
     'Bug tracker': 'Bug tracker',
     'Annotations statistics': 'Annotations statistics',
+    'Shapes / Tracks': 'Shapes / Tracks',
+    'Rectangle': 'Rectangle',
+    'Polygon': 'Polygon',
+    'Polyline': 'Polyline',
+    'Points': 'Points',
     // src\containers\annotation-page\top-bar\top-bar.tsx
     'You have unsaved changes, please confirm leaving this page.': 'You have unsaved changes, please confirm leaving this page.',
     // cvat-ui\src\components\annotation-page\annotation-page.tsx

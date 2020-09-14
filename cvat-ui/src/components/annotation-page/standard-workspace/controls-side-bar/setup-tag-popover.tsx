@@ -39,7 +39,7 @@ function SetupTagPopover(props: Props): JSX.Element {
             </Row>
             <Row type='flex' justify='start'>
                 <Col>
-                    <Text className='cvat-text-color'>{t('Label')}</Text>
+                    <Text className='cvat-text-color'>{t('controlsSidebar::Label')}</Text>
                 </Col>
             </Row>
             <Row type='flex' justify='center'>

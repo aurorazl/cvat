@@ -22,22 +22,22 @@ export default {
     'Cursor ${cursorShortkey}': '光标 {{cursorShortkey}}',
     //annotation-page\standard-workspace\controls-side-bar\draw-shape-popover.tsx
     'Draw new ${shapeType}': '绘制新的${shapeType}',
-    'Label': 'Label',
+    'Label': '标签',
     'Drawing method': '绘制方法',
     'By 2 Points': '2个点',
     'By 4 Points': '4个点',
     'From rectangle': '从矩形',
     'Number of points:': '点数量:',
-    'Shape': 'Shape',
-    'Track': 'Track',
+    'Shape': '形状',
+    'Track': '轨迹',
     'Press ${repeatShapeShortcut} to draw again': '再次绘制${repeatShapeShortcut}',
     //annotation-page\standard-workspace\controls-side-bar\fit-control.tsx
     'Fit the image [Double Click]': '适应图片[双击]',
     //annotation-page\standard-workspace\controls-side-bar\group-control.tsx
-    'Group shapes/tracks ${switchGroupShortcut}.': '分组 shapes/tracks ${switchGroupShortcut}.',
+    'Group shapes/tracks ${switchGroupShortcut}.': '分组形状/轨迹 ${switchGroupShortcut}.',
     ' Select and press ${resetGroupShortcut} to reset a group': '选中并按下${resetGroupShortcut}重置分组',
     //annotation-page\standard-workspace\controls-side-bar\merge-control.tsx
-    'Merge shapes/tracks ${switchMergeShortcut}': '合并 shapes/tracks ${switchMergeShortcut}',
+    'Merge shapes/tracks ${switchMergeShortcut}': '合并形状/轨迹 ${switchMergeShortcut}',
     //annotation-page\standard-workspace\controls-side-bar\move-control.tsx
     'Move the image': '移动图片',
     //annotation-page\standard-workspace\controls-side-bar\resize-control.tsx
@@ -50,7 +50,7 @@ export default {
     'Press ${repeatShapeShortcut} to add a tag again': '按下${repeatShapeShortcut}再次添加tag',
     'Tag': 'Tag',
     //annotation-page\standard-workspace\controls-side-bar\split-control.tsx
-    'Split a track ${switchSplitShortcut}': '分割 track ${switchSplitShortcut}',
+    'Split a track ${switchSplitShortcut}': '分割轨迹 ${switchSplitShortcut}',
     // annotation-page\standard-workspace\controls-side-bar\tools-control.tsx
     'Canvas raises event "canvas.interacted" when interaction is off': '当交互关闭时，Canvas 触发了 "canvas.interacted" 事件',
     'Interaction error occured': '发生了交互错误',
@@ -165,7 +165,7 @@ export default {
     'Tags': 'Tags',
     'Manually': '手工',
     'Interpolated': '内插',
-    'Total': '总共',
+    'Total': '总计',
     'Job status': '作业状态',
     'annotation': '标注',
     'validation': '校验',
@@ -177,6 +177,11 @@ export default {
     'Frames': '帧',
     'Bug tracker': 'Bug 跟踪',
     'Annotations statistics': '标注统计',
+    'Shapes / Tracks': '形状/轨迹',
+    'Rectangle': '矩形',
+    'Polygon': '多边形',
+    'Polyline': '多段线',
+    'Points': '点',    
     // src\containers\annotation-page\top-bar\top-bar.tsx
     'You have unsaved changes, please confirm leaving this page.': '尚未保存更改，请确认离开此页面。',    
     // cvat-ui\src\components\annotation-page\annotation-page.tsx
