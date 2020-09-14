@@ -19,6 +19,8 @@ ARG USER
 ARG DJANGO_CONFIGURATION
 ENV DJANGO_CONFIGURATION=${DJANGO_CONFIGURATION}
 
+RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+
 # Install necessary apt packages
 RUN apt-get update && \
     apt-get --no-install-recommends install -yq \
@@ -49,7 +51,9 @@ RUN apt-get update && \
         git-lfs \
         ssh \
         poppler-utils \
-        curl && \
+        curl
+
+RUN python3 -m pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/ && \
     python3 -m pip install --no-cache-dir -U pip==20.0.1 setuptools==49.6.0 wheel==0.35.1 && \
     ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata && \
