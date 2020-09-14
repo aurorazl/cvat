@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import './styles.scss';
-import React from 'react';
+import React, { ComponentType } from 'react';
 import Tabs from 'antd/lib/tabs';
 import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
@@ -276,4 +276,4 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State> {
     }
 }
 
-export default withTranslation()(FileManager);
+export default (withTranslation('translation', { withRef: true })(FileManager) as React.ComponentType<Props & WithTranslation>);

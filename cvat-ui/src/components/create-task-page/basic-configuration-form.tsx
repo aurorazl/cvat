@@ -62,4 +62,4 @@ class BasicConfigurationForm extends React.PureComponent<Props & WithTranslation
     }
 }
 
-export default Form.create<Props>()(withTranslation()(BasicConfigurationForm));
+export default Form.create<Props>()(withTranslation(undefined, { withRef: true })(BasicConfigurationForm));

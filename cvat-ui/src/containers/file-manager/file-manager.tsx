@@ -74,7 +74,6 @@ export class FileManagerContainer extends React.PureComponent<Props> {
             getTreeData,
             withRemote,
         } = this.props;
-
         return (
             <FileManagerComponent
                 treeData={treeData}
