@@ -276,4 +276,4 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State> {
     }
 }
 
-export default (withTranslation('translation', { withRef: true })(FileManager) as React.ComponentType<Props & WithTranslation>);
+export default withTranslation(undefined, { withRef: true })(FileManager);
