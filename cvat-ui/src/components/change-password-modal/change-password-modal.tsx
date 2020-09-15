@@ -60,7 +60,7 @@ function ChangePasswordComponent(props: ChangePasswordPageComponentProps): JSX.E
         <Modal
             title={<Title level={3}>{t('Change password')}</Title>}
             okType='primary'
-            okText='Submit'
+            okText={t('Submit')}
             footer={null}
             visible={visible}
             destroyOnClose

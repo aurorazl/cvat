@@ -37,6 +37,9 @@ import {
 } from './reducers/interfaces';
 
 import './i18n';
+import { ConfigProvider } from 'antd';
+// import enUS from 'antd/es/locale/en_US';
+import zhCN from 'antd/es/locale/zh_CN';
 
 createCVATStore(createRootReducer);
 const cvatStore = getCVATStore();
@@ -140,9 +143,11 @@ const ReduxAppWrapper = connect(
 ReactDOM.render(
     (
         <Provider store={cvatStore}>
-            <BrowserRouter>
-                <ReduxAppWrapper />
-            </BrowserRouter>
+            <ConfigProvider locale={zhCN}>
+                <BrowserRouter>
+                    <ReduxAppWrapper />
+                </BrowserRouter>
+            </ConfigProvider>
         </Provider>
     ),
     document.getElementById('root'),

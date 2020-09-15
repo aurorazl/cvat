@@ -12,9 +12,6 @@ import Paragraph from 'antd/lib/typography/Paragraph';
 import Upload, { RcFile } from 'antd/lib/upload';
 import Empty from 'antd/lib/empty';
 import Tree, { AntTreeNode, TreeNodeNormal } from 'antd/lib/tree/Tree';
-import zhCN from 'antd/lib/locale-provider/zh_CN';
-import enUS from 'antd/lib/locale-provider/en_US';
-import { LocaleProvider } from 'antd';
 
 import consts from 'consts';
 
@@ -201,9 +198,7 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State> {
                         </Tree>
                     ) : (
                         <div className='cvat-empty-share-tree'>
-                            <LocaleProvider locale={ isZh() ? zhCN : enUS}>
-                                <Empty />
-                            </LocaleProvider>
+                            <Empty />
                             <Paragraph className='cvat-text-color'>
                                 { !isZh() ?
                                     (<>

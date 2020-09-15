@@ -89,7 +89,6 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
                     type: 'danger',
                 },
                 okText: t('Delete'),
-                cancelText: t('Cancel'),
             });
         } else {
             onClickMenu(copyParams);

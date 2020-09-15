@@ -209,7 +209,6 @@ function HeaderContainer(props: Props): JSX.Element {
                     width: '100px',
                 },
             },
-            okText: t('OK'),
         });
     }
 

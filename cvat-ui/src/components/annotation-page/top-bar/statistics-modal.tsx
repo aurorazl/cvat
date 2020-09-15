@@ -53,7 +53,6 @@ export default function StatisticsModalComponent(props: Props): JSX.Element {
         width: 1000,
         visible,
         closable: false,
-        okText: t('OK'),
     };
 
     if (collecting || !data) {
