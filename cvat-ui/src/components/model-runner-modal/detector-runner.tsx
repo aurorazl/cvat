@@ -154,7 +154,7 @@ function DetectorRunner(props: Props): JSX.Element {
                 <Col span={4}>{t('Model:')}</Col>
                 <Col span={20}>
                     <Select
-                        placeholder='Select a model'
+                        placeholder={t('Select a model')}
                         style={{ width: '100%' }}
                         onChange={(_modelID: string): void => {
                             const newmodel = models

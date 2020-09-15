@@ -121,11 +121,6 @@ export default {
     'Skip frame': 'Skip frame',
     'Automatically go to the next frame': 'Automatically go to the next frame',
     'Frame tags:': 'Frame tags:',
-    'Use': 'Use',
-    'or digits': 'or digits',
-    'to add selected tag': 'to add selected tag',
-    'or': 'or',
-    'to skip frame': 'to skip frame',
     'tagAnnotationSidebarShortcutHelp': 'Use <1>N</1> or digits <3>0-9</3> to add selected tag<5/>or <7>→</7> to skip frame',
     // cvat-ui\src\components\annotation-page\top-bar
     // cvat-ui\src\components\annotation-page\top-bar\annotation-menu.tsx

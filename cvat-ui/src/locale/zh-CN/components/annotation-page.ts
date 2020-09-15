@@ -46,9 +46,9 @@ export default {
     'Rotate the image anticlockwise ${anticlockwiseShortcut}': '逆时针旋转图片 ${anticlockwiseShortcut}',
     'Rotate the image clockwise ${clockwiseShortcut}': '顺时针旋转图片 ${clockwiseShortcut}',
     //annotation-page\standard-workspace\controls-side-bar\setup-tag-popover.tsx
-    'Setup tag': '设置tag',
-    'Press ${repeatShapeShortcut} to add a tag again': '按下${repeatShapeShortcut}再次添加tag',
-    'Tag': 'Tag',
+    'Setup tag': '设置标记',
+    'Press ${repeatShapeShortcut} to add a tag again': '按下${repeatShapeShortcut}再次添加标记',
+    'Tag': '标记',
     //annotation-page\standard-workspace\controls-side-bar\split-control.tsx
     'Split a track ${switchSplitShortcut}': '分割轨迹 ${switchSplitShortcut}',
     // annotation-page\standard-workspace\controls-side-bar\tools-control.tsx
@@ -121,11 +121,6 @@ export default {
     'Skip frame': '跳过帧',
     'Automatically go to the next frame': '自动跳转到下一帧',
     'Frame tags:': '帧 tags',
-    'Use': '使用',
-    'or digits': '或数字',
-    'to add selected tag': '添加选中的 tag',
-    'or': '或者',
-    'to skip frame': '跳过帧',
     'tagAnnotationSidebarShortcutHelp': '使用<1>N</1>或数字<3>0-9</3>来添加选中的tag<5/>或者<7>→</7>跳过帧',
     // cvat-ui\src\components\annotation-page\top-bar
     // cvat-ui\src\components\annotation-page\top-bar\annotation-menu.tsx

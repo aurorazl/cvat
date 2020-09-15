@@ -32,6 +32,7 @@ import {
 } from 'actions/annotation-actions';
 import { InteractionResult } from 'cvat-canvas/src/typescript/canvas';
 import DetectorRunner from 'components/model-runner-modal/detector-runner';
+import { withTranslation, WithTranslation  } from 'react-i18next';
 
 interface StateToProps {
     canvasInstance: Canvas;
@@ -98,7 +99,7 @@ function convertShapesForInteractor(shapes: InteractionResult[]): number[][] {
         .flat().reduce(reducer, []);
 }
 
-type Props = StateToProps & DispatchToProps;
+type Props = StateToProps & DispatchToProps & WithTranslation;
 interface State {
     activeInteractor: Model | null;
     activeLabelID: number;
@@ -196,12 +197,13 @@ class ToolsControlComponent extends React.PureComponent<Props, State> {
             activeLabelID,
             fetchAnnotations,
             updateAnnotations,
+            t,
         } = this.props;
         const { activeInteractor, interactiveStateID, fetching } = this.state;
 
         try {
             if (!isInteraction) {
-                throw Error('Canvas raises event "canvas.interacted" when interaction is off');
+                throw Error(t('Canvas raises event "canvas.interacted" when interaction is off'));
             }
 
             if (fetching) {
@@ -297,7 +299,7 @@ class ToolsControlComponent extends React.PureComponent<Props, State> {
         } catch (err) {
             notification.error({
                 description: err.toString(),
-                message: 'Interaction error occured',
+                message: t('Interaction error occured'),
             });
         }
     };
@@ -312,13 +314,13 @@ class ToolsControlComponent extends React.PureComponent<Props, State> {
     };
 
     private renderLabelBlock(): JSX.Element {
-        const { labels } = this.props;
+        const { labels, t } = this.props;
         const { activeLabelID } = this.state;
         return (
             <>
                 <Row type='flex' justify='start'>
                     <Col>
-                        <Text className='cvat-text-color'>Label</Text>
+                        <Text className='cvat-text-color'>{t('controlsSidebar::Label')}</Text>
                     </Col>
                 </Row>
                 <Row type='flex' justify='center'>
@@ -356,14 +358,14 @@ class ToolsControlComponent extends React.PureComponent<Props, State> {
     }
 
     private renderInteractorBlock(): JSX.Element {
-        const { interactors, canvasInstance, onInteractionStart } = this.props;
+        const { interactors, canvasInstance, onInteractionStart, t } = this.props;
         const { activeInteractor, activeLabelID, fetching } = this.state;
 
         return (
             <>
                 <Row type='flex' justify='start'>
                     <Col>
-                        <Text className='cvat-text-color'>Interactor</Text>
+                        <Text className='cvat-text-color'>{t('Interactor')}</Text>
                     </Col>
                 </Row>
                 <Row type='flex' align='middle' justify='center'>
@@ -401,7 +403,7 @@ class ToolsControlComponent extends React.PureComponent<Props, State> {
                                 }
                             }}
                         >
-                            Interact
+                            {t('Interact')}
                         </Button>
                     </Col>
                 </Row>
@@ -415,6 +417,7 @@ class ToolsControlComponent extends React.PureComponent<Props, State> {
             detectors,
             frame,
             fetchAnnotations,
+            t,
         } = this.props;
 
         return (
@@ -453,7 +456,7 @@ class ToolsControlComponent extends React.PureComponent<Props, State> {
                     } catch (error) {
                         notification.error({
                             description: error.toString(),
-                            message: 'Detection error occured',
+                            message: t('Detection error occured'),
                         });
                     } finally {
                         this.setState({ fetching: false });
@@ -464,19 +467,20 @@ class ToolsControlComponent extends React.PureComponent<Props, State> {
     }
 
     private renderPopoverContent(): JSX.Element {
+        const { t } = this.props;
         return (
             <div className='cvat-tools-control-popover-content'>
                 <Row type='flex' justify='start'>
                     <Col>
-                        <Text className='cvat-text-color' strong>AI Tools</Text>
+                        <Text className='cvat-text-color' strong>{t('AI Tools')}</Text>
                     </Col>
                 </Row>
                 <Tabs>
-                    <Tabs.TabPane key='interactors' tab='Interactors'>
+                    <Tabs.TabPane key='interactors' tab={t('Interactors')}>
                         { this.renderLabelBlock() }
                         { this.renderInteractorBlock() }
                     </Tabs.TabPane>
-                    <Tabs.TabPane key='detectors' tab='Detectors'>
+                    <Tabs.TabPane key='detectors' tab={t('Detectors')}>
                         { this.renderDetectorBlock() }
                     </Tabs.TabPane>
                 </Tabs>
@@ -485,7 +489,7 @@ class ToolsControlComponent extends React.PureComponent<Props, State> {
     }
 
     public render(): JSX.Element | null {
-        const { interactors, isInteraction, canvasInstance } = this.props;
+        const { interactors, isInteraction, canvasInstance, t } = this.props;
         const { fetching } = this.state;
 
         if (!interactors.length) return null;
@@ -508,14 +512,14 @@ class ToolsControlComponent extends React.PureComponent<Props, State> {
         return (
             <>
                 <Modal
-                    title='Making a server request'
+                    title={t('Making a server request')}
                     zIndex={Number.MAX_SAFE_INTEGER}
                     visible={fetching}
                     closable={false}
                     footer={[]}
 
                 >
-                    <Text>Waiting for a server response..</Text>
+                    <Text>{t('Waiting for a server response..')}</Text>
                     <Icon style={{ marginLeft: '10px' }} type='loading' />
                 </Modal>
                 <Popover
@@ -534,4 +538,4 @@ class ToolsControlComponent extends React.PureComponent<Props, State> {
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(ToolsControlComponent);
+)(withTranslation()(ToolsControlComponent));
