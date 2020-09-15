@@ -1,3 +1,5 @@
+import controlsSidebar from './en-US/components/ns/controls-side-bar';
+import objectsSidebar from './en-US/components/ns/objects-side-bar';
 import actionsMenu from './en-US/components/actions-menu';
 import annotationPage from './en-US/components/annotation-page';
 import changePasswordModal from './en-US/components/change-password-modal';
@@ -23,6 +25,8 @@ import reducersUtils from './en-US/reducers/index';
 import notificationsReducers from './en-US/reducers/notifications-reducer';
 
 export default {
+  controlsSidebar,
+  objectsSidebar,
   ...actionsMenu,
   ...annotationPage,
   ...changePasswordModal,

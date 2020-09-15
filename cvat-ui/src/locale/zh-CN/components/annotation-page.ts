@@ -26,7 +26,7 @@ export default {
     'Drawing method': '绘制方法',
     'By 2 Points': '2个点',
     'By 4 Points': '4个点',
-    'From rectangle': '从矩形',
+    'From rectangle': '基于矩形',
     'Number of points:': '点数量:',
     'Shape': '形状',
     'Track': '轨迹',
