@@ -157,7 +157,7 @@ export default {
     'Fullscreen': '全屏',
     'Info': '信息',
     // cvat-ui\src\components\annotation-page\top-bar\statistics-modal.tsx
-    'Tags': 'Tags',
+    'Tags': '标记',
     'Manually': '手工',
     'Interpolated': '内插',
     'Total': '总计',

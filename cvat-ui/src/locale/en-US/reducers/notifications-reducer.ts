@@ -43,7 +43,7 @@ export default {
     'Could not propagate the object': 'Could not propagate the object',
     'Could not collect annotations statistics': 'Could not collect annotations statistics',
     'Could not save the job on the server': 'Could not save the job on the server',
-    'Could not upload annotations for the': 'Could not upload annotations for the',
+    'Could not upload annotations for the Could not upload annotations for the <a href="/tasks/${taskID}/jobs/${jobID}" target="_blank">job ${taskID}</a>': 'Could not upload annotations for the <a href="/tasks/{{taskID}}/jobs/{{jobID}}" target="_blank">job {{taskID}}</a>',
     'Could not remove annotations': 'Could not remove annotations',
     'Could not fetch annotations': 'Could not fetch annotations',
     'Could not redo': 'Could not redo',
