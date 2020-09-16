@@ -18,6 +18,7 @@ import { UserAgreementsActionTypes } from 'actions/useragreements-actions';
 
 import { NotificationsState } from './interfaces';
 
+import i18n from "i18next";
 
 const defaultState: NotificationsState = {
     errors: {
@@ -114,7 +115,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     auth: {
                         ...state.errors.auth,
                         authorized: {
-                            message: 'Could not check authorization on the server',
+                            message: i18n.t('Could not check authorization on the server'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -129,7 +130,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     auth: {
                         ...state.errors.auth,
                         login: {
-                            message: 'Could not login on the server',
+                            message: i18n.t('Could not login on the server'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -144,7 +145,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     auth: {
                         ...state.errors.auth,
                         logout: {
-                            message: 'Could not logout from the server',
+                            message: i18n.t('Could not logout from the server'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -159,7 +160,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     auth: {
                         ...state.errors.auth,
                         register: {
-                            message: 'Could not register on the server',
+                            message: i18n.t('Could not register on the server'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -174,8 +175,8 @@ export default function (state = defaultState, action: AnyAction): Notifications
                         ...state.messages,
                         auth: {
                             ...state.messages.auth,
-                            registerDone: `To use your account, you need to confirm the email address. \
-                                 We have sent an email with a confirmation link to ${action.payload.user.email}.`,
+                            registerDone: i18n.t('To use your account, you need to confirm the email address.') +
+                                 i18n.t('We have sent an email with a confirmation link to ${action.payload.user.email}.').replace('${action.payload.user.email}', `${action.payload.user.email}`),
                         },
                     },
                 };
@@ -192,7 +193,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     ...state.messages,
                     auth: {
                         ...state.messages.auth,
-                        changePasswordDone: 'New password has been saved.',
+                        changePasswordDone: i18n.t('New password has been saved.'),
                     },
                 },
             };
@@ -205,7 +206,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     auth: {
                         ...state.errors.auth,
                         changePassword: {
-                            message: 'Could not change password',
+                            message: i18n.t('Could not change password'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -219,8 +220,8 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     ...state.messages,
                     auth: {
                         ...state.messages.auth,
-                        requestPasswordResetDone: `Check your email for a link to reset your password.
-                            If it doesn’t appear within a few minutes, check your spam folder.`,
+                        requestPasswordResetDone: i18n.t('Check your email for a link to reset your password.') +
+                            i18n.t('If it doesn’t appear within a few minutes, check your spam folder.'),
                     },
                 },
             };
@@ -233,7 +234,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     auth: {
                         ...state.errors.auth,
                         requestPasswordReset: {
-                            message: 'Could not reset password on the server.',
+                            message: i18n.t('Could not reset password on the server.'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -247,7 +248,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     ...state.messages,
                     auth: {
                         ...state.messages.auth,
-                        resetPasswordDone: 'Password has been reset with the new password.',
+                        resetPasswordDone: i18n.t('Password has been reset with the new password.'),
                     },
                 },
             };
@@ -260,7 +261,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     auth: {
                         ...state.errors.auth,
                         resetPassword: {
-                            message: 'Could not set new password on the server.',
+                            message: i18n.t('Could not set new password on the server.'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -275,7 +276,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     auth: {
                         ...state.errors.auth,
                         loadAuthActions: {
-                            message: 'Could not check available auth actions',
+                            message: i18n.t('Could not check available auth actions'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -291,8 +292,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     tasks: {
                         ...state.errors.tasks,
                         exporting: {
-                            message: 'Could not export dataset for the '
-                                + `<a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>`,
+                            message: i18n.t('Could not export dataset for the <a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>', {taskID: `${taskID}`}),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -307,7 +307,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     tasks: {
                         ...state.errors.tasks,
                         fetching: {
-                            message: 'Could not fetch tasks',
+                            message: i18n.t('Could not fetch tasks'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -323,8 +323,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     tasks: {
                         ...state.errors.tasks,
                         loading: {
-                            message: 'Could not upload annotation for the '
-                                + `<a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>`,
+                            message: i18n.t('Could not upload annotation for the <a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>', {taskID: `${taskID}`}),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -339,8 +338,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     ...state.messages,
                     tasks: {
                         ...state.messages.tasks,
-                        loadingDone: 'Annotations have been loaded to the '
-                            + `<a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>`,
+                        loadingDone: i18n.t('Annotations have been loaded to the <a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>', {taskID: `${taskID}`}),
                     },
                 },
             };
@@ -354,8 +352,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     tasks: {
                         ...state.errors.tasks,
                         updating: {
-                            message: 'Could not update '
-                                + `<a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>`,
+                            message: i18n.t('Could not update <a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>', {taskID: `${taskID}`}),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -371,8 +368,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     tasks: {
                         ...state.errors.tasks,
                         dumping: {
-                            message: 'Could not dump annotations for the '
-                                + `<a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>`,
+                            message: i18n.t('Could not dump annotations for the <a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>', {taskID: `${taskID}`}),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -388,8 +384,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     tasks: {
                         ...state.errors.tasks,
                         deleting: {
-                            message: 'Could not delete the '
-                                + `<a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>`,
+                            message: i18n.t('Could not delete the <a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>', {taskID: `${taskID}`}),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -404,7 +399,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     tasks: {
                         ...state.errors.tasks,
                         creating: {
-                            message: 'Could not create the task',
+                            message: i18n.t('Could not create the task'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -419,7 +414,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     formats: {
                         ...state.errors.formats,
                         fetching: {
-                            message: 'Could not get formats from the server',
+                            message: i18n.t('Could not get formats from the server'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -434,7 +429,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     users: {
                         ...state.errors.users,
                         fetching: {
-                            message: 'Could not get users from the server',
+                            message: i18n.t('Could not get users from the server'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -449,7 +444,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     about: {
                         ...state.errors.about,
                         fetching: {
-                            message: 'Could not get info about the server',
+                            message: i18n.t('Could not get info about the server'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -464,7 +459,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     share: {
                         ...state.errors.share,
                         fetching: {
-                            message: 'Could not load share data from the server',
+                            message: i18n.t('Could not load share data from the server'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -480,8 +475,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                         ...state.messages,
                         models: {
                             ...state.messages.models,
-                            inferenceDone: 'Automatic annotation finished for the '
-                                + `<a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>`,
+                            inferenceDone: i18n.t('Automatic annotation finished for the <a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>', {taskID: `${taskID}`}),
                         },
                     },
                 };
@@ -499,7 +493,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     models: {
                         ...state.errors.models,
                         metaFetching: {
-                            message: 'Could not fetch models meta information',
+                            message: i18n.t('Could not fetch models meta information'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -515,8 +509,8 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     models: {
                         ...state.errors.models,
                         inferenceStatusFetching: {
-                            message: 'Fetching inference status for the '
-                                + `<a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>`,
+                            message: i18n.t('Fetching inference status for the <a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>', {taskID: `${taskID}`}),
+                            // message: `Fetching inference status for the <a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>`,
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -531,7 +525,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     models: {
                         ...state.errors.models,
                         fetching: {
-                            message: 'Could not get models from the server',
+                            message: i18n.t('Could not get models from the server'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -547,8 +541,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     models: {
                         ...state.errors.models,
                         starting: {
-                            message: 'Could not infer model for the '
-                                + `<a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>`,
+                            message: i18n.t('Could not infer model for the <a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>', {taskID: `${taskID}`}),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -564,8 +557,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     models: {
                         ...state.errors.models,
                         canceling: {
-                            message: 'Could not cancel model inference for the '
-                                + `<a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>`,
+                            message: i18n.t('Could not cancel model inference for the <a href="/tasks/${taskID}" target="_blank">task ${taskID}</a>', { taskID: `${taskID}` }),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -580,7 +572,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         jobFetching: {
-                            message: 'Error during fetching a job',
+                            message: i18n.t('Error during fetching a job'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -595,7 +587,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         frameFetching: {
-                            message: `Could not receive frame ${action.payload.number}`,
+                            message: i18n.t('Could not receive frame ${action.payload.number}').replace('${action.payload.number}', `${action.payload.number}`),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -610,7 +602,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         saving: {
-                            message: 'Could not save annotations',
+                            message: i18n.t('Could not save annotations'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -625,7 +617,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         updating: {
-                            message: 'Could not update annotations',
+                            message: i18n.t('Could not update annotations'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -640,7 +632,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         creating: {
-                            message: 'Could not create annotations',
+                            message: i18n.t('Could not create annotations'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -655,7 +647,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         merging: {
-                            message: 'Could not merge annotations',
+                            message: i18n.t('Could not merge annotations'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -670,7 +662,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         grouping: {
-                            message: 'Could not group annotations',
+                            message: i18n.t('Could not group annotations'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -685,7 +677,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         splitting: {
-                            message: 'Could not split the track',
+                            message: i18n.t('Could not split the track'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -700,7 +692,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         removing: {
-                            message: 'Could not remove the object',
+                            message: i18n.t('Could not remove the object'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -715,7 +707,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         propagating: {
-                            message: 'Could not propagate the object',
+                            message: i18n.t('Could not propagate the object'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -730,7 +722,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         collectingStatistics: {
-                            message: 'Could not collect annotations statistics',
+                            message: i18n.t('Could not collect annotations statistics'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -745,7 +737,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         savingJob: {
-                            message: 'Could not save the job on the server',
+                            message: i18n.t('Could not save the job on the server'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -772,8 +764,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         uploadAnnotations: {
-                            message: 'Could not upload annotations for the '
-                                + `<a href="/tasks/${taskID}/jobs/${jobID}" target="_blank">job ${taskID}</a>`,
+                            message: i18n.t('Could not upload annotations for the <a href="/tasks/${taskID}/jobs/${jobID}" target="_blank">job ${taskID}</a>', {taskID: `${taskID}`, jobID: `${jobID}`}),
                             reason: error.toString(),
                         },
                     },
@@ -788,7 +779,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         removeAnnotations: {
-                            message: 'Could not remove annotations',
+                            message: i18n.t('Could not remove annotations'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -803,7 +794,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         fetchingAnnotations: {
-                            message: 'Could not fetch annotations',
+                            message: i18n.t('Could not fetch annotations'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -818,7 +809,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         redo: {
-                            message: 'Could not redo',
+                            message: i18n.t('Could not redo'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -833,7 +824,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         undo: {
-                            message: 'Could not undo',
+                            message: i18n.t('Could not undo'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -848,7 +839,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         search: {
-                            message: 'Could not execute search annotations',
+                            message: i18n.t('Could not execute search annotations'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -863,7 +854,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     annotation: {
                         ...state.errors.annotation,
                         savingLogs: {
-                            message: 'Could not send logs to the server',
+                            message: i18n.t('Could not send logs to the server'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -878,7 +869,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     boundaries: {
                         ...state.errors.annotation,
                         resetError: {
-                            message: 'Could not reset the state',
+                            message: i18n.t('Could not reset the state'),
                             reason: action.payload.error.toString(),
                         },
                     },
@@ -893,7 +884,7 @@ export default function (state = defaultState, action: AnyAction): Notifications
                     userAgreements: {
                         ...state.errors.userAgreements,
                         fetching: {
-                            message: 'Could not get user agreements from the server',
+                            message: i18n.t('Could not get user agreements from the server'),
                             reason: action.payload.error.toString(),
                         },
                     },

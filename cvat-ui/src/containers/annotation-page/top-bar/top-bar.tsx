@@ -27,6 +27,7 @@ import { Canvas } from 'cvat-canvas-wrapper';
 
 import AnnotationTopBarComponent from 'components/annotation-page/top-bar/top-bar';
 import { CombinedState, FrameSpeed, Workspace } from 'reducers/interfaces';
+import { withTranslation, WithTranslation  } from 'react-i18next';
 
 interface StateToProps {
     jobInstance: any;
@@ -156,7 +157,7 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
     };
 }
 
-type Props = StateToProps & DispatchToProps & RouteComponentProps;
+type Props = StateToProps & DispatchToProps & RouteComponentProps & WithTranslation;
 class AnnotationTopBarContainer extends React.PureComponent<Props> {
     private inputFrameRef: React.RefObject<InputNumber>;
     private autoSaveInterval: number | undefined;
@@ -172,6 +173,7 @@ class AnnotationTopBarContainer extends React.PureComponent<Props> {
             autoSaveInterval,
             history,
             jobInstance,
+            t,
         } = this.props;
 
         this.autoSaveInterval = window.setInterval(this.autoSave.bind(this), autoSaveInterval);
@@ -182,7 +184,7 @@ class AnnotationTopBarContainer extends React.PureComponent<Props> {
 
             if (jobInstance.annotations.hasUnsavedChanges()
                 && location.pathname !== `/tasks/${taskID}/jobs/${jobID}`) {
-                return 'You have unsaved changes, please confirm leaving this page.';
+                return t('You have unsaved changes, please confirm leaving this page.') as string;
             }
             return undefined;
         });
@@ -447,7 +449,7 @@ class AnnotationTopBarContainer extends React.PureComponent<Props> {
     };
 
     private beforeUnloadCallback = (event: BeforeUnloadEvent): string | undefined => {
-        const { jobInstance } = this.props;
+        const { jobInstance, t } = this.props;
         if (jobInstance.annotations.hasUnsavedChanges()) {
             const confirmationMessage = t('You have unsaved changes, please confirm leaving this page.');
             // eslint-disable-next-line no-param-reassign
@@ -636,5 +638,5 @@ export default withRouter(
     connect(
         mapStateToProps,
         mapDispatchToProps,
-    )(AnnotationTopBarContainer),
+    )(withTranslation()(AnnotationTopBarContainer)),
 );

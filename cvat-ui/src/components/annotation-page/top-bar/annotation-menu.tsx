@@ -74,7 +74,7 @@ export default function AnnotationMenuComponent(props: Props): JSX.Element {
         } else if (copyParams.key === Actions.REMOVE_ANNO) {
             Modal.confirm({
                 title: t('All annotations will be removed'),
-                content: t('You are going to remove all annotations from the client. ')
+                content: t('You are going to remove all annotations from the client.')
                     + t('It will stay on the server till you save a job. Continue?'),
                 onOk: () => {
                     onClickMenu(copyParams);
