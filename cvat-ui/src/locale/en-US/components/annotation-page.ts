@@ -60,6 +60,8 @@ export default {
     'AI Tools': 'AI Tools',
     'Making a server request': 'Making a server request',
     'Waiting for a server response..': 'Waiting for a server response..',
+    'Detectors': 'Detectors',
+    'Interactors': 'Interactors',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\color-picker.tsx
     'Select color': 'Select color',
@@ -187,8 +189,7 @@ export default {
     'Please, be sure information you tried to get exist and you have access': 'Please, be sure information you tried to get exist and you have access',
     // cvat-ui\src\components\annotation-page\annotations-filters-input.tsx
     'General': 'General',
-    'You can use filters to display only subset of objects on a frame': 'You can use filters to display only subset of objects on a frame',
-    ' or to search objects that satisfy the filters using hotkeys': ' or to search objects that satisfy the filters using hotkeys',
+    'You can use filters to display only subset of objects on a frame or to search objects that satisfy the filters using hotkeys': 'You can use filters to display only subset of objects on a frame or to search objects that satisfy the filters using hotkeys',
     'Supported properties:': 'Supported properties:',
     'Supported operators:': 'Supported operators:',
     'If you have double quotes in your query string,': 'If you have double quotes in your query string,',

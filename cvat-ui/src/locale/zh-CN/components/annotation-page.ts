@@ -54,12 +54,14 @@ export default {
     // annotation-page\standard-workspace\controls-side-bar\tools-control.tsx
     'Canvas raises event "canvas.interacted" when interaction is off': '当交互关闭时，Canvas 触发了 "canvas.interacted" 事件',
     'Interaction error occured': '发生了交互错误',
-    'Interactor': 'Interactor',
-    'Interact': 'Interact',
+    'Interactor': '模型',
+    'Interact': '辅助标注',
     'Detection error occured': '发生了检测错误',
     'AI Tools': 'AI 工具',
     'Making a server request': '发送服务器请求',
     'Waiting for a server response..': '等待服务器响应..',
+    'Detectors': '自动化标注',
+    'Interactors': '辅助标注',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\color-picker.tsx
     'Select color': '选择颜色',
@@ -78,7 +80,7 @@ export default {
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\object-item-details.tsx
     'Details': '详情',
     // src\components\annotation-page\standard-workspace\objects-side-bar\object-item-basics.tsx
-    'Change current label': '改变当前标签',    
+    'Change current label': '改变当前标签',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\object-item-menu.tsx
     'Create object URL': '创建对象URL',
     'Make a copy': '复制',
@@ -126,7 +128,7 @@ export default {
     'tagAnnotationSidebarShortcutHelp': '使用<1>N</1>或数字<3>0-9</3>来添加选中的tag<5/>或者<7>→</7>跳过帧',
     // cvat-ui\src\components\annotation-page\top-bar
     // cvat-ui\src\components\annotation-page\top-bar\annotation-menu.tsx
-    'Current annotation will be lost': '当前标注将会丢失',
+    'Current annotation will be lost': '当前标注将会被丢弃',
     'You are going to upload new annotations to this job. Continue?': '您正在上传新的标注到该作业。是否继续？',
     'All annotations will be removed': '所有标注将会被移除',
     'You are going to remove all annotations from the client.': '你正在从客户端移除所有标注。',
@@ -161,7 +163,7 @@ export default {
     // cvat-ui\src\components\annotation-page\top-bar\statistics-modal.tsx
     'Tags': '标记',
     'Manually': '手工',
-    'Interpolated': '内插',
+    'Interpolated': '插值',
     'Total': '总计',
     'Job status': '作业状态',
     'annotation': '标注',
@@ -178,16 +180,15 @@ export default {
     'Rectangle': '矩形',
     'Polygon': '多边形',
     'Polyline': '多段线',
-    'Points': '点',    
+    'Points': '点',
     // src\containers\annotation-page\top-bar\top-bar.tsx
-    'You have unsaved changes, please confirm leaving this page.': '尚未保存更改，请确认离开此页面。',    
+    'You have unsaved changes, please confirm leaving this page.': '尚未保存更改，请确认离开此页面。',
     // cvat-ui\src\components\annotation-page\annotation-page.tsx
     'Sorry, but this job was not found': '抱歉，作业未找到',
     'Please, be sure information you tried to get exist and you have access': '请确认要获取的信息存在，并且可以访问',
     // cvat-ui\src\components\annotation-page\annotations-filters-input.tsx
     'General': '通用',
-    'You can use filters to display only subset of objects on a frame': 'You can use filters to display only subset of objects on a frame',
-    ' or to search objects that satisfy the filters using hotkeys': ' or to search objects that satisfy the filters using hotkeys',
+    'You can use filters to display only subset of objects on a frame or to search objects that satisfy the filters using hotkeys': '通过快捷键，可以使用过滤器仅显示一个frame中的部分objects，或者搜索符合过滤器的objects',
     'Supported properties:': '支持的属性:',
     'Supported operators:': '支持的操作:',
     'If you have double quotes in your query string,': '如果查询字符串包含双引号,',
