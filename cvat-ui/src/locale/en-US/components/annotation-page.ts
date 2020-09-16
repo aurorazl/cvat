@@ -77,6 +77,8 @@ export default {
     'Switch pinned property': 'Switch pinned property',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\object-item-details.tsx
     'Details': 'Details',
+    // src\components\annotation-page\standard-workspace\objects-side-bar\object-item-basics.tsx
+    'Change current label': 'Change current label',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\object-item-menu.tsx
     'Create object URL': 'Create object URL',
     'Make a copy': 'Make a copy',

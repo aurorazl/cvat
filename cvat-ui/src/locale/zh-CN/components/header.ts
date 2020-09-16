@@ -1,5 +1,6 @@
 export default {
-    // cvat-ui\src\components\header\settings-modal\player-settings.tsx
+    // cvat-ui\src\components\header\
+    'Player step': '播放步长',
     'skippedFramesTip': '选择<1/>或<3/> 时跳过的帧数',
     'Player speed': '播放速度',
     'Fastest': '最快',

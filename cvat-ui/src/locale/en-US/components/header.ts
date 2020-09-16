@@ -1,5 +1,6 @@
 export default {
-    // cvat-ui\src\components\header\settings-modal\player-settings.tsx
+    // cvat-ui\src\components\header\
+    'Player step': 'Player step',
     'skippedFramesTip': 'Number of frames skipped when selecting <1/> or <3/>',
     'Player speed': 'Player speed',
     'Fastest': 'Fastest',

@@ -330,6 +330,13 @@ function HeaderContainer(props: Props): JSX.Element {
                 </Button> */}
                 <Button
                     className='cvat-header-button'
+                    size='small'
+                    onClick={(e)=>{console.log(e);}}
+                >
+                    中文
+                </Button>
+                <Button
+                    className='cvat-header-button'
                     type='link'
                     href={`${tool.server.host}/documentation/user_guide.html`}
                     onClick={

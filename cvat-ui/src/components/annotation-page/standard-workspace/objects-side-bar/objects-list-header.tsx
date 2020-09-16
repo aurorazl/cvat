@@ -33,19 +33,19 @@ function StatesOrderingSelectorComponent(props: StatesOrderingSelectorComponentP
                     key={StatesOrdering.ID_DESCENT}
                     value={StatesOrdering.ID_DESCENT}
                 >
-                    {StatesOrdering.ID_DESCENT}
+                    {t(StatesOrdering.ID_DESCENT)}
                 </Select.Option>
                 <Select.Option
                     key={StatesOrdering.ID_ASCENT}
                     value={StatesOrdering.ID_ASCENT}
                 >
-                    {StatesOrdering.ID_ASCENT}
+                    {t(StatesOrdering.ID_ASCENT)}
                 </Select.Option>
                 <Select.Option
                     key={StatesOrdering.UPDATED}
                     value={StatesOrdering.UPDATED}
                 >
-                    {StatesOrdering.UPDATED}
+                    {t(StatesOrdering.UPDATED)}
                 </Select.Option>
             </Select>
         </Col>

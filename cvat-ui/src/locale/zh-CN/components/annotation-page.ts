@@ -77,6 +77,8 @@ export default {
     'Switch pinned property': '切换固定属性',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\object-item-details.tsx
     'Details': '详情',
+    // src\components\annotation-page\standard-workspace\objects-side-bar\object-item-basics.tsx
+    'Change current label': '改变当前标签',    
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\object-item-menu.tsx
     'Create object URL': '创建对象URL',
     'Make a copy': '复制',
@@ -117,10 +119,10 @@ export default {
     'None': '空',
     // cvat-ui\src\components\annotation-page\tag-annotation-workspace\tag-annotation-sidebar\tag-annotation-sidebar.tsx
     'Tag label': 'Tag label',
-    'Add tag': '添加 tag',
+    'Add tag': '添加标记',
     'Skip frame': '跳过帧',
     'Automatically go to the next frame': '自动跳转到下一帧',
-    'Frame tags:': '帧 tags',
+    'Frame tags:': '帧标记：',
     'tagAnnotationSidebarShortcutHelp': '使用<1>N</1>或数字<3>0-9</3>来添加选中的tag<5/>或者<7>→</7>跳过帧',
     // cvat-ui\src\components\annotation-page\top-bar
     // cvat-ui\src\components\annotation-page\top-bar\annotation-menu.tsx
