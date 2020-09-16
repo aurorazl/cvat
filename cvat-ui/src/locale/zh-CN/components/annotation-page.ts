@@ -118,7 +118,7 @@ export default {
     'Shortcuts for labels:': 'labels快捷键:',
     'None': '空',
     // cvat-ui\src\components\annotation-page\tag-annotation-workspace\tag-annotation-sidebar\tag-annotation-sidebar.tsx
-    'Tag label': 'Tag label',
+    'Tag label': '标记标签',
     'Add tag': '添加标记',
     'Skip frame': '跳过帧',
     'Automatically go to the next frame': '自动跳转到下一帧',
@@ -168,7 +168,7 @@ export default {
     'validation': '校验',
     'completed': '完成',
     'Overview': '概览',
-    'Assignee': 'Assignee',
+    'Assignee': '执行人',
     'Start frame': '起始帧',
     'Stop frame': '终止帧',
     'Frames': '帧',
