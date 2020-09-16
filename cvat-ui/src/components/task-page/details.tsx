@@ -16,6 +16,8 @@ import moment from 'moment';
 import getCore from 'cvat-core-wrapper';
 import patterns from 'utils/validation-patterns';
 import { getReposData, syncRepos } from 'utils/git-utils';
+import { ActiveInference } from 'reducers/interfaces';
+import AutomaticAnnotationProgress from 'components/tasks-page/automatic-annotation-progress';
 import UserSelector from './user-selector';
 import LabelsEditorComponent from '../labels-editor/labels-editor';
 import { withTranslation, WithTranslation  } from 'react-i18next';
@@ -28,6 +30,8 @@ interface Props extends WithTranslation {
     taskInstance: any;
     installedGit: boolean; // change to git repos url
     registeredUsers: any[];
+    activeInference: ActiveInference | null;
+    cancelAutoAnnotation(): void;
     onTaskUpdate: (taskInstance: any) => void;
 }
 
@@ -127,10 +131,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
 
     private renderTaskName(): JSX.Element {
         const { name } = this.state;
-        const {
-            taskInstance,
-            onTaskUpdate,
-        } = this.props;
+        const { taskInstance, onTaskUpdate } = this.props;
 
         return (
             <Title
@@ -163,9 +164,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
 
     private renderParameters(): JSX.Element {
         const { taskInstance, t } = this.props;
-        const { overlap } = taskInstance;
-        const { segmentSize } = taskInstance;
-        const { imageQuality } = taskInstance;
+        const { overlap, segmentSize, imageQuality } = taskInstance;
         const zOrder = taskInstance.zOrder.toString();
 
         return (
@@ -199,12 +198,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
     }
 
     private renderUsers(): JSX.Element {
-        const {
-            taskInstance,
-            registeredUsers,
-            onTaskUpdate,
-            t,
-        } = this.props;
+        const { taskInstance, registeredUsers, onTaskUpdate, t } = this.props;
         const owner = taskInstance.owner ? taskInstance.owner.username : null;
         const assignee = taskInstance.assignee ? taskInstance.assignee.username : null;
         const created = moment(taskInstance.createdDate);
@@ -249,10 +243,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
 
     private renderDatasetRepository(): JSX.Element | boolean {
         const { taskInstance, t } = this.props;
-        const {
-            repository,
-            repositoryStatus,
-        } = this.state;
+        const { repository, repositoryStatus } = this.state;
 
         return (
             !!repository
@@ -324,11 +315,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
     }
 
     private renderBugTracker(): JSX.Element {
-        const {
-            taskInstance,
-            onTaskUpdate,
-            t,
-        } = this.props;
+        const { taskInstance, onTaskUpdate, t } = this.props;
         const { bugTracker, bugTrackerEditing } = this.state;
 
         let shown = false;
@@ -404,10 +391,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
     }
 
     private renderLabelsEditor(): JSX.Element {
-        const {
-            taskInstance,
-            onTaskUpdate,
-        } = this.props;
+        const { taskInstance, onTaskUpdate } = this.props;
 
         return (
             <Row>
@@ -428,6 +412,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
     }
 
     public render(): JSX.Element {
+        const { activeInference, cancelAutoAnnotation } = this.props;
         return (
             <div className='cvat-task-details'>
                 <Row type='flex' justify='start' align='middle'>
@@ -450,7 +435,17 @@ class DetailsComponent extends React.PureComponent<Props, State> {
                     </Col>
                     <Col md={16} lg={17} xl={17} xxl={18}>
                         { this.renderUsers() }
-                        { this.renderBugTracker() }
+                        <Row type='flex' justify='space-between' align='middle'>
+                            <Col span={12}>
+                                { this.renderBugTracker() }
+                            </Col>
+                            <Col span={10}>
+                                <AutomaticAnnotationProgress
+                                    activeInference={activeInference}
+                                    cancelAutoAnnotation={cancelAutoAnnotation}
+                                />
+                            </Col>
+                        </Row>
                         { this.renderDatasetRepository() }
                         { this.renderLabelsEditor() }
                     </Col>

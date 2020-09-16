@@ -10,14 +10,13 @@ import { Row, Col } from 'antd/lib/grid';
 import Button from 'antd/lib/button';
 import Icon from 'antd/lib/icon';
 import Dropdown from 'antd/lib/dropdown';
-import Tooltip from 'antd/lib/tooltip';
-import Modal from 'antd/lib/modal';
 import Progress from 'antd/lib/progress';
 import moment from 'moment';
 
 import ActionsMenuContainer from 'containers/actions-menu/actions-menu';
 import { ActiveInference } from 'reducers/interfaces';
 import { MenuIcon } from 'icons';
+import AutomaticAnnotationProgress from './automatic-annotation-progress';
 
 import { withTranslation, WithTranslation  } from 'react-i18next';
 import { transMoment } from 'utils/lang-utils';
@@ -126,47 +125,10 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
                         />
                     </Col>
                 </Row>
-                { activeInference
-                    && (
-                        <>
-                            <Row>
-                                <Col>
-                                    <Text strong>{t('Automatic annotation')}</Text>
-                                </Col>
-                            </Row>
-                            <Row type='flex' justify='space-between'>
-                                <Col span={22}>
-                                    <Progress
-                                        percent={Math.floor(activeInference.progress)}
-                                        strokeColor={{
-                                            from: '#108ee9',
-                                            to: '#87d068',
-                                        }}
-                                        showInfo={false}
-                                        strokeWidth={5}
-                                        size='small'
-                                    />
-                                </Col>
-                                <Col span={1} className='close-auto-annotation-icon'>
-                                    <Tooltip title={t('Cancel automatic annotation')} mouseLeaveDelay={0}>
-                                        <Icon
-                                            type='close'
-                                            onClick={() => {
-                                                Modal.confirm({
-                                                    title: t('You are going to cancel automatic annotation?'),
-                                                    content: t('Reached progress will be lost. Continue?'),
-                                                    okType: 'danger',
-                                                    onOk() {
-                                                        cancelAutoAnnotation();
-                                                    },
-                                                });
-                                            }}
-                                        />
-                                    </Tooltip>
-                                </Col>
-                            </Row>
-                        </>
-                    )}
+                <AutomaticAnnotationProgress
+                    activeInference={activeInference}
+                    cancelAutoAnnotation={cancelAutoAnnotation}
+                />
             </Col>
         );
     }

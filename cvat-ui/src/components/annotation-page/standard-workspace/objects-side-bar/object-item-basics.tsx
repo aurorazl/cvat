@@ -43,6 +43,7 @@ interface Props {
     toBackground(): void;
     toForeground(): void;
     resetCuboidPerspective(): void;
+    activateTracking(): void;
 }
 
 function ItemTopComponent(props: Props): JSX.Element {
@@ -75,6 +76,7 @@ function ItemTopComponent(props: Props): JSX.Element {
         toBackground,
         toForeground,
         resetCuboidPerspective,
+        activateTracking,
     } = props;
 
     const [menuVisible, setMenuVisible] = useState(false);
@@ -153,6 +155,7 @@ function ItemTopComponent(props: Props): JSX.Element {
                         toForeground,
                         resetCuboidPerspective,
                         changeColorPickerVisible,
+                        activateTracking,
                     })}
                 >
                     <Icon type='more' />
