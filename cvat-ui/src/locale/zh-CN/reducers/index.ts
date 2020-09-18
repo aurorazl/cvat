@@ -16,5 +16,5 @@ export default {
     // Workspace
     'Standard': '标准',
     'Attribute annotation': '属性标注',
-    'Tag annotation': 'Tag标注',     
+    'Tag annotation': '标记标注',     
   }

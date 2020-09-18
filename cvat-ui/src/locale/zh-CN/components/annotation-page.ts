@@ -117,7 +117,7 @@ export default {
     // cvat-ui\src\components\annotation-page\tag-annotation-workspace\tag-annotation-sidebar
     // cvat-ui\src\components\annotation-page\tag-annotation-workspace\tag-annotation-sidebar\shortcuts-select.tsx
 
-    'Shortcuts for labels:': 'labels快捷键:',
+    'Shortcuts for labels:': '标签快捷键:',
     'None': '空',
     // cvat-ui\src\components\annotation-page\tag-annotation-workspace\tag-annotation-sidebar\tag-annotation-sidebar.tsx
     'Tag label': '标记标签',
@@ -125,7 +125,7 @@ export default {
     'Skip frame': '跳过帧',
     'Automatically go to the next frame': '自动跳转到下一帧',
     'Frame tags:': '帧标记：',
-    'tagAnnotationSidebarShortcutHelp': '使用<1>N</1>或数字<3>0-9</3>来添加选中的tag<5/>或者<7>→</7>跳过帧',
+    'tagAnnotationSidebarShortcutHelp': '使用<1>N</1>或数字<3>0-9</3>来添加选中的标记<5/>或者<7>→</7>跳过帧',
     // cvat-ui\src\components\annotation-page\top-bar
     // cvat-ui\src\components\annotation-page\top-bar\annotation-menu.tsx
     'Current annotation will be lost': '当前标注将会被丢弃',
