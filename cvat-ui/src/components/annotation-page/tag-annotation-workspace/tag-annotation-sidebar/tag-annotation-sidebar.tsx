@@ -289,7 +289,7 @@ function TagAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Elemen
                 <Row type='flex' justify='center' className='cvat-tag-annotation-sidebar-shortcut-help'>
                     <Col>
                         <Text>
-                        <Trans i18nKey="skippedFramesTip">
+                        <Trans i18nKey="tagAnnotationSidebarShortcutHelp">
                             Use&nbsp;
                             <Text code>N</Text>
                             &nbsp;or digits&nbsp;
