@@ -28,6 +28,9 @@ export default {
     'Job': 'Job',
     'Copied to clipboard!': 'Copied to clipboard!',
     '${completed} of ${data.length} jobs': '{{completed}} of {{dataLength}} jobs',
+    'annotation': 'annotation',
+    'completed': 'completed',
+    'validation': 'validation',
     //task-page.tsx
     'Sorry, but this task was not found': 'Sorry, but this task was not found',
     'Please, be sure information you tried to get exist and you have access': 'Please, be sure information you tried to get exist and you have access',

@@ -81,7 +81,7 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
             }
 
             return (
-                <Text strong className={progressColor}>{ status }</Text>
+                <Text strong className={progressColor}>{ t(status) }</Text>
             );
         },
     }, {

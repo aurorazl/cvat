@@ -15,6 +15,10 @@ export function transStatesOrdering(statesOrdering: string): string {
     return i18n.t(statesOrdering);
 }
 
+export function transJobStatus(jobStatus: string): string {
+    return i18n.t(jobStatus);
+}
+
 export function transMoment(date: Moment): string {
     return isZh() ? date.format('YYYY-MM-DD HH:mm') : date.format('MMMM Do YYYY HH:MM');
 }
