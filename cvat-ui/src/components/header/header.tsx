@@ -333,7 +333,7 @@ function HeaderContainer(props: Props): JSX.Element {
                     size='small'
                     onClick={(e)=>{console.log(e);}}
                 >
-                    中文
+                    <Text className='cvat-text-color'>中文</Text>
                 </Button>
                 <Button
                     className='cvat-header-button'

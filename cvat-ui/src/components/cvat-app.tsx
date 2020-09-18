@@ -198,6 +198,7 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
     }
 
     private showErrors(): void {
+        const { t } = this.props;
         function showError(title: string, _error: any): void {
             const error = _error.toString();
             notification.error({
@@ -210,7 +211,7 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
                     />
                 ),
                 duration: null,
-                description: error.length > 200 ? 'Open the Browser Console to get details' : error,
+                description: error.length > 200 ? t('Open the Browser Console to get details') : error,
             });
 
             // eslint-disable-next-line no-console
