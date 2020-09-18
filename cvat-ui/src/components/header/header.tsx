@@ -328,13 +328,13 @@ function HeaderContainer(props: Props): JSX.Element {
                     <Icon type='github' />
                     <Text className='cvat-text-color'>GitHub</Text>
                 </Button> */}
-                <Button
+                {/* <Button
                     className='cvat-header-button'
                     size='small'
                     onClick={(e)=>{console.log(e);}}
                 >
                     <Text className='cvat-text-color'>中文</Text>
-                </Button>
+                </Button> */}
                 <Button
                     className='cvat-header-button'
                     type='link'
