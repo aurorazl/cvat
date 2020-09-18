@@ -1,8 +1,22 @@
 export default {
-    // common.ts(TODO)
+    // common.ts
     'Type of attribute name must be a string. Got value ${attr.name}': 'Type of attribute name must be a string. Got value ${attr.name}',
+    'Attribute: "${attr.name}". Type of attribute id must be a number or undefined. Got value ${attr.id}': 'Attribute: "${attr.name}". Type of attribute id must be a number or undefined. Got value ${attr.id}',
+    'Attribute: "${attr.name}". Unknown input type: ${attr.input_type}': 'Attribute: "${attr.name}". Unknown input type: ${attr.input_type}',
+    'Attribute: "${attr.name}". Mutable flag must be a boolean value. Got value ${attr.mutable}': 'Attribute: "${attr.name}". Mutable flag must be a boolean value. Got value ${attr.mutable}',
+    'Attribute: "${attr.name}". Attribute values must be an array. Got type ${typeof (attr.values)}': 'Attribute: "${attr.name}". Attribute values must be an array. Got type ${typeof (attr.values)}',
+    'Attribute: "${attr.name}". Attribute values array mustn\'t be empty': 'Attribute: "${attr.name}". Attribute values array mustn\'t be empty',
+    'Attribute: "${attr.name}". Each value must be a string. Got value ${value}': 'Attribute: "${attr.name}". Each value must be a string. Got value ${value}',
+    'Type of label name must be a string. Got value ${label.name}': 'Type of label name must be a string. Got value ${label.name}',
+    'Label "${label.name}". Type of label id must be only a number or undefined. Got value ${label.id}': 'Label "${label.name}". Type of label id must be only a number or undefined. Got value ${label.id}',
+    'Label "${label.name}". Label color must be a string. Got ${typeof (label.color)}': 'Label "${label.name}". Label color must be a string. Got ${typeof (label.color)}',
+    'Label "${label.name}". Type of label color must be only a valid color string. Got value ${label.color}': 'Label "${label.name}". Type of label color must be only a valid color string. Got value ${label.color}',
+    'Label "${label.name}". attributes must be an array. Got type ${typeof (label.attributes)}': 'Label "${label.name}". attributes must be an array. Got type ${typeof (label.attributes)}',
     //constructor-viewer.tsx
     'Add label': 'Add label',
+    // constructor-viewer-item.tsx
+    'Update attributes': 'Update attributes',
+    'Delete label': 'Delete label',
     //label-form.tsx
     'Please specify a name': 'Please specify a name',
     'An HTML element representing the attribute': 'An HTML element representing the attribute',

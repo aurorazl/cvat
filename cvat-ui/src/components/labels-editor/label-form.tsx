@@ -130,7 +130,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
                             pattern: patterns.validateAttributeName.pattern,
                             message: patterns.validateAttributeName.message,
                         }],
-                    })(<Input disabled={locked} placeholder='Name' />)}
+                    })(<Input disabled={locked} placeholder={t('Name')} />)}
                 </Form.Item>
             </Col>
         );

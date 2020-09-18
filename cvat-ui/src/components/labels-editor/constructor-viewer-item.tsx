@@ -10,6 +10,8 @@ import Text from 'antd/lib/typography/Text';
 import consts from 'consts';
 import { Label } from './common';
 
+import { useTranslation } from 'react-i18next';
+
 interface ConstructorViewerItemProps {
     label: Label;
     color: string;
@@ -18,6 +20,7 @@ interface ConstructorViewerItemProps {
 }
 
 export default function ConstructorViewerItem(props: ConstructorViewerItemProps): JSX.Element {
+    const { t } = useTranslation();
     const {
         color,
         label,
@@ -28,7 +31,7 @@ export default function ConstructorViewerItem(props: ConstructorViewerItemProps)
     return (
         <div style={{ background: color || consts.NEW_LABEL_COLOR }} className='cvat-constructor-viewer-item'>
             <Text>{label.name}</Text>
-            <Tooltip title='Update attributes' mouseLeaveDelay={0}>
+            <Tooltip title={t('Update attributes')} mouseLeaveDelay={0}>
                 <span
                     role='button'
                     tabIndex={0}
@@ -40,7 +43,7 @@ export default function ConstructorViewerItem(props: ConstructorViewerItemProps)
             </Tooltip>
             { label.id < 0
                 && (
-                    <Tooltip title='Delete label' mouseLeaveDelay={0}>
+                    <Tooltip title={t('Delete label')} mouseLeaveDelay={0}>
                         <span
                             role='button'
                             tabIndex={0}
