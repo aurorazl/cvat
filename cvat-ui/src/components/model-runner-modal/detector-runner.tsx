@@ -99,7 +99,7 @@ function DetectorRunner(props: Props): JSX.Element {
         onChange: (label: string) => void,
     ): JSX.Element {
         return (
-            <Tooltip title={tooltip}>
+            <Tooltip title={t(tooltip)}>
                 <Select
                     value={value}
                     onChange={onChange}

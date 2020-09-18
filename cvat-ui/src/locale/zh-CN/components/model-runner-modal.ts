@@ -11,6 +11,8 @@ export default {
     'Maximum distance between shapes that can be merged': '可合并形状之间的最大距离',
     'Clean old annotations': '清空旧的标注',
     'Annotate': '标注',
+    'Model labels': '模型标签',
+    'Task labels': '任务标签',
     // model-runner-dialog.tsx
     'Automatic annotation': '自动化标注',
   }

@@ -11,6 +11,8 @@ export default {
     'Maximum distance between shapes that can be merged': 'Maximum distance between shapes that can be merged',
     'Clean old annotations': 'Clean old annotations',
     'Annotate': 'Annotate',
+    'Model labels': 'Model labels',
+    'Task labels': 'Task labels',
     // model-runner-dialog.tsx
     'Automatic annotation': 'Automatic annotation',
   }
