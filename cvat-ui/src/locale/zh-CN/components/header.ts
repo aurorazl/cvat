@@ -1,5 +1,5 @@
 export default {
-    // cvat-ui\src\components\header\
+    // cvat-ui\src\components\header\settings-modal\player-settings.tsx
     'Player step': '播放步长',
     'skippedFramesTip': '选择<1/>或<3/> 时跳过的帧数',
     'Player speed': '播放速度',
@@ -22,6 +22,11 @@ export default {
     'Contrast': '对比度',
     'Saturation': '饱和度',
     'Reset color settings': '重置颜色设置',
+    'White': '白色',
+    'Black': '黑色',
+    'Red': '红色',
+    'Green': '绿色',
+    'Blue': '蓝色',    
     // cvat-ui\src\components\header\settings-modal\settings-modal.tsx
     'Close': '关闭',
     'Player': '播放',

@@ -1,5 +1,5 @@
 export default {
-    // cvat-ui\src\components\header\
+    // cvat-ui\src\components\header\settings-modal\player-settings.tsx
     'Player step': 'Player step',
     'skippedFramesTip': 'Number of frames skipped when selecting <1/> or <3/>',
     'Player speed': 'Player speed',
@@ -22,6 +22,11 @@ export default {
     'Contrast': 'Contrast',
     'Saturation': 'Saturation',
     'Reset color settings': 'Reset color settings',
+    'White': 'White',
+    'Black': 'Black',
+    'Red': 'Red',
+    'Green': 'Green',
+    'Blue': 'Blue',
     // cvat-ui\src\components\header\settings-modal\settings-modal.tsx
     'Close': 'Close',
     'Player': 'Player',

@@ -188,11 +188,11 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                             onChangeGridColor(color);
                         }}
                     >
-                        <Select.Option key='white' value={GridColor.White}>White</Select.Option>
-                        <Select.Option key='black' value={GridColor.Black}>Black</Select.Option>
-                        <Select.Option key='red' value={GridColor.Red}>Red</Select.Option>
-                        <Select.Option key='green' value={GridColor.Green}>Green</Select.Option>
-                        <Select.Option key='blue' value={GridColor.Blue}>Blue</Select.Option>
+                        <Select.Option key='white' value={GridColor.White}>{t('White')}</Select.Option>
+                        <Select.Option key='black' value={GridColor.Black}>{t('Black')}</Select.Option>
+                        <Select.Option key='red' value={GridColor.Red}>{t('Red')}</Select.Option>
+                        <Select.Option key='green' value={GridColor.Green}>{t('Green')}</Select.Option>
+                        <Select.Option key='blue' value={GridColor.Blue}>{t('Blue')}</Select.Option>
                     </Select>
                 </Col>
                 <Col span={8} className='cvat-player-settings-grid-opacity'>
