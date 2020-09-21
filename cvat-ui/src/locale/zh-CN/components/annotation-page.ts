@@ -86,7 +86,7 @@ export default {
     'Make a copy': '复制',
     'Propagate': '传播',
     'Switch orientation': '切换方向',
-    'Reset perspective': 'Reset perspective',
+    'Reset perspective': '重置透视',
     'To background': '移至背景',
     'To foreground': '移至前景',
     'Change ${colorBy.toLowerCase()} color': '改变${colorBy.toLowerCase()}颜色',
