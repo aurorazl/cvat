@@ -22,9 +22,11 @@ import { CVATLogo, AccountIcon, ApulisLogo } from 'icons';
 import ChangePasswordDialog from 'components/change-password-modal/change-password-modal';
 import { switchSettingsDialog as switchSettingsDialogAction } from 'actions/settings-actions';
 import { logoutAsync, authActions } from 'actions/auth-actions';
+import { changeLang } from 'actions/lang-actions';
 import { SupportedPlugins, CombinedState } from 'reducers/interfaces';
 import SettingsModal from './settings-modal/settings-modal';
 import { useTranslation } from 'react-i18next';
+import i18n from "i18next";
 
 const core = getCore();
 
@@ -56,12 +58,14 @@ interface StateToProps {
     logoutFetching: boolean;
     installedAnalytics: boolean;
     renderChangePasswordItem: boolean;
+    lang: string;
 }
 
 interface DispatchToProps {
     onLogout: () => void;
     switchSettingsDialog: (show: boolean) => void;
     switchChangePasswordDialog: (show: boolean) => void;
+    changeLang: (lang: string) => void;
 }
 
 function mapStateToProps(state: CombinedState): StateToProps {
@@ -86,6 +90,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
         settings: {
             showDialog: settingsDialogShown,
         },
+        lang,
     } = state;
 
     return {
@@ -114,6 +119,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
         logoutFetching,
         installedAnalytics: list[SupportedPlugins.ANALYTICS],
         renderChangePasswordItem,
+        lang: lang.lang,
     };
 }
 
@@ -123,6 +129,9 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
         switchSettingsDialog: (show: boolean): void => dispatch(switchSettingsDialogAction(show)),
         switchChangePasswordDialog: (show: boolean): void => (
             dispatch(authActions.switchChangePasswordDialog(show))
+        ),
+        changeLang: (lang: string): void => (
+            dispatch(changeLang(lang))
         ),
     };
 }
@@ -143,6 +152,8 @@ function HeaderContainer(props: Props): JSX.Element {
         switchSettingsDialog,
         switchChangePasswordDialog,
         renderChangePasswordItem,
+        changeLang,
+        lang,
     } = props;
 
     const {
@@ -331,9 +342,17 @@ function HeaderContainer(props: Props): JSX.Element {
                 {/* <Button
                     className='cvat-header-button'
                     size='small'
-                    onClick={(e)=>{console.log(e);}}
+                    onClick={
+                        ()=>{
+                            const selected: string = lang === 'en-US' ? 'zh-CN' : 'en-US';
+                            changeLang(selected);
+
+                            localStorage.language = selected;
+                            i18n.changeLanguage(selected);                            
+                        }
+                    }
                 >
-                    <Text className='cvat-text-color'>中文</Text>
+                    <Text className='cvat-text-color'>{lang === 'en-US' ? '中文' : 'English'}</Text>
                 </Button> */}
                 <Button
                     className='cvat-header-button'

@@ -312,6 +312,11 @@ export enum Rotation {
     CLOCKWISE90,
 }
 
+export enum LangType {
+    EN_US = 'en-US',
+    ZH_CN = 'zh-CN',
+}
+
 export interface AnnotationState {
     activities: {
         loads: {
@@ -491,4 +496,9 @@ export interface CombinedState {
     annotation: AnnotationState;
     settings: SettingsState;
     shortcuts: ShortcutsState;
+    lang: LangState;
+}
+
+export interface LangState {
+    lang: string;
 }
