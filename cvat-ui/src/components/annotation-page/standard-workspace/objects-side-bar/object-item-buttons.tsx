@@ -143,7 +143,7 @@ function ItemButtonsComponent(props: Props): JSX.Element {
                     </Row>
                     <Row type='flex' justify='space-around'>
                         <Col>
-                            <Tooltip title={`Switch outside property ${switchOutsideShortcut}`} mouseLeaveDelay={0}>
+                            <Tooltip title={t('Switch outside property ${switchOutsideShortcut}').replace('${switchOutsideShortcut}', `${switchOutsideShortcut}`)} mouseLeaveDelay={0}>
                                 { outside
                                     ? (
                                         <Icon
