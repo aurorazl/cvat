@@ -1,0 +1,6 @@
+version: "2.3"
+
+services:
+  cvat_proxy:
+    environment:
+      CVAT_HOST: 10.31.3.230
