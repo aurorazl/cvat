@@ -104,24 +104,15 @@ class LabelsEditor
             }
         }
 
-        this.setState({
-            unsavedLabels,
-            savedLabels,
-        });
-
+        this.setState({ unsavedLabels, savedLabels });
         this.handleSubmit(savedLabels, unsavedLabels);
     };
 
     private handleCreate = (label: Label | null): void => {
         if (label === null) {
-            this.setState({
-                constructorMode: ConstructorMode.SHOW,
-            });
+            this.setState({ constructorMode: ConstructorMode.SHOW });
         } else {
-            const {
-                unsavedLabels,
-                savedLabels,
-            } = this.state;
+            const { unsavedLabels, savedLabels } = this.state;
             const newUnsavedLabels = [
                 ...unsavedLabels,
                 {
@@ -130,19 +121,13 @@ class LabelsEditor
                 },
             ];
 
-            this.setState({
-                unsavedLabels: newUnsavedLabels,
-            });
-
+            this.setState({ unsavedLabels: newUnsavedLabels });
             this.handleSubmit(savedLabels, newUnsavedLabels);
         }
     };
 
     private handleUpdate = (label: Label | null): void => {
-        const {
-            savedLabels,
-            unsavedLabels,
-        } = this.state;
+        const { savedLabels, unsavedLabels } = this.state;
 
         if (label) {
             const filteredSavedLabels = savedLabels
@@ -165,9 +150,7 @@ class LabelsEditor
 
             this.handleSubmit(filteredSavedLabels, filteredUnsavedLabels);
         } else {
-            this.setState({
-                constructorMode: ConstructorMode.SHOW,
-            });
+            this.setState({ constructorMode: ConstructorMode.SHOW });
         }
     };
 
@@ -182,19 +165,13 @@ class LabelsEditor
             });
         }
 
-        const {
-            unsavedLabels,
-            savedLabels,
-        } = this.state;
+        const { unsavedLabels, savedLabels } = this.state;
 
         const filteredUnsavedLabels = unsavedLabels.filter(
             (_label: Label): boolean => _label.id !== label.id,
         );
 
-        this.setState({
-            unsavedLabels: filteredUnsavedLabels,
-        });
-
+        this.setState({ unsavedLabels: filteredUnsavedLabels });
         this.handleSubmit(savedLabels, filteredUnsavedLabels);
     };
 
@@ -218,10 +195,8 @@ class LabelsEditor
         }
 
         const { onSubmit } = this.props;
-        const output = [];
-        for (const label of savedLabels.concat(unsavedLabels)) {
-            output.push(transformLabel(label));
-        }
+        const output = savedLabels.concat(unsavedLabels)
+            .map((label: Label): any => transformLabel(label));
 
         onSubmit(output);
     }

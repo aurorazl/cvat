@@ -41,6 +41,7 @@ export interface Task {
 export interface TasksState {
     initialized: boolean;
     fetching: boolean;
+    updating: boolean;
     hideEmpty: boolean;
     gettingQuery: TasksQuery;
     count: number;
@@ -79,14 +80,17 @@ export interface FormatsState {
 export enum SupportedPlugins {
     GIT_INTEGRATION = 'GIT_INTEGRATION',
     ANALYTICS = 'ANALYTICS',
+    MODELS = 'MODELS',
 }
+
+export type PluginsList = {
+    [name in SupportedPlugins]: boolean;
+};
 
 export interface PluginsState {
     fetching: boolean;
     initialized: boolean;
-    list: {
-        [name in SupportedPlugins]: boolean;
-    };
+    list: PluginsList;
 }
 
 export interface UsersState {
@@ -482,6 +486,14 @@ export interface ShortcutsState {
     normalizedKeyMap: Record<string, string>;
 }
 
+export interface MetaState {
+    initialized: boolean;
+    fetching: boolean;
+    showTasksButton: boolean;
+    showAnalyticsButton: boolean;
+    showModelsButton: boolean;
+}
+
 export interface CombinedState {
     auth: AuthState;
     tasks: TasksState;
@@ -496,6 +508,7 @@ export interface CombinedState {
     annotation: AnnotationState;
     settings: SettingsState;
     shortcuts: ShortcutsState;
+    meta: MetaState;
     lang: LangState;
 }
 

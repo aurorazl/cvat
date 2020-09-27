@@ -17,7 +17,7 @@ export default {
     'Open': 'Open',
     'Actions': 'Actions',
     //tasks-page.tsx
-    'Some tasks have not been showed because they do not have any data.': 'Some tasks have not been showed because they do not have any data.',
+    'Some tasks are temporary hidden since they are without any data': 'Some tasks are temporary hidden since they are without any data',
     'Show all': 'Show all',
     //top-bar.tsx
     'Default project': 'Default project',

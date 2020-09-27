@@ -102,7 +102,7 @@ export default {
     'Objects': 'Objects',
     'Labels': 'Labels',
     // cvat-ui\src\components\annotation-page\standard-workspace\canvas-point-context-menu.tsx
-    'Delete point [Ctrl + dblclick]': 'Delete point [Ctrl + dblclick]',
+    'Delete point [Alt + dblclick]': 'Delete point [Alt + dblclick]',
     'Delete point': 'Delete point',
     'Set start point': 'Set start point',
     // cvat-ui\src\components\annotation-page\standard-workspace\canvas-wrapper.tsx

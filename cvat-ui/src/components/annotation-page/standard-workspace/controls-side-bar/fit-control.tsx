@@ -17,13 +17,15 @@ interface Props {
 
 function FitControl(props: Props): JSX.Element {
     const { t } = useTranslation();
-    const {
-        canvasInstance,
-    } = props;
+    const { canvasInstance } = props;
 
     return (
         <Tooltip title={t('Fit the image [Double Click]')} placement='right' mouseLeaveDelay={0}>
-            <Icon component={FitIcon} onClick={(): void => canvasInstance.fit()} />
+            <Icon
+                className='cvat-fit-control'
+                component={FitIcon}
+                onClick={(): void => canvasInstance.fit()}
+            />
         </Tooltip>
     );
 }

@@ -23,7 +23,7 @@ import ChangePasswordDialog from 'components/change-password-modal/change-passwo
 import { switchSettingsDialog as switchSettingsDialogAction } from 'actions/settings-actions';
 import { logoutAsync, authActions } from 'actions/auth-actions';
 import { changeLang } from 'actions/lang-actions';
-import { SupportedPlugins, CombinedState } from 'reducers/interfaces';
+import { CombinedState } from 'reducers/interfaces';
 import SettingsModal from './settings-modal/settings-modal';
 import { useTranslation } from 'react-i18next';
 import i18n from "i18next";
@@ -56,8 +56,10 @@ interface StateToProps {
     changePasswordDialogShown: boolean;
     changePasswordFetching: boolean;
     logoutFetching: boolean;
-    installedAnalytics: boolean;
     renderChangePasswordItem: boolean;
+    isAnalyticsPluginActive: boolean;
+    isModelsPluginActive: boolean;
+    isGitPluginActive: boolean;
     lang: string;
 }
 
@@ -117,8 +119,10 @@ function mapStateToProps(state: CombinedState): StateToProps {
         changePasswordDialogShown,
         changePasswordFetching,
         logoutFetching,
-        installedAnalytics: list[SupportedPlugins.ANALYTICS],
         renderChangePasswordItem,
+        isAnalyticsPluginActive: list.ANALYTICS,
+        isModelsPluginActive: list.MODELS,
+        isGitPluginActive: list.GIT_INTEGRATION,
         lang: lang.lang,
     };
 }
@@ -143,7 +147,6 @@ function HeaderContainer(props: Props): JSX.Element {
     const {
         user,
         tool,
-        installedAnalytics,
         logoutFetching,
         changePasswordFetching,
         settingsDialogShown,
@@ -152,6 +155,8 @@ function HeaderContainer(props: Props): JSX.Element {
         switchSettingsDialog,
         switchChangePasswordDialog,
         renderChangePasswordItem,
+        isAnalyticsPluginActive,
+        isModelsPluginActive,
         changeLang,
         lang,
     } = props;
@@ -289,38 +294,40 @@ function HeaderContainer(props: Props): JSX.Element {
                 >
                     {t('Tasks')}
                 </Button>
-                <Button
-                    className='cvat-header-button'
-                    type='link'
-                    value='models'
-                    href='/models'
-                    onClick={
-                        (event: React.MouseEvent): void => {
-                            event.preventDefault();
-                            history.push('/models');
-                        }
-                    }
-                >
-                    {t('Models')}
-                </Button>
-                { installedAnalytics
-                    && (
-                        <Button
-                            className='cvat-header-button'
-                            type='link'
-                            href={`${tool.server.host}/analytics/app/kibana`}
-                            onClick={
-                                (event: React.MouseEvent): void => {
-                                    event.preventDefault();
-                                    // false positive
-                                    // eslint-disable-next-line
-                                    window.open(`${tool.server.host}/analytics/app/kibana`, '_blank');
-                                }
+
+                {isModelsPluginActive && (
+                    <Button
+                        className='cvat-header-button'
+                        type='link'
+                        value='models'
+                        href='/models'
+                        onClick={
+                            (event: React.MouseEvent): void => {
+                                event.preventDefault();
+                                history.push('/models');
                             }
-                        >
-                            {t('Analytics')}
-                        </Button>
-                    )}
+                        }
+                    >
+                        {t('Models')}
+                    </Button>
+                )}
+                {isAnalyticsPluginActive && (
+                    <Button
+                        className='cvat-header-button'
+                        type='link'
+                        href={`${tool.server.host}/analytics/app/kibana`}
+                        onClick={
+                            (event: React.MouseEvent): void => {
+                                event.preventDefault();
+                                // false positive
+                                // eslint-disable-next-line
+                                window.open(`${tool.server.host}/analytics/app/kibana`, '_blank');
+                            }
+                        }
+                    >
+                        {t('Analytics')}
+                    </Button>
+                )}
             </div>
             <div className='cvat-right-header'>
                 {/* <Button
@@ -348,7 +355,7 @@ function HeaderContainer(props: Props): JSX.Element {
                             changeLang(selected);
 
                             localStorage.language = selected;
-                            i18n.changeLanguage(selected);                            
+                            i18n.changeLanguage(selected);
                         }
                     }
                 >

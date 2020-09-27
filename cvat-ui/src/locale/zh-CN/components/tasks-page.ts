@@ -17,7 +17,7 @@ export default {
     'Open': '打开',
     'Actions': '操作',
     //tasks-page.tsx
-    'Some tasks have not been showed because they do not have any data.': '因为没有任何数据，某些任务未显示。',
+    'Some tasks are temporary hidden since they are without any data': '因为没有任何数据，某些任务未显示。',
     'Show all': '显示所有',
     //top-bar.tsx
     // 'You have unsaved changes, please confirm leaving this page.': '尚未保存更改，请确认离开此页面。',
@@ -25,5 +25,5 @@ export default {
     'Tasks': '任务',
     'Create new task': '创建新任务',
     'Search': '查找',
-    
+
   }

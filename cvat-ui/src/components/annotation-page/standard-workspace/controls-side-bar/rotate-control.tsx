@@ -20,11 +20,7 @@ interface Props {
 
 function RotateControl(props: Props): JSX.Element {
     const { t } = useTranslation();
-    const {
-        anticlockwiseShortcut,
-        clockwiseShortcut,
-        rotateFrame,
-    } = props;
+    const { anticlockwiseShortcut, clockwiseShortcut, rotateFrame } = props;
 
     return (
         <Popover
@@ -50,7 +46,7 @@ function RotateControl(props: Props): JSX.Element {
             )}
             trigger='hover'
         >
-            <Icon component={RotateIcon} />
+            <Icon className='cvat-rotate-canvas-control' component={RotateIcon} />
         </Popover>
     );
 }
