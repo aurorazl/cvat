@@ -9,8 +9,6 @@ import cn from './locale/zh-CN';
 
 const lng = localStorage.language || navigator.language;
 
-console.log('lng-', lng)
-
 moment.locale(lng);
 
 i18n
