@@ -10,6 +10,7 @@ import Tooltip from 'antd/lib/tooltip';
 import Icon from 'antd/lib/icon';
 import Modal from 'antd/lib/modal';
 import { ActiveInference } from 'reducers/interfaces';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     activeInference: ActiveInference | null;
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export default function AutomaticAnnotationProgress(props: Props): JSX.Element | null {
+    const { t } = useTranslation();
     const { activeInference, cancelAutoAnnotation } = props;
     if (!activeInference) return null;
 
@@ -24,7 +26,7 @@ export default function AutomaticAnnotationProgress(props: Props): JSX.Element |
         <>
             <Row>
                 <Col>
-                    <Text strong>Automatic annotation</Text>
+                    <Text strong>{t('Automatic annotation')}</Text>
                 </Col>
             </Row>
             <Row type='flex' justify='space-between'>
@@ -41,13 +43,13 @@ export default function AutomaticAnnotationProgress(props: Props): JSX.Element |
                     />
                 </Col>
                 <Col span={1} className='close-auto-annotation-icon'>
-                    <Tooltip title='Cancel automatic annotation' mouseLeaveDelay={0}>
+                    <Tooltip title={t('Cancel automatic annotation')} mouseLeaveDelay={0}>
                         <Icon
                             type='close'
                             onClick={() => {
                                 Modal.confirm({
-                                    title: 'You are going to cancel automatic annotation?',
-                                    content: 'Reached progress will be lost. Continue?',
+                                    title: t('You are going to cancel automatic annotation?'),
+                                    content: t('Reached progress will be lost. Continue?'),
                                     okType: 'danger',
                                     onOk() {
                                         cancelAutoAnnotation();

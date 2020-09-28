@@ -10,12 +10,14 @@ export default {
     'Completed': 'Completed',
     'In Progress': 'In Progress',
     '${numOfCompleted} of ${numOfJobs} jobs': '${numOfCompleted} of ${numOfJobs} jobs',
+    // automatic-annotation-progress.tsx
     'Automatic annotation': 'Automatic annotation',
     'Cancel automatic annotation': 'Cancel automatic annotation',
     'You are going to cancel automatic annotation?': 'You are going to cancel automatic annotation?',
     'Reached progress will be lost. Continue?': 'Reached progress will be lost. Continue?',
     'Open': 'Open',
     'Actions': 'Actions',
+    'Preview': 'Preview',
     //tasks-page.tsx
     'Some tasks are temporary hidden since they are without any data': 'Some tasks are temporary hidden since they are without any data',
     'Show all': 'Show all',

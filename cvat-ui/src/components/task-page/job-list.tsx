@@ -148,7 +148,7 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
             <Row type='flex' justify='space-between' align='middle'>
                 <Col>
                     <Text className='cvat-text-color cvat-jobs-header'> {t('Jobs')} </Text>
-                    <Tooltip trigger='click' title='Copied to clipboard!' mouseLeaveDelay={0}>
+                    <Tooltip trigger='click' title={t('Copied to clipboard!')} mouseLeaveDelay={0}>
                         <Button
                             type='link'
                             onClick={(): void => {

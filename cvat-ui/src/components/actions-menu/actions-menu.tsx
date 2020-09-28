@@ -80,7 +80,7 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
             }
         } else if (copyParams.key === Actions.DELETE_TASK) {
             Modal.confirm({
-                title: t(`The task ${taskID} will be deleted`).replace('${taskID}', `${taskID}`),
+                title: t('The task ${taskID} will be deleted').replace('${taskID}', `${taskID}`),
                 content: t('All related data (images, annotations) will be lost. Continue?'),
                 onOk: () => {
                     onClickMenu(copyParams);
