@@ -123,7 +123,7 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State> {
                         <>
                             <br />
                             <Text className='cvat-text-color'>
-                                {`${files.local.length} files selected`}
+                                {t('${files.local.length} files selected').replace('${files.local.length}', `${files.local.length}`)}
                             </Text>
                         </>
                     )}
