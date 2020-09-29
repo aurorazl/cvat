@@ -12,7 +12,7 @@ import {
 } from 'reducers/interfaces';
 import ItemDetails, { attrValuesAreEqual } from './object-item-details';
 import ItemBasics from './object-item-basics';
-
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     normalizedKeyMap: Record<string, string>;
@@ -65,6 +65,7 @@ function objectItemsAreEqual(prevProps: Props, nextProps: Props): boolean {
 }
 
 function ObjectItemComponent(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         activated,
         objectType,
@@ -98,8 +99,8 @@ function ObjectItemComponent(props: Props): JSX.Element {
         activateTracking,
     } = props;
 
-    const type = objectType === ObjectType.TAG ? ObjectType.TAG.toUpperCase()
-        : `${shapeType.toUpperCase()} ${objectType.toUpperCase()}`;
+    const type = objectType === ObjectType.TAG ? t(ObjectType.TAG).toUpperCase()
+        : `${t(shapeType).toUpperCase()} ${t(objectType).toUpperCase()}`;
 
     const className = !activated ? 'cvat-objects-sidebar-state-item'
         : 'cvat-objects-sidebar-state-item cvat-objects-sidebar-state-active-item';

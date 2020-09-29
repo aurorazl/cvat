@@ -9,6 +9,10 @@ export default {
     'polyline': 'polyline',    
     'points': 'points',
     'cuboid': 'cuboid',
+    // ObjectType
+    'shape': 'shape',
+    'track': 'track',
+    'tag': 'tag',    
     // StatesOrdering
     'ID - descent': 'ID - descent',
     'ID - ascent': 'ID - ascent',

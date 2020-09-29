@@ -9,6 +9,10 @@ export default {
     'polyline': '多段线',
     'points': '点',
     'cuboid': '长方体',
+    // ObjectType
+    'shape': '形状',
+    'track': '轨迹',
+    'tag': '标记',     
     // StatesOrdering
     'ID - descent': 'ID - 降序',
     'ID - ascent': 'ID - 升序',
