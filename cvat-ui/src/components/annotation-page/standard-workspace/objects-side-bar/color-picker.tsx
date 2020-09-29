@@ -106,7 +106,7 @@ function ColorPicker(props: Props, ref: React.Ref<any>): JSX.Element {
                         </Text>
                     </Col>
                     <Col span={4}>
-                        <Tooltip title='Cancel'>
+                        <Tooltip title={t('Cancel')}>
                             <Button
                                 type='link'
                                 onClick={() => {
