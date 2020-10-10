@@ -197,7 +197,7 @@ export default {
     'CVAT uses json queries to perform search.': 'CVAT使用json查询器进行查询。',
     'Examples': '示例',
     'Click to open help': '点击打开帮助',
-    'How to use filters?': '怎么使用过滤器？',
+    'How to use filters?': '如何使用过滤器？',
     'Annotations filters': '标注过滤器',
     // cvat-ui\src\components\annotation-page\appearance-block.tsx
     'Appearance': '外观',

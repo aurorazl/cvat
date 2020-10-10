@@ -19,6 +19,7 @@ import {
 import { CombinedState } from 'reducers/interfaces';
 
 import { useTranslation } from 'react-i18next';
+import { isZh } from 'utils/lang-utils';
 
 interface StateToProps {
     annotationsFilters: string[];
@@ -80,32 +81,62 @@ function filtersHelpModalContent(
             <Paragraph>
                 <Title level={3}>{t('General')}</Title>
             </Paragraph>
-            <Paragraph>
-                You can use filters to display only subset of objects on a frame
-                    or to search objects that satisfy the filters using hotkeys
-                <Text strong>
-                    {` ${searchForwardShortcut} `}
-                </Text>
-                and
-                <Text strong>
-                    {` ${searchBackwardShortcut} `}
-                </Text>
-            </Paragraph>
-            <Paragraph>
-                <Text strong>Supported properties: </Text>
-                width, height, label, serverID, clientID, type, shape, occluded
-                <br />
-                <Text strong>Supported operators: </Text>
-                    ==, !=, &gt;, &gt;=, &lt;, &lt;=, (), &amp; and |
-                <br />
-                <Text strong>
-                    If you have double quotes in your query string,
-                     please escape them using back slash: \&quot; (see the latest example)
-                </Text>
-                <br />
-                All properties and values are case-sensitive.
-                CVAT uses json queries to perform search.
-            </Paragraph>
+            { isZh() ?
+                <Paragraph>
+                    你可以使用过滤器仅显示帧上的对象子集或者使用热键
+                    <Text strong>
+                        {` ${searchForwardShortcut} `}
+                    </Text>
+                    和
+                    <Text strong>
+                        {` ${searchBackwardShortcut} `}
+                    </Text>
+                    来搜索满足过滤条件的对象。
+                </Paragraph> :
+                <Paragraph>
+                    You can use filters to display only subset of objects on a frame
+                        or to search objects that satisfy the filters using hotkeys
+                    <Text strong>
+                        {` ${searchForwardShortcut} `}
+                    </Text>
+                    and
+                    <Text strong>
+                        {` ${searchBackwardShortcut} `}
+                    </Text>
+                </Paragraph>               
+            }
+            { isZh() ?
+                <Paragraph>
+                    <Text strong>支持的属性：</Text>
+                    width, height, label, serverID, clientID, type, shape, occluded
+                    <br />
+                    <Text strong>支持的操作：</Text>
+                        ==, !=, &gt;, &gt;=, &lt;, &lt;=, (), &amp; 和 |
+                    <br />
+                    <Text strong>
+                        如果查询字符串中包含双引号，
+                        请使用反斜线\&quot;进行转义:  (查看最新的例子)
+                    </Text>
+                    <br />
+                    所有属性和值均区分大小写。
+                    CVAT使用json查询执行搜索。
+                </Paragraph> :
+                <Paragraph>
+                    <Text strong>Supported properties: </Text>
+                    width, height, label, serverID, clientID, type, shape, occluded
+                    <br />
+                    <Text strong>Supported operators: </Text>
+                        ==, !=, &gt;, &gt;=, &lt;, &lt;=, (), &amp; and |
+                    <br />
+                    <Text strong>
+                        If you have double quotes in your query string,
+                        please escape them using back slash: \&quot; (see the latest example)
+                    </Text>
+                    <br />
+                    All properties and values are case-sensitive.
+                    CVAT uses json queries to perform search.
+                </Paragraph>
+            }
             <Paragraph>
                 <Title level={3}>{t('Examples')}</Title>
                 <ul>
@@ -141,6 +172,11 @@ function AnnotationsFiltersInput(props: StateToProps & DispatchToProps): JSX.Ele
 
     const [underCursor, setUnderCursor] = useState(false);
 
+    const modalContent = filtersHelpModalContent(
+        searchForwardShortcut,
+        searchBackwardShortcut,
+    );
+
     return (
         <Select
             className='cvat-annotations-filters-input'
@@ -159,10 +195,7 @@ function AnnotationsFiltersInput(props: StateToProps & DispatchToProps): JSX.Ele
                                     Modal.info({
                                         width: 700,
                                         title: t('How to use filters?'),
-                                        content: filtersHelpModalContent(
-                                            searchForwardShortcut,
-                                            searchBackwardShortcut,
-                                        ),
+                                        content: modalContent,
                                     });
                                 }}
                             />
