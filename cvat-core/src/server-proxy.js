@@ -15,6 +15,7 @@
     const store = require('store');
     const config = require('./config');
     const DownloadWorker = require('./download.worker');
+    const i18next = require('i18next').default;
 
     function generateError(errorData) {
         if (errorData.response) {
@@ -444,7 +445,7 @@
 
                 let response = null;
 
-                onUpdate('The task is being created on the server..');
+                onUpdate(i18next.t('The task is being created on the server..'));
                 try {
                     response = await Axios.post(`${backendAPI}/tasks`, JSON.stringify(taskSpec), {
                         proxy: config.proxy,
@@ -456,7 +457,7 @@
                     throw generateError(errorData);
                 }
 
-                onUpdate('The data are being uploaded to the server..');
+                onUpdate(i18next.t('The data are being uploaded to the server..'));
                 try {
                     await Axios.post(`${backendAPI}/tasks/${response.data.id}/data`, taskData, {
                         proxy: config.proxy,

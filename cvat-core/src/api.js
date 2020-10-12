@@ -21,6 +21,7 @@ function build() {
     const { Job, Task } = require('./session');
     const { Attribute, Label } = require('./labels');
     const MLModel = require('./ml-model');
+    require('./i18n');
 
     const {
         ShareFileType,
