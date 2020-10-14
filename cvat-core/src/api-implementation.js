@@ -27,6 +27,7 @@
     const { AnnotationFormats } = require('./annotation-formats.js');
     const { ArgumentError } = require('./exceptions');
     const { Task } = require('./session');
+    const i18next = require('i18next').default;
 
     function attachUsers(task, users) {
         if (task.assignee !== null) {
@@ -146,13 +147,13 @@
 
             if (('taskID' in filter) && ('jobID' in filter)) {
                 throw new ArgumentError(
-                    'Only one of fields "taskID" and "jobID" allowed simultaneously',
+                    i18next.t('Only one of fields "taskID" and "jobID" allowed simultaneously'),
                 );
             }
 
             if (!Object.keys(filter).length) {
                 throw new ArgumentError(
-                    'Job filter must not be empty',
+                    i18next.t('Job filter must not be empty'),
                 );
             }
 
@@ -194,7 +195,7 @@
             if ('search' in filter && Object.keys(filter).length > 1) {
                 if (!('page' in filter && Object.keys(filter).length === 2)) {
                     throw new ArgumentError(
-                        'Do not use the filter field "search" with others',
+                        i18next.t('Do not use the filter field "search" with others'),
                     );
                 }
             }
@@ -202,7 +203,7 @@
             if ('id' in filter && Object.keys(filter).length > 1) {
                 if (!('page' in filter && Object.keys(filter).length === 2)) {
                     throw new ArgumentError(
-                        'Do not use the filter field "id" with others',
+                        i18next.t('Do not use the filter field "id" with others'),
                     );
                 }
             }

@@ -12,6 +12,7 @@
         AttributeType,
     } = require('./enums');
     const { ArgumentError } = require('./exceptions');
+    const i18next = require('i18next').default;
 
     /**
         * Class representing an attribute
@@ -43,7 +44,7 @@
 
             if (!Object.values(AttributeType).includes(data.input_type)) {
                 throw new ArgumentError(
-                    `Got invalid attribute type ${data.input_type}`,
+                    i18next.t('Got invalid attribute type ${data.input_type}', {input_type: `${data.input_type}`}),
                 );
             }
 
@@ -192,7 +193,7 @@
                         if (typeof color === 'string' && color.match(/^#[0-9a-f]{6}$|^$/)) {
                             data.color = color;
                         } else {
-                            throw new ArgumentError('Trying to set wrong color format');
+                            throw new ArgumentError(i18next.t('Trying to set wrong color format'));
                         }
                     },
                 },

@@ -21,6 +21,7 @@
     const { TaskStatus } = require('./enums');
     const { Label } = require('./labels');
     const User = require('./user');
+    const i18next = require('i18next').default;
 
     function buildDublicatedAPI(prototype) {
         Object.defineProperties(prototype, {
@@ -656,7 +657,7 @@
 
                     if (data[property] === undefined) {
                         throw new ArgumentError(
-                            `Job field "${property}" was not initialized`,
+                            i18next.t('Job field "${property}" was not initialized', {property: `${property}`}),
                         );
                     }
                 }
@@ -686,7 +687,7 @@
                     set: (assignee) => {
                         if (assignee !== null && !(assignee instanceof User)) {
                             throw new ArgumentError(
-                                'Value must be a user instance',
+                                i18next.t('Value must be a user instance'),
                             );
                         }
                         data.assignee = assignee;
@@ -713,7 +714,7 @@
 
                         if (!valueInEnum) {
                             throw new ArgumentError(
-                                'Value must be a value from the enumeration cvat.enums.TaskStatus',
+                                i18next.t('Value must be a value from the enumeration cvat.enums.TaskStatus'),
                             );
                         }
 
@@ -920,7 +921,7 @@
                     set: (value) => {
                         if (!value.trim().length) {
                             throw new ArgumentError(
-                                'Value must not be empty',
+                                i18next.t('Value must not be empty'),
                             );
                         }
                         data.name = value;
@@ -980,7 +981,7 @@
                     set: (assignee) => {
                         if (assignee !== null && !(assignee instanceof User)) {
                             throw new ArgumentError(
-                                'Value must be a user instance',
+                                i18next.t('Value must be a user instance'),
                             );
                         }
                         data.assignee = assignee;
@@ -1031,7 +1032,7 @@
                     set: (overlap) => {
                         if (!Number.isInteger(overlap) || overlap < 0) {
                             throw new ArgumentError(
-                                'Value must be a non negative integer',
+                                i18next.t('Value must be a non negative integer'),
                             );
                         }
                         data.overlap = overlap;
@@ -1049,7 +1050,7 @@
                     set: (segment) => {
                         if (!Number.isInteger(segment) || segment < 0) {
                             throw new ArgumentError(
-                                'Value must be a positive integer',
+                                i18next.t('Value must be a positive integer'),
                             );
                         }
                         data.segment_size = segment;
@@ -1067,7 +1068,7 @@
                     set: (zOrder) => {
                         if (typeof (zOrder) !== 'boolean') {
                             throw new ArgumentError(
-                                'Value must be a boolean',
+                                i18next.t('Value must be a boolean'),
                             );
                         }
                         data.z_order = zOrder;
@@ -1085,7 +1086,7 @@
                     set: (quality) => {
                         if (!Number.isInteger(quality) || quality < 0) {
                             throw new ArgumentError(
-                                'Value must be a positive integer',
+                                i18next.t('Value must be a positive integer'),
                             );
                         }
                         data.image_quality = quality;
@@ -1103,7 +1104,7 @@
                     set: (useZipChunks) => {
                         if (typeof (useZipChunks) !== 'boolean') {
                             throw new ArgumentError(
-                                'Value must be a boolean',
+                                i18next.t('Value must be a boolean'),
                             );
                         }
                         data.use_zip_chunks = useZipChunks;
@@ -1121,7 +1122,7 @@
                     set: (useCache) => {
                         if (typeof (useCache) !== 'boolean') {
                             throw new ArgumentError(
-                                'Value must be a boolean',
+                                i18next.t('Value must be a boolean'),
                             );
                         }
                         data.use_cache = useCache;
@@ -1140,15 +1141,15 @@
                     set: (labels) => {
                         if (!Array.isArray(labels)) {
                             throw new ArgumentError(
-                                'Value must be an array of Labels',
+                                i18next.t('Value must be an array of Labels'),
                             );
                         }
 
                         for (const label of labels) {
                             if (!(label instanceof Label)) {
                                 throw new ArgumentError(
-                                    'Each array value must be an instance of Label. '
-                                        + `${typeof (label)} was found`,
+                                    i18next.t('Each array value must be an instance of Label. ')
+                                        + i18next.t('${typeof (label)} was found', {typeoflabel: `${typeof (label)}`}),
                                 );
                             }
                         }
@@ -1179,14 +1180,14 @@
                     set: (serverFiles) => {
                         if (!Array.isArray(serverFiles)) {
                             throw new ArgumentError(
-                                `Value must be an array. But ${typeof (serverFiles)} has been got.`,
+                                i18next.t('Value must be an array. But ${typeof (serverFiles)} has been got.', {typeofserverFiles: `${typeof (serverFiles)}`}),
                             );
                         }
 
                         for (const value of serverFiles) {
                             if (typeof (value) !== 'string') {
                                 throw new ArgumentError(
-                                    `Array values must be a string. But ${typeof (value)} has been got.`,
+                                    i18next.t('Array values must be a string. But ${typeof (value)} has been got.', {typeofvalue: `${typeof (value)}`}),
                                 );
                             }
                         }
@@ -1207,14 +1208,14 @@
                     set: (clientFiles) => {
                         if (!Array.isArray(clientFiles)) {
                             throw new ArgumentError(
-                                `Value must be an array. But ${typeof (clientFiles)} has been got.`,
+                                i18next.t('Value must be an array. But ${typeof (clientFiles)} has been got.', {typeofclientFiles: `${typeof (clientFiles)}`}),
                             );
                         }
 
                         for (const value of clientFiles) {
                             if (!(value instanceof File)) {
                                 throw new ArgumentError(
-                                    `Array values must be a File. But ${value.constructor.name} has been got.`,
+                                    i18next.t('Array values must be a File. But ${value.constructor.name} has been got.', {valueconstructorname: `${value.constructor.name}`}),
                                 );
                             }
                         }
@@ -1235,14 +1236,14 @@
                     set: (remoteFiles) => {
                         if (!Array.isArray(remoteFiles)) {
                             throw new ArgumentError(
-                                `Value must be an array. But ${typeof (remoteFiles)} has been got.`,
+                                i18next.t('Value must be an array. But ${typeof (remoteFiles)} has been got.', {typeofremoteFiles: `${typeof (remoteFiles)}`}),
                             );
                         }
 
                         for (const value of remoteFiles) {
                             if (typeof (value) !== 'string') {
                                 throw new ArgumentError(
-                                    `Array values must be a string. But ${typeof (value)} has been got.`,
+                                    i18next.t('Array values must be a string. But ${typeof (value)} has been got.', {typeofvalue: `${typeof (value)}`}),
                                 );
                             }
                         }
@@ -1263,7 +1264,7 @@
                     set: (frame) => {
                         if (!Number.isInteger(frame) || frame < 0) {
                             throw new ArgumentError(
-                                'Value must be a not negative integer',
+                                i18next.t('Value must be a not negative integer'),
                             );
                         }
                         data.start_frame = frame;
@@ -1282,7 +1283,7 @@
                     set: (frame) => {
                         if (!Number.isInteger(frame) || frame < 0) {
                             throw new ArgumentError(
-                                'Value must be a not negative integer',
+                                i18next.t('Value must be a not negative integer'),
                             );
                         }
                         data.stop_frame = frame;
@@ -1301,7 +1302,7 @@
                     set: (filter) => {
                         if (typeof (filter) !== 'string') {
                             throw new ArgumentError(
-                                `Filter value must be a string. But ${typeof (filter)} has been got.`,
+                                i18next.t('Filter value must be a string. But ${typeof (filter)} has been got.', {typeoffilter: `${typeof (filter)}`}),
                             );
                         }
 
@@ -1313,7 +1314,7 @@
                     set: (chunkSize) => {
                         if (typeof (chunkSize) !== 'number' || chunkSize < 1) {
                             throw new ArgumentError(
-                                `Chunk size value must be a positive number. But value ${chunkSize} has been got.`,
+                                i18next.t('Chunk size value must be a positive number. But value ${chunkSize} has been got.', {chunkSize: `${chunkSize}`}),
                             );
                         }
 
@@ -1468,20 +1469,20 @@
         }
 
         throw new ArgumentError(
-            'Can not save job without and id',
+            i18next.t('Can not save job without and id'),
         );
     };
 
     Job.prototype.frames.get.implementation = async function (frame, isPlaying, step) {
         if (!Number.isInteger(frame) || frame < 0) {
             throw new ArgumentError(
-                `Frame must be a positive integer. Got: "${frame}"`,
+                i18next.t('Frame must be a positive integer. Got: "${frame}"', {frame: `${frame}`}),
             );
         }
 
         if (frame < this.startFrame || frame > this.stopFrame) {
             throw new ArgumentError(
-                `The frame with number ${frame} is out of the job`,
+                i18next.t('The frame with number ${frame} is out of the job', {frame: `${frame}`}),
             );
         }
 
@@ -1510,19 +1511,19 @@
     Job.prototype.annotations.get.implementation = async function (frame, allTracks, filters) {
         if (!Array.isArray(filters) || filters.some((filter) => typeof (filter) !== 'string')) {
             throw new ArgumentError(
-                'The filters argument must be an array of strings',
+                i18next.t('The filters argument must be an array of strings'),
             );
         }
 
         if (!Number.isInteger(frame)) {
             throw new ArgumentError(
-                'The frame argument must be an integer',
+                i18next.t('The frame argument must be an integer'),
             );
         }
 
         if (frame < this.startFrame || frame > this.stopFrame) {
             throw new ArgumentError(
-                `Frame ${frame} does not exist in the job`,
+                i18next.t('Frame ${frame} does not exist in the job', {frame: `${frame}`}),
             );
         }
 
@@ -1533,25 +1534,25 @@
     Job.prototype.annotations.search.implementation = function (filters, frameFrom, frameTo) {
         if (!Array.isArray(filters) || filters.some((filter) => typeof (filter) !== 'string')) {
             throw new ArgumentError(
-                'The filters argument must be an array of strings',
+                i18next.t('The filters argument must be an array of strings'),
             );
         }
 
         if (!Number.isInteger(frameFrom) || !Number.isInteger(frameTo)) {
             throw new ArgumentError(
-                'The start and end frames both must be an integer',
+                i18next.t('The start and end frames both must be an integer'),
             );
         }
 
         if (frameFrom < this.startFrame || frameFrom > this.stopFrame) {
             throw new ArgumentError(
-                'The start frame is out of the job',
+                i18next.t('The start frame is out of the job'),
             );
         }
 
         if (frameTo < this.startFrame || frameTo > this.stopFrame) {
             throw new ArgumentError(
-                'The stop frame is out of the job',
+                i18next.t('The stop frame is out of the job'),
             );
         }
 
@@ -1562,19 +1563,19 @@
     Job.prototype.annotations.searchEmpty.implementation = function (frameFrom, frameTo) {
         if (!Number.isInteger(frameFrom) || !Number.isInteger(frameTo)) {
             throw new ArgumentError(
-                'The start and end frames both must be an integer',
+                i18next.t('The start and end frames both must be an integer'),
             );
         }
 
         if (frameFrom < this.startFrame || frameFrom > this.stopFrame) {
             throw new ArgumentError(
-                'The start frame is out of the job',
+                i18next.t('The start frame is out of the job'),
             );
         }
 
         if (frameTo < this.startFrame || frameTo > this.stopFrame) {
             throw new ArgumentError(
-                'The stop frame is out of the job',
+                i18next.t('The stop frame is out of the job'),
             );
         }
 
@@ -1758,13 +1759,13 @@
     Task.prototype.frames.get.implementation = async function (frame, isPlaying, step) {
         if (!Number.isInteger(frame) || frame < 0) {
             throw new ArgumentError(
-                `Frame must be a positive integer. Got: "${frame}"`,
+                i18next.t('Frame must be a positive integer. Got: "${frame}"', {frame: `${frame}`}),
             );
         }
 
         if (frame >= this.size) {
             throw new ArgumentError(
-                `The frame with number ${frame} is out of the task`,
+                i18next.t('The frame with number ${frame} is out of the task', {frame: `${frame}`}),
             );
         }
 
@@ -1803,19 +1804,19 @@
     Task.prototype.annotations.get.implementation = async function (frame, allTracks, filters) {
         if (!Array.isArray(filters) || filters.some((filter) => typeof (filter) !== 'string')) {
             throw new ArgumentError(
-                'The filters argument must be an array of strings',
+                i18next.t('The filters argument must be an array of strings'),
             );
         }
 
         if (!Number.isInteger(frame) || frame < 0) {
             throw new ArgumentError(
-                `Frame must be a positive integer. Got: "${frame}"`,
+                i18next.t('Frame must be a positive integer. Got: "${frame}"', {frame: `${frame}`}),
             );
         }
 
         if (frame >= this.size) {
             throw new ArgumentError(
-                `Frame ${frame} does not exist in the task`,
+                i18next.t('Frame ${frame} does not exist in the task', {frame: `${frame}`}),
             );
         }
 
@@ -1826,25 +1827,25 @@
     Task.prototype.annotations.search.implementation = function (filters, frameFrom, frameTo) {
         if (!Array.isArray(filters) || filters.some((filter) => typeof (filter) !== 'string')) {
             throw new ArgumentError(
-                'The filters argument must be an array of strings',
+                i18next.t('The filters argument must be an array of strings'),
             );
         }
 
         if (!Number.isInteger(frameFrom) || !Number.isInteger(frameTo)) {
             throw new ArgumentError(
-                'The start and end frames both must be an integer',
+                i18next.t('The start and end frames both must be an integer'),
             );
         }
 
         if (frameFrom < 0 || frameFrom >= this.size) {
             throw new ArgumentError(
-                'The start frame is out of the task',
+                i18next.t('The start frame is out of the task'),
             );
         }
 
         if (frameTo < 0 || frameTo >= this.size) {
             throw new ArgumentError(
-                'The stop frame is out of the task',
+                i18next.t('The stop frame is out of the task'),
             );
         }
 
@@ -1855,19 +1856,19 @@
     Task.prototype.annotations.searchEmpty.implementation = function (frameFrom, frameTo) {
         if (!Number.isInteger(frameFrom) || !Number.isInteger(frameTo)) {
             throw new ArgumentError(
-                'The start and end frames both must be an integer',
+                i18next.t('The start and end frames both must be an integer'),
             );
         }
 
         if (frameFrom < 0 || frameFrom >= this.size) {
             throw new ArgumentError(
-                'The start frame is out of the task',
+                i18next.t('The start frame is out of the task'),
             );
         }
 
         if (frameTo < 0 || frameTo >= this.size) {
             throw new ArgumentError(
-                'The stop frame is out of the task',
+                i18next.t('The stop frame is out of the task'),
             );
         }
 

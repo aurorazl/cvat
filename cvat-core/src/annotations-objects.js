@@ -30,6 +30,8 @@
 
     const { Label } = require('./labels');
 
+    const i18next = require('i18next').default;
+
     const defaultGroupColor = '#E0E0E0';
 
     // Called with the Annotation context
@@ -49,36 +51,36 @@
         if (shapeType === ObjectShape.RECTANGLE) {
             if (points.length / 2 !== 2) {
                 throw new DataError(
-                    `Rectangle must have 2 points, but got ${points.length / 2}`,
+                    i18next.t('Rectangle must have 2 points, but got ${points.length / 2}').replace('${points.length / 2}', `${points.length / 2}`),
                 );
             }
         } else if (shapeType === ObjectShape.POLYGON) {
             if (points.length / 2 < 3) {
                 throw new DataError(
-                    `Polygon must have at least 3 points, but got ${points.length / 2}`,
+                    i18next.t('Polygon must have at least 3 points, but got ${points.length / 2}').replace('${points.length / 2}', `${points.length / 2}`),
                 );
             }
         } else if (shapeType === ObjectShape.POLYLINE) {
             if (points.length / 2 < 2) {
                 throw new DataError(
-                    `Polyline must have at least 2 points, but got ${points.length / 2}`,
+                    i18next.t('Polyline must have at least 2 points, but got ${points.length / 2}').replace('${points.length / 2}', `${points.length / 2}`),
                 );
             }
         } else if (shapeType === ObjectShape.POINTS) {
             if (points.length / 2 < 1) {
                 throw new DataError(
-                    `Points must have at least 1 points, but got ${points.length / 2}`,
+                    i18next.t('Points must have at least 1 points, but got ${points.length / 2}').replace('${points.length / 2}', `${points.length / 2}`),
                 );
             }
         } else if (shapeType === ObjectShape.CUBOID) {
             if (points.length / 2 !== 8) {
                 throw new DataError(
-                    `Points must have exact 8 points, but got ${points.length / 2}`,
+                    i18next.t('Points must have exact 8 points, but got ${points.length / 2}').replace('${points.length / 2}', `${points.length / 2}`),
                 );
             }
         } else {
             throw new ArgumentError(
-                `Unknown value of shapeType has been recieved ${shapeType}`,
+                i18next.t('Unknown value of shapeType has been recieved ${shapeType}').replace('${shapeType}', `${shapeType}`),
             );
         }
     }
@@ -151,7 +153,7 @@
 
         if (typeof (value) !== 'string') {
             throw new ArgumentError(
-                `Attribute value is expected to be string, but got ${typeof (value)}`,
+                i18next.t('Attribute value is expected to be string, but got ${typeof (value)}').replace('${typeof (value)}', `${typeof (value)}`),
             );
         }
 
@@ -316,12 +318,12 @@
                     if (attrID in labelAttributes) {
                         if (!validateAttributeValue(value, labelAttributes[attrID])) {
                             throw new ArgumentError(
-                                `Trying to save an attribute attribute with id ${attrID} and invalid value ${value}`,
+                                i18next.t('Trying to save an attribute attribute with id ${attrID} and invalid value ${value}', {attrID: `${attrID}`, value: `${value}`}),
                             );
                         }
                     } else {
                         throw new ArgumentError(
-                            `The label of the shape doesn't have the attribute with id ${attrID} and value ${value}`,
+                            i18next.t("The label of the shape doesn't have the attribute with id ${attrID} and value ${value}", {attrID: `${attrID}`, value: `${value}`}),
                         );
                     }
                 }
@@ -365,7 +367,7 @@
                 checkObjectType('color', data.color, 'string', null);
                 if (!/^#[0-9A-F]{6}$/i.test(data.color)) {
                     throw new ArgumentError(
-                        `Got invalid color value: "${data.color}"`,
+                        i18next.t('Got invalid color value: "${data.color}"').replace('${data.color}', `${data.color}`),
                     );
                 }
             }
@@ -378,7 +380,7 @@
                 checkObjectType('keyframe', data.keyframe, 'boolean', null);
                 if (!this.shapes || (Object.keys(this.shapes).length === 1 && !data.keyframe)) {
                     throw new ArgumentError(
-                        'Can not remove the latest keyframe of an object. Consider removing the object instead',
+                        i18next.t('Can not remove the latest keyframe of an object. Consider removing the object instead'),
                     );
                 }
             }
@@ -449,19 +451,19 @@
 
         save() {
             throw new ScriptingError(
-                'Is not implemented',
+                i18next.t('Is not implemented'),
             );
         }
 
         get() {
             throw new ScriptingError(
-                'Is not implemented',
+                i18next.t('Is not implemented'),
             );
         }
 
         toJSON() {
             throw new ScriptingError(
-                'Is not implemented',
+                i18next.t('Is not implemented'),
             );
         }
     }
@@ -502,7 +504,7 @@
         get(frame) {
             if (frame !== this.frame) {
                 throw new ScriptingError(
-                    'Got frame is not equal to the frame of the shape',
+                    i18next.t('Got frame is not equal to the frame of the shape'),
                 );
             }
 
@@ -590,7 +592,7 @@
         save(frame, data) {
             if (frame !== this.frame) {
                 throw new ScriptingError(
-                    'Got frame is not equal to the frame of the shape',
+                    i18next.t('Got frame is not equal to the frame of the shape'),
                 );
             }
 
@@ -1196,8 +1198,8 @@
             }
 
             throw new DataError(
-                'No one left position or right position was found. '
-                + `Interpolation impossible. Client ID: ${this.clientID}`,
+                i18next.t('No one left position or right position was found. ')
+                + i18next.t('Interpolation impossible. Client ID: ${this.clientID}').replace('${this.clientID}', `${this.clientID}`),
             );
         }
     }
@@ -1231,7 +1233,7 @@
         get(frame) {
             if (frame !== this.frame) {
                 throw new ScriptingError(
-                    'Got frame is not equal to the frame of the shape',
+                    i18next.t('Got frame is not equal to the frame of the shape'),
                 );
             }
 
@@ -1253,7 +1255,7 @@
         save(frame, data) {
             if (frame !== this.frame) {
                 throw new ScriptingError(
-                    'Got frame is not equal to the frame of the tag',
+                    i18next.t('Got frame is not equal to the frame of the tag'),
                 );
             }
 

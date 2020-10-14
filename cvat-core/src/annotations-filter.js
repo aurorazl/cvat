@@ -13,7 +13,7 @@ const {
     ObjectType,
 } = require('./enums');
 const { ArgumentError } = require('./exceptions');
-
+const i18next = require('i18next').default;
 
 class AnnotationsFilter {
     constructor() {
@@ -119,10 +119,10 @@ class AnnotationsFilter {
         }
 
         if (startBracket !== null) {
-            throw Error('Extra opening bracket found');
+            throw Error(i18next.t('Extra opening bracket found'));
         }
         if (endBracket !== null) {
-            throw Error('Extra closing bracket found');
+            throw Error(i18next.t('Extra closing bracket found'));
         }
     }
 
@@ -217,7 +217,7 @@ class AnnotationsFilter {
     toJSONQuery(filters) {
         try {
             if (!Array.isArray(filters) || filters.some((value) => typeof (value) !== 'string')) {
-                throw Error('Argument must be an array of strings');
+                throw Error(i18next.t('Argument must be an array of strings'));
             }
 
             if (!filters.length) {
@@ -229,7 +229,7 @@ class AnnotationsFilter {
             this._splitWithOperator(groups, expression);
             return [groups, `$.objects[?(${this._join(groups)})].clientID`];
         } catch (error) {
-            throw new ArgumentError(`Wrong filter expression. ${error.toString()}`);
+            throw new ArgumentError(i18next.t('Wrong filter expression. ${error.toString()}').replace('${error.toString()}', `${error.toString()}`));
         }
     }
 
@@ -238,7 +238,7 @@ class AnnotationsFilter {
             const objects = this._convertObjects(statesData);
             return jsonpath.query(objects, query);
         } catch (error) {
-            throw new ArgumentError(`Could not apply the filter. ${error.toString()}`);
+            throw new ArgumentError(i18next.t('Could not apply the filter. ${error.toString()}').replace('${error.toString()}', `${error.toString()}`));
         }
     }
 }

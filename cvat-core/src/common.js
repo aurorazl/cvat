@@ -9,6 +9,7 @@
 
 (() => {
     const { ArgumentError } = require('./exceptions');
+    const i18next = require('i18next').default;
 
     function isBoolean(value) {
         return typeof (value) === 'boolean';
@@ -40,11 +41,11 @@
             if (Object.prototype.hasOwnProperty.call(filter, prop)) {
                 if (!(prop in fields)) {
                     throw new ArgumentError(
-                        `Unsupported filter property has been recieved: "${prop}"`,
+                        i18next.t('Unsupported filter property has been recieved: "${prop}"', {prop: `${prop}`}),
                     );
                 } else if (!fields[prop](filter[prop])) {
                     throw new ArgumentError(
-                        `Received filter property "${prop}" is not satisfied for checker`,
+                        i18next.t('Received filter property "${prop}" is not satisfied for checker', {prop: `${prop}`}),
                     );
                 }
             }
@@ -60,20 +61,19 @@
                 }
 
                 throw new ArgumentError(
-                    `"${name}" is expected to be "${type}", but "${typeof (value)}" has been got.`,
+                    i18next.t('"${name}" is expected to be "${type}", but "${typeof (value)}" has been got.', {name: `${name}`, type: `${type}`, tyepofvalue: `${typeof (value)}`}),
                 );
             }
         } else if (instance) {
             if (!(value instanceof instance)) {
                 if (value !== undefined) {
                     throw new ArgumentError(
-                        `"${name}" is expected to be ${instance.name}, but `
-                            + `"${value.constructor.name}" has been got`,
+                        i18next.t('"${name}" is expected to be ${instance.name}, but "${value.constructor.name}" has been got', {name: `${name}`, instancename: `${instance.name}`, valueconstructorname: `${value.constructor.name}`}),
                     );
                 }
 
                 throw new ArgumentError(
-                    `"${name}" is expected to be ${instance.name}, but "undefined" has been got.`,
+                    i18next.t('"${name}" is expected to be ${instance.name}, but "undefined" has been got.', {name: `${name}`, instancename: `${instance.name}`}),
                 );
             }
         }

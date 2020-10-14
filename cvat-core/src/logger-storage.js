@@ -11,6 +11,7 @@ const serverProxy = require('./server-proxy');
 const logFactory = require('./log');
 const { ArgumentError } = require('./exceptions');
 const { LogType } = require('./enums');
+const i18next = require('i18next').default;
 
 const WORKING_TIME_THRESHOLD = 100000; // ms, 1.66 min
 
@@ -83,11 +84,11 @@ LoggerStorage.prototype.configure.implementation = function (
     userActivityCallback,
 ) {
     if (typeof (isActiveChecker) !== 'function') {
-        throw new ArgumentError('isActiveChecker argument must be callable');
+        throw new ArgumentError(i18next.t('isActiveChecker argument must be callable'));
     }
 
     if (!Array.isArray(userActivityCallback)) {
-        throw new ArgumentError('userActivityCallback argument must be an array');
+        throw new ArgumentError(i18next.t('userActivityCallback argument must be an array'));
     }
 
     this.isActiveChecker = () => !!isActiveChecker();
@@ -96,11 +97,11 @@ LoggerStorage.prototype.configure.implementation = function (
 
 LoggerStorage.prototype.log.implementation = function (logType, payload, wait) {
     if (typeof (payload) !== 'object') {
-        throw new ArgumentError('Payload must be an object');
+        throw new ArgumentError(i18next.t('Payload must be an object'));
     }
 
     if (typeof (wait) !== 'boolean') {
-        throw new ArgumentError('Payload must be an object');
+        throw new ArgumentError(i18next.t('Payload must be an object'));
     }
 
     if (logType in this.ignoreRules) {

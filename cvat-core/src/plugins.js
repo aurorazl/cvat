@@ -9,6 +9,7 @@
 
 (() => {
     const { PluginError } = require('./exceptions');
+    const i18next = require('i18next').default;
 
     const plugins = [];
     class PluginRegistry {
@@ -25,7 +26,7 @@
                         if (exception instanceof PluginError) {
                             throw exception;
                         } else {
-                            throw new PluginError(`Exception in plugin ${plugin.name}: ${exception.toString()}`);
+                            throw new PluginError(i18next.t('Exception in plugin ${plugin.name}: ${exception.toString()}'), {pluginname: `${plugin.name}`, exceptiontoString: `${exception.toString()}`});
                         }
                     }
                 }
@@ -43,7 +44,7 @@
                         if (exception instanceof PluginError) {
                             throw exception;
                         } else {
-                            throw new PluginError(`Exception in plugin ${plugin.name}: ${exception.toString()}`);
+                            throw new PluginError(i18next.t('Exception in plugin ${plugin.name}: ${exception.toString()}'), {pluginname: `${plugin.name}`, exceptiontoString: `${exception.toString()}`});
                         }
                     }
                 }
@@ -57,19 +58,19 @@
             const functions = [];
 
             if (typeof (plug) !== 'object') {
-                throw new PluginError(`Plugin should be an object, but got "${typeof (plug)}"`);
+                throw new PluginError(i18next.t('Plugin should be an object, but got "${typeof (plug)}"'), {typeofplug: `${typeof (plug)}`});
             }
 
             if (!('name' in plug) || typeof (plug.name) !== 'string') {
-                throw new PluginError('Plugin must contain a "name" field and it must be a string');
+                throw new PluginError(i18next.t('Plugin must contain a "name" field and it must be a string'));
             }
 
             if (!('description' in plug) || typeof (plug.description) !== 'string') {
-                throw new PluginError('Plugin must contain a "description" field and it must be a string');
+                throw new PluginError(i18next.t('Plugin must contain a "description" field and it must be a string'));
             }
 
             if ('functions' in plug) {
-                throw new PluginError('Plugin must not contain a "functions" field');
+                throw new PluginError(i18next.t('Plugin must not contain a "functions" field'));
             }
 
             (function traverse(plugin, api) {

@@ -14,7 +14,8 @@
     const serverProxy = require('./server-proxy');
     const { isBrowser, isNode } = require('browser-or-node');
     const { Exception, ArgumentError, DataError } = require('./exceptions');
-
+    const i18next = require('i18next').default;
+    
     // This is the frames storage
     const frameDataCache = {};
 
@@ -325,14 +326,14 @@
         } else if (mode === 'annotation') {
             if (frame >= meta.size) {
                 throw new ArgumentError(
-                    `Meta information about frame ${frame} can't be received from the server`,
+                    i18next.t("Meta information about frame ${frame} can't be received from the server", {frame: `${frame}`}),
                 );
             } else {
                 size = meta.frames[frame];
             }
         } else {
             throw new DataError(
-                `Invalid mode is specified ${mode}`,
+                i18next.t('Invalid mode is specified ${mode}', {mode: `${mode}`}),
             );
         }
         return size;

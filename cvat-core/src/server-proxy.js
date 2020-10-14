@@ -410,14 +410,14 @@
                                 } else if (response.data.state === 'Failed') {
                                     // If request has been successful, but task hasn't been created
                                     // Then passed data is wrong and we can pass code 400
-                                    const message = 'Could not create the task on the server. '
+                                    const message = i18next.t('Could not create the task on the server. ')
                                         + `${response.data.message}.`;
                                     reject(new ServerError(message, 400));
                                 } else {
                                     // If server has another status, it is unexpected
                                     // Therefore it is server error and we can pass code 500
                                     reject(new ServerError(
-                                        `Unknown task state has been received: ${response.data.state}`,
+                                        i18next.t('Unknown task state has been received: ${response.data.state}').replace('${response.data.state}', `${response.data.state}`),
                                         500,
                                     ));
                                 }
@@ -561,7 +561,7 @@
                 } catch (errorData) {
                     const code = errorData.response ? errorData.response.status : errorData.code;
                     throw new ServerError(
-                        `Could not get preview frame for the task ${tid} from the server`,
+                        i18next.t('Could not get preview frame for the task ${tid} from the server', {tid: `${tid}`}),
                         code,
                     );
                 }
