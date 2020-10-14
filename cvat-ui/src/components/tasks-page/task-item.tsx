@@ -31,11 +31,11 @@ export interface TaskItemProps extends WithTranslation {
 
 class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteComponentProps> {
     private renderPreview(): JSX.Element {
-        const { previewImage } = this.props;
+        const { previewImage, t } = this.props;
         return (
             <Col span={4}>
                 <div className='cvat-task-item-preview-wrapper'>
-                    <img alt='Preview' className='cvat-task-item-preview' src={previewImage} />
+                    <img alt={t('Preview')} className='cvat-task-item-preview' src={previewImage} />
                 </div>
             </Col>
         );

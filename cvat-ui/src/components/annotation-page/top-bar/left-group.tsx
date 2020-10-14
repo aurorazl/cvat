@@ -95,7 +95,7 @@ function LeftGroup(props: Props): JSX.Element {
                 <span>{t('Undo')}</span>
             </Button>
             <Button
-                title={`Redo: ${redoAction} ${redoShortcut}`}
+                title={t('Redo: ${redoAction} ${redoShortcut}', {redoAction: `${redoAction}`, redoShortcut: `${redoShortcut}`})}
                 disabled={!redoAction}
                 style={{ pointerEvents: redoAction ? 'initial' : 'none', opacity: redoAction ? 1 : 0.5 }}
                 type='link'

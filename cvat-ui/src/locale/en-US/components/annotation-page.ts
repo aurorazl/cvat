@@ -111,6 +111,7 @@ export default {
     'Yes': 'Yes',
     'Confirm propagation': 'Confirm propagation',
     'Do you want to make a copy of the object on': 'Do you want to make a copy of the object on',
+    'frames': 'frames',
     'up to the': 'up to the',
     'frame': 'frame',
     // cvat-ui\src\components\annotation-page\tag-annotation-workspace
@@ -146,6 +147,7 @@ export default {
     'Undo': 'Undo',
     'Redo': 'Redo',
     'Undo: ${undoAction} ${undoShortcut}': 'Undo: {{undoAction}} {{undoShortcut}}',
+    'Redo: ${redoAction} ${redoShortcut}': 'Redo: {{redoAction}} {{redoShortcut}}',
     // cvat-ui\src\components\annotation-page\top-bar\player-buttons.tsx
     'Go to the first frame': 'Go to the first frame',
     'Go back with a step ${backwardShortcut}': 'Go back with a step ${backwardShortcut}',

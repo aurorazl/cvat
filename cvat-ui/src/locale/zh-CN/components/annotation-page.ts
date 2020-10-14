@@ -110,7 +110,8 @@ export default {
     // cvat-ui\src\components\annotation-page\standard-workspace\propagate-confirm.tsx
     'Yes': '确定',
     'Confirm propagation': '确定传播',
-    'Do you want to make a copy of the object on': '是否需要复制对象',
+    'Do you want to make a copy of the object on': '是否需要复制对象从',
+    'frames': '帧',
     'up to the': '至',
     'frame': '帧',
     // cvat-ui\src\components\annotation-page\tag-annotation-workspace
@@ -145,6 +146,8 @@ export default {
     'Pending..': 'Pending..',
     'Undo': '撤销',
     'Redo': '恢复',
+    'Undo: ${undoAction} ${undoShortcut}': '撤销: {{undoAction}} {{undoShortcut}}',
+    'Redo: ${redoAction} ${redoShortcut}': '恢复: {{redoAction}} {{redoShortcut}}',
     // cvat-ui\src\components\annotation-page\top-bar\player-buttons.tsx
     'Go to the first frame': '跳转到第一帧',
     'Go back with a step ${backwardShortcut}': '以步长值回退 ${backwardShortcut}',

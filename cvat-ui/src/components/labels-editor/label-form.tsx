@@ -246,7 +246,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
 
             for (const number of numbers) {
                 if (Number.isNaN(number)) {
-                    callback(`"${number}" is not a number`);
+                    callback(t('"${number}" is not a number').replace('${number}', `${number}`));
                 }
             }
 

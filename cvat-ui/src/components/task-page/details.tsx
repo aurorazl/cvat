@@ -80,7 +80,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
         };
 
         previewImageElement.src = previewImage;
-        previewImageElement.alt = 'Preview';
+        previewImageElement.alt = t('Preview');
         if (previewWrapperRef.current) {
             previewWrapperRef.current.appendChild(previewImageElement);
         }
