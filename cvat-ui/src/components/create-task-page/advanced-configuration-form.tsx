@@ -12,7 +12,8 @@ import Form, { FormComponentProps } from 'antd/lib/form/Form';
 import Text from 'antd/lib/typography/Text';
 
 import patterns from 'utils/validation-patterns';
-import { useTranslation, withTranslation, WithTranslation, Trans } from 'react-i18next';
+import { withTranslation, WithTranslation, Trans } from 'react-i18next';
+import i18n from "i18next";
 
 export interface AdvancedConfiguration {
     bugTracker?: string;
@@ -36,7 +37,6 @@ type Props = FormComponentProps & {
 } & WithTranslation;
 
 function isPositiveInteger(_: any, value: any, callback: any): void {
-    const { t } = useTranslation();
     if (!value) {
         callback();
         return;
@@ -45,14 +45,13 @@ function isPositiveInteger(_: any, value: any, callback: any): void {
     const intValue = +value;
     if (Number.isNaN(intValue)
         || !Number.isInteger(intValue) || intValue < 1) {
-        callback(t('Value must be a positive integer'));
+        callback(i18n.t('Value must be a positive integer'));
     }
 
     callback();
 }
 
 function isNonNegativeInteger(_: any, value: any, callback: any): void {
-    const { t } = useTranslation();
     if (!value) {
         callback();
         return;
@@ -60,14 +59,13 @@ function isNonNegativeInteger(_: any, value: any, callback: any): void {
 
     const intValue = +value;
     if (Number.isNaN(intValue) || intValue < 0) {
-        callback(t('Value must be a non negative integer'));
+        callback(i18n.t('Value must be a non negative integer'));
     }
 
     callback();
 }
 
 function isIntegerRange(min: number, max: number, _: any, value: any, callback: any): void {
-    const { t } = useTranslation();
     if (!value) {
         callback();
         return;
@@ -78,7 +76,7 @@ function isIntegerRange(min: number, max: number, _: any, value: any, callback: 
         || !Number.isInteger(intValue)
         || intValue < min || intValue > max
     ) {
-        callback(t('Value must be an integer [${min}, ${max}]').replace('${min}', `${min}`).replace('${max}', `${max}`));
+        callback(i18n.t('Value must be an integer [${min}, ${max}]').replace('${min}', `${min}`).replace('${max}', `${max}`));
     }
 
     callback();
@@ -506,4 +504,4 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 }
 
-export default Form.create<Props>()(withTranslation()(AdvancedConfigurationForm));
+export default Form.create<Props>()(withTranslation(undefined, { withRef: true })(AdvancedConfigurationForm));
