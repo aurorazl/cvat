@@ -27,6 +27,7 @@
         "airbnb-base",
     ],
     "rules": {
+        "no-template-curly-in-string": "off",
         "no-await-in-loop": [0],
         "global-require": [0],
         "no-new": [0],

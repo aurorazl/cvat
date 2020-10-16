@@ -16,10 +16,11 @@ import moment from 'moment';
 import ActionsMenuContainer from 'containers/actions-menu/actions-menu';
 import { ActiveInference } from 'reducers/interfaces';
 import { MenuIcon } from 'icons';
+
+import { withTranslation, WithTranslation } from 'react-i18next';
+import { transMoment } from 'utils/lang-utils';
 import AutomaticAnnotationProgress from './automatic-annotation-progress';
 
-import { withTranslation, WithTranslation  } from 'react-i18next';
-import { transMoment } from 'utils/lang-utils';
 export interface TaskItemProps extends WithTranslation {
     taskInstance: any;
     previewImage: string;
@@ -40,7 +41,7 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
             </Col>
         );
     }
-    
+
     private renderDescription(): JSX.Element {
         // Task info
         const { taskInstance, t } = this.props;
@@ -55,47 +56,60 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
         return (
             <Col span={10} className='cvat-task-item-description'>
                 <Text strong type='secondary'>{`#${id}: `}</Text>
-                <Text strong className='cvat-text-color'>{name}</Text>
+                <Text strong className='cvat-text-color'>
+                    {name}
+                </Text>
                 <br />
-                { owner
-                    && (
-                        <>
-                            <Text type='secondary'>
-                                { owner ? t('Created by ${owner} on ${created}', { owner : owner, created : transMoment(created) }) : t('Created on ${created}', { created : transMoment(created) })}
-                            </Text>
-                            <br />
-                        </>
-                    )}
+                {owner && (
+                    <>
+                        <Text type='secondary'>
+                            {/* eslint-disable-next-line */}
+                            {owner
+                                ? t('Created by ${owner} on ${created}', {
+                                      owner: owner,
+                                      created: transMoment(created),
+                                  })
+                                : t('Created on ${created}', { created: transMoment(created) })}
+                        </Text>
+                        <br />
+                    </>
+                )}
+                {/* eslint-disable-next-line */}
                 <Text type='secondary'>{t('Last updated ${updated}').replace('${updated}', `${updated}`)}</Text>
             </Col>
         );
     }
 
     private renderProgress(): JSX.Element {
-        const {
-            taskInstance,
-            activeInference,
-            cancelAutoAnnotation,
-            t,
-        } = this.props;
+        const { taskInstance, activeInference, cancelAutoAnnotation, t } = this.props;
         // Count number of jobs and performed jobs
         const numOfJobs = taskInstance.jobs.length;
-        const numOfCompleted = taskInstance.jobs.filter(
-            (job: any): boolean => job.status === 'completed',
-        ).length;
+        const numOfCompleted = taskInstance.jobs.filter((job: any): boolean => job.status === 'completed').length;
 
         // Progress appearence depends on number of jobs
         let progressColor = null;
         let progressText = null;
         if (numOfCompleted && numOfCompleted === numOfJobs) {
             progressColor = 'cvat-task-completed-progress';
-            progressText = <Text strong className={progressColor}>{t('Completed')}</Text>;
+            progressText = (
+                <Text strong className={progressColor}>
+                    {t('Completed')}
+                </Text>
+            );
         } else if (numOfCompleted) {
             progressColor = 'cvat-task-progress-progress';
-            progressText = <Text strong className={progressColor}>{t('In Progress')}</Text>;
+            progressText = (
+                <Text strong className={progressColor}>
+                    {t('In Progress')}
+                </Text>
+            );
         } else {
             progressColor = 'cvat-task-pending-progress';
-            progressText = <Text strong className={progressColor}>{t('Pending')}</Text>;
+            progressText = (
+                <Text strong className={progressColor}>
+                    {t('Pending')}
+                </Text>
+            );
         }
 
         const jobsProgress = numOfCompleted / numOfJobs;
@@ -107,10 +121,15 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
                         <svg height='8' width='8' className={progressColor}>
                             <circle cx='4' cy='4' r='4' strokeWidth='0' />
                         </svg>
-                        { progressText }
+                        {progressText}
                     </Col>
                     <Col>
-                        <Text type='secondary'>{t('${numOfCompleted} of ${numOfJobs} jobs').replace('${numOfCompleted}', `${numOfCompleted}`).replace('${numOfJobs}', `${numOfJobs}`)}</Text>
+                        {/* eslint-disable-next-line */}
+                        <Text type='secondary'>
+                            {t('${numOfCompleted} of ${numOfJobs} jobs')
+                                .replace('${numOfCompleted}', `${numOfCompleted}`)
+                                .replace('${numOfJobs}', `${numOfJobs}`)}
+                        </Text>
                     </Col>
                 </Row>
                 <Row>
@@ -134,11 +153,7 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
     }
 
     private renderNavigation(): JSX.Element {
-        const {
-            taskInstance,
-            history,
-            t,
-        } = this.props;
+        const { taskInstance, history, t } = this.props;
         const { id } = taskInstance;
 
         return (
@@ -173,14 +188,12 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
     }
 
     public render(): JSX.Element {
-        const {
-            deleted,
-            hidden,
-        } = this.props;
+        const { deleted, hidden } = this.props;
         const style = {};
         if (deleted) {
             (style as any).pointerEvents = 'none';
-            (style as any).opacity = 0.5;
+            // (style as any).opacity = 0.5;
+            (style as any).display = 'none';
         }
 
         if (hidden) {
