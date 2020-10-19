@@ -32,7 +32,7 @@ export default {
     'Track': '轨迹',
     'Press ${repeatShapeShortcut} to draw again': '再次绘制${repeatShapeShortcut}',
     //annotation-page\standard-workspace\controls-side-bar\fit-control.tsx
-    'Fit the image [Double Click]': '适应图片[双击]',
+    'Fit the image [Double Click]': '图片自适应[双击图片]',
     //annotation-page\standard-workspace\controls-side-bar\group-control.tsx
     'Group shapes/tracks ${switchGroupShortcut}.': '分组形状/轨迹 ${switchGroupShortcut}.',
     ' Select and press ${resetGroupShortcut} to reset a group': '选中并按下${resetGroupShortcut}重置分组',
@@ -41,7 +41,7 @@ export default {
     //annotation-page\standard-workspace\controls-side-bar\move-control.tsx
     'Move the image': '移动图片',
     //annotation-page\standard-workspace\controls-side-bar\resize-control.tsx
-    'Select a region of interest': '选中兴趣区域',
+    'Select a region of interest': '框选并放大',
     //annotation-page\standard-workspace\controls-side-bar\rotate-control.tsx
     'Rotate the image anticlockwise ${anticlockwiseShortcut}': '逆时针旋转图片 ${anticlockwiseShortcut}',
     'Rotate the image clockwise ${clockwiseShortcut}': '顺时针旋转图片 ${clockwiseShortcut}',
@@ -84,7 +84,7 @@ export default {
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\object-item-menu.tsx
     'Create object URL': '创建对象URL',
     'Make a copy': '复制',
-    'Propagate': '传播',
+    'Propagate': '复制到多帧',
     'Switch orientation': '切换方向',
     'Reset perspective': '重置透视',
     'To background': '移至背景',
@@ -94,8 +94,8 @@ export default {
     'Are you sure you want to remove it?': '确定要移除？',
     'Remove': '移除',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\objects-list-header.tsx
-    'Switch lock property for all ${switchLockAllShortcut}': '对所有切换锁定属性${switchLockAllShortcut}',
-    'Switch hidden property for all ${switchHiddenAllShortcut}': '对所有切换隐藏属性{{switchLockAllShortcut}}',
+    'Switch lock property for all ${switchLockAllShortcut}': '锁定/解锁所有标注${switchLockAllShortcut}',
+    'Switch hidden property for all ${switchHiddenAllShortcut}': '隐藏/显示所有标注{{switchLockAllShortcut}}',
     'Expand/collapse all': '展开/折叠所有',
     'Sort by': '排序',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\objects-side-bar.tsx
@@ -109,7 +109,7 @@ export default {
     'Add new layer ${maxZLayer + 1} and switch to it': '添加并切换至新图层${maxZLayer + 1}',
     // cvat-ui\src\components\annotation-page\standard-workspace\propagate-confirm.tsx
     'Yes': '确定',
-    'Confirm propagation': '确定传播',
+    'Confirm propagation': '确定复制到多帧',
     'Do you want to make a copy of the object on': '是否需要复制对象从',
     'frames': '帧',
     'up to the': '至',
@@ -143,7 +143,7 @@ export default {
     'Saving...': '保存中...',
     'Save': '保存',
     'Saving changes on the server': '保存修改至服务器',
-    'Pending..': 'Pending..',
+    'Pending..': '无完成作业..',
     'Undo': '撤销',
     'Redo': '恢复',
     'Undo: ${undoAction} ${undoShortcut}': '撤销: {{undoAction}} {{undoShortcut}}',
@@ -159,7 +159,7 @@ export default {
     'Go to the last frame': '跳转到最后一帧',
     // cvat-ui\src\components\annotation-page\top-bar\player-navigation.tsx
     'Create frame URL': '创建帧URL',
-    'Press ${focusFrameInputShortcut} to focus here': '按下 ${focusFrameInputShortcut} 聚焦这里',
+    'Press ${focusFrameInputShortcut} to focus here': '光标聚焦 ${focusFrameInputShortcut}',
     // cvat-ui\src\components\annotation-page\top-bar\right-group.tsx
     'Fullscreen': '全屏',
     'Info': '信息',
@@ -169,9 +169,9 @@ export default {
     'Interpolated': '插值',
     'Total': '总计',
     'Job status': '作业状态',
-    'annotation': '标注',
-    'validation': '校验',
-    'completed': '完成',
+    'annotation': '标注中',
+    'validation': '校验中',
+    'completed': '已完成',
     'Overview': '概览',
     'Assignee': '执行人',
     'Start frame': '起始帧',
@@ -204,9 +204,9 @@ export default {
     'Annotations filters': '标注过滤器',
     // cvat-ui\src\components\annotation-page\appearance-block.tsx
     'Appearance': '外观',
-    'Color by': '颜色依据',
+    'Color by': '按以下类型设置颜色',
     'Opacity': '不透明度',
-    'Selected opacity': '选择不透明度',
+    'Selected opacity': '选中标注的不透明度',
     // 'Black borders': '黑色边线',
     'Show bitmap': '显示位图',
     'Show projections': '显示投影',

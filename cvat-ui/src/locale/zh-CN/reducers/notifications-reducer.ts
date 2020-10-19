@@ -53,7 +53,7 @@ export default {
     'Could not group annotations': '无法分组标注',
     'Could not split the track': '无法分割轨迹',
     'Could not remove the object': '无法移除对象',
-    'Could not propagate the object': '无法传播对象',
+    'Could not propagate the object': '无法将对象复制到多帧',
     'Could not collect annotations statistics': '无法收集标注统计信息',
     'Could not save the job on the server': '无法保存作业到服务器',
     'Could not upload annotations for the <a href="/tasks/${taskID}/jobs/${jobID}" target="_blank">job ${taskID}</a>':
