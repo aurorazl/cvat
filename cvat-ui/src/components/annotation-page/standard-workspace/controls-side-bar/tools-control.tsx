@@ -331,6 +331,7 @@ export class ToolsControlComponent extends React.PureComponent<Props, State> {
             frame,
             curZOrder,
             fetchAnnotations,
+            t,
         } = this.props;
         const { activeLabelID } = this.state;
         const [label] = jobInstance.task.labels.filter(
@@ -372,7 +373,7 @@ export class ToolsControlComponent extends React.PureComponent<Props, State> {
         } catch (err) {
             notification.error({
                 description: err.toString(),
-                message: 'Tracking error occured',
+                message: t('Tracking error occured'),
             });
         }
     };
@@ -515,6 +516,7 @@ export class ToolsControlComponent extends React.PureComponent<Props, State> {
             jobInstance,
             frame,
             onInteractionStart,
+            t,
         } = this.props;
         const {
             activeTracker,
@@ -527,7 +529,7 @@ export class ToolsControlComponent extends React.PureComponent<Props, State> {
             return (
                 <Row type='flex' justify='center' align='middle' style={{ marginTop: '5px' }}>
                     <Col>
-                        <Text type='warning' className='cvat-text-color'>No available trackers found</Text>
+                        <Text type='warning' className='cvat-text-color'>{t('No available trackers found')}</Text>
                     </Col>
                 </Row>
             );
@@ -537,7 +539,7 @@ export class ToolsControlComponent extends React.PureComponent<Props, State> {
             <>
                 <Row type='flex' justify='start'>
                     <Col>
-                        <Text className='cvat-text-color'>Tracker</Text>
+                        <Text className='cvat-text-color'>{t('Tracker')}</Text>
                     </Col>
                 </Row>
                 <Row type='flex' align='middle' justify='center'>
@@ -557,7 +559,7 @@ export class ToolsControlComponent extends React.PureComponent<Props, State> {
                 </Row>
                 <Row type='flex' align='middle' justify='start' style={{ marginTop: '5px' }}>
                     <Col>
-                        <Text>Tracking frames</Text>
+                        <Text>{t('Tracking frames')}</Text>
                     </Col>
                     <Col offset={2}>
                         <InputNumber
@@ -615,7 +617,7 @@ export class ToolsControlComponent extends React.PureComponent<Props, State> {
             return (
                 <Row type='flex' justify='center' align='middle' style={{ marginTop: '5px' }}>
                     <Col>
-                        <Text type='warning' className='cvat-text-color'>No available interactors found</Text>
+                        <Text type='warning' className='cvat-text-color'>{t('No available interactors found')}</Text>
                     </Col>
                 </Row>
             );
@@ -689,7 +691,7 @@ export class ToolsControlComponent extends React.PureComponent<Props, State> {
             return (
                 <Row type='flex' justify='center' align='middle' style={{ marginTop: '5px' }}>
                     <Col>
-                        <Text type='warning' className='cvat-text-color'>No available detectors found</Text>
+                        <Text type='warning' className='cvat-text-color'>{t('No available detectors found')}</Text>
                     </Col>
                 </Row>
             );
@@ -762,7 +764,7 @@ export class ToolsControlComponent extends React.PureComponent<Props, State> {
                     <Tabs.TabPane key='detectors' tab={t('Detectors')}>
                         { this.renderDetectorBlock() }
                     </Tabs.TabPane>
-                    <Tabs.TabPane key='trackers' tab='Trackers'>
+                    <Tabs.TabPane key='trackers' tab={t('Trackers')}>
                         { this.renderLabelBlock() }
                         { this.renderTrackerBlock() }
                     </Tabs.TabPane>

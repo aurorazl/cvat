@@ -54,6 +54,7 @@ export default {
     // annotation-page\standard-workspace\controls-side-bar\tools-control.tsx
     'Canvas raises event "canvas.interacted" when interaction is off': 'Canvas raises event "canvas.interacted" when interaction is off',
     'Interaction error occured': 'Interaction error occured',
+    'Canvas raises event "canvas.interacted" when interaction with it is off': 'Canvas raises event "canvas.interacted" when interaction with it is off',
     'Interactor': 'Interactor',
     'Interact': 'Interact',
     'Detection error occured': 'Detection error occured',
@@ -62,6 +63,12 @@ export default {
     'Waiting for a server response..': 'Waiting for a server response..',
     'Detectors': 'Detectors',
     'Interactors': 'Interactors',
+    'No available trackers found': 'No available trackers found',
+    'Tracker': 'Tracker',
+    'Tracking frames': 'Tracking frames',
+    'No available interactors found': 'No available interactors found',
+    'No available detectors found': 'No available detectors found',
+    'Trackers': 'Trackers',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\color-picker.tsx
     'Select color': 'Select color',

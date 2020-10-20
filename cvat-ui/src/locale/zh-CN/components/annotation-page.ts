@@ -54,14 +54,21 @@ export default {
     // annotation-page\standard-workspace\controls-side-bar\tools-control.tsx
     'Canvas raises event "canvas.interacted" when interaction is off': '当交互关闭时，Canvas 触发了 "canvas.interacted" 事件',
     'Interaction error occured': '发生了交互错误',
+    'Canvas raises event "canvas.interacted" when interaction with it is off': 'Canvas raises event "canvas.interacted" when interaction with it is off',
     'Interactor': '模型',
     'Interact': '辅助标注',
     'Detection error occured': '发生了检测错误',
     'AI Tools': 'AI 工具',
     'Making a server request': '发送服务器请求',
     'Waiting for a server response..': '等待服务器响应..',
-    'Detectors': '自动化标注',
+    'Detectors': '自动标注',
     'Interactors': '辅助标注',
+    'No available trackers found': '无可用的目标跟踪模型',
+    'Tracker': '跟踪模型',
+    'Tracking frames': '跟踪帧',
+    'No available interactors found': '无可用的辅助标注模型',
+    'No available detectors found': '无可用的目标检测模型',
+    'Trackers': '目标跟踪',    
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\color-picker.tsx
     'Select color': '选择颜色',
