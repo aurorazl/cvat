@@ -18,6 +18,7 @@ export default {
     'Not specified': '未指定',
     'Created by ${owner} on ${created}': '{{owner}} 创建于 {{created}}',
     'Issue Tracker': '问题跟踪',
+    'Value must not be empty': '值不能为空',
     //job-list.tsx
     'Copy': '复制',
     'Frames': '帧',
