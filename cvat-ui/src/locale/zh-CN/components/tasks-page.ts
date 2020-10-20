@@ -9,6 +9,7 @@ export default {
     'Last updated ${updated}': '上次更新时间${updated}',
     'Completed': '已完成',
     'In Progress': '进行中',
+    'Pending': '无完成作业',
     '${numOfCompleted} of ${numOfJobs} jobs': '${numOfCompleted} / ${numOfJobs} 作业',
     // automatic-annotation-progress.tsx
     'Automatic annotation': '自动标注',

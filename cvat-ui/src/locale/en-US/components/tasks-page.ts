@@ -9,6 +9,7 @@ export default {
     'Last updated ${updated}': 'Last updated ${updated}',
     'Completed': 'Completed',
     'In Progress': 'In Progress',
+    'Pending': 'Pending',
     '${numOfCompleted} of ${numOfJobs} jobs': '${numOfCompleted} of ${numOfJobs} jobs',
     // automatic-annotation-progress.tsx
     'Automatic annotation': 'Automatic annotation',
