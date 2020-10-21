@@ -79,11 +79,11 @@ export default {
     'Go to previous keyframe ${prevKeyFrameShortcut}': '跳转到上一关键帧 ${prevKeyFrameShortcut}',
     'Go to next keyframe ${nextKeyFrameShortcut}': '跳转到下一关键帧 ${nextKeyFrameShortcut}',
     'Switch outside property ${switchOutsideShortcut}': '切换外部属性 ${switchOutsideShortcut}',
-    'Switch lock property ${switchLockShortcut}': '切换锁定属性 ${switchLockShortcut}',
-    'Switch occluded property ${switchOccludedShortcut}': '切换遮挡属性 ${switchOccludedShortcut}',
-    'Switch hidden property ${switchHiddenShortcut}': '切换隐藏属性 {{switchHiddenShortcut}}',
-    'Switch keyframe property ${switchKeyFrameShortcut}': '切换关键帧属性 ${switchKeyFrameShortcut}',
-    'Switch pinned property': '切换固定属性',
+    'Switch lock property ${switchLockShortcut}': '锁定/解锁 ${switchLockShortcut}',
+    'Switch occluded property ${switchOccludedShortcut}': '遮挡/显示 ${switchOccludedShortcut}',
+    'Switch hidden property ${switchHiddenShortcut}': '隐藏/显示 {{switchHiddenShortcut}}',
+    'Switch keyframe property ${switchKeyFrameShortcut}': '是否关键帧 ${switchKeyFrameShortcut}',
+    'Switch pinned property': '固定/解除固定',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\object-item-details.tsx
     'Details': '详情',
     // src\components\annotation-page\standard-workspace\objects-side-bar\object-item-basics.tsx
@@ -101,6 +101,7 @@ export default {
     'Are you sure you want to remove it?': '确定要移除？',
     'Remove': '移除',
     'Run tracking with the active tracker': '使用激活的跟踪模型进行跟踪',
+    '${copyShortcut} and ${pasteShortcut}': '{{copyShortcut}} 和 {{pasteShortcut}}',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\objects-list-header.tsx
     'Switch lock property for all ${switchLockAllShortcut}': '锁定/解锁所有标注${switchLockAllShortcut}',
     'Switch hidden property for all ${switchHiddenAllShortcut}': '隐藏/显示所有标注{{switchLockAllShortcut}}',
