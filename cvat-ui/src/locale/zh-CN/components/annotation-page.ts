@@ -29,7 +29,7 @@ export default {
     'From rectangle': '基于矩形',
     'Number of points:': '点数量:',
     'Shape': '形状',
-    'Track': '轨迹',
+    'Track': '跟踪',
     'Press ${repeatShapeShortcut} to draw again': '再次绘制${repeatShapeShortcut}',
     //annotation-page\standard-workspace\controls-side-bar\fit-control.tsx
     'Fit the image [Double Click]': '图片自适应[双击图片]',

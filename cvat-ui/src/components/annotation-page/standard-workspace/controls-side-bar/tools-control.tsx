@@ -601,7 +601,7 @@ export class ToolsControlComponent extends React.PureComponent<Props, State> {
                                 }
                             }}
                         >
-                            Track
+                            {t('Track')}
                         </Button>
                     </Col>
                 </Row>
