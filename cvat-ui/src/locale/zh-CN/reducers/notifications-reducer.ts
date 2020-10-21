@@ -47,7 +47,7 @@ export default {
     'Error during fetching a job': '获取作业出错',
     'Could not receive frame ${action.payload.number}': '无法获取帧 ${action.payload.number}',
     'Could not save annotations': '无法保存标注',
-    'Could not update annotations': '无法上传标注',
+    'Could not update annotations': '无法更新标注',
     'Could not create annotations': '无法创建标注',
     'Could not merge annotations': '无法合并标注',
     'Could not group annotations': '无法分组标注',

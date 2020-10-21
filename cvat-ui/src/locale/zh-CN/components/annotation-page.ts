@@ -100,6 +100,7 @@ export default {
     'Object is locked': '对象被锁定了',
     'Are you sure you want to remove it?': '确定要移除？',
     'Remove': '移除',
+    'Run tracking with the active tracker': '使用激活的跟踪模型进行跟踪',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\objects-list-header.tsx
     'Switch lock property for all ${switchLockAllShortcut}': '锁定/解锁所有标注${switchLockAllShortcut}',
     'Switch hidden property for all ${switchHiddenAllShortcut}': '隐藏/显示所有标注{{switchLockAllShortcut}}',

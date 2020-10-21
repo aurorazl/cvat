@@ -100,6 +100,7 @@ export default {
     'Object is locked': 'Object is locked',
     'Are you sure you want to remove it?': 'Are you sure you want to remove it?',
     'Remove': 'Remove',
+    'Run tracking with the active tracker': 'Run tracking with the active tracker',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\objects-list-header.tsx
     'Switch lock property for all ${switchLockAllShortcut}': 'Switch lock property for all ${switchLockAllShortcut}',
     'Switch hidden property for all ${switchHiddenAllShortcut}': 'Switch hidden property for all {{switchHiddenAllShortcut}}',
