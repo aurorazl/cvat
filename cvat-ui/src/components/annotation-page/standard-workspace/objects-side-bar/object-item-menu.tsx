@@ -85,7 +85,7 @@ export default function ItemMenu(props: Props): JSX.Element {
                 </Button>
             </Menu.Item>
             <Menu.Item>
-                <Tooltip title={`${copyShortcut} and ${pasteShortcut}`} mouseLeaveDelay={0}>
+                <Tooltip title={t('${copyShortcut} and ${pasteShortcut}', {copyShortcut: `${copyShortcut}`, pasteShortcut: `${pasteShortcut}`})} mouseLeaveDelay={0}>
                     <Button type='link' icon='copy' onClick={copy}>
                     {t('Make a copy')}
                     </Button>
