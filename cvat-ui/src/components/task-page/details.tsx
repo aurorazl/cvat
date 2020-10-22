@@ -356,7 +356,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
             return (
                 <Row>
                     <Col>
-                        <Text strong className='cvat-text-color'>{t('Issue Tracker')}</Text>
+                        <Text strong className='cvat-issue-text'>{t('Issue Tracker')}</Text>
                         <br />
                         <Text editable={{ onChange: onChangeValue, onStart }}>{bugTracker}</Text>
                         {
@@ -384,7 +384,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
         return (
             <Row>
                 <Col>
-                    <Text strong className='cvat-text-color'>{t('Issue Tracker')}</Text>
+                    <Text strong className='cvat-issue-text'>{t('Issue Tracker')}</Text>
                     <br />
                     <Text
                         editable={{
