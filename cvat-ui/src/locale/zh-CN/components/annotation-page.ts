@@ -224,6 +224,6 @@ export default {
     'Selected opacity': '选中标注的不透明度',
     // 'Black borders': '黑色边线',
     'Show bitmap': '显示位图',
-    'Show projections': '显示投影',
+    'Show projections': '显示投影线',
     'Outlined borders': '外边线',
   }
