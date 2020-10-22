@@ -166,9 +166,15 @@ export default {
     'Go next ${nextFrameShortcut}': '前进 ${nextFrameShortcut}',
     'Go next with a step ${forwardShortcut}': '以步长值前进 ${forwardShortcut}',
     'Go to the last frame': '跳转到最后一帧',
+    'Go back': '回退',
+    'Go back with a filter': 'Go back with a filter',
+    'Go back to an empty frame': '回退到空帧',
+    'Go next': '前进',
+    'Go next with a filter': 'Go next with a filter',
+    'Go next to an empty frame': '前进到空帧',    
     // cvat-ui\src\components\annotation-page\top-bar\player-navigation.tsx
     'Create frame URL': '创建帧URL',
-    'Press ${focusFrameInputShortcut} to focus here': '光标聚焦 ${focusFrameInputShortcut}',
+    'Press ${focusFrameInputShortcut} to focus here': '获取焦点 ${focusFrameInputShortcut}',
     // cvat-ui\src\components\annotation-page\top-bar\right-group.tsx
     'Fullscreen': '全屏',
     'Info': '信息',

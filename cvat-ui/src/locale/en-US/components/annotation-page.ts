@@ -166,6 +166,12 @@ export default {
     'Go next ${nextFrameShortcut}': 'Go next ${nextFrameShortcut}',
     'Go next with a step ${forwardShortcut}': 'Go next with a step ${forwardShortcut}',
     'Go to the last frame': 'Go to the last frame',
+    'Go back': 'Go back',
+    'Go back with a filter': 'Go back with a filter',
+    'Go back to an empty frame': 'Go back to an empty frame',
+    'Go next': 'Go next',
+    'Go next with a filter': 'Go next with a filter',
+    'Go next to an empty frame': 'Go next to an empty frame',
     // cvat-ui\src\components\annotation-page\top-bar\player-navigation.tsx
     'Create frame URL': 'Create frame URL',
     'Press ${focusFrameInputShortcut} to focus here': 'Press ${focusFrameInputShortcut} to focus here',

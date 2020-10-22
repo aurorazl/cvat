@@ -68,12 +68,12 @@ function PlayerButtons(props: Props): JSX.Element {
         setNextButton,
     } = props;
 
-    const prevRegularText = 'Go back';
-    const prevFilteredText = 'Go back with a filter';
-    const prevEmptyText = 'Go back to an empty frame';
-    const nextRegularText = 'Go next';
-    const nextFilteredText = 'Go next with a filter';
-    const nextEmptyText = 'Go next to an empty frame';
+    const prevRegularText = t('Go back');
+    const prevFilteredText = t('Go back with a filter');
+    const prevEmptyText = t('Go back to an empty frame');
+    const nextRegularText = t('Go next');
+    const nextFilteredText = t('Go next with a filter');
+    const nextEmptyText = t('Go next to an empty frame');
 
     let prevButton = <Icon className='cvat-player-previous-button' component={PreviousIcon} onClick={onPrevFrame} />;
     let prevButtonTooltipMessage = prevRegularText;
