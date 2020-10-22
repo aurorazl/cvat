@@ -358,19 +358,24 @@ class DetailsComponent extends React.PureComponent<Props, State> {
                     <Col>
                         <Text strong className='cvat-text-color'>{t('Issue Tracker')}</Text>
                         <br />
-                        <Text editable={{ onChange: onChangeValue }}>{bugTracker}</Text>
-                        <Button
-                            type='ghost'
-                            size='small'
-                            onClick={(): void => {
-                                // false positive
-                                // eslint-disable-next-line
-                                window.open(bugTracker, '_blank');
-                            }}
-                            className='cvat-open-bug-tracker-button'
-                        >
-                                {t('Open the issue')}
-                        </Button>
+                        <Text editable={{ onChange: onChangeValue, onStart }}>{bugTracker}</Text>
+                        {
+                            !bugTrackerEditing ?
+                            (
+                                <Button
+                                    type='ghost'
+                                    size='small'
+                                    onClick={(): void => {
+                                        // false positive
+                                        // eslint-disable-next-line
+                                        window.open(bugTracker, '_blank');
+                                    }}
+                                    className='cvat-open-bug-tracker-button'
+                                >
+                                        {t('Open the issue')}
+                                </Button>
+                            ) : null
+                        }
                     </Col>
                 </Row>
             );
