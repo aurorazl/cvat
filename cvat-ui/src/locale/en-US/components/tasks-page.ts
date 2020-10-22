@@ -3,6 +3,7 @@ export default {
     'No tasks created yet ...': 'No tasks created yet ...',
     'To get started with your annotation project': 'To get started with your annotation project',
     'create a new task': 'create a new task',
+    'No task found...': 'No task found...',
     //task-item.tsx
     'Created by ${owner} on ${created}': 'Created by {{owner}} on {{created}}',
     'Created on ${created}': 'Created on {{created}}',

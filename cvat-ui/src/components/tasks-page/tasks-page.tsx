@@ -16,6 +16,7 @@ import FeedbackComponent from 'components/feedback/feedback';
 import TaskListContainer from 'containers/tasks-page/tasks-list';
 import TopBar from './top-bar';
 import EmptyListComponent from './empty-list';
+import NoTaskFoundComponent from './no-task-found';
 
 import { withTranslation, WithTranslation  } from 'react-i18next';
 
@@ -76,6 +77,8 @@ function updateQuery(previousQuery: TasksQuery, searchString: string): TasksQuer
 }
 
 class TasksPageComponent extends React.PureComponent<TasksPageProps & RouteComponentProps> {
+    private fromSearch: boolean = false;
+
     public componentDidMount(): void {
         const { gettingQuery, location, onGetTasks } = this.props;
         const query = updateQuery(gettingQuery, location.search);
@@ -125,6 +128,7 @@ class TasksPageComponent extends React.PureComponent<TasksPageProps & RouteCompo
     }
 
     private handleSearch = (value: string): void => {
+        this.fromSearch = true;
         const {
             gettingQuery,
         } = this.props;
@@ -220,7 +224,7 @@ class TasksPageComponent extends React.PureComponent<TasksPageProps & RouteCompo
                         <TaskListContainer
                             onSwitchPage={this.handlePagination}
                         />
-                    ) : <EmptyListComponent />}
+                    ) : (this.fromSearch ? <NoTaskFoundComponent /> : <EmptyListComponent />)}
                 {/* <FeedbackComponent /> */}
             </div>
         );
