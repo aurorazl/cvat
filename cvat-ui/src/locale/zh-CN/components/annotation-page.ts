@@ -119,9 +119,9 @@ export default {
     // cvat-ui\src\components\annotation-page\standard-workspace\propagate-confirm.tsx
     'Yes': '确定',
     'Confirm propagation': '确定复制到多帧',
-    'Do you want to make a copy of the object on': '是否需要复制对象从',
+    'Do you want to make a copy of the object on': '将当前对象复制',
     'frames': '帧',
-    'up to the': '至',
+    'up to the': '或者截止到第',
     'frame': '帧',
     // cvat-ui\src\components\annotation-page\tag-annotation-workspace
     // cvat-ui\src\components\annotation-page\tag-annotation-workspace\tag-annotation-sidebar
