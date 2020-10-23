@@ -58,6 +58,7 @@ function ShorcutsDialog(props: StateToProps & DispatchToProps): JSX.Element | nu
             title: t('Name'),
             dataIndex: 'name',
             key: 'name',
+            render: (n:string) => t(n)
         },
         {
             title: t('Shortcut'),
@@ -75,6 +76,7 @@ function ShorcutsDialog(props: StateToProps & DispatchToProps): JSX.Element | nu
             title: t('Description'),
             dataIndex: 'description',
             key: 'description',
+            render: (d:string) => t(d)
         },
     ];
 
@@ -83,7 +85,7 @@ function ShorcutsDialog(props: StateToProps & DispatchToProps): JSX.Element | nu
         name: keyMap[key].name || key,
         description: keyMap[key].description || '',
         shortcut: keyMap[key].sequences.map((value) => value.sequence),
-        action: keyMap[key].sequences.map((value) => value.action || 'keydown'),
+        action: keyMap[key].sequences.map((value) => value.action || t('keydown')),
     }));
 
     return (
