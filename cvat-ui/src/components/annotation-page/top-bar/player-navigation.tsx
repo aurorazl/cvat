@@ -94,6 +94,7 @@ function PlayerNavigation(props: Props): JSX.Element {
                         }}
                         onPressEnter={() => {
                             onInputChange(frameInputValue);
+                            inputFrameRef.current?.blur();
                         }}
                         ref={inputFrameRef}
                     />
