@@ -176,7 +176,7 @@ const defaultKeyMap = {
     },
     DECREASE_SATURATION: {
         name: 'Saturation-',
-        description: 'Increase contrast level for the image',
+        description: 'Decrease saturation level for the image',
         sequences: ['shift+s+-'],
         action: 'keydown',
     },
