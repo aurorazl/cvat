@@ -11,6 +11,7 @@
     const serverProxy = require('./server-proxy');
     const { Task } = require('./session');
     const { ScriptingError } = ('./exceptions');
+    const i18next = require('i18next').default;
 
     class AnnotationsSaver {
         constructor(version, collection, session) {
@@ -199,7 +200,7 @@
             const exported = this.collection.export();
             const { flush } = this.collection;
             if (flush) {
-                onUpdate('Created objects are being saved on the server');
+                onUpdate(i18next.t('Created objects are being saved on the server'));
                 const indexes = this._receiveIndexes(exported);
                 const savedData = await this._put({ ...exported, version: this.version });
                 this.version = savedData.version;
@@ -220,7 +221,7 @@
                     deleted,
                 } = this._split(exported);
 
-                onUpdate('Created objects are being saved on the server');
+                onUpdate(i18next.t('Created objects are being saved on the server'));
                 const indexes = this._receiveIndexes(created);
                 const createdData = await this._create({ ...created, version: this.version });
                 this.version = createdData.version;
@@ -233,7 +234,7 @@
                     }
                 }
 
-                onUpdate('Updated objects are being saved on the server');
+                onUpdate(i18next.t('Updated objects are being saved on the server'));
                 this._receiveIndexes(updated);
                 const updatedData = await this._update({ ...updated, version: this.version });
                 this.version = updatedData.version;
@@ -244,7 +245,7 @@
                     }
                 }
 
-                onUpdate('Deleted objects are being deleted from the server');
+                onUpdate(i18next.t('Deleted objects are being deleted from the server'));
                 this._receiveIndexes(deleted);
                 const deletedData = await this._delete({ ...deleted, version: this.version });
                 this._version = deletedData.version;
