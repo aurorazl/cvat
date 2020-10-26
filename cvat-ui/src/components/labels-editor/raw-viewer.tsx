@@ -20,9 +20,9 @@ import { withTranslation, WithTranslation  } from 'react-i18next';
 type Props = FormComponentProps & {
     labels: Label[];
     onSubmit: (labels: Label[]) => void;
-} & WithTranslation;
+};
 
-class RawViewer extends React.PureComponent<Props> {
+class RawViewer extends React.PureComponent<Props & WithTranslation> {
     private validateLabels = (_: any, value: string, callback: any): void => {
         const { t } = this.props;
         try {
