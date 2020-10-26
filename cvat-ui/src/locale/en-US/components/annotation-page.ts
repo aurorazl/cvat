@@ -9,7 +9,7 @@ export default {
     'Number:': 'Number:',
     'Text:': 'Text:',
     'Change current value for the attribute to "${value}"': 'Change current value for the attribute to "${value}"',
-    'From': 'From',
+    'From:': 'From:',
     'To:': 'To:',
     'Step:': 'Step:',
     // annotation-page\attribute-annotation-workspace\attribute-annotation-sidebar\attribute-switcher.tsx

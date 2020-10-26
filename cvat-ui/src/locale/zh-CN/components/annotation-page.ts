@@ -9,7 +9,7 @@ export default {
     'Number:': '数字:',
     'Text:': '文本:',
     'Change current value for the attribute to "${value}"': '改变当前的属性值为"${value}"',
-    'From': '起始',
+    'From:': '起始:',
     'To:': '终止:',
     'Step:': '步长:',
     // annotation-page\attribute-annotation-workspace\attribute-annotation-sidebar\attribute-switcher.tsx
