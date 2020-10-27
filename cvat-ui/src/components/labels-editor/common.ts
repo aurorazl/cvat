@@ -64,7 +64,7 @@ export function validateParsedLabel(label: Label): void {
     }
 
     if (typeof (label.color) !== 'string') {
-        throw new Error(i18n.t('Label "${label.name}". Label color must be a string. Got ${typeof (label.color)}').replace('${label.name}', `${label.name}`).replace('${label.color}', `${label.color}`));
+        throw new Error(i18n.t('Label "${label.name}". Label color must be a string. Got ${typeof (label.color)}').replace('${label.name}', `${label.name}`).replace('${typeof (label.color)}', `${typeof (label.color)}`));
     }
 
     if (!label.color.match(/^#[0-9a-f]{6}$|^$/)) {

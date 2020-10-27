@@ -22,6 +22,12 @@ hr {
     color: $text-color;
 }
 
+.cvat-issue-text {
+    color: $text-color;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
 .cvat-title {
     font-weight: 400;
     font-size: 21px;

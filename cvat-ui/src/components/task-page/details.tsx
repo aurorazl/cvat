@@ -12,6 +12,7 @@ import notification from 'antd/lib/notification';
 import Text from 'antd/lib/typography/Text';
 import Title from 'antd/lib/typography/Title';
 import moment from 'moment';
+import { message } from 'antd';
 
 import getCore from 'cvat-core-wrapper';
 import patterns from 'utils/validation-patterns';
@@ -131,19 +132,23 @@ class DetailsComponent extends React.PureComponent<Props, State> {
 
     private renderTaskName(): JSX.Element {
         const { name } = this.state;
-        const { taskInstance, onTaskUpdate } = this.props;
+        const { taskInstance, onTaskUpdate, t } = this.props;
 
         return (
             <Title
                 level={4}
                 editable={{
                     onChange: (value: string): void => {
-                        this.setState({
-                            name: value,
-                        });
+                        if(!value){
+                            message.error(t('Value must not be empty'));
+                        }else{
+                            this.setState({
+                                name: value,
+                            });
 
-                        taskInstance.name = value;
-                        onTaskUpdate(taskInstance);
+                            taskInstance.name = value;
+                            onTaskUpdate(taskInstance);
+                        }     
                     },
                 }}
                 className='cvat-text-color'
@@ -188,7 +193,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
                         <Text className='cvat-text-color'>{imageQuality}</Text>
                     </Col>
                     <Col span={12}>
-                        <Text strong className='cvat-text-color'>Z-order</Text>
+                        <Text strong className='cvat-text-color'>{t('Z-order')}</Text>
                         <br />
                         <Text className='cvat-text-color'>{zOrder}</Text>
                     </Col>
@@ -351,21 +356,26 @@ class DetailsComponent extends React.PureComponent<Props, State> {
             return (
                 <Row>
                     <Col>
-                        <Text strong className='cvat-text-color'>{t('Issue Tracker')}</Text>
+                        <Text strong className='cvat-issue-text'>{t('Issue Tracker')}</Text>
                         <br />
-                        <Text editable={{ onChange: onChangeValue }}>{bugTracker}</Text>
-                        <Button
-                            type='ghost'
-                            size='small'
-                            onClick={(): void => {
-                                // false positive
-                                // eslint-disable-next-line
-                                window.open(bugTracker, '_blank');
-                            }}
-                            className='cvat-open-bug-tracker-button'
-                        >
-                                {t('Open the issue')}
-                        </Button>
+                        <Text editable={{ onChange: onChangeValue, onStart }}>{bugTracker}</Text>
+                        {
+                            !bugTrackerEditing ?
+                            (
+                                <Button
+                                    type='ghost'
+                                    size='small'
+                                    onClick={(): void => {
+                                        // false positive
+                                        // eslint-disable-next-line
+                                        window.open(bugTracker, '_blank');
+                                    }}
+                                    className='cvat-open-bug-tracker-button'
+                                >
+                                        {t('Open the issue')}
+                                </Button>
+                            ) : null
+                        }
                     </Col>
                 </Row>
             );
@@ -374,7 +384,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
         return (
             <Row>
                 <Col>
-                    <Text strong className='cvat-text-color'>{t('Issue Tracker')}</Text>
+                    <Text strong className='cvat-issue-text'>{t('Issue Tracker')}</Text>
                     <br />
                     <Text
                         editable={{
@@ -418,7 +428,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
                 <Row type='flex' justify='start' align='middle'>
                     <Col>
                         { this.renderTaskName() }
-                    </Col>
+                    </Col>           
                 </Row>
                 <Row type='flex' justify='space-between' align='top'>
                     <Col md={8} lg={7} xl={7} xxl={6}>

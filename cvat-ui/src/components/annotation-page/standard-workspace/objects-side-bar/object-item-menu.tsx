@@ -85,7 +85,7 @@ export default function ItemMenu(props: Props): JSX.Element {
                 </Button>
             </Menu.Item>
             <Menu.Item>
-                <Tooltip title={`${copyShortcut} and ${pasteShortcut}`} mouseLeaveDelay={0}>
+                <Tooltip title={t('${copyShortcut} and ${pasteShortcut}', {copyShortcut: `${copyShortcut}`, pasteShortcut: `${pasteShortcut}`})} mouseLeaveDelay={0}>
                     <Button type='link' icon='copy' onClick={copy}>
                     {t('Make a copy')}
                     </Button>
@@ -100,10 +100,10 @@ export default function ItemMenu(props: Props): JSX.Element {
             </Menu.Item>
             {objectType === ObjectType.TRACK && shapeType === ShapeType.RECTANGLE && (
                 <Menu.Item>
-                    <Tooltip title='Run tracking with the active tracker' mouseLeaveDelay={0}>
+                    <Tooltip title={t('Run tracking with the active tracker')} mouseLeaveDelay={0}>
                         <Button type='link' onClick={activateTracking}>
                             <Icon type='gateway' />
-                            Track
+                            {t('Track')}
                         </Button>
                     </Tooltip>
                 </Menu.Item>

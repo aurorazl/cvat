@@ -3,12 +3,14 @@ export default {
     'No tasks created yet ...': '尚未创建任务...',
     'To get started with your annotation project': '开始你的标注项目',
     'create a new task': '创建新的任务',
+    'No task found...': '未查到任务...',
     //task-item.tsx
     'Created by ${owner} on ${created}': '{{owner}} 创建于 {{created}}',
     'Created on ${created}': '创建于 {{created}}',
     'Last updated ${updated}': '上次更新时间${updated}',
     'Completed': '已完成',
     'In Progress': '进行中',
+    'Pending': '无完成作业',
     '${numOfCompleted} of ${numOfJobs} jobs': '${numOfCompleted} / ${numOfJobs} 作业',
     // automatic-annotation-progress.tsx
     'Automatic annotation': '自动标注',

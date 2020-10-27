@@ -1,6 +1,18 @@
-version: "2.3"
+version: "3.3"
 
 services:
   cvat_proxy:
     environment:
       CVAT_HOST: 10.31.3.230
+  cvat:
+    environment:
+      CVAT_SHARE_URL: "Mounted from /mnt/share host directory"
+    volumes:
+      - cvat_share:/home/django/share:ro
+
+volumes:
+  cvat_share:
+    driver_opts:
+      type: none
+      device: /mnt/share
+      o: bind

@@ -9,7 +9,7 @@ export default {
     'Number:': '数字:',
     'Text:': '文本:',
     'Change current value for the attribute to "${value}"': '改变当前的属性值为"${value}"',
-    'From': '起始',
+    'From:': '起始:',
     'To:': '终止:',
     'Step:': '步长:',
     // annotation-page\attribute-annotation-workspace\attribute-annotation-sidebar\attribute-switcher.tsx
@@ -29,10 +29,10 @@ export default {
     'From rectangle': '基于矩形',
     'Number of points:': '点数量:',
     'Shape': '形状',
-    'Track': '轨迹',
+    'Track': '跟踪',
     'Press ${repeatShapeShortcut} to draw again': '再次绘制${repeatShapeShortcut}',
     //annotation-page\standard-workspace\controls-side-bar\fit-control.tsx
-    'Fit the image [Double Click]': '适应图片[双击]',
+    'Fit the image [Double Click]': '图片自适应[双击图片]',
     //annotation-page\standard-workspace\controls-side-bar\group-control.tsx
     'Group shapes/tracks ${switchGroupShortcut}.': '分组形状/轨迹 ${switchGroupShortcut}.',
     ' Select and press ${resetGroupShortcut} to reset a group': '选中并按下${resetGroupShortcut}重置分组',
@@ -41,7 +41,7 @@ export default {
     //annotation-page\standard-workspace\controls-side-bar\move-control.tsx
     'Move the image': '移动图片',
     //annotation-page\standard-workspace\controls-side-bar\resize-control.tsx
-    'Select a region of interest': '选中兴趣区域',
+    'Select a region of interest': '框选并放大',
     //annotation-page\standard-workspace\controls-side-bar\rotate-control.tsx
     'Rotate the image anticlockwise ${anticlockwiseShortcut}': '逆时针旋转图片 ${anticlockwiseShortcut}',
     'Rotate the image clockwise ${clockwiseShortcut}': '顺时针旋转图片 ${clockwiseShortcut}',
@@ -54,14 +54,21 @@ export default {
     // annotation-page\standard-workspace\controls-side-bar\tools-control.tsx
     'Canvas raises event "canvas.interacted" when interaction is off': '当交互关闭时，Canvas 触发了 "canvas.interacted" 事件',
     'Interaction error occured': '发生了交互错误',
+    'Canvas raises event "canvas.interacted" when interaction with it is off': 'Canvas raises event "canvas.interacted" when interaction with it is off',
     'Interactor': '模型',
     'Interact': '辅助标注',
     'Detection error occured': '发生了检测错误',
     'AI Tools': 'AI 工具',
     'Making a server request': '发送服务器请求',
     'Waiting for a server response..': '等待服务器响应..',
-    'Detectors': '自动化标注',
+    'Detectors': '自动标注',
     'Interactors': '辅助标注',
+    'No available trackers found': '无可用的目标跟踪模型',
+    'Tracker': '跟踪模型',
+    'Tracking frames': '跟踪帧',
+    'No available interactors found': '无可用的辅助标注模型',
+    'No available detectors found': '无可用的目标检测模型',
+    'Trackers': '目标跟踪',    
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\color-picker.tsx
     'Select color': '选择颜色',
@@ -71,12 +78,12 @@ export default {
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\object-item-buttons.tsx
     'Go to previous keyframe ${prevKeyFrameShortcut}': '跳转到上一关键帧 ${prevKeyFrameShortcut}',
     'Go to next keyframe ${nextKeyFrameShortcut}': '跳转到下一关键帧 ${nextKeyFrameShortcut}',
-    'Switch outside property ${switchOutsideShortcut}': '切换外部属性 ${switchOutsideShortcut}',
-    'Switch lock property ${switchLockShortcut}': '切换锁定属性 ${switchLockShortcut}',
-    'Switch occluded property ${switchOccludedShortcut}': '切换遮挡属性 ${switchOccludedShortcut}',
-    'Switch hidden property ${switchHiddenShortcut}': '切换隐藏属性 {{switchHiddenShortcut}}',
-    'Switch keyframe property ${switchKeyFrameShortcut}': '切换关键帧属性 ${switchKeyFrameShortcut}',
-    'Switch pinned property': '切换固定属性',
+    'Switch outside property ${switchOutsideShortcut}': '截止下一关键帧之前，是否关闭该轨迹 ${switchOutsideShortcut}',
+    'Switch lock property ${switchLockShortcut}': '锁定/解锁 ${switchLockShortcut}',
+    'Switch occluded property ${switchOccludedShortcut}': '遮挡/显示 ${switchOccludedShortcut}',
+    'Switch hidden property ${switchHiddenShortcut}': '隐藏/显示 {{switchHiddenShortcut}}',
+    'Switch keyframe property ${switchKeyFrameShortcut}': '是否关键帧 ${switchKeyFrameShortcut}',
+    'Switch pinned property': '固定/解除固定',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\object-item-details.tsx
     'Details': '详情',
     // src\components\annotation-page\standard-workspace\objects-side-bar\object-item-basics.tsx
@@ -84,8 +91,8 @@ export default {
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\object-item-menu.tsx
     'Create object URL': '创建对象URL',
     'Make a copy': '复制',
-    'Propagate': '传播',
-    'Switch orientation': '切换方向',
+    'Propagate': '复制到多帧',
+    'Switch orientation': '切换朝向',
     'Reset perspective': '重置透视',
     'To background': '移至背景',
     'To foreground': '移至前景',
@@ -93,26 +100,28 @@ export default {
     'Object is locked': '对象被锁定了',
     'Are you sure you want to remove it?': '确定要移除？',
     'Remove': '移除',
+    'Run tracking with the active tracker': '使用激活的跟踪模型进行跟踪',
+    '${copyShortcut} and ${pasteShortcut}': '{{copyShortcut}} 和 {{pasteShortcut}}',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\objects-list-header.tsx
-    'Switch lock property for all ${switchLockAllShortcut}': '对所有切换锁定属性${switchLockAllShortcut}',
-    'Switch hidden property for all ${switchHiddenAllShortcut}': '对所有切换隐藏属性{{switchLockAllShortcut}}',
+    'Switch lock property for all ${switchLockAllShortcut}': '锁定/解锁所有标注${switchLockAllShortcut}',
+    'Switch hidden property for all ${switchHiddenAllShortcut}': '隐藏/显示所有标注{{switchLockAllShortcut}}',
     'Expand/collapse all': '展开/折叠所有',
     'Sort by': '排序',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\objects-side-bar.tsx
     'Objects': '对象',
     'Labels': 'Labels',
     // cvat-ui\src\components\annotation-page\standard-workspace\canvas-point-context-menu.tsx
-    'Delete point [Alt + dblclick]': '删除点[Ctrl+双击]',
+    'Delete point [Alt + click]': '删除点[Alt+单击]',
     'Delete point': '删除点',
     'Set start point': '设置起始点',
     // cvat-ui\src\components\annotation-page\standard-workspace\canvas-wrapper.tsx
     'Add new layer ${maxZLayer + 1} and switch to it': '添加并切换至新图层${maxZLayer + 1}',
     // cvat-ui\src\components\annotation-page\standard-workspace\propagate-confirm.tsx
     'Yes': '确定',
-    'Confirm propagation': '确定传播',
-    'Do you want to make a copy of the object on': '是否需要复制对象从',
+    'Confirm propagation': '确定复制到多帧',
+    'Do you want to make a copy of the object on': '将当前对象复制',
     'frames': '帧',
-    'up to the': '至',
+    'up to the': '或者截止到第',
     'frame': '帧',
     // cvat-ui\src\components\annotation-page\tag-annotation-workspace
     // cvat-ui\src\components\annotation-page\tag-annotation-workspace\tag-annotation-sidebar
@@ -143,7 +152,7 @@ export default {
     'Saving...': '保存中...',
     'Save': '保存',
     'Saving changes on the server': '保存修改至服务器',
-    'Pending..': 'Pending..',
+    'Pending..': '无完成作业..',
     'Undo': '撤销',
     'Redo': '恢复',
     'Undo: ${undoAction} ${undoShortcut}': '撤销: {{undoAction}} {{undoShortcut}}',
@@ -157,9 +166,15 @@ export default {
     'Go next ${nextFrameShortcut}': '前进 ${nextFrameShortcut}',
     'Go next with a step ${forwardShortcut}': '以步长值前进 ${forwardShortcut}',
     'Go to the last frame': '跳转到最后一帧',
+    'Go back': '回退',
+    'Go back with a filter': 'Go back with a filter',
+    'Go back to an empty frame': '回退到空帧',
+    'Go next': '前进',
+    'Go next with a filter': 'Go next with a filter',
+    'Go next to an empty frame': '前进到空帧',    
     // cvat-ui\src\components\annotation-page\top-bar\player-navigation.tsx
     'Create frame URL': '创建帧URL',
-    'Press ${focusFrameInputShortcut} to focus here': '按下 ${focusFrameInputShortcut} 聚焦这里',
+    'Press ${focusFrameInputShortcut} to focus here': '获取焦点 ${focusFrameInputShortcut}',
     // cvat-ui\src\components\annotation-page\top-bar\right-group.tsx
     'Fullscreen': '全屏',
     'Info': '信息',
@@ -169,9 +184,9 @@ export default {
     'Interpolated': '插值',
     'Total': '总计',
     'Job status': '作业状态',
-    'annotation': '标注',
-    'validation': '校验',
-    'completed': '完成',
+    'annotation': '标注中',
+    'validation': '校验中',
+    'completed': '已完成',
     'Overview': '概览',
     'Assignee': '执行人',
     'Start frame': '起始帧',
@@ -204,11 +219,11 @@ export default {
     'Annotations filters': '标注过滤器',
     // cvat-ui\src\components\annotation-page\appearance-block.tsx
     'Appearance': '外观',
-    'Color by': '颜色依据',
+    'Color by': '按以下类型设置颜色',
     'Opacity': '不透明度',
-    'Selected opacity': '选择不透明度',
+    'Selected opacity': '选中标注的不透明度',
     // 'Black borders': '黑色边线',
     'Show bitmap': '显示位图',
-    'Show projections': '显示投影',
+    'Show projections': '显示投影线',
     'Outlined borders': '外边线',
   }

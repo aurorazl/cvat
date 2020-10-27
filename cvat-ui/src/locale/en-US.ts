@@ -23,6 +23,7 @@ import gitUtils from './en-US/utils/git-utils';
 import validationPatterns from './en-US/utils/validation-patterns';
 import reducersUtils from './en-US/reducers/index';
 import notificationsReducers from './en-US/reducers/notifications-reducer';
+import shortcutsReducer from './en-US/reducers/shortcuts-reducer';
 
 export default {
   controlsSidebar,
@@ -50,4 +51,5 @@ export default {
   ...validationPatterns,
   ...reducersUtils,
   ...notificationsReducers,
+  ...shortcutsReducer,
 }

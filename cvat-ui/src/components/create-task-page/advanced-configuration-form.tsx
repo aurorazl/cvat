@@ -130,7 +130,7 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
                     valuePropName: 'checked',
                 })(
                     <Checkbox>
-                        <Text className='cvat-text-color'>Z-order</Text>
+                        <Text className='cvat-text-color'>{t('Z-order')}</Text>
                     </Checkbox>,
                 )}
             </Form.Item>
@@ -165,10 +165,7 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
 
         return (
             <Form.Item label={<span>{t('Overlap size')}</span>}>
-                <Tooltip
-                    title={t('Defines a number of intersected frames between different segments')}
-                    mouseLeaveDelay={0}
-                >
+                <Tooltip title={t('Defines a number of intersected frames between different segments')} mouseLeaveDelay={0}>
                     {form.getFieldDecorator('overlapSize', {
                         rules: [
                             {
@@ -364,7 +361,7 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
         return (
             <Form.Item help={t('Using cache to store data.')}>
                 {form.getFieldDecorator('useCache', {
-                    initialValue: false,
+                    initialValue: true,
                     valuePropName: 'checked',
                 })(
                     <Checkbox>

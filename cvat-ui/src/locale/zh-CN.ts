@@ -23,6 +23,7 @@ import gitUtils from './zh-CN/utils/git-utils';
 import validationPatterns from './zh-CN/utils/validation-patterns';
 import reducersUtils from './zh-CN/reducers/index';
 import notificationsReducers from './zh-CN/reducers/notifications-reducer';
+import shortcutsReducer from './zh-CN/reducers/shortcuts-reducer';
 
 export default {
   controlsSidebar,
@@ -50,4 +51,5 @@ export default {
   ...validationPatterns,
   ...reducersUtils,
   ...notificationsReducers,
+  ...shortcutsReducer,
 }

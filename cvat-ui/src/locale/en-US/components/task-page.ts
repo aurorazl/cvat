@@ -17,6 +17,7 @@ export default {
     'Open the issue': 'Open the issue',
     'Not specified': 'Not specified',
     'Created by ${owner} on ${created}': 'Created by {{owner}} on {{created}}',
+    'Value must not be empty': 'Value must not be empty',
     //job-list.tsx
     'Copy': 'Copy',
     'Frames': 'Frames',

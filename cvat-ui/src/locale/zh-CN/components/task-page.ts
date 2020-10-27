@@ -18,6 +18,7 @@ export default {
     'Not specified': '未指定',
     'Created by ${owner} on ${created}': '{{owner}} 创建于 {{created}}',
     'Issue Tracker': '问题跟踪',
+    'Value must not be empty': '值不能为空',
     //job-list.tsx
     'Copy': '复制',
     'Frames': '帧',
@@ -29,9 +30,9 @@ export default {
     'Job': '作业',
     'Copied to clipboard!': '复制到剪贴板！',
     '${completed} of ${data.length} jobs': '{{completed}} / {{dataLength}} 作业',
-    'annotation': '标注',
-    'completed': '完成',
-    'validation': '验证',    
+    'annotation': '标注中',
+    'completed': '已完成',
+    'validation': '验证中',
     //task-page.tsx
     'Sorry, but this task was not found': '抱歉，找不到此任务',
     'Please, be sure information you tried to get exist and you have access': '请确保尝试获取的信息存在并且可以访问',

@@ -27,7 +27,8 @@ export default {
     'Using cache to store data.': '使用缓存存储数据。',
     'Use cache': '使用缓存',    
     'Chunk size': '块大小',
-    'chunkSizeTip': '定义从客户端发送到服务器时要打包成块的帧数。如果为空，将由服务器自动定义。<1/>建议值：<3/>小于1080p: 36<5/>小于2k: 8 - 16<7/>小于4k: 4 - 8<9/>大于4k: 1 - 4',    
+    'chunkSizeTip': '定义从客户端发送到服务器时要打包成块的帧数。如果为空，将由服务器自动定义。<1/>建议值：<3/>小于1080p: 36<5/>小于2k: 8 - 16<7/>小于4k: 4 - 8<9/>大于4k: 1 - 4',
+    'Z-order': 'Z轴次序',
     //basic-configuration-form.tsx
     'Name': '名称',
     'Please, specify a name': '请指定名称',

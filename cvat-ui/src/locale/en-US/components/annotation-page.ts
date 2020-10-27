@@ -9,7 +9,7 @@ export default {
     'Number:': 'Number:',
     'Text:': 'Text:',
     'Change current value for the attribute to "${value}"': 'Change current value for the attribute to "${value}"',
-    'From': 'From',
+    'From:': 'From:',
     'To:': 'To:',
     'Step:': 'Step:',
     // annotation-page\attribute-annotation-workspace\attribute-annotation-sidebar\attribute-switcher.tsx
@@ -54,6 +54,7 @@ export default {
     // annotation-page\standard-workspace\controls-side-bar\tools-control.tsx
     'Canvas raises event "canvas.interacted" when interaction is off': 'Canvas raises event "canvas.interacted" when interaction is off',
     'Interaction error occured': 'Interaction error occured',
+    'Canvas raises event "canvas.interacted" when interaction with it is off': 'Canvas raises event "canvas.interacted" when interaction with it is off',
     'Interactor': 'Interactor',
     'Interact': 'Interact',
     'Detection error occured': 'Detection error occured',
@@ -62,6 +63,12 @@ export default {
     'Waiting for a server response..': 'Waiting for a server response..',
     'Detectors': 'Detectors',
     'Interactors': 'Interactors',
+    'No available trackers found': 'No available trackers found',
+    'Tracker': 'Tracker',
+    'Tracking frames': 'Tracking frames',
+    'No available interactors found': 'No available interactors found',
+    'No available detectors found': 'No available detectors found',
+    'Trackers': 'Trackers',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\color-picker.tsx
     'Select color': 'Select color',
@@ -93,6 +100,8 @@ export default {
     'Object is locked': 'Object is locked',
     'Are you sure you want to remove it?': 'Are you sure you want to remove it?',
     'Remove': 'Remove',
+    'Run tracking with the active tracker': 'Run tracking with the active tracker',
+    '${copyShortcut} and ${pasteShortcut}': '{{copyShortcut}} and {{pasteShortcut}}',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\objects-list-header.tsx
     'Switch lock property for all ${switchLockAllShortcut}': 'Switch lock property for all ${switchLockAllShortcut}',
     'Switch hidden property for all ${switchHiddenAllShortcut}': 'Switch hidden property for all {{switchHiddenAllShortcut}}',
@@ -102,7 +111,7 @@ export default {
     'Objects': 'Objects',
     'Labels': 'Labels',
     // cvat-ui\src\components\annotation-page\standard-workspace\canvas-point-context-menu.tsx
-    'Delete point [Alt + dblclick]': 'Delete point [Alt + dblclick]',
+    'Delete point [Alt + click]': 'Delete point [Alt + click]',
     'Delete point': 'Delete point',
     'Set start point': 'Set start point',
     // cvat-ui\src\components\annotation-page\standard-workspace\canvas-wrapper.tsx
@@ -157,6 +166,12 @@ export default {
     'Go next ${nextFrameShortcut}': 'Go next ${nextFrameShortcut}',
     'Go next with a step ${forwardShortcut}': 'Go next with a step ${forwardShortcut}',
     'Go to the last frame': 'Go to the last frame',
+    'Go back': 'Go back',
+    'Go back with a filter': 'Go back with a filter',
+    'Go back to an empty frame': 'Go back to an empty frame',
+    'Go next': 'Go next',
+    'Go next with a filter': 'Go next with a filter',
+    'Go next to an empty frame': 'Go next to an empty frame',
     // cvat-ui\src\components\annotation-page\top-bar\player-navigation.tsx
     'Create frame URL': 'Create frame URL',
     'Press ${focusFrameInputShortcut} to focus here': 'Press ${focusFrameInputShortcut} to focus here',
