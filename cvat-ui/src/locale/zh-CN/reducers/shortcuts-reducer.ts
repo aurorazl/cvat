@@ -16,7 +16,7 @@ export default {
     'Change occluded property for an active object': '开关激活对象的遮挡属性',
     'Switch keyframe': '切换关键帧',
     'Change keyframe property for an active track': '切换活动轨迹的关键帧属性',
-    'Switch outside': '切换外部属性',
+    'Switch outside': '截止下一关键帧之前，是否关闭该轨迹',
     'Change outside property for an active track': '切换活动轨迹的外部属性',
     'Delete object': '删除对象',
     'Delete an active object. Use shift to force delete of locked objects': '删除活动对象。使用shift强制删除锁定的对象。',
