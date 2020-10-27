@@ -45,6 +45,7 @@ export default {
     'Save the label and create one more': 'Save the label and create one more',
     'Continue': 'Continue',
     'Do not save the label and return': 'Do not save the label and return',
+    'Do not save the label': 'Do not save the label',
     'Cancel': 'Cancel',
     'Change color of the label': 'Change color of the label',
     'Attributes': 'Attributes',
@@ -66,5 +67,6 @@ export default {
     'Field is expected to be a JSON array': 'Field is expected to be a JSON array',
     'Label names must be unique for the task': 'Label names must be unique for the task',
     'Save labels and return': 'Save labels and return',
+    'Save labels': 'Save labels',
     'Reset': 'Reset',
   }

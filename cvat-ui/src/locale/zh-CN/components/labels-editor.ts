@@ -45,6 +45,7 @@ export default {
     'Save the label and create one more': '保存标签并再创建一个',
     'Continue': '继续',
     'Do not save the label and return': '放弃保存标签并返回',
+    'Do not save the label': '放弃保存',
     'Cancel': '取消',
     'Change color of the label': '改变标签颜色',
     'Attributes': '属性',
@@ -66,5 +67,6 @@ export default {
     'Field is expected to be a JSON array': '字段必须是JSON数组',
     'Label names must be unique for the task': '任务中的标签名称必须是唯一的',
     'Save labels and return': '保存标签并返回',
+    'Save labels': '保存标签',
     'Reset': '重置',
   }

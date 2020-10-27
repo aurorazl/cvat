@@ -97,7 +97,7 @@ class RawViewer extends React.PureComponent<Props & WithTranslation> {
                 </Form.Item>
                 <Row type='flex' justify='start' align='middle'>
                     <Col>
-                        <Tooltip title={t('Save labels and return')} mouseLeaveDelay={0}>
+                        <Tooltip title={t('Save labels')} mouseLeaveDelay={0}>
                             <Button
                                 style={{ width: '150px' }}
                                 type='primary'
@@ -108,7 +108,7 @@ class RawViewer extends React.PureComponent<Props & WithTranslation> {
                         </Tooltip>
                     </Col>
                     <Col offset={1}>
-                        <Tooltip title={t('Do not save the label and return')} mouseLeaveDelay={0}>
+                        <Tooltip title={t('Do not save the label')} mouseLeaveDelay={0}>
                             <Button
                                 style={{ width: '150px' }}
                                 type='danger'
