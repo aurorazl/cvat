@@ -48,6 +48,13 @@ export default {
     'Cancel': 'Cancel',
     'Change color of the label': 'Change color of the label',
     'Attributes': 'Attributes',
+    'Select': 'Select',
+    'Radio': 'Radio',
+    'Checkbox': 'Checkbox',
+    'Text': 'Text',
+    'Number': 'Number',
+    // 'False': 'False',
+    // 'True': 'True',
     //labels-editor.tsx
     'Could not delete the label': 'Could not delete the label',
     'It has been already saved on the server': 'It has been already saved on the server',

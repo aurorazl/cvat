@@ -145,19 +145,19 @@ class LabelForm extends React.PureComponent<Props, {}> {
                         })(
                             <Select disabled={locked}>
                                 <Select.Option value={AttributeType.SELECT}>
-                                    Select
+                                    {t('Select')}
                                 </Select.Option>
                                 <Select.Option value={AttributeType.RADIO}>
-                                    Radio
+                                    {t('Radio')}
                                 </Select.Option>
                                 <Select.Option value={AttributeType.CHECKBOX}>
-                                    Checkbox
+                                    {t('Checkbox')}
                                 </Select.Option>
                                 <Select.Option value={AttributeType.TEXT}>
-                                    Text
+                                    {t('Text')}
                                 </Select.Option>
                                 <Select.Option value={AttributeType.NUMBER}>
-                                    Number
+                                    {t('Number')}
                                 </Select.Option>
                             </Select>,
                         )}

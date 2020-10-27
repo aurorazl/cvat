@@ -48,6 +48,13 @@ export default {
     'Cancel': '取消',
     'Change color of the label': '改变标签颜色',
     'Attributes': '属性',
+    'Select': '下拉框',
+    'Radio': '单选框',
+    'Checkbox': '复选框',
+    'Text': '文本框',
+    'Number': '数字输入框',
+    // 'False': '假',
+    // 'True': '真',     
     //labels-editor.tsx
     'Could not delete the label': '无法删除标签',
     'It has been already saved on the server': '已经保存在服务器上',

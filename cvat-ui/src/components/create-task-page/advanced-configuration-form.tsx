@@ -130,7 +130,7 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
                     valuePropName: 'checked',
                 })(
                     <Checkbox>
-                        <Text className='cvat-text-color'>Z-order</Text>
+                        <Text className='cvat-text-color'>{t('Z-order')}</Text>
                     </Checkbox>,
                 )}
             </Form.Item>

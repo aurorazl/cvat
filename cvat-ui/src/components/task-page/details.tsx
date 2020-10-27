@@ -193,7 +193,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
                         <Text className='cvat-text-color'>{imageQuality}</Text>
                     </Col>
                     <Col span={12}>
-                        <Text strong className='cvat-text-color'>Z-order</Text>
+                        <Text strong className='cvat-text-color'>{t('Z-order')}</Text>
                         <br />
                         <Text className='cvat-text-color'>{zOrder}</Text>
                     </Col>
