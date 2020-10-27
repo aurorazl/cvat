@@ -92,7 +92,7 @@ export default {
     'Create object URL': '创建对象URL',
     'Make a copy': '复制',
     'Propagate': '复制到多帧',
-    'Switch orientation': '切换方向',
+    'Switch orientation': '切换朝向',
     'Reset perspective': '重置透视',
     'To background': '移至背景',
     'To foreground': '移至前景',
