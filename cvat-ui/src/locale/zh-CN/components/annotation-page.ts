@@ -78,7 +78,7 @@ export default {
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\object-item-buttons.tsx
     'Go to previous keyframe ${prevKeyFrameShortcut}': '跳转到上一关键帧 ${prevKeyFrameShortcut}',
     'Go to next keyframe ${nextKeyFrameShortcut}': '跳转到下一关键帧 ${nextKeyFrameShortcut}',
-    'Switch outside property ${switchOutsideShortcut}': '截止下一关键帧之前，是否关闭该轨迹 ${switchOutsideShortcut}',
+    'Switch outside property ${switchOutsideShortcut}': '是否保留该轨迹（截止下一关键帧） ${switchOutsideShortcut}',
     'Switch lock property ${switchLockShortcut}': '锁定/解锁 ${switchLockShortcut}',
     'Switch occluded property ${switchOccludedShortcut}': '遮挡/显示 ${switchOccludedShortcut}',
     'Switch hidden property ${switchHiddenShortcut}': '隐藏/显示 {{switchHiddenShortcut}}',
