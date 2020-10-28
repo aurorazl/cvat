@@ -2,7 +2,7 @@ version: '3.3'
 services:
   cvat_elasticsearch:
     container_name: cvat_elasticsearch
-    image: cvat_elasticsearch
+    image: harbor.sigsus.cn:8443/library/cvat_elasticsearch
     networks:
       default:
         aliases:
@@ -14,10 +14,12 @@ services:
     volumes:
       - cvat_events:/usr/share/elasticsearch/data
     restart: always
+    ports:
+        - "9200:9200"
 
   cvat_kibana:
     container_name: cvat_kibana
-    image: cvat_kibana
+    image: harbor.sigsus.cn:8443/library/cvat_kibana
     networks:
       default:
         aliases:
@@ -28,10 +30,12 @@ services:
         ELK_VERSION: 6.4.0
     depends_on: ['cvat_elasticsearch']
     restart: always
+    ports:
+        - "5601:5601"
 
   cvat_kibana_setup:
     container_name: cvat_kibana_setup
-    image: cvat/server
+    image: harbor.sigsus.cn:8443/library/cvat/server
     volumes: ['./components/analytics/kibana:/home/django/kibana:ro']
     depends_on: ['cvat']
     working_dir: '/home/django'
@@ -43,7 +47,7 @@ services:
 
   cvat_logstash:
     container_name: cvat_logstash
-    image: cvat_logstash
+    image: harbor.sigsus.cn:8443/library/cvat_logstash
     networks:
       default:
         aliases:

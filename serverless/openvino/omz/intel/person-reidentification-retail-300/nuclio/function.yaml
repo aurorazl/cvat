@@ -19,6 +19,7 @@ spec:
   build:
     image: cvat/openvino.omz.intel.person-reidentification-retail-0300
     baseImage: openvino/ubuntu18_dev:2020.2
+    noBaseImagePull: true
 
     directives:
       preCopy:
