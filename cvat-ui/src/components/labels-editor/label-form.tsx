@@ -222,8 +222,8 @@ class LabelForm extends React.PureComponent<Props, {}> {
                         initialValue: value,
                     })(
                         <Select>
-                            <Select.Option value='false'> False </Select.Option>
-                            <Select.Option value='true'> True </Select.Option>
+                            <Select.Option value='false'> {t('False')} </Select.Option>
+                            <Select.Option value='true'> {t('True')} </Select.Option>
                         </Select>,
                     )}
                 </Form.Item>
