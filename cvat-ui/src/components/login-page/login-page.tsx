@@ -29,11 +29,7 @@ function LoginPageComponent(props: LoginPageComponentProps & RouteComponentProps
         xl: { span: 4 },
     };
 
-    const {
-        fetching,
-        onLogin,
-        renderResetPassword,
-    } = props;
+    const { fetching, onLogin, renderResetPassword } = props;
 
     return (
         <>
@@ -54,8 +50,7 @@ function LoginPageComponent(props: LoginPageComponentProps & RouteComponentProps
                             </Text>
                         </Col>
                     </Row>
-                    { renderResetPassword
-                        && (
+                    { renderResetPassword && (
                             <Row type='flex' justify='start' align='top'>
                                 <Col>
                                     <Text strong>

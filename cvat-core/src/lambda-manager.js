@@ -1,11 +1,6 @@
-/*
-* Copyright (C) 2020 Intel Corporation
-* SPDX-License-Identifier: MIT
-*/
-
-/* global
-    require:false
-*/
+// Copyright (C) 2019-2020 Intel Corporation
+//
+// SPDX-License-Identifier: MIT
 
 const serverProxy = require('./server-proxy');
 const { ArgumentError } = require('./exceptions');
@@ -29,10 +24,12 @@ class LambdaManager {
         const models = [];
 
         for (const model of result) {
-            models.push(new MLModel({
-                ...model,
-                type: model.kind,
-            }));
+            models.push(
+                new MLModel({
+                    ...model,
+                    type: model.kind,
+                }),
+            );
         }
 
         this.cachedList = models;
@@ -109,7 +106,11 @@ class LambdaManager {
                     delete this.listening[requestID];
                 }
             } catch (error) {
-                onUpdate(RQStatus.UNKNOWN, 0, i18next.t('Could not get a status of the request ${requestID}. ${error.toString()}', {requestID: `${requestID}`, errortoString: `${error.toString()}`}));
+                onUpdate(
+                    RQStatus.UNKNOWN,
+                    0,
+                    i18next.t('Could not get a status of the request ${requestID}. ${error.toString()}', {requestID: `${requestID}`, errortoString: `${error.toString()}`}),
+                );
             }
         };
 

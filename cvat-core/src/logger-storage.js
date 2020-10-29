@@ -1,10 +1,6 @@
-// Copyright (C) 2020 Intel Corporation
+// Copyright (C) 2019-2020 Intel Corporation
 //
 // SPDX-License-Identifier: MIT
-
-/* global
-    require:false
-*/
 
 const PluginRegistry = require('./plugins');
 const serverProxy = require('./server-proxy');
@@ -42,8 +38,10 @@ class LoggerStorage {
         this.ignoreRules[LogType.changeAttribute] = {
             lastLog: null,
             ignore(previousLog, currentPayload) {
-                return currentPayload.object_id === previousLog.payload.object_id
-                    && currentPayload.id === previousLog.payload.id;
+                return (
+                    currentPayload.object_id === previousLog.payload.object_id
+                    && currentPayload.id === previousLog.payload.id
+                );
             },
         };
     }
@@ -58,32 +56,28 @@ class LoggerStorage {
     }
 
     async configure(isActiveChecker, activityHelper) {
-        const result = await PluginRegistry
-            .apiWrapper.call(
-                this, LoggerStorage.prototype.configure,
-                isActiveChecker, activityHelper,
-            );
+        const result = await PluginRegistry.apiWrapper.call(
+            this,
+            LoggerStorage.prototype.configure,
+            isActiveChecker,
+            activityHelper,
+        );
         return result;
     }
 
     async log(logType, payload = {}, wait = false) {
-        const result = await PluginRegistry
-            .apiWrapper.call(this, LoggerStorage.prototype.log, logType, payload, wait);
+        const result = await PluginRegistry.apiWrapper.call(this, LoggerStorage.prototype.log, logType, payload, wait);
         return result;
     }
 
     async save() {
-        const result = await PluginRegistry
-            .apiWrapper.call(this, LoggerStorage.prototype.save);
+        const result = await PluginRegistry.apiWrapper.call(this, LoggerStorage.prototype.save);
         return result;
     }
 }
 
-LoggerStorage.prototype.configure.implementation = function (
-    isActiveChecker,
-    userActivityCallback,
-) {
-    if (typeof (isActiveChecker) !== 'function') {
+LoggerStorage.prototype.configure.implementation = function (isActiveChecker, userActivityCallback) {
+    if (typeof isActiveChecker !== 'function') {
         throw new ArgumentError(i18next.t('isActiveChecker argument must be callable'));
     }
 
@@ -96,11 +90,11 @@ LoggerStorage.prototype.configure.implementation = function (
 };
 
 LoggerStorage.prototype.log.implementation = function (logType, payload, wait) {
-    if (typeof (payload) !== 'object') {
+    if (typeof payload !== 'object') {
         throw new ArgumentError(i18next.t('Payload must be an object'));
     }
 
-    if (typeof (wait) !== 'boolean') {
+    if (typeof wait !== 'boolean') {
         throw new ArgumentError(i18next.t('Payload must be an object'));
     }
 

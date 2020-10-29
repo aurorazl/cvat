@@ -21,12 +21,7 @@ interface ConstructorViewerItemProps {
 
 export default function ConstructorViewerItem(props: ConstructorViewerItemProps): JSX.Element {
     const { t } = useTranslation();
-    const {
-        color,
-        label,
-        onUpdate,
-        onDelete,
-    } = props;
+    const { color, label, onUpdate, onDelete } = props;
 
     return (
         <div style={{ background: color || consts.NEW_LABEL_COLOR }} className='cvat-constructor-viewer-item'>
@@ -41,8 +36,7 @@ export default function ConstructorViewerItem(props: ConstructorViewerItemProps)
                     <Icon theme='filled' type='edit' />
                 </span>
             </Tooltip>
-            { label.id < 0
-                && (
+            { label.id < 0 && (
                     <Tooltip title={t('Delete label')} mouseLeaveDelay={0}>
                         <span
                             role='button'

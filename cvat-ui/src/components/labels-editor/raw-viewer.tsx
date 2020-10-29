@@ -9,12 +9,7 @@ import Button from 'antd/lib/button';
 import Tooltip from 'antd/lib/tooltip';
 import Form, { FormComponentProps } from 'antd/lib/form/Form';
 
-import {
-    Label,
-    Attribute,
-    validateParsedLabel,
-    idGenerator,
-} from './common';
+import { Label, Attribute, validateParsedLabel, idGenerator } from './common';
 import { withTranslation, WithTranslation  } from 'react-i18next';
 
 type Props = FormComponentProps & {
@@ -69,18 +64,18 @@ class RawViewer extends React.PureComponent<Props & WithTranslation> {
 
     public render(): JSX.Element {
         const { labels } = this.props;
-        const convertedLabels = labels.map((label: any): Label => (
-            {
+        const convertedLabels = labels.map(
+            (label: any): Label => ({
                 ...label,
                 id: label.id < 0 ? undefined : label.id,
-                attributes: label.attributes.map((attribute: any): Attribute => (
-                    {
+                attributes: label.attributes.map(
+                    (attribute: any): Attribute => ({
                         ...attribute,
                         id: attribute.id < 0 ? undefined : attribute.id,
-                    }
-                )),
-            }
-        ));
+                    }),
+                ),
+            }),
+        );
 
         const textLabels = JSON.stringify(convertedLabels, null, 2);
         const { form, t } = this.props;
@@ -90,19 +85,17 @@ class RawViewer extends React.PureComponent<Props & WithTranslation> {
                 <Form.Item>
                     {form.getFieldDecorator('labels', {
                         initialValue: textLabels,
-                        rules: [{
-                            validator: this.validateLabels,
-                        }],
+                        rules: [
+                            {
+                                validator: this.validateLabels,
+                            },
+                        ],
                     })(<Input.TextArea rows={5} className='cvat-raw-labels-viewer' />)}
                 </Form.Item>
                 <Row type='flex' justify='start' align='middle'>
                     <Col>
                         <Tooltip title={t('Save labels')} mouseLeaveDelay={0}>
-                            <Button
-                                style={{ width: '150px' }}
-                                type='primary'
-                                htmlType='submit'
-                            >
+                            <Button style={{ width: '150px' }} type='primary'htmlType='submit'>
                                 {t('Done')}
                             </Button>
                         </Tooltip>

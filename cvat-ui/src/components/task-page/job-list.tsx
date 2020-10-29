@@ -37,13 +37,12 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
         taskInstance,
         registeredUsers,
         onJobUpdate,
-        history: {
-            push,
-        },
+        history: { push },
     } = props;
 
     const { jobs, id: taskId } = taskInstance;
-    const columns = [{
+    const columns = [
+        {
         title: t('Job'),
         dataIndex: 'job',
         key: 'job',
@@ -61,12 +60,14 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
                 </Button>
             </div>
         ),
-    }, {
+    }, 
+    {
         title: t('Frames'),
         dataIndex: 'frames',
         key: 'frames',
         className: 'cvat-text-color',
-    }, {
+    }, 
+    {
         title: t('Status'),
         dataIndex: 'status',
         key: 'status',
@@ -81,20 +82,25 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
             }
 
             return (
-                <Text strong className={progressColor}>{ t(status) }</Text>
+                <Text strong className={progressColor}>
+                    { t(status) }
+                </Text>
             );
         },
-    }, {
+    }, 
+    {
         title: t('Started on'),
         dataIndex: 'started',
         key: 'started',
         className: 'cvat-text-color',
-    }, {
+    }, 
+    {
         title: t('Duration'),
         dataIndex: 'duration',
         key: 'duration',
         className: 'cvat-text-color',
-    }, {
+    }, 
+    {
         title: t('Assignee'),
         dataIndex: 'assignee',
         key: 'assignee',
@@ -106,8 +112,7 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
                     users={registeredUsers}
                     value={assignee}
                     onChange={(value: string): void => {
-                        let [userInstance] = [...registeredUsers]
-                            .filter((user: any) => user.username === value);
+                        let [userInstance] = [...registeredUsers].filter((user: any) => user.username === value);
 
                         if (userInstance === undefined) {
                             userInstance = null;
@@ -120,7 +125,8 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
                 />
             );
         },
-    }];
+    },
+    ];
 
     let completed = 0;
     const data = jobs.reduce((acc: any[], job: any) => {
@@ -156,10 +162,14 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
                                 const [latestJob] = [...taskInstance.jobs].reverse();
                                 for (const job of taskInstance.jobs) {
                                     serialized += `Job #${job.id}`.padEnd(`${latestJob.id}`.length + 6, ' ');
-                                    serialized += `: ${baseURL}/?id=${job.id}`
-                                        .padEnd(`${latestJob.id}`.length + baseURL.length + 8, ' ');
-                                    serialized += `: [${job.startFrame}-${job.stopFrame}]`
-                                        .padEnd(`${latestJob.startFrame}${latestJob.stopFrame}`.length + 5, ' ');
+                                    serialized += `: ${baseURL}/?id=${job.id}`.padEnd(
+                                        `${latestJob.id}`.length + baseURL.length + 8,
+                                        ' ',
+                                    );
+                                    serialized += `: [${job.startFrame}-${job.stopFrame}]`.padEnd(
+                                        `${latestJob.startFrame}${latestJob.stopFrame}`.length + 5,
+                                        ' ',
+                                    );
 
                                     if (job.assignee) {
                                         serialized += `\t assigned to: ${job.assignee.username}`;
@@ -175,17 +185,10 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
                     </Tooltip>
                 </Col>
                 <Col>
-                    <Text className='cvat-text-color'>
-                        {t('${completed} of ${data.length} jobs', { completed: `${completed}`, dataLength: `${data.length}`})}
-                    </Text>
+                    <Text className='cvat-text-color'>{t('${completed} of ${data.length} jobs', { completed: `${completed}`, dataLength: `${data.length}`})}</Text>
                 </Col>
             </Row>
-            <Table
-                className='cvat-task-jobs-table'
-                columns={columns}
-                dataSource={data}
-                size='small'
-            />
+            <Table className='cvat-task-jobs-table' columns={columns} dataSource={data} size='small' />
         </div>
     );
 }

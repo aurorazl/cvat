@@ -1,11 +1,6 @@
-/*
-* Copyright (C) 2019 Intel Corporation
-* SPDX-License-Identifier: MIT
-*/
-
-/* global
-    require:false
-*/
+// Copyright (C) 2019-2020 Intel Corporation
+//
+// SPDX-License-Identifier: MIT
 
 (() => {
     const { PluginError } = require('./exceptions');
@@ -17,8 +12,7 @@
             // I have to optimize the wrapper
             const pluginList = await PluginRegistry.list();
             for (const plugin of pluginList) {
-                const pluginDecorators = plugin.functions
-                    .filter((obj) => obj.callback === wrappedFunc)[0];
+                const pluginDecorators = plugin.functions.filter((obj) => obj.callback === wrappedFunc)[0];
                 if (pluginDecorators && pluginDecorators.enter) {
                     try {
                         await pluginDecorators.enter.call(this, plugin, ...args);
@@ -35,8 +29,7 @@
             let result = await wrappedFunc.implementation.call(this, ...args);
 
             for (const plugin of pluginList) {
-                const pluginDecorators = plugin.functions
-                    .filter((obj) => obj.callback === wrappedFunc)[0];
+                const pluginDecorators = plugin.functions.filter((obj) => obj.callback === wrappedFunc)[0];
                 if (pluginDecorators && pluginDecorators.leave) {
                     try {
                         result = await pluginDecorators.leave.call(this, plugin, result, ...args);
@@ -73,17 +66,19 @@
                 throw new PluginError(i18next.t('Plugin must not contain a "functions" field'));
             }
 
-            (function traverse(plugin, api) {
+            function traverse(plugin, api) {
                 const decorator = {};
                 for (const key in plugin) {
                     if (Object.prototype.hasOwnProperty.call(plugin, key)) {
-                        if (typeof (plugin[key]) === 'object') {
+                        if (typeof plugin[key] === 'object') {
                             if (Object.prototype.hasOwnProperty.call(api, key)) {
                                 traverse(plugin[key], api[key]);
                             }
-                        } else if (['enter', 'leave'].includes(key)
-                            && typeof (api) === 'function'
-                            && typeof (plugin[key] === 'function')) {
+                        } else if (
+                            ['enter', 'leave'].includes(key)
+                            && typeof api === 'function'
+                            && typeof (plugin[key] === 'function')
+                        ) {
                             decorator.callback = api;
                             decorator[key] = plugin[key];
                         }
@@ -93,9 +88,9 @@
                 if (Object.keys(decorator).length) {
                     functions.push(decorator);
                 }
-            }(plug, {
-                cvat: this,
-            }));
+            }
+
+            traverse(plug, { cvat: this });
 
             Object.defineProperty(plug, 'functions', {
                 value: functions,

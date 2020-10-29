@@ -3,19 +3,12 @@
 * SPDX-License-Identifier: MIT
 */
 
-/* global
-    require:false
-*/
-
 (() => {
     const PluginRegistry = require('./plugins');
     const loggerStorage = require('./logger-storage');
     const serverProxy = require('./server-proxy');
-    const {
-        getFrame,
-        getRanges,
-        getPreview,
-        clear: clearFrames,
+    const { 
+        getFrame, getRanges, getPreview, clear: clearFrames,
     } = require('./frames');
     const { ArgumentError } = require('./exceptions');
     const { TaskStatus } = require('./enums');
@@ -28,109 +21,142 @@
             annotations: Object.freeze({
                 value: {
                     async upload(file, loader) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.annotations.upload, file, loader);
+                        const result = await PluginRegistry.apiWrapper.call(
+                            this, 
+                            prototype.annotations.upload, 
+                            file, 
+                            loader,
+                        );
                         return result;
                     },
 
                     async save(onUpdate) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.annotations.save, onUpdate);
+                        const result = await PluginRegistry.apiWrapper.call(this, prototype.annotations.save, onUpdate);
                         return result;
                     },
 
                     async clear(reload = false) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.annotations.clear, reload);
+                        const result = await PluginRegistry.apiWrapper.call(this, prototype.annotations.clear, reload);
                         return result;
                     },
 
                     async dump(dumper, name = null) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.annotations.dump, dumper, name);
+                        const result = await PluginRegistry.apiWrapper.call(
+                            this, 
+                            prototype.annotations.dump, 
+                            dumper, 
+                            name,
+                        );
                         return result;
                     },
 
                     async statistics() {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.annotations.statistics);
+                        const result = await PluginRegistry.apiWrapper.call(this, prototype.annotations.statistics);
                         return result;
                     },
 
                     async put(arrayOfObjects = []) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.annotations.put, arrayOfObjects);
+                        const result = await PluginRegistry.apiWrapper.call(
+                            this, 
+                            prototype.annotations.put, 
+                            arrayOfObjects,
+                        );
                         return result;
                     },
 
                     async get(frame, allTracks = false, filters = []) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.annotations.get,
-                                frame, allTracks, filters);
+                        const result = await PluginRegistry.apiWrapper.call(
+                            this, 
+                            prototype.annotations.get,
+                            frame, 
+                            allTracks, 
+                            filters,
+                        );
                         return result;
                     },
 
                     async search(filters, frameFrom, frameTo) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.annotations.search,
-                                filters, frameFrom, frameTo);
+                        const result = await PluginRegistry.apiWrapper.call(
+                            this, 
+                            prototype.annotations.search,
+                            filters, 
+                            frameFrom, 
+                            frameTo
+                        );
                         return result;
                     },
 
                     async searchEmpty(frameFrom, frameTo) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.annotations.searchEmpty,
-                                frameFrom, frameTo);
+                        const result = await PluginRegistry.apiWrapper.call(
+                            this, 
+                            prototype.annotations.searchEmpty,
+                            frameFrom, 
+                            frameTo
+                        );
                         return result;
                     },
 
                     async select(objectStates, x, y) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this,
-                                prototype.annotations.select, objectStates, x, y);
+                        const result = await PluginRegistry.apiWrapper.call(
+                            this,
+                            prototype.annotations.select, 
+                            objectStates, 
+                            x, 
+                            y
+                        );
                         return result;
                     },
 
                     async merge(objectStates) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.annotations.merge, objectStates);
+                        const result = await PluginRegistry.apiWrapper.call(
+                            this, 
+                            prototype.annotations.merge, 
+                            objectStates
+                        );
                         return result;
                     },
 
                     async split(objectState, frame) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.annotations.split, objectState, frame);
+                        const result = await PluginRegistry.apiWrapper.call(
+                            this, 
+                            prototype.annotations.split, 
+                            objectState, 
+                            frame
+                        );
                         return result;
                     },
 
                     async group(objectStates, reset = false) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.annotations.group,
-                                objectStates, reset);
+                        const result = await PluginRegistry.apiWrapper.call(
+                            this, 
+                            prototype.annotations.group,
+                            objectStates, 
+                            reset
+                        );
                         return result;
                     },
 
                     async import(data) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.annotations.import, data);
+                        const result = await PluginRegistry.apiWrapper.call(this, prototype.annotations.import, data);
                         return result;
                     },
 
                     async export() {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.annotations.export);
+                        const result = await PluginRegistry.apiWrapper.call(this, prototype.annotations.export);
                         return result;
                     },
 
                     async exportDataset(format) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.annotations.exportDataset, format);
+                        const result = await PluginRegistry.apiWrapper.call(
+                            this, 
+                            prototype.annotations.exportDataset, 
+                            format
+                        );
                         return result;
                     },
 
                     hasUnsavedChanges() {
-                        const result = prototype.annotations
-                            .hasUnsavedChanges.implementation.call(this);
+                        const result = prototype.annotations.hasUnsavedChanges.implementation.call(this);
                         return result;
                     },
                 },
@@ -139,18 +165,21 @@
             frames: Object.freeze({
                 value: {
                     async get(frame, isPlaying = false, step = 1) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.frames.get, frame, isPlaying, step);
+                        const result = await PluginRegistry.apiWrapper.call(
+                            this, 
+                            prototype.frames.get, 
+                            frame, 
+                            isPlaying, 
+                            step
+                        );
                         return result;
                     },
                     async ranges() {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.frames.ranges);
+                        const result = await PluginRegistry.apiWrapper.call(this, prototype.frames.ranges);
                         return result;
                     },
                     async preview() {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.frames.preview);
+                        const result = await PluginRegistry.apiWrapper.call(this, prototype.frames.preview);
                         return result;
                     },
                 },
@@ -159,8 +188,13 @@
             logger: Object.freeze({
                 value: {
                     async log(logType, payload = {}, wait = false) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.logger.log, logType, payload, wait);
+                        const result = await PluginRegistry.apiWrapper.call(
+                            this, 
+                            prototype.logger.log, 
+                            logType, 
+                            payload, 
+                            wait
+                        );
                         return result;
                     },
                 },
@@ -169,28 +203,23 @@
             actions: Object.freeze({
                 value: {
                     async undo(count = 1) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.actions.undo, count);
+                        const result = await PluginRegistry.apiWrapper.call(this, prototype.actions.undo, count);
                         return result;
                     },
                     async redo(count = 1) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.actions.redo, count);
+                        const result = await PluginRegistry.apiWrapper.call(this, prototype.actions.redo, count);
                         return result;
                     },
                     async freeze(frozen) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.actions.freeze, frozen);
+                        const result = await PluginRegistry.apiWrapper.call(this, prototype.actions.freeze, frozen);
                         return result;
                     },
                     async clear() {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.actions.clear);
+                        const result = await PluginRegistry.apiWrapper.call(this, prototype.actions.clear);
                         return result;
                     },
                     async get() {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.actions.get);
+                        const result = await PluginRegistry.apiWrapper.call(this, prototype.actions.get);
                         return result;
                     },
                 },
@@ -199,13 +228,21 @@
             events: Object.freeze({
                 value: {
                     async subscribe(evType, callback) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.events.subscribe, evType, callback);
+                        const result = await PluginRegistry.apiWrapper.call(
+                            this, 
+                            prototype.events.subscribe, 
+                            evType, 
+                            callback
+                        );
                         return result;
                     },
                     async unsubscribe(evType, callback = null) {
-                        const result = await PluginRegistry
-                            .apiWrapper.call(this, prototype.events.unsubscribe, evType, callback);
+                        const result = await PluginRegistry.apiWrapper.call(
+                            this, 
+                            prototype.events.unsubscribe, 
+                            evType, 
+                            callback
+                        );
                         return result;
                     },
                 },
@@ -772,8 +809,7 @@
                 import: Object.getPrototypeOf(this).annotations.import.bind(this),
                 export: Object.getPrototypeOf(this).annotations.export.bind(this),
                 statistics: Object.getPrototypeOf(this).annotations.statistics.bind(this),
-                hasUnsavedChanges: Object.getPrototypeOf(this)
-                    .annotations.hasUnsavedChanges.bind(this),
+                hasUnsavedChanges: Object.getPrototypeOf(this).annotations.hasUnsavedChanges.bind(this),
             };
 
             this.actions = {
@@ -825,7 +861,6 @@
         * <br> <li style="margin-left: 10px;"> name
         * <br> <li style="margin-left: 10px;"> assignee
         * <br> <li style="margin-left: 10px;"> bug_tracker
-        * <br> <li style="margin-left: 10px;"> z_order
         * <br> <li style="margin-left: 10px;"> labels
         * <br> <li style="margin-left: 10px;"> segment_size
         * <br> <li style="margin-left: 10px;"> overlap
@@ -845,7 +880,6 @@
                 bug_tracker: undefined,
                 overlap: undefined,
                 segment_size: undefined,
-                z_order: undefined,
                 image_quality: undefined,
                 start_frame: undefined,
                 stop_frame: undefined,
@@ -858,8 +892,7 @@
             };
 
             for (const property in data) {
-                if (Object.prototype.hasOwnProperty.call(data, property)
-                    && property in initialData) {
+                if (Object.prototype.hasOwnProperty.call(data, property) && property in initialData) {
                     data[property] = initialData[property];
                 }
             }
@@ -1057,24 +1090,6 @@
                     },
                 },
                 /**
-                    * @name zOrder
-                    * @type {boolean}
-                    * @memberof module:API.cvat.classes.Task
-                    * @instance
-                    * @throws {module:API.cvat.exceptions.ArgumentError}
-                */
-                zOrder: {
-                    get: () => data.z_order,
-                    set: (zOrder) => {
-                        if (typeof (zOrder) !== 'boolean') {
-                            throw new ArgumentError(
-                                i18next.t('Value must be a boolean'),
-                            );
-                        }
-                        data.z_order = zOrder;
-                    },
-                },
-                /**
                     * @name imageQuality
                     * @type {integer}
                     * @memberof module:API.cvat.classes.Task
@@ -1103,9 +1118,7 @@
                     get: () => data.use_zip_chunks,
                     set: (useZipChunks) => {
                         if (typeof (useZipChunks) !== 'boolean') {
-                            throw new ArgumentError(
-                                i18next.t('Value must be a boolean'),
-                            );
+                            throw new ArgumentError(i18next.t('Value must be a boolean'));
                         }
                         data.use_zip_chunks = useZipChunks;
                     },
@@ -1121,9 +1134,7 @@
                     get: () => data.use_cache,
                     set: (useCache) => {
                         if (typeof (useCache) !== 'boolean') {
-                            throw new ArgumentError(
-                                i18next.t('Value must be a boolean'),
-                            );
+                            throw new ArgumentError(i18next.t('Value must be a boolean'));
                         }
                         data.use_cache = useCache;
                     },
@@ -1148,8 +1159,7 @@
                         for (const label of labels) {
                             if (!(label instanceof Label)) {
                                 throw new ArgumentError(
-                                    i18next.t('Each array value must be an instance of Label. ')
-                                        + i18next.t('${typeof (label)} was found', {typeoflabel: `${typeof (label)}`}),
+                                    i18next.t('Each array value must be an instance of Label. ') + i18next.t('${typeof (label)} was found', {typeoflabel: `${typeof (label)}`}),
                                 );
                             }
                         }
@@ -1263,9 +1273,7 @@
                     get: () => data.start_frame,
                     set: (frame) => {
                         if (!Number.isInteger(frame) || frame < 0) {
-                            throw new ArgumentError(
-                                i18next.t('Value must be a not negative integer'),
-                            );
+                            throw new ArgumentError(i18next.t('Value must be a not negative integer'));
                         }
                         data.start_frame = frame;
                     },
@@ -1345,10 +1353,8 @@
                 import: Object.getPrototypeOf(this).annotations.import.bind(this),
                 export: Object.getPrototypeOf(this).annotations.export.bind(this),
                 statistics: Object.getPrototypeOf(this).annotations.statistics.bind(this),
-                hasUnsavedChanges: Object.getPrototypeOf(this)
-                    .annotations.hasUnsavedChanges.bind(this),
-                exportDataset: Object.getPrototypeOf(this)
-                    .annotations.exportDataset.bind(this),
+                hasUnsavedChanges: Object.getPrototypeOf(this).annotations.hasUnsavedChanges.bind(this),
+                exportDataset: Object.getPrototypeOf(this).annotations.exportDataset.bind(this),
             };
 
             this.actions = {
@@ -1400,8 +1406,7 @@
             * @throws {module:API.cvat.exceptions.PluginError}
         */
         async save(onUpdate = () => {}) {
-            const result = await PluginRegistry
-                .apiWrapper.call(this, Task.prototype.save, onUpdate);
+            const result = await PluginRegistry.apiWrapper.call(this, Task.prototype.save, onUpdate);
             return result;
         }
 
@@ -1416,8 +1421,7 @@
             * @throws {module:API.cvat.exceptions.PluginError}
         */
         async delete() {
-            const result = await PluginRegistry
-                .apiWrapper.call(this, Task.prototype.delete);
+            const result = await PluginRegistry.apiWrapper.call(this, Task.prototype.delete);
             return result;
         }
     }
@@ -1468,22 +1472,16 @@
             return this;
         }
 
-        throw new ArgumentError(
-            i18next.t('Can not save job without and id'),
-        );
+        throw new ArgumentError(i18next.t('Can not save job without and id'));
     };
 
     Job.prototype.frames.get.implementation = async function (frame, isPlaying, step) {
         if (!Number.isInteger(frame) || frame < 0) {
-            throw new ArgumentError(
-                i18next.t('Frame must be a positive integer. Got: "${frame}"', {frame: `${frame}`}),
-            );
+            throw new ArgumentError(i18next.t('Frame must be a positive integer. Got: "${frame}"', {frame: `${frame}`}));
         }
 
         if (frame < this.startFrame || frame > this.stopFrame) {
-            throw new ArgumentError(
-                i18next.t('The frame with number ${frame} is out of the job', {frame: `${frame}`}),
-            );
+            throw new ArgumentError(i18next.t('The frame with number ${frame} is out of the job', {frame: `${frame}`}));
         }
 
         const frameData = await getFrame(
@@ -1501,30 +1499,22 @@
     };
 
     Job.prototype.frames.ranges.implementation = async function () {
-        const rangesData = await getRanges(
-            this.task.id,
-        );
+        const rangesData = await getRanges(this.task.id);
         return rangesData;
     };
 
     // TODO: Check filter for annotations
     Job.prototype.annotations.get.implementation = async function (frame, allTracks, filters) {
         if (!Array.isArray(filters) || filters.some((filter) => typeof (filter) !== 'string')) {
-            throw new ArgumentError(
-                i18next.t('The filters argument must be an array of strings'),
-            );
+            throw new ArgumentError(i18next.t('The filters argument must be an array of strings'));
         }
 
         if (!Number.isInteger(frame)) {
-            throw new ArgumentError(
-                i18next.t('The frame argument must be an integer'),
-            );
+            throw new ArgumentError(i18next.t('The frame argument must be an integer'));
         }
 
         if (frame < this.startFrame || frame > this.stopFrame) {
-            throw new ArgumentError(
-                i18next.t('Frame ${frame} does not exist in the job', {frame: `${frame}`}),
-            );
+            throw new ArgumentError(i18next.t('Frame ${frame} does not exist in the job', {frame: `${frame}`}));
         }
 
         const annotationsData = await getAnnotations(this, frame, allTracks, filters);
@@ -1533,27 +1523,19 @@
 
     Job.prototype.annotations.search.implementation = function (filters, frameFrom, frameTo) {
         if (!Array.isArray(filters) || filters.some((filter) => typeof (filter) !== 'string')) {
-            throw new ArgumentError(
-                i18next.t('The filters argument must be an array of strings'),
-            );
+            throw new ArgumentError(i18next.t('The filters argument must be an array of strings'));
         }
 
         if (!Number.isInteger(frameFrom) || !Number.isInteger(frameTo)) {
-            throw new ArgumentError(
-                i18next.t('The start and end frames both must be an integer'),
-            );
+            throw new ArgumentError(i18next.t('The start and end frames both must be an integer'));
         }
 
         if (frameFrom < this.startFrame || frameFrom > this.stopFrame) {
-            throw new ArgumentError(
-                i18next.t('The start frame is out of the job'),
-            );
+            throw new ArgumentError(i18next.t('The start frame is out of the job'));
         }
 
         if (frameTo < this.startFrame || frameTo > this.stopFrame) {
-            throw new ArgumentError(
-                i18next.t('The stop frame is out of the job'),
-            );
+            throw new ArgumentError(i18next.t('The stop frame is out of the job'));
         }
 
         const result = searchAnnotations(this, filters, frameFrom, frameTo);
@@ -1562,21 +1544,15 @@
 
     Job.prototype.annotations.searchEmpty.implementation = function (frameFrom, frameTo) {
         if (!Number.isInteger(frameFrom) || !Number.isInteger(frameTo)) {
-            throw new ArgumentError(
-                i18next.t('The start and end frames both must be an integer'),
-            );
+            throw new ArgumentError(i18next.t('The start and end frames both must be an integer'));
         }
 
         if (frameFrom < this.startFrame || frameFrom > this.stopFrame) {
-            throw new ArgumentError(
-                i18next.t('The start frame is out of the job'),
-            );
+            throw new ArgumentError(i18next.t('The start frame is out of the job'));
         }
 
         if (frameTo < this.startFrame || frameTo > this.stopFrame) {
-            throw new ArgumentError(
-                i18next.t('The stop frame is out of the job'),
-            );
+            throw new ArgumentError(i18next.t('The stop frame is out of the job'));
         }
 
         const result = searchEmptyFrame(this, frameFrom, frameTo);
@@ -1701,7 +1677,6 @@
                 assignee: this.assignee ? this.assignee.id : null,
                 name: this.name,
                 bug_tracker: this.bugTracker,
-                z_order: this.zOrder,
                 labels: [...this.labels.map((el) => el.toJSON())],
             };
 
@@ -1712,7 +1687,6 @@
         const taskSpec = {
             name: this.name,
             labels: this.labels.map((el) => el.toJSON()),
-            z_order: Boolean(this.zOrder),
         };
 
         if (typeof (this.bugTracker) !== 'undefined') {
@@ -1758,15 +1732,11 @@
 
     Task.prototype.frames.get.implementation = async function (frame, isPlaying, step) {
         if (!Number.isInteger(frame) || frame < 0) {
-            throw new ArgumentError(
-                i18next.t('Frame must be a positive integer. Got: "${frame}"', {frame: `${frame}`}),
-            );
+            throw new ArgumentError(i18next.t('Frame must be a positive integer. Got: "${frame}"', {frame: `${frame}`}));
         }
 
         if (frame >= this.size) {
-            throw new ArgumentError(
-                i18next.t('The frame with number ${frame} is out of the task', {frame: `${frame}`}),
-            );
+            throw new ArgumentError(i18next.t('The frame with number ${frame} is out of the task', {frame: `${frame}`}));
         }
 
         const result = await getFrame(
@@ -1789,9 +1759,7 @@
     };
 
     Task.prototype.frames.ranges.implementation = async function () {
-        const rangesData = await getRanges(
-            this.id,
-        );
+        const rangesData = await getRanges(this.id);
         return rangesData;
     };
 
@@ -1803,21 +1771,15 @@
     // TODO: Check filter for annotations
     Task.prototype.annotations.get.implementation = async function (frame, allTracks, filters) {
         if (!Array.isArray(filters) || filters.some((filter) => typeof (filter) !== 'string')) {
-            throw new ArgumentError(
-                i18next.t('The filters argument must be an array of strings'),
-            );
+            throw new ArgumentError(i18next.t('The filters argument must be an array of strings'));
         }
 
         if (!Number.isInteger(frame) || frame < 0) {
-            throw new ArgumentError(
-                i18next.t('Frame must be a positive integer. Got: "${frame}"', {frame: `${frame}`}),
-            );
+            throw new ArgumentError(i18next.t('Frame must be a positive integer. Got: "${frame}"', {frame: `${frame}`}));
         }
 
         if (frame >= this.size) {
-            throw new ArgumentError(
-                i18next.t('Frame ${frame} does not exist in the task', {frame: `${frame}`}),
-            );
+            throw new ArgumentError(i18next.t('Frame ${frame} does not exist in the task', {frame: `${frame}`}));
         }
 
         const result = await getAnnotations(this, frame, allTracks, filters);
@@ -1826,27 +1788,19 @@
 
     Task.prototype.annotations.search.implementation = function (filters, frameFrom, frameTo) {
         if (!Array.isArray(filters) || filters.some((filter) => typeof (filter) !== 'string')) {
-            throw new ArgumentError(
-                i18next.t('The filters argument must be an array of strings'),
-            );
+            throw new ArgumentError(i18next.t('The filters argument must be an array of strings'));
         }
 
         if (!Number.isInteger(frameFrom) || !Number.isInteger(frameTo)) {
-            throw new ArgumentError(
-                i18next.t('The start and end frames both must be an integer'),
-            );
+            throw new ArgumentError(i18next.t('The start and end frames both must be an integer'));
         }
 
         if (frameFrom < 0 || frameFrom >= this.size) {
-            throw new ArgumentError(
-                i18next.t('The start frame is out of the task'),
-            );
+            throw new ArgumentError(i18next.t('The start frame is out of the task'));
         }
 
         if (frameTo < 0 || frameTo >= this.size) {
-            throw new ArgumentError(
-                i18next.t('The stop frame is out of the task'),
-            );
+            throw new ArgumentError(i18next.t('The stop frame is out of the task'));
         }
 
         const result = searchAnnotations(this, filters, frameFrom, frameTo);
@@ -1855,21 +1809,15 @@
 
     Task.prototype.annotations.searchEmpty.implementation = function (frameFrom, frameTo) {
         if (!Number.isInteger(frameFrom) || !Number.isInteger(frameTo)) {
-            throw new ArgumentError(
-                i18next.t('The start and end frames both must be an integer'),
-            );
+            throw new ArgumentError(i18next.t('The start and end frames both must be an integer'));
         }
 
         if (frameFrom < 0 || frameFrom >= this.size) {
-            throw new ArgumentError(
-                i18next.t('The start frame is out of the task'),
-            );
+            throw new ArgumentError(i18next.t('The start frame is out of the task'));
         }
 
         if (frameTo < 0 || frameTo >= this.size) {
-            throw new ArgumentError(
-                i18next.t('The stop frame is out of the task'),
-            );
+            throw new ArgumentError(i18next.t('The stop frame is out of the task'));
         }
 
         const result = searchEmptyFrame(this, frameFrom, frameTo);

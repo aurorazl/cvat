@@ -59,10 +59,7 @@ class ChangePasswordFormComponent extends React.PureComponent<ChangePasswordForm
 
     private handleSubmit = (e: React.FormEvent): void => {
         e.preventDefault();
-        const {
-            form,
-            onSubmit,
-        } = this.props;
+        const { form, onSubmit } = this.props;
 
         form.validateFields((error, values): void => {
             if (!error) {
@@ -82,15 +79,19 @@ class ChangePasswordFormComponent extends React.PureComponent<ChangePasswordForm
         return (
             <Form.Item hasFeedback>
                 {form.getFieldDecorator('oldPassword', {
-                    rules: [{
-                        required: true,
-                        message: t('Please input your current password!'),
-                    }],
-                })(<Input.Password
-                    autoComplete='new-password'
-                    prefix={<Icon type='lock' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
-                    placeholder={t('Current password')}
-                />)}
+                    rules: [
+                        {
+                            required: true,
+                            message: t('Please input your current password!'),
+                        }
+                    ],
+                })(
+                    <Input.Password
+                        autoComplete='new-password'
+                        prefix={<Icon type='lock' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
+                        placeholder={t('Current password')}
+                    />,
+                )}
             </Form.Item>
         );
     }
@@ -101,17 +102,22 @@ class ChangePasswordFormComponent extends React.PureComponent<ChangePasswordForm
         return (
             <Form.Item hasFeedback>
                 {form.getFieldDecorator('newPassword1', {
-                    rules: [{
-                        required: true,
-                        message: t('Please input new password!'),
-                    }, {
-                        validator: this.validatePassword,
-                    }],
-                })(<Input.Password
-                    autoComplete='new-password'
-                    prefix={<Icon type='lock' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
-                    placeholder={t('New password')}
-                />)}
+                    rules: [
+                        {
+                            required: true,
+                            message: t('Please input new password!'),
+                        }, 
+                        {
+                            validator: this.validatePassword,
+                        },
+                    ],
+                })(
+                    <Input.Password
+                        autoComplete='new-password'
+                        prefix={<Icon type='lock' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
+                        placeholder={t('New password')}
+                    />,
+                )}
             </Form.Item>
         );
     }
@@ -122,17 +128,22 @@ class ChangePasswordFormComponent extends React.PureComponent<ChangePasswordForm
         return (
             <Form.Item hasFeedback>
                 {form.getFieldDecorator('newPassword2', {
-                    rules: [{
-                        required: true,
-                        message: t('Please confirm your new password!'),
-                    }, {
-                        validator: this.validateConfirmation,
-                    }],
-                })(<Input.Password
-                    autoComplete='new-password'
-                    prefix={<Icon type='lock' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
-                    placeholder={t('Confirm new password')}
-                />)}
+                    rules: [
+                        {
+                            required: true,
+                            message: t('Please confirm your new password!'),
+                        }, 
+                        {
+                            validator: this.validateConfirmation,
+                        },
+                    ],
+                })(
+                    <Input.Password
+                        autoComplete='new-password'
+                        prefix={<Icon type='lock' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
+                        placeholder={t('Confirm new password')}
+                    />,
+                )}
             </Form.Item>
         );
     }
@@ -141,10 +152,7 @@ class ChangePasswordFormComponent extends React.PureComponent<ChangePasswordForm
         const { fetching, t } = this.props;
 
         return (
-            <Form
-                onSubmit={this.handleSubmit}
-                className='change-password-form'
-            >
+            <Form onSubmit={this.handleSubmit} className='change-password-form'>
                 {this.renderOldPasswordField()}
                 {this.renderNewPasswordField()}
                 {this.renderNewPasswordConfirmationField()}

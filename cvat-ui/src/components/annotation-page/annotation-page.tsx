@@ -28,14 +28,7 @@ interface Props {
 
 export default function AnnotationPageComponent(props: Props): JSX.Element {
     const { t } = useTranslation();
-    const {
-        job,
-        fetching,
-        getJob,
-        closeJob,
-        saveLogs,
-        workspace,
-    } = props;
+    const { job, fetching, getJob, closeJob, saveLogs, workspace } = props;
 
     const history = useHistory();
     useEffect(() => {
@@ -65,7 +58,7 @@ export default function AnnotationPageComponent(props: Props): JSX.Element {
         return <Spin size='large' className='cvat-spinner' />;
     }
 
-    if (typeof (job) === 'undefined') {
+    if (typeof job === 'undefined') {
         return (
             <Result
                 className='cvat-not-found'
@@ -81,17 +74,17 @@ export default function AnnotationPageComponent(props: Props): JSX.Element {
             <Layout.Header className='cvat-annotation-header'>
                 <AnnotationTopBarContainer />
             </Layout.Header>
-            { workspace === Workspace.STANDARD && (
+            {workspace === Workspace.STANDARD && (
                 <Layout.Content style={{ height: '100%' }}>
                     <StandardWorkspaceComponent />
                 </Layout.Content>
             )}
-            { workspace === Workspace.ATTRIBUTE_ANNOTATION && (
+            {workspace === Workspace.ATTRIBUTE_ANNOTATION && (
                 <Layout.Content style={{ height: '100%' }}>
                     <AttributeAnnotationWorkspace />
                 </Layout.Content>
             )}
-            { workspace === Workspace.TAG_ANNOTATION && (
+            {workspace === Workspace.TAG_ANNOTATION && (
                 <Layout.Content style={{ height: '100%' }}>
                     <TagAnnotationWorkspace />
                 </Layout.Content>

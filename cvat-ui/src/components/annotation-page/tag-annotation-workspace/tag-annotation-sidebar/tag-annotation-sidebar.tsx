@@ -51,25 +51,13 @@ function mapStateToProps(state: CombinedState): StateToProps {
     const {
         annotation: {
             player: {
-                frame: {
-                    number: frameNumber,
-                },
+                frame: { number: frameNumber },
             },
-            annotations: {
-                states,
-            },
-            job: {
-                instance: jobInstance,
-                labels,
-            },
-            canvas: {
-                instance: canvasInstance,
-            },
+            annotations: { states },
+            job: { instance: jobInstance, labels },
+            canvas: { instance: canvasInstance },
         },
-        shortcuts: {
-            keyMap,
-            normalizedKeyMap,
-        },
+        shortcuts: { keyMap, normalizedKeyMap },
     } = state;
 
     return {
@@ -136,8 +124,10 @@ function TagAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Elemen
 
     useEffect(() => {
         const listener = (event: Event): void => {
-            if ((event as TransitionEvent).propertyName === 'width'
-                    && ((event.target as any).classList as DOMTokenList).contains('cvat-tag-annotation-sidebar')) {
+            if (
+                (event as TransitionEvent).propertyName === 'width' &&
+                ((event.target as any).classList as DOMTokenList).contains('cvat-tag-annotation-sidebar')
+            ) {
                 canvasInstance.fitCanvas();
                 canvasInstance.fit();
             }
@@ -153,9 +143,7 @@ function TagAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Elemen
     }, []);
 
     useEffect(() => {
-        setFrameTags(states.filter(
-            (objectState: any): boolean => objectState.objectType === ObjectType.TAG,
-        ));
+        setFrameTags(states.filter((objectState: any): boolean => objectState.objectType === ObjectType.TAG));
     }, [states]);
 
     const siderProps: SiderProps = {
@@ -221,28 +209,21 @@ function TagAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Elemen
                         ant-layout-sider-zero-width-trigger-left`}
                     onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
                 >
-                    {sidebarCollapsed ? <Icon type='menu-fold' title={t('Show')} />
-                        : <Icon type='menu-unfold' title={t('Hide')} />}
+                    {sidebarCollapsed ? (
+                        <Icon type='menu-fold' title={t('Show')} />
+                    ) : (
+                        <Icon type='menu-unfold' title={t('Hide')} />
+                    )}
                 </span>
                 <Row type='flex' justify='start' className='cvat-tag-annotation-sidebar-label-select'>
                     <Col>
                         <Text strong>{t('Tag label')}</Text>
-                        <Select
-                            value={`${selectedLabelID}`}
-                            onChange={onChangeLabel}
-                            size='default'
-
-                        >
-                            {
-                                labels.map((label: any) => (
-                                    <Select.Option
-                                        key={label.id}
-                                        value={`${label.id}`}
-                                    >
-                                        {label.name}
-                                    </Select.Option>
-                                ))
-                            }
+                        <Select value={`${selectedLabelID}`} onChange={onChangeLabel} size='default'>
+                            {labels.map((label: any) => (
+                                <Select.Option key={label.id} value={`${label.id}`}>
+                                    {label.name}
+                                </Select.Option>
+                            ))}
                         </Select>
                     </Col>
                 </Row>
@@ -272,7 +253,9 @@ function TagAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Elemen
                         {frameTags.map((tag: any) => (
                             <Tag
                                 color={tag.label.color}
-                                onClose={() => { onRemoveState(tag); }}
+                                onClose={() => {
+                                    onRemoveState(tag);
+                                }}
                                 key={tag.clientID}
                                 closable
                             >
@@ -308,7 +291,4 @@ function TagAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Elemen
     );
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(TagAnnotationSidebar);
+export default connect(mapStateToProps, mapDispatchToProps)(TagAnnotationSidebar);

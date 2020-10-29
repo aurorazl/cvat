@@ -18,9 +18,7 @@ export default function DeployedModelsListComponent(props: Props): JSX.Element {
     const { t } = useTranslation();
     const { models } = props;
 
-    const items = models.map((model): JSX.Element => (
-        <DeployedModelItem key={model.id} model={model} />
-    ));
+    const items = models.map((model): JSX.Element => <DeployedModelItem key={model.id} model={model} />);
 
     return (
         <>
@@ -43,7 +41,7 @@ export default function DeployedModelsListComponent(props: Props): JSX.Element {
                             <Text strong>{t('Labels')}</Text>
                         </Col>
                     </Row>
-                    { items }
+                    {items}
                 </Col>
             </Row>
         </>

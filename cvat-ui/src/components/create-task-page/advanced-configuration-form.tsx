@@ -17,7 +17,6 @@ import i18n from 'i18next';
 
 export interface AdvancedConfiguration {
     bugTracker?: string;
-    zOrder: boolean;
     imageQuality?: number;
     overlapSize?: number;
     segmentSize?: number;
@@ -73,9 +72,7 @@ function isIntegerRange(min: number, max: number, _: any, value: any, callback: 
     const intValue = +value;
     if (Number.isNaN(intValue) || !Number.isInteger(intValue) || intValue < min || intValue > max) {
         // eslint-disable-next-line
-        callback(
-            i18n.t('Value must be an integer [${min}, ${max}]').replace('${min}', `${min}`).replace('${max}', `${max}`),
-        );
+        callback(i18n.t('Value must be an integer [${min}, ${max}]').replace('${min}', `${min}`).replace('${max}', `${max}`));
     }
 
     callback();
@@ -119,22 +116,6 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     public resetFields(): void {
         const { form } = this.props;
         form.resetFields();
-    }
-
-    private renderZOrder(): JSX.Element {
-        const { form, t } = this.props;
-        return (
-            <Form.Item help={t('Enables order for shapes. Useful for segmentation tasks')}>
-                {form.getFieldDecorator('zOrder', {
-                    initialValue: false,
-                    valuePropName: 'checked',
-                })(
-                    <Checkbox>
-                        <Text className='cvat-text-color'>{t('Z-order')}</Text>
-                    </Checkbox>,
-                )}
-            </Form.Item>
-        );
     }
 
     private renderImageQuality(): JSX.Element {
@@ -413,10 +394,6 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
 
         return (
             <Form>
-                <Row>
-                    <Col>{this.renderZOrder()}</Col>
-                </Row>
-
                 <Row>
                     <Col>{this.renderUzeZipChunks()}</Col>
                 </Row>

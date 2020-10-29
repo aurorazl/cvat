@@ -86,8 +86,7 @@ class RegisterFormComponent extends React.PureComponent<RegisterFormProps> {
         const { userAgreements } = this.props;
         let isValid = true;
         for (const userAgreement of userAgreements) {
-            if (agreement.field === userAgreement.name
-                && userAgreement.required && !value) {
+            if (agreement.field === userAgreement.name && userAgreement.required && !value) {
                 isValid = false;
                 callback(`You must accept the ${userAgreement.displayText} to continue!`);
                 break;
@@ -100,11 +99,7 @@ class RegisterFormComponent extends React.PureComponent<RegisterFormProps> {
 
     private handleSubmit = (e: React.FormEvent): void => {
         e.preventDefault();
-        const {
-            form,
-            onSubmit,
-            userAgreements,
-        } = this.props;
+        const { form, onSubmit, userAgreements } = this.props;
 
         form.validateFields((error, values): void => {
             if (!error) {
@@ -132,11 +127,13 @@ class RegisterFormComponent extends React.PureComponent<RegisterFormProps> {
         return (
             <Form.Item hasFeedback>
                 {form.getFieldDecorator('firstName', {
-                    rules: [{
-                        required: true,
-                        message: t('Please specify a first name'),
-                        pattern: patterns.validateName.pattern,
-                    }],
+                    rules: [
+                        {
+                            required: true,
+                            message: t('Please specify a first name'),
+                            pattern: patterns.validateName.pattern,
+                        }
+                    ],
                 })(
                     <Input
                         prefix={<Icon type='user-add' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
@@ -153,11 +150,13 @@ class RegisterFormComponent extends React.PureComponent<RegisterFormProps> {
         return (
             <Form.Item hasFeedback>
                 {form.getFieldDecorator('lastName', {
-                    rules: [{
-                        required: true,
-                        message: t('Please specify a last name'),
-                        pattern: patterns.validateName.pattern,
-                    }],
+                    rules: [
+                        {
+                            required: true,
+                            message: t('Please specify a last name'),
+                            pattern: patterns.validateName.pattern,
+                        }
+                    ],
                 })(
                     <Input
                         prefix={<Icon type='user-add' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
@@ -174,12 +173,15 @@ class RegisterFormComponent extends React.PureComponent<RegisterFormProps> {
         return (
             <Form.Item hasFeedback>
                 {form.getFieldDecorator('username', {
-                    rules: [{
-                        required: true,
-                        message: t('Please specify a username'),
-                    }, {
-                        validator: this.validateUsername,
-                    }],
+                    rules: [
+                        {
+                            required: true,
+                            message: t('Please specify a username'),
+                        },
+                        {
+                            validator: this.validateUsername,
+                        }
+                    ],
                 })(
                     <Input
                         prefix={<Icon type='user-add' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
@@ -196,13 +198,16 @@ class RegisterFormComponent extends React.PureComponent<RegisterFormProps> {
         return (
             <Form.Item hasFeedback>
                 {form.getFieldDecorator('email', {
-                    rules: [{
-                        type: 'email',
-                        message: t('The input is not valid E-mail!'),
-                    }, {
-                        required: true,
-                        message: t('Please specify an email address'),
-                    }],
+                    rules: [
+                        {
+                            type: 'email',
+                            message: t('The input is not valid E-mail!'),
+                        },
+                        {
+                            required: true,
+                            message: t('Please specify an email address'),
+                        }
+                    ],
                 })(
                     <Input
                         autoComplete='email'
@@ -220,17 +225,22 @@ class RegisterFormComponent extends React.PureComponent<RegisterFormProps> {
         return (
             <Form.Item hasFeedback>
                 {form.getFieldDecorator('password1', {
-                    rules: [{
-                        required: true,
-                        message: t('Please input your password!'),
-                    }, {
-                        validator: this.validatePassword,
-                    }],
-                })(<Input.Password
-                    autoComplete='new-password'
-                    prefix={<Icon type='lock' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
-                    placeholder={t('Password')}
-                />)}
+                    rules: [
+                        {
+                            required: true,
+                            message: t('Please input your password!'),
+                        },
+                        {
+                            validator: this.validatePassword,
+                        },
+                    ],
+                })(
+                    <Input.Password
+                        autoComplete='new-password'
+                        prefix={<Icon type='lock' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
+                        placeholder={t('Password')}
+                    />,
+                )}
             </Form.Item>
         );
     }
@@ -241,17 +251,22 @@ class RegisterFormComponent extends React.PureComponent<RegisterFormProps> {
         return (
             <Form.Item hasFeedback>
                 {form.getFieldDecorator('password2', {
-                    rules: [{
-                        required: true,
-                        message: t('Please confirm your password!'),
-                    }, {
-                        validator: this.validateConfirmation,
-                    }],
-                })(<Input.Password
-                    autoComplete='new-password'
-                    prefix={<Icon type='lock' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
-                    placeholder={t('Confirm password')}
-                />)}
+                    rules: [
+                        {
+                            required: true,
+                            message: t('Please confirm your password!'),
+                        },
+                        {
+                            validator: this.validateConfirmation,
+                        },
+                    ],
+                })(
+                    <Input.Password
+                        autoComplete='new-password'
+                        prefix={<Icon type='lock' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
+                        placeholder={t('Confirm password')}
+                    />,
+                )}
             </Form.Item>
         );
     }
@@ -266,20 +281,19 @@ class RegisterFormComponent extends React.PureComponent<RegisterFormProps> {
                         {form.getFieldDecorator(userAgreement.name, {
                             initialValue: false,
                             valuePropName: 'checked',
-                            rules: [{
-                                required: true,
-                                message: t('You must accept to continue!'),
-                            }, {
-                                validator: this.validateAgrement,
-                            }],
+                            rules: [
+                                {
+                                    required: true,
+                                    message: t('You must accept to continue!'),
+                                },
+                                {
+                                    validator: this.validateAgrement,
+                                }
+                            ],
                         })(
                             <Checkbox>
                                 {t('I read and accept the')}
-                                <a
-                                    rel='noopener noreferrer'
-                                    target='_blank'
-                                    href={userAgreement.url}
-                                >
+                                <a rel='noopener noreferrer' target='_blank' href={userAgreement.url}>
                                     {` ${userAgreement.displayText}`}
                                 </a>
                             </Checkbox>,
@@ -299,12 +313,8 @@ class RegisterFormComponent extends React.PureComponent<RegisterFormProps> {
         return (
             <Form onSubmit={this.handleSubmit} className='login-form'>
                 <Row gutter={8}>
-                    <Col span={12}>
-                        {this.renderFirstNameField()}
-                    </Col>
-                    <Col span={12}>
-                        {this.renderLastNameField()}
-                    </Col>
+                    <Col span={12}>{this.renderFirstNameField()}</Col>
+                    <Col span={12}>{this.renderLastNameField()}</Col>
                 </Row>
                 {this.renderUsernameField()}
                 {this.renderEmailField()}

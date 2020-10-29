@@ -79,19 +79,10 @@ function mapStateToProps(state: CombinedState): StateToProps {
             showChangePasswordDialog: changePasswordDialogShown,
             allowChangePassword: renderChangePasswordItem,
         },
-        plugins: {
-            list,
-        },
-        about: {
-            server,
-            packageVersion,
-        },
-        shortcuts: {
-            normalizedKeyMap,
-        },
-        settings: {
-            showDialog: settingsDialogShown,
-        },
+        plugins: { list },
+        about: { server, packageVersion },
+        shortcuts: { normalizedKeyMap },
+        settings: { showDialog: settingsDialogShown },
         lang,
     } = state;
 
@@ -131,12 +122,8 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
     return {
         onLogout: (): void => dispatch(logoutAsync()),
         switchSettingsDialog: (show: boolean): void => dispatch(switchSettingsDialogAction(show)),
-        switchChangePasswordDialog: (show: boolean): void => (
-            dispatch(authActions.switchChangePasswordDialog(show))
-        ),
-        changeLang: (lang: string): void => (
-            dispatch(changeLang(lang))
-        ),
+        switchChangePasswordDialog: (show: boolean): void => dispatch(authActions.switchChangePasswordDialog(show)),
+        changeLang: (lang: string): void => (dispatch(changeLang(lang))),
     };
 }
 
@@ -161,13 +148,7 @@ function HeaderContainer(props: Props): JSX.Element {
         lang,
     } = props;
 
-    const {
-        CHANGELOG_URL,
-        LICENSE_URL,
-        GITTER_URL,
-        FORUM_URL,
-        GITHUB_URL,
-    } = consts;
+    const { CHANGELOG_URL, LICENSE_URL, GITTER_URL, FORUM_URL, GITHUB_URL } = consts;
 
     const history = useHistory();
 
@@ -176,46 +157,44 @@ function HeaderContainer(props: Props): JSX.Element {
             title: `${tool.name}`,
             content: (
                 <div>
+                    <p>{`${tool.description}`}</p>
                     <p>
-                        {`${tool.description}`}
+                        <Text strong>{t('Server version:')}</Text>
+                        <Text type='secondary'>{` ${tool.server.version}`}</Text>
                     </p>
                     <p>
-                        <Text strong>
-                        {t('Server version:')}
-                        </Text>
-                        <Text type='secondary'>
-                            {` ${tool.server.version}`}
-                        </Text>
+                        <Text strong>{t('Core version:')}</Text>
+                        <Text type='secondary'>{` ${tool.core.version}`}</Text>
                     </p>
                     <p>
-                        <Text strong>
-                        {t('Core version:')}
-                        </Text>
-                        <Text type='secondary'>
-                            {` ${tool.core.version}`}
-                        </Text>
+                        <Text strong>{t('Canvas version:')}</Text>
+                        <Text type='secondary'>{` ${tool.canvas.version}`}</Text>
                     </p>
                     <p>
-                        <Text strong>
-                        {t('Canvas version:')}
-                        </Text>
-                        <Text type='secondary'>
-                            {` ${tool.canvas.version}`}
-                        </Text>
-                    </p>
-                    <p>
-                        <Text strong>
-                        {t('UI version:')}
-                        </Text>
-                        <Text type='secondary'>
-                            {` ${tool.ui.version}`}
-                        </Text>
+                        <Text strong>{t('UI version:')}</Text>
+                        <Text type='secondary'>{` ${tool.ui.version}`}</Text>
                     </p>
                     <Row type='flex' justify='space-around'>
-                        <Col><a href={CHANGELOG_URL} target='_blank' rel='noopener noreferrer'>{t('What\'s new?')}</a></Col>
-                        <Col><a href={LICENSE_URL} target='_blank' rel='noopener noreferrer'>{t('License')}</a></Col>
-                        <Col><a href={GITTER_URL} target='_blank' rel='noopener noreferrer'>{t('Need help?')}</a></Col>
-                        <Col><a href={FORUM_URL} target='_blank' rel='noopener noreferrer'>{t('Forum on Intel Developer Zone')}</a></Col>
+                        <Col>
+                            <a href={CHANGELOG_URL} target='_blank' rel='noopener noreferrer'>
+                                    {t('What\'s new?')}
+                            </a>
+                        </Col>
+                        <Col>
+                            <a href={LICENSE_URL} target='_blank' rel='noopener noreferrer'>
+                                    {t('License')}
+                            </a>
+                        </Col>
+                        <Col>
+                            <a href={GITTER_URL} target='_blank' rel='noopener noreferrer'>
+                                    {t('Need help?')}
+                            </a>
+                        </Col>
+                        <Col>
+                            <a href={FORUM_URL} target='_blank' rel='noopener noreferrer'>
+                                    {t('Forum on Intel Developer Zone')}
+                            </a>
+                        </Col>
                     </Row>
                 </div>
             ),
@@ -243,10 +222,7 @@ function HeaderContainer(props: Props): JSX.Element {
                 </Menu.Item>
             )}
 
-            <Menu.Item
-                title={t('Press ${switchSettingsShortcut} to switch').replace('${switchSettingsShortcut}', `${switchSettingsShortcut}`)}
-                onClick={() => switchSettingsDialog(true)}
-            >
+            <Menu.Item title={t('Press ${switchSettingsShortcut} to switch').replace('${switchSettingsShortcut}', `${switchSettingsShortcut}`)} onClick={() => switchSettingsDialog(true)}>
                 <Icon type='setting' />
                 {t('Settings')}
             </Menu.Item>
@@ -255,23 +231,16 @@ function HeaderContainer(props: Props): JSX.Element {
                 {t('About')}
             </Menu.Item>
             {renderChangePasswordItem && (
-                <Menu.Item
-                    onClick={(): void => switchChangePasswordDialog(true)}
-                    disabled={changePasswordFetching}
-                >
+                <Menu.Item onClick={(): void => switchChangePasswordDialog(true)} disabled={changePasswordFetching}>
                     {changePasswordFetching ? <Icon type='loading' /> : <Icon type='edit' />}
                     {t('Change password')}
                 </Menu.Item>
             )}
 
-            <Menu.Item
-                onClick={onLogout}
-                disabled={logoutFetching}
-            >
+            <Menu.Item onClick={onLogout} disabled={logoutFetching}>
                 {logoutFetching ? <Icon type='loading' /> : <Icon type='logout' />}
                 {t('Logout')}
             </Menu.Item>
-
         </Menu>
     );
 
@@ -285,12 +254,10 @@ function HeaderContainer(props: Props): JSX.Element {
                     type='link'
                     value='tasks'
                     href='/tasks?page=1'
-                    onClick={
-                        (event: React.MouseEvent): void => {
-                            event.preventDefault();
-                            history.push('/tasks?page=1');
-                        }
-                    }
+                    onClick={(event: React.MouseEvent): void => {
+                        event.preventDefault();
+                        history.push('/tasks?page=1');
+                    }}
                 >
                     {t('Tasks')}
                 </Button>
@@ -301,12 +268,10 @@ function HeaderContainer(props: Props): JSX.Element {
                         type='link'
                         value='models'
                         href='/models'
-                        onClick={
-                            (event: React.MouseEvent): void => {
-                                event.preventDefault();
-                                history.push('/models');
-                            }
-                        }
+                        onClick={(event: React.MouseEvent): void => {
+                            event.preventDefault();
+                            history.push('/models');
+                        }}
                     >
                         {t('Models')}
                     </Button>
@@ -316,14 +281,12 @@ function HeaderContainer(props: Props): JSX.Element {
                         className='cvat-header-button'
                         type='link'
                         href={`${tool.server.host}/analytics/app/kibana`}
-                        onClick={
-                            (event: React.MouseEvent): void => {
-                                event.preventDefault();
-                                // false positive
-                                // eslint-disable-next-line
-                                window.open(`${tool.server.host}/analytics/app/kibana`, '_blank');
-                            }
-                        }
+                        onClick={(event: React.MouseEvent): void => {
+                            event.preventDefault();
+                            // false positive
+                            // eslint-disable-next-line
+                            window.open(`${tool.server.host}/analytics/app/kibana`, '_blank');
+                        }}
                     >
                         {t('Analytics')}
                     </Button>
@@ -334,14 +297,12 @@ function HeaderContainer(props: Props): JSX.Element {
                     className='cvat-header-button'
                     type='link'
                     href={GITHUB_URL}
-                    onClick={
-                        (event: React.MouseEvent): void => {
-                            event.preventDefault();
-                            // false positive
-                            // eslint-disable-next-line security/detect-non-literal-fs-filename
-                            window.open(GITHUB_URL, '_blank');
-                        }
-                    }
+                    onClick={(event: React.MouseEvent): void => {
+                        event.preventDefault();
+                        // false positive
+                        // eslint-disable-next-line security/detect-non-literal-fs-filename
+                        window.open(GITHUB_URL, '_blank');
+                    }}
                 >
                     <Icon type='github' />
                     <Text className='cvat-text-color'>GitHub</Text>
@@ -365,14 +326,12 @@ function HeaderContainer(props: Props): JSX.Element {
                     className='cvat-header-button'
                     type='link'
                     href={`${tool.server.host}/documentation/user_guide.html`}
-                    onClick={
-                        (event: React.MouseEvent): void => {
-                            event.preventDefault();
-                            // false positive
-                            // eslint-disable-next-line
-                            window.open(`${tool.server.host}/documentation/user_guide.html`, '_blank')
-                        }
-                    }
+                    onClick={(event: React.MouseEvent): void => {
+                        event.preventDefault();
+                        // false positive
+                        // eslint-disable-next-line
+                        window.open(`${tool.server.host}/documentation/user_guide.html`, '_blank');
+                    }}
                 >
                     <Icon type='question-circle' />
                     {t('Help')}
@@ -387,17 +346,8 @@ function HeaderContainer(props: Props): JSX.Element {
                     </span>
                 </Dropdown>
             </div>
-            <SettingsModal
-                visible={settingsDialogShown}
-                onClose={() => switchSettingsDialog(false)}
-            />
-            { renderChangePasswordItem
-                && (
-                    <ChangePasswordDialog
-                        onClose={() => switchChangePasswordDialog(false)}
-                    />
-                )}
-
+            <SettingsModal visible={settingsDialogShown} onClose={() => switchSettingsDialog(false)} />
+            {renderChangePasswordItem && <ChangePasswordDialog onClose={() => switchChangePasswordDialog(false)} />}
         </Layout.Header>
     );
 }
@@ -415,7 +365,4 @@ function propsAreTheSame(prevProps: Props, nextProps: Props): boolean {
     return equal;
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(React.memo(HeaderContainer, propsAreTheSame));
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(HeaderContainer, propsAreTheSame));

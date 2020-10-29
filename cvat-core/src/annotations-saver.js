@@ -1,11 +1,6 @@
-/*
-* Copyright (C) 2019 Intel Corporation
-* SPDX-License-Identifier: MIT
-*/
-
-/* global
-    require:false
-*/
+// Copyright (C) 2019-2020 Intel Corporation
+//
+// SPDX-License-Identifier: MIT
 
 (() => {
     const serverProxy = require('./server-proxy');
@@ -54,12 +49,7 @@
         }
 
         async _request(data, action) {
-            const result = await serverProxy.annotations.updateAnnotations(
-                this.sessionType,
-                this.id,
-                data,
-                action,
-            );
+            const result = await serverProxy.annotations.updateAnnotations(this.sessionType, this.id, data, action);
 
             return result;
         }
@@ -103,27 +93,37 @@
                 },
             };
 
-            const keys = ['id', 'label_id', 'group', 'frame',
-                'occluded', 'z_order', 'points', 'type', 'shapes',
-                'attributes', 'value', 'spec_id', 'source', 'outside'];
+            const keys = [
+                'id',
+                'label_id',
+                'group',
+                'frame',
+                'occluded',
+                'z_order',
+                'points',
+                'type',
+                'shapes',
+                'attributes',
+                'value',
+                'spec_id',
+                'source',
+                'outside',
+            ];
 
             // Find created and updated objects
             for (const type of Object.keys(exported)) {
                 for (const object of exported[type]) {
                     if (object.id in this.initialObjects[type]) {
                         const exportedHash = JSON.stringify(object, keys);
-                        const initialHash = JSON.stringify(
-                            this.initialObjects[type][object.id], keys,
-                        );
+                        const initialHash = JSON.stringify(this.initialObjects[type][object.id], keys);
                         if (exportedHash !== initialHash) {
                             splitted.updated[type].push(object);
                         }
-                    } else if (typeof (object.id) === 'undefined') {
+                    } else if (typeof object.id === 'undefined') {
                         splitted.created[type].push(object);
                     } else {
                         throw new ScriptingError(
-                            `Id of object is defined "${object.id}"`
-                            + 'but it absents in initial state',
+                            `Id of object is defined "${object.id}" but it absents in initial state`,
                         );
                     }
                 }
@@ -145,21 +145,17 @@
                 }
             }
 
-
             return splitted;
         }
 
         _updateCreatedObjects(saved, indexes) {
-            const savedLength = saved.tracks.length
-                + saved.shapes.length + saved.tags.length;
+            const savedLength = saved.tracks.length + saved.shapes.length + saved.tags.length;
 
-            const indexesLength = indexes.tracks.length
-                + indexes.shapes.length + indexes.tags.length;
+            const indexesLength = indexes.tracks.length + indexes.shapes.length + indexes.tags.length;
 
             if (indexesLength !== savedLength) {
                 throw new ScriptingError(
-                    'Number of indexes is differed by number of saved objects'
-                        + `${indexesLength} vs ${savedLength}`,
+                    `Number of indexes is differed by number of saved objects ${indexesLength} vs ${savedLength}`,
                 );
             }
 
@@ -181,7 +177,9 @@
             };
 
             // Remove them from the request body
-            exported.tracks.concat(exported.shapes).concat(exported.tags)
+            exported.tracks
+                .concat(exported.shapes)
+                .concat(exported.tags)
                 .map((value) => {
                     delete value.clientID;
                     return value;
@@ -215,11 +213,7 @@
                     }
                 }
             } else {
-                const {
-                    created,
-                    updated,
-                    deleted,
-                } = this._split(exported);
+                const { created, updated, deleted } = this._split(exported);
 
                 onUpdate(i18next.t('Created objects are being saved on the server'));
                 const indexes = this._receiveIndexes(created);

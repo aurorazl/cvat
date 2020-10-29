@@ -19,10 +19,7 @@ interface StateToProps {
 }
 
 interface DispatchToProps {
-    onChangePassword(
-        oldPassword: string,
-        newPassword1: string,
-        newPassword2: string): void;
+    onChangePassword(oldPassword: string, newPassword1: string, newPassword2: string): void;
 }
 
 interface ChangePasswordPageComponentProps {
@@ -40,21 +37,16 @@ function mapStateToProps(state: CombinedState): StateToProps {
 }
 
 function mapDispatchToProps(dispatch: any): DispatchToProps {
-    return ({
+    return {
         onChangePassword(oldPassword: string, newPassword1: string, newPassword2: string): void {
             dispatch(changePasswordAsync(oldPassword, newPassword1, newPassword2));
         },
-    });
+    };
 }
 
 function ChangePasswordComponent(props: ChangePasswordPageComponentProps): JSX.Element {
     const { t } = useTranslation();
-    const {
-        fetching,
-        onChangePassword,
-        visible,
-        onClose,
-    } = props;
+    const { fetching, onChangePassword, visible, onClose } = props;
 
     return (
         <Modal
@@ -80,7 +72,4 @@ function ChangePasswordComponent(props: ChangePasswordPageComponentProps): JSX.E
     );
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(ChangePasswordComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ChangePasswordComponent);

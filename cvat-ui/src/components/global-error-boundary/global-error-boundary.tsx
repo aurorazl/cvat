@@ -41,14 +41,9 @@ interface State {
 function mapStateToProps(state: CombinedState): StateToProps {
     const {
         annotation: {
-            job: {
-                instance: job,
-            },
+            job: { instance: job },
         },
-        about: {
-            server,
-            packageVersion,
-        },
+        about: { server, packageVersion },
     } = state;
 
     return {
@@ -107,15 +102,7 @@ class GlobalErrorBoundary extends React.PureComponent<Props, State> {
     }
 
     public render(): React.ReactNode {
-        const {
-            restore,
-            job,
-            serverVersion,
-            coreVersion,
-            canvasVersion,
-            uiVersion,
-            t,
-        } = this.props;
+        const { restore, job, serverVersion, coreVersion, canvasVersion, uiVersion, t } = this.props;
 
         const { hasError, error } = this.state;
 
@@ -144,7 +131,11 @@ class GlobalErrorBoundary extends React.PureComponent<Props, State> {
                                 <Collapse accordion>
                                     <Collapse.Panel header={t('Error message')} key='errorMessage'>
                                         <Text type='danger'>
-                                            <TextArea className='cvat-global-boundary-error-field' autoSize value={message} />
+                                            <TextArea
+                                                className='cvat-global-boundary-error-field'
+                                                autoSize
+                                                value={message}
+                                            />
                                         </Text>
                                     </Collapse.Panel>
                                 </Collapse>
@@ -157,7 +148,14 @@ class GlobalErrorBoundary extends React.PureComponent<Props, State> {
                                 <li>
                                     <Tooltip title='Copied!' trigger='click' mouseLeaveDelay={0}>
                                         {/* eslint-disable-next-line */}
-                                        <a onClick={() => {copy(message)}}> {t('Copy')} </a>
+                                        <a 
+                                            onClick={() => {
+                                                copy(message)
+                                            }}
+                                        > 
+                                            {' '}
+                                            {t('Copy')}{' '} 
+                                        </a>
                                     </Tooltip>
                                     {t('the error message to clipboard')}
                                 </li>
@@ -218,7 +216,4 @@ class GlobalErrorBoundary extends React.PureComponent<Props, State> {
     }
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(withTranslation()(GlobalErrorBoundary));
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation()(GlobalErrorBoundary));

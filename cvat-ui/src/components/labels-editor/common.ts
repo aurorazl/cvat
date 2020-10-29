@@ -27,7 +27,9 @@ function validateParsedAttribute(attr: Attribute): void {
     }
 
     if (!['number', 'undefined'].includes(typeof (attr.id))) {
-        throw new Error(i18n.t('Attribute: "${attr.name}". Type of attribute id must be a number or undefined. Got value ${attr.id}').replace('${attr.name}', `${attr.name}`).replace('${attr.id}', `${attr.id}`));
+        throw new Error(
+            i18n.t('Attribute: "${attr.name}". Type of attribute id must be a number or undefined. Got value ${attr.id}').replace('${attr.name}', `${attr.name}`).replace('${attr.id}', `${attr.id}`)
+        );
     }
 
     if (!['checkbox', 'number', 'text', 'radio', 'select'].includes((attr.input_type || '').toLowerCase())) {
@@ -35,17 +37,20 @@ function validateParsedAttribute(attr: Attribute): void {
     }
 
     if (typeof (attr.mutable) !== 'boolean') {
-        throw new Error(i18n.t('Attribute: "${attr.name}". Mutable flag must be a boolean value. Got value ${attr.mutable}').replace('${attr.name}', `${attr.name}`).replace('${attr.mutable}', `${attr.mutable}`));
+        throw new Error(
+            i18n.t('Attribute: "${attr.name}". Mutable flag must be a boolean value. Got value ${attr.mutable}').replace('${attr.name}', `${attr.name}`).replace('${attr.mutable}', `${attr.mutable}`)
+        );
     }
 
     if (!Array.isArray(attr.values)) {
-        throw new Error(i18n.t('Attribute: "${attr.name}". Attribute values must be an array. Got type ${typeof (attr.values)}').replace('${attr.name}', `${attr.name}`).replace('${attr.values}', `${attr.values}`));
+        throw new Error(
+            i18n.t('Attribute: "${attr.name}". Attribute values must be an array. Got type ${typeof (attr.values)}').replace('${attr.name}', `${attr.name}`).replace('${attr.values}', `${attr.values}`)
+        );
     }
 
     if (!attr.values.length) {
         throw new Error(i18n.t('Attribute: "${attr.name}". Attribute values array mustn\'t be empty').replace('${attr.name}', `${attr.name}`));
     }
-
 
     for (const value of attr.values) {
         if (typeof (value) !== 'string') {
@@ -60,7 +65,9 @@ export function validateParsedLabel(label: Label): void {
     }
 
     if (!['number', 'undefined'].includes(typeof (label.id))) {
-        throw new Error(i18n.t('Label "${label.name}". Type of label id must be only a number or undefined. Got value ${label.id}').replace('${label.name}', `${label.name}`).replace('${label.id}', `${label.id}`));
+        throw new Error(
+            i18n.t('Label "${label.name}". Type of label id must be only a number or undefined. Got value ${label.id}').replace('${label.name}', `${label.name}`).replace('${label.id}', `${label.id}`)
+        );
     }
 
     if (typeof (label.color) !== 'string') {
@@ -68,7 +75,9 @@ export function validateParsedLabel(label: Label): void {
     }
 
     if (!label.color.match(/^#[0-9a-f]{6}$|^$/)) {
-        throw new Error(i18n.t('Label "${label.name}". Type of label color must be only a valid color string. Got value ${label.color}').replace('${label.name}', `${label.name}`).replace('${label.color}', `${label.color}`));
+        throw new Error(
+            i18n.t('Label "${label.name}". Type of label color must be only a valid color string. Got value ${label.color}').replace('${label.name}', `${label.name}`).replace('${label.color}', `${label.color}`)
+        );
     }
 
     if (!Array.isArray(label.attributes)) {

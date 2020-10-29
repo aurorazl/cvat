@@ -17,18 +17,14 @@ interface Props {
 
 export default function ExportSubmenu(props: Props): JSX.Element {
     const { t } = useTranslation();
-    const {
-        menuKey,
-        exporters,
-        exportActivities,
-    } = props;
+    const { menuKey, exporters, exportActivities } = props;
 
     return (
         <Menu.SubMenu key={menuKey} title={t('Export as a dataset')}>
-            {
-                exporters
-                    .sort((a: any, b: any) => a.name.localeCompare(b.name))
-                    .map((exporter: any): JSX.Element => {
+            {exporters
+                .sort((a: any, b: any) => a.name.localeCompare(b.name))
+                .map(
+                    (exporter: any): JSX.Element => {
                         const pending = (exportActivities || []).includes(exporter.name);
                         const disabled = !exporter.enabled || pending;
                         return (
@@ -42,8 +38,8 @@ export default function ExportSubmenu(props: Props): JSX.Element {
                                 {pending && <Icon style={{ marginLeft: 10 }} type='loading' />}
                             </Menu.Item>
                         );
-                    })
-            }
+                    },
+            )}
         </Menu.SubMenu>
     );
 }

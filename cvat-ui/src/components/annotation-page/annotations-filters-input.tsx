@@ -35,14 +35,9 @@ interface DispatchToProps {
 function mapStateToProps(state: CombinedState): StateToProps {
     const {
         annotation: {
-            annotations: {
-                filters: annotationsFilters,
-                filtersHistory: annotationsFiltersHistory,
-            },
+            annotations: { filters: annotationsFilters, filtersHistory: annotationsFiltersHistory },
         },
-        shortcuts: {
-            normalizedKeyMap,
-        },
+        shortcuts: { normalizedKeyMap },
     } = state;
 
     return {
@@ -56,13 +51,12 @@ function mapStateToProps(state: CombinedState): StateToProps {
 function mapDispatchToProps(dispatch: any): DispatchToProps {
     return {
         changeAnnotationsFilters(value: SelectValue) {
-            if (typeof (value) === 'string') {
+            if (typeof value === 'string') {
                 dispatch(changeAnnotationsFiltersAction([value]));
                 dispatch(fetchAnnotationsAsync());
-            } else if (Array.isArray(value)
-                && value.every((element: string | number | LabeledValue): boolean => (
-                    typeof (element) === 'string'
-                ))
+            } else if (
+                Array.isArray(value) &&
+                value.every((element: string | number | LabeledValue): boolean => typeof element === 'string')
             ) {
                 dispatch(changeAnnotationsFiltersAction(value as string[]));
                 dispatch(fetchAnnotationsAsync());
@@ -71,10 +65,7 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
     };
 }
 
-function filtersHelpModalContent(
-    searchForwardShortcut: string,
-    searchBackwardShortcut: string,
-): JSX.Element {
+function filtersHelpModalContent(searchForwardShortcut: string, searchBackwardShortcut: string): JSX.Element {
     const { t } = useTranslation();
     return (
         <>
@@ -84,26 +75,18 @@ function filtersHelpModalContent(
             { isZh() ?
                 <Paragraph>
                     你可以使用过滤器仅显示帧上的对象子集或者使用热键
-                    <Text strong>
-                        {` ${searchForwardShortcut} `}
-                    </Text>
+                    <Text strong>{` ${searchForwardShortcut} `}</Text>
                     和
-                    <Text strong>
-                        {` ${searchBackwardShortcut} `}
-                    </Text>
+                    <Text strong>{` ${searchBackwardShortcut} `}</Text>
                     来搜索满足过滤条件的对象。
                 </Paragraph> :
                 <Paragraph>
-                    You can use filters to display only subset of objects on a frame
-                        or to search objects that satisfy the filters using hotkeys
-                    <Text strong>
-                        {` ${searchForwardShortcut} `}
-                    </Text>
+                    You can use filters to display only subset of objects on a frame or to search objects that satisfy the 
+                    filters using hotkeys
+                    <Text strong>{` ${searchForwardShortcut} `}</Text>
                     and
-                    <Text strong>
-                        {` ${searchBackwardShortcut} `}
-                    </Text>
-                </Paragraph>               
+                    <Text strong>{` ${searchBackwardShortcut} `}</Text>
+                </Paragraph>
             }
             { isZh() ?
                 <Paragraph>
@@ -129,12 +112,11 @@ function filtersHelpModalContent(
                         ==, !=, &gt;, &gt;=, &lt;, &lt;=, (), &amp; and |
                     <br />
                     <Text strong>
-                        If you have double quotes in your query string,
-                        please escape them using back slash: \&quot; (see the latest example)
+                        If you have double quotes in your query string, please escape them using back slash: \&quot; (see 
+                        the latest example)
                     </Text>
                     <br />
-                    All properties and values are case-sensitive.
-                    CVAT uses json queries to perform search.
+                    All properties and values are case-sensitive. CVAT uses json queries to perform search.
                 </Paragraph>
             }
             <Paragraph>
@@ -146,13 +128,12 @@ function filtersHelpModalContent(
                     <li>attr[&quot;Attribute 1&quot;] == attr[&quot;Attribute 2&quot;]</li>
                     <li>clientID == 50</li>
                     <li>
-                        (label==&quot;car&quot; &amp; attr[&quot;parked&quot;]==true)
-                        | (label==&quot;pedestrian&quot; &amp; width &gt; 150)
+                        (label==&quot;car&quot; &amp; attr[&quot;parked&quot;]==true) | (label==&quot;pedestrian&quot;
+                        &amp; width &gt; 150)
                     </li>
                     <li>
-                        (( label==[&quot;car \&quot;mazda\&quot;&quot;])
-                        &amp; (attr[&quot;sunglasses&quot;]==true
-                        | (width &gt; 150 | height &gt; 150 &amp; (clientID == serverID)))))
+                        (( label==[&quot;car \&quot;mazda\&quot;&quot;]) &amp; (attr[&quot;sunglasses&quot;]==true |
+                        (width &gt; 150 | height &gt; 150 &amp; (clientID == serverID)))))
                     </li>
                 </ul>
             </Paragraph>
@@ -212,15 +193,15 @@ function AnnotationsFiltersInput(props: StateToProps & DispatchToProps): JSX.Ele
             onMouseEnter={() => setUnderCursor(true)}
             onMouseLeave={() => setUnderCursor(false)}
         >
-            {annotationsFiltersHistory.map((element: string): JSX.Element => (
-                <Select.Option key={element} value={element}>{element}</Select.Option>
-            ))}
+            {annotationsFiltersHistory.map(
+                (element: string): JSX.Element => (
+                    <Select.Option key={element} value={element}>
+                        {element}
+                    </Select.Option>
+                ),
+            )}
         </Select>
     );
 }
 
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(AnnotationsFiltersInput);
+export default connect(mapStateToProps, mapDispatchToProps)(AnnotationsFiltersInput);

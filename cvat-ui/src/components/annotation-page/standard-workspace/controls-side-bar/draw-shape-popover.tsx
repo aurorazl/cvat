@@ -72,7 +72,7 @@ function DrawShapePopoverComponent(props: Props): JSX.Element {
                         showSearch
                         filterOption={(input: string, option: React.ReactElement<OptionProps>) => {
                             const { children } = option.props;
-                            if (typeof (children) === 'string') {
+                            if (typeof children === 'string') {
                                 return children.toLowerCase().includes(input.toLowerCase());
                             }
 
@@ -81,124 +81,95 @@ function DrawShapePopoverComponent(props: Props): JSX.Element {
                         value={`${selectedLabeID}`}
                         onChange={onChangeLabel}
                     >
-                        {
-                            labels.map((label: any) => (
-                                <Select.Option
-                                    key={label.id}
-                                    value={`${label.id}`}
-                                >
+                        {labels.map((label: any) => (
+                                <Select.Option key={label.id} value={`${label.id}`}>
                                     {label.name}
                                 </Select.Option>
-                            ))
-                        }
+                        ))}
                     </Select>
                 </Col>
             </Row>
-            {
-                shapeType === ShapeType.RECTANGLE && (
-                    <>
-                        <Row>
-                            <Col>
-                                <Text className='cvat-text-color'> {t('Drawing method')} </Text>
-                            </Col>
-                        </Row>
-                        <Row type='flex' justify='space-around'>
-                            <Col>
-                                <Radio.Group
-                                    style={{ display: 'flex' }}
-                                    value={rectDrawingMethod}
-                                    onChange={onChangeRectDrawingMethod}
-                                >
-                                    <Radio
-                                        value={RectDrawingMethod.CLASSIC}
-                                        style={{ width: 'auto' }}
-                                    >
-                                        {t('By 2 Points')}
-                                    </Radio>
-                                    <Radio
-                                        value={RectDrawingMethod.EXTREME_POINTS}
-                                        style={{ width: 'auto' }}
-                                    >
-                                        {t('By 4 Points')}
-                                    </Radio>
-                                </Radio.Group>
-                            </Col>
-                        </Row>
-                    </>
-                )
-            }
-            {
-                shapeType === ShapeType.CUBOID && (
-                    <>
-                        <Row>
-                            <Col>
-                                <Text className='cvat-text-color'> {t('Drawing method')} </Text>
-                            </Col>
-                        </Row>
-                        <Row type='flex' justify='space-around'>
-                            <Col>
-                                <Radio.Group
-                                    style={{ display: 'flex' }}
-                                    value={cuboidDrawingMethod}
-                                    onChange={onChangeCuboidDrawingMethod}
-                                >
-                                    <Radio
-                                        value={CuboidDrawingMethod.CLASSIC}
-                                        style={{ width: 'auto' }}
-                                    >
-                                        {t('From rectangle')}
-                                    </Radio>
-                                    <Radio
-                                        value={CuboidDrawingMethod.CORNER_POINTS}
-                                        style={{ width: 'auto' }}
-                                    >
-                                        {t('By 4 Points')}
-                                    </Radio>
-                                </Radio.Group>
-                            </Col>
-                        </Row>
-                    </>
-                )
-            }
-            {
-                shapeType !== ShapeType.RECTANGLE && shapeType !== ShapeType.CUBOID && (
-                    <Row type='flex' justify='space-around' align='middle'>
-                        <Col span={14}>
-                            <Text className='cvat-text-color'> {t('Number of points:')} </Text>
-                        </Col>
-                        <Col span={10}>
-                            <InputNumber
-                                onChange={(value: number | undefined) => {
-                                    if (typeof (value) === 'number') {
-                                        onChangePoints(Math.floor(
-                                            clamp(value, minimumPoints, Number.MAX_SAFE_INTEGER),
-                                        ));
-                                    } else if (!value) {
-                                        onChangePoints(undefined);
-                                    }
-                                }}
-                                className='cvat-draw-shape-popover-points-selector'
-                                min={minimumPoints}
-                                value={numberOfPoints}
-                                step={1}
-                            />
+            {shapeType === ShapeType.RECTANGLE && (
+                <>
+                    <Row>
+                        <Col>
+                            <Text className='cvat-text-color'> {t('Drawing method')} </Text>
                         </Col>
                     </Row>
-                )
-            }
+                    <Row type='flex' justify='space-around'>
+                        <Col>
+                            <Radio.Group
+                                style={{ display: 'flex' }}
+                                value={rectDrawingMethod}
+                                onChange={onChangeRectDrawingMethod}
+                            >
+                                <Radio value={RectDrawingMethod.CLASSIC} style={{ width: 'auto' }}>
+                                    {t('By 2 Points')}
+                                </Radio>
+                                <Radio value={RectDrawingMethod.EXTREME_POINTS} style={{ width: 'auto' }}>
+                                    {t('By 4 Points')}
+                                </Radio>
+                            </Radio.Group>
+                        </Col>
+                    </Row>
+                </>
+            )}
+            {shapeType === ShapeType.CUBOID && (
+                <>
+                    <Row>
+                        <Col>
+                            <Text className='cvat-text-color'> {t('Drawing method')} </Text>
+                        </Col>
+                    </Row>
+                    <Row type='flex' justify='space-around'>
+                        <Col>
+                            <Radio.Group
+                                style={{ display: 'flex' }}
+                                value={cuboidDrawingMethod}
+                                onChange={onChangeCuboidDrawingMethod}
+                            >
+                                <Radio value={CuboidDrawingMethod.CLASSIC} style={{ width: 'auto' }}>
+                                    {t('From rectangle')}
+                                </Radio>
+                                <Radio value={CuboidDrawingMethod.CORNER_POINTS} style={{ width: 'auto' }}>
+                                    {t('By 4 Points')}
+                                </Radio>
+                            </Radio.Group>
+                        </Col>
+                    </Row>
+                </>
+            )}
+            {shapeType !== ShapeType.RECTANGLE && shapeType !== ShapeType.CUBOID && (
+                <Row type='flex' justify='space-around' align='middle'>
+                    <Col span={14}>
+                        <Text className='cvat-text-color'> {t('Number of points:')} </Text>
+                    </Col>
+                    <Col span={10}>
+                        <InputNumber
+                            onChange={(value: number | undefined) => {
+                                if (typeof value === 'number') {
+                                    onChangePoints(Math.floor(clamp(value, minimumPoints, Number.MAX_SAFE_INTEGER)));
+                                } else if (!value) {
+                                    onChangePoints(undefined);
+                                }
+                            }}
+                            className='cvat-draw-shape-popover-points-selector'
+                            min={minimumPoints}
+                            value={numberOfPoints}
+                            step={1}
+                        />
+                    </Col>
+                </Row>
+            )}
             <Row type='flex' justify='space-around'>
                 <Col span={12}>
                     <Tooltip title={t('Press ${repeatShapeShortcut} to draw again').replace('${repeatShapeShortcut}', `${repeatShapeShortcut}`)} mouseLeaveDelay={0}>
-                        <Button onClick={onDrawShape}>
-                        {t('Shape')}
-                        </Button>
+                        <Button onClick={onDrawShape}>{t('Shape')}</Button>
                     </Tooltip>
                 </Col>
                 <Col span={12}>
                     <Tooltip title={t('Press ${repeatShapeShortcut} to draw again').replace('${repeatShapeShortcut}', `${repeatShapeShortcut}`)} mouseLeaveDelay={0}>
-                        <Button onClick={onDrawTrack}>
-                        {t('Track')}
-                        </Button>
+                        <Button onClick={onDrawTrack}>{t('Track')}</Button>
                     </Tooltip>
                 </Col>
             </Row>

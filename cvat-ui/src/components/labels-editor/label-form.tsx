@@ -18,12 +18,7 @@ import ColorPicker from 'components/annotation-page/standard-workspace/objects-s
 import { ColorizeIcon } from 'icons';
 import patterns from 'utils/validation-patterns';
 import consts from 'consts';
-import {
-    equalArrayHead,
-    idGenerator,
-    Label,
-    Attribute,
-} from './common';
+import { equalArrayHead, idGenerator, Label, Attribute } from './common';
 
 import { withTranslation, WithTranslation  } from 'react-i18next';
 
@@ -59,27 +54,28 @@ class LabelForm extends React.PureComponent<Props, {}> {
                     name: formValues.labelName,
                     id: label ? label.id : idGenerator(),
                     color: formValues.labelColor,
-                    attributes: formValues.keys.map((key: number, index: number): Attribute => {
-                        let attrValues = formValues.values[key];
-                        if (!Array.isArray(attrValues)) {
-                            if (formValues.type[key] === AttributeType.NUMBER) {
-                                attrValues = attrValues.split(';');
-                            } else {
-                                attrValues = [attrValues];
+                    attributes: formValues.keys.map(
+                        (key: number, index: number): Attribute => {
+                            let attrValues = formValues.values[key];
+                            if (!Array.isArray(attrValues)) {
+                                if (formValues.type[key] === AttributeType.NUMBER) {
+                                    attrValues = attrValues.split(';');
+                                } else {
+                                    attrValues = [attrValues];
+                                }
                             }
-                        }
 
-                        attrValues = attrValues.map((value: string) => value.trim());
+                            attrValues = attrValues.map((value: string) => value.trim());
 
-                        return {
-                            name: formValues.attrName[key],
-                            input_type: formValues.type[key],
-                            mutable: formValues.mutable[key],
-                            id: label && index < label.attributes.length
-                                ? label.attributes[index].id : key,
-                            values: attrValues,
-                        };
-                    }),
+                            return {
+                                name: formValues.attrName[key],
+                                input_type: formValues.type[key],
+                                mutable: formValues.mutable[key],
+                                id: label && index < label.attributes.length ? label.attributes[index].id : key,
+                                values: attrValues,
+                            };
+                        },
+                    ),
                 });
 
                 form.resetFields();
@@ -118,13 +114,16 @@ class LabelForm extends React.PureComponent<Props, {}> {
                 <Form.Item hasFeedback>
                     {form.getFieldDecorator(`attrName[${key}]`, {
                         initialValue: value,
-                        rules: [{
+                        rules: [
+                        {
                             required: true,
                             message: t('Please specify a name'),
-                        }, {
+                        },
+                        {
                             pattern: patterns.validateAttributeName.pattern,
                             message: patterns.validateAttributeName.message,
-                        }],
+                        },
+                    ],
                     })(<Input disabled={locked} placeholder={t('Name')} />)}
                 </Form.Item>
             </Col>
@@ -144,21 +143,11 @@ class LabelForm extends React.PureComponent<Props, {}> {
                             initialValue: type,
                         })(
                             <Select disabled={locked}>
-                                <Select.Option value={AttributeType.SELECT}>
-                                    {t('Select')}
-                                </Select.Option>
-                                <Select.Option value={AttributeType.RADIO}>
-                                    {t('Radio')}
-                                </Select.Option>
-                                <Select.Option value={AttributeType.CHECKBOX}>
-                                    {t('Checkbox')}
-                                </Select.Option>
-                                <Select.Option value={AttributeType.TEXT}>
-                                    {t('Text')}
-                                </Select.Option>
-                                <Select.Option value={AttributeType.NUMBER}>
-                                    {t('Number')}
-                                </Select.Option>
+                                <Select.Option value={AttributeType.SELECT}>{t('Select')}</Select.Option>
+                                <Select.Option value={AttributeType.RADIO}>{t('Radio')}</Select.Option>
+                                <Select.Option value={AttributeType.CHECKBOX}>{t('Checkbox')}</Select.Option>
+                                <Select.Option value={AttributeType.TEXT}>{t('Text')}</Select.Option>
+                                <Select.Option value={AttributeType.NUMBER}>{t('Number')}</Select.Option>
                             </Select>,
                         )}
                     </Tooltip>
@@ -191,21 +180,18 @@ class LabelForm extends React.PureComponent<Props, {}> {
         return (
             <Tooltip title={t('Press enter to add a new value')} mouseLeaveDelay={0}>
                 <Form.Item>
-                    { form.getFieldDecorator(`values[${key}]`, {
+                    {form.getFieldDecorator(`values[${key}]`, {
                         initialValue: existedValues,
-                        rules: [{
-                            required: true,
-                            message: t('Please specify values'),
-                        }, {
-                            validator,
-                        }],
-                    })(
-                        <Select
-                            mode='tags'
-                            dropdownMenuStyle={{ display: 'none' }}
-                            placeholder={t('Attribute values')}
-                        />,
-                    )}
+                        rules: [
+                            {
+                                required: true,
+                                message: t('Please specify values'),
+                            },
+                            {
+                                validator,
+                            },
+                        ],
+                    })(<Select mode='tags' dropdownMenuStyle={{ display: 'none' }} placeholder={t('Attribute values')} />)}
                 </Form.Item>
             </Tooltip>
         );
@@ -218,7 +204,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
         return (
             <Tooltip title={t('Specify a default value')} mouseLeaveDelay={0}>
                 <Form.Item>
-                    { form.getFieldDecorator(`values[${key}]`, {
+                    {form.getFieldDecorator(`values[${key}]`, {
                         initialValue: value,
                     })(
                         <Select>
@@ -237,9 +223,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
         const { form, t } = this.props;
 
         const validator = (_: any, strNumbers: string, callback: any): void => {
-            const numbers = strNumbers
-                .split(';')
-                .map((number): number => Number.parseFloat(number));
+            const numbers = strNumbers.split(';').map((number): number => Number.parseFloat(number));
             if (numbers.length !== 3) {
                 callback(t('Three numbers are expected'));
             }
@@ -269,17 +253,18 @@ class LabelForm extends React.PureComponent<Props, {}> {
 
         return (
             <Form.Item>
-                { form.getFieldDecorator(`values[${key}]`, {
+                {form.getFieldDecorator(`values[${key}]`, {
                     initialValue: value,
-                    rules: [{
-                        required: true,
-                        message: t('Please set a range'),
-                    }, {
-                        validator,
-                    }],
-                })(
-                    <Input disabled={locked} placeholder={t('min;max;step')} />,
-                )}
+                    rules: [
+                        {
+                            required: true,
+                            message: t('Please set a range'),
+                        }, 
+                        {
+                            validator,
+                        },
+                    ],
+                })(<Input disabled={locked} placeholder={t('min;max;step')} />)}
             </Form.Item>
         );
     }
@@ -290,11 +275,9 @@ class LabelForm extends React.PureComponent<Props, {}> {
 
         return (
             <Form.Item>
-                { form.getFieldDecorator(`values[${key}]`, {
+                {form.getFieldDecorator(`values[${key}]`, {
                     initialValue: value,
-                })(
-                    <Input placeholder={t('Default value')} />,
-                )}
+                })(<Input placeholder={t('Default value')} />)}
             </Form.Item>
         );
     }
@@ -310,9 +293,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
                     { form.getFieldDecorator(`mutable[${key}]`, {
                         initialValue: value,
                         valuePropName: 'checked',
-                    })(
-                        <Checkbox disabled={locked}> {t('Mutable')} </Checkbox>,
-                    )}
+                    })(<Checkbox disabled={locked}> {t('Mutable')} </Checkbox>)}
                 </Tooltip>
             </Form.Item>
         );
@@ -342,15 +323,13 @@ class LabelForm extends React.PureComponent<Props, {}> {
 
     private renderAttribute = (key: number, index: number): JSX.Element => {
         const { label, form } = this.props;
-        const attr = (label && index < label.attributes.length
-            ? label.attributes[index]
-            : null);
+        const attr = label && index < label.attributes.length ? label.attributes[index] : null;
 
         return (
             <Form.Item key={key}>
                 <Row type='flex' justify='space-between' align='middle'>
-                    { this.renderAttributeNameInput(key, attr) }
-                    { this.renderAttributeTypeInput(key, attr) }
+                    {this.renderAttributeNameInput(key, attr)}
+                    {this.renderAttributeTypeInput(key, attr)}
                     <Col span={6}>
                         {((): JSX.Element => {
                             const type = form.getFieldValue(`type[${key}]`);
@@ -368,12 +347,8 @@ class LabelForm extends React.PureComponent<Props, {}> {
                             return element;
                         })()}
                     </Col>
-                    <Col span={5}>
-                        { this.renderMutableAttributeInput(key, attr) }
-                    </Col>
-                    <Col span={2}>
-                        { this.renderDeleteAttributeButton(key, attr) }
-                    </Col>
+                    <Col span={5}>{this.renderMutableAttributeInput(key, attr)}</Col>
+                    <Col span={2}>{this.renderDeleteAttributeButton(key, attr)}</Col>
                 </Row>
             </Form.Item>
         );
@@ -389,20 +364,23 @@ class LabelForm extends React.PureComponent<Props, {}> {
                 <Form.Item hasFeedback>
                     {form.getFieldDecorator('labelName', {
                         initialValue: value,
-                        rules: [{
-                            required: true,
-                            message: t('Please specify a name'),
-                        }, {
-                            pattern: patterns.validateAttributeName.pattern,
-                            message: patterns.validateAttributeName.message,
-                        }, {
-                            validator:
-                                async (_rule: any, labelName: string, callback: Function) => {
-                                    if (labelNames && labelNames.includes(labelName)) {
-                                        callback(t('Label name must be unique for the task'));
-                                    }
-                                },
-                        }],
+                        rules: [
+                            {
+                                required: true,
+                                message: t('Please specify a name'),
+                            },
+                            {
+                                pattern: patterns.validateAttributeName.pattern,
+                                message: patterns.validateAttributeName.message,
+                            },
+                            {
+                                validator: async (_rule: any, labelName: string, callback: Function) => {
+                                        if (labelNames && labelNames.includes(labelName)) {
+                                            callback(t('Label name must be unique for the task'));
+                                        }
+                                    },
+                            }
+                        ],
                     })(<Input disabled={locked} placeholder={t('Label name')} />)}
                 </Form.Item>
             </Col>
@@ -414,11 +392,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
         return (
             <Col span={6}>
                 <Form.Item>
-                    <Button
-                        type='ghost'
-                        onClick={this.addAttribute}
-                        className='cvat-new-attribute-button'
-                    >
+                    <Button type='ghost' onClick={this.addAttribute} className='cvat-new-attribute-button'>
                         {t('Add an attribute')}
                         <Icon type='plus' />
                     </Button>
@@ -450,9 +424,9 @@ class LabelForm extends React.PureComponent<Props, {}> {
     private renderContinueButton(): JSX.Element {
         const { label, t } = this.props;
 
-        return (
-            label ? <div />
-                : (
+        return ( label ? (
+                    <div />
+                ) : (
                     <Col offset={1}>
                         <Tooltip title={t('Save the label and create one more')} mouseLeaveDelay={0}>
                             <Button
@@ -497,20 +471,16 @@ class LabelForm extends React.PureComponent<Props, {}> {
         return (
             <Col span={3}>
                 <Form.Item>
-                    {
-                        form.getFieldDecorator('labelColor', {
-                            initialValue: (label && label.color) ? label.color : undefined,
+                    {form.getFieldDecorator('labelColor', {
+                            initialValue: label && label.color ? label.color : undefined,
                         })(
                             <ColorPicker placement='bottom'>
                                 <Tooltip title={t('Change color of the label')}>
-                                    <Button
-                                        type='default'
-                                        className='cvat-change-task-label-color-button'
-                                    >
+                                    <Button type='default' className='cvat-change-task-label-color-button'>
                                         <Badge
                                             className='cvat-change-task-label-color-badge'
                                             color={form.getFieldValue('labelColor') || consts.NEW_LABEL_COLOR}
-                                            text={(<Icon component={ColorizeIcon} />)}
+                                            text={<Icon component={ColorizeIcon} />}
                                         />
                                     </Button>
                                 </Tooltip>
@@ -526,9 +496,7 @@ class LabelForm extends React.PureComponent<Props, {}> {
         const { label, form, t } = this.props;
 
         form.getFieldDecorator('keys', {
-            initialValue: label
-                ? label.attributes.map((attr: Attribute): number => attr.id)
-                : [],
+            initialValue: label ? label.attributes.map((attr: Attribute): number => attr.id) : [],
         });
 
         const keys = form.getFieldValue('keys');
@@ -537,14 +505,13 @@ class LabelForm extends React.PureComponent<Props, {}> {
         return (
             <Form onSubmit={this.handleSubmit}>
                 <Row type='flex' justify='start' align='middle'>
-                    { this.renderLabelNameInput() }
+                    {this.renderLabelNameInput()}
                     <Col span={1} />
-                    { this.renderChangeColorButton() }
+                    {this.renderChangeColorButton()}
                     <Col span={1} />
-                    { this.renderNewAttributeButton() }
+                    {this.renderNewAttributeButton()}
                 </Row>
-                { attributeItems.length > 0
-                    && (
+                { attributeItems.length > 0 && (
                         <Row type='flex' justify='start' align='middle'>
                             <Col>
                                 <Text>{t('Attributes')}</Text>
@@ -553,9 +520,9 @@ class LabelForm extends React.PureComponent<Props, {}> {
                     )}
                 { attributeItems.reverse() }
                 <Row type='flex' justify='start' align='middle'>
-                    { this.renderDoneButton() }
-                    { this.renderContinueButton() }
-                    { this.renderCancelButton() }
+                    {this.renderDoneButton()}
+                    {this.renderContinueButton()}
+                    {this.renderCancelButton()}
                 </Row>
             </Form>
         );

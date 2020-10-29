@@ -19,19 +19,14 @@ interface Props {
 
 export default function LoadSubmenu(props: Props): JSX.Element {
     const { t } = useTranslation();
-    const {
-        menuKey,
-        loaders,
-        loadActivity,
-        onFileUpload,
-    } = props;
+    const { menuKey, loaders, loadActivity, onFileUpload } = props;
 
     return (
         <Menu.SubMenu key={menuKey} title={t('Upload annotations')}>
-            {
-                loaders
-                    .sort((a: any, b: any) => a.name.localeCompare(b.name))
-                    .map((loader: any): JSX.Element => {
+            {loaders
+                .sort((a: any, b: any) => a.name.localeCompare(b.name))
+                .map(
+                    (loader: any): JSX.Element => {
                         const accept = loader.format
                             .split(',')
                             .map((x: string) => `.${x.trimStart()}`)
@@ -39,11 +34,7 @@ export default function LoadSubmenu(props: Props): JSX.Element {
                         const pending = loadActivity === loader.name;
                         const disabled = !loader.enabled || !!loadActivity;
                         return (
-                            <Menu.Item
-                                key={loader.name}
-                                disabled={disabled}
-                                className='cvat-menu-load-submenu-item'
-                            >
+                            <Menu.Item key={loader.name} disabled={disabled} className='cvat-menu-load-submenu-item'>
                                 <Upload
                                     accept={accept}
                                     multiple={false}
@@ -59,11 +50,10 @@ export default function LoadSubmenu(props: Props): JSX.Element {
                                         {pending && <Icon style={{ marginLeft: 10 }} type='loading' />}
                                     </Button>
                                 </Upload>
-
                             </Menu.Item>
                         );
-                    })
-            }
+                    },
+                )}
         </Menu.SubMenu>
     );
 }

@@ -28,14 +28,7 @@ export default function DetailsComponent(props: DetailsComponentProps): JSX.Elem
                 <Text className='cvat-title'>{t('Task details #${id}').replace('${id}', `${id}`)}</Text>
             </Col>
             <Col>
-                <Dropdown overlay={
-                    (
-                        <ActionsMenuContainer
-                            taskInstance={taskInstance}
-                        />
-                    )
-                }
-                >
+                <Dropdown overlay={<ActionsMenuContainer taskInstance={taskInstance} />}>
                     <Button size='large'>
                         <Text className='cvat-text-color'>{t('Actions')}</Text>
                         <Icon className='cvat-menu-icon' component={MenuIcon} />

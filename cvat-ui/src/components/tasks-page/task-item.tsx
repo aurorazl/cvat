@@ -63,13 +63,7 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
                 {owner && (
                     <>
                         <Text type='secondary'>
-                            {/* eslint-disable-next-line */}
-                            {owner
-                                ? t('Created by ${owner} on ${created}', {
-                                      owner: owner,
-                                      created: transMoment(created),
-                                  })
-                                : t('Created on ${created}', { created: transMoment(created) })}
+                            {owner ? t('Created by ${owner} on ${created}', {owner: owner, created: transMoment(created),}) : t('Created on ${created}', { created: transMoment(created) })}
                         </Text>
                         <br />
                     </>
@@ -124,12 +118,7 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
                         {progressText}
                     </Col>
                     <Col>
-                        {/* eslint-disable-next-line */}
-                        <Text type='secondary'>
-                            {t('${numOfCompleted} of ${numOfJobs} jobs')
-                                .replace('${numOfCompleted}', `${numOfCompleted}`)
-                                .replace('${numOfJobs}', `${numOfJobs}`)}
-                        </Text>
+                        <Text type='secondary'>{t('${numOfCompleted} of ${numOfJobs} jobs').replace('${numOfCompleted}', `${numOfCompleted}`).replace('${numOfJobs}', `${numOfJobs}`)}</Text>
                     </Col>
                 </Row>
                 <Row>

@@ -1,10 +1,6 @@
-// Copyright (C) 2020 Intel Corporation
+// Copyright (C) 2019-2020 Intel Corporation
 //
 // SPDX-License-Identifier: MIT
-
-/* global
-    require:false
-*/
 
 const { detect } = require('detect-browser');
 const PluginRegistry = require('./plugins');
@@ -13,10 +9,10 @@ const { LogType } = require('./enums');
 const i18next = require('i18next').default;
 
 /**
-    * Class representing a single log
-    * @memberof module:API.cvat.classes
-    * @hideconstructor
-*/
+ * Class representing a single log
+ * @memberof module:API.cvat.classes
+ * @hideconstructor
+ */
 class Log {
     constructor(logType, payload) {
         this.onCloseCallback = null;
@@ -64,22 +60,21 @@ class Log {
     }
 
     /**
-        * Method saves a durable log in a storage <br>
-        * Note then you can call close() multiple times <br>
-        * Log duration will be computed based on the latest call <br>
-        * All payloads will be shallowly combined (all top level properties will exist)
-        * @method close
-        * @memberof module:API.cvat.classes.Log
-        * @param {object} [payload] part of payload can be added when close a log
-        * @readonly
-        * @instance
-        * @async
-        * @throws {module:API.cvat.exceptions.PluginError}
-        * @throws {module:API.cvat.exceptions.ArgumentError}
-    */
+     * Method saves a durable log in a storage <br>
+     * Note then you can call close() multiple times <br>
+     * Log duration will be computed based on the latest call <br>
+     * All payloads will be shallowly combined (all top level properties will exist)
+     * @method close
+     * @memberof module:API.cvat.classes.Log
+     * @param {object} [payload] part of payload can be added when close a log
+     * @readonly
+     * @instance
+     * @async
+     * @throws {module:API.cvat.exceptions.PluginError}
+     * @throws {module:API.cvat.exceptions.ArgumentError}
+     */
     async close(payload = {}) {
-        const result = await PluginRegistry
-            .apiWrapper.call(this, Log.prototype.close, payload);
+        const result = await PluginRegistry.apiWrapper.call(this, Log.prototype.close, payload);
         return result;
     }
 }
@@ -149,8 +144,9 @@ class LogWithWorkingTime extends Log {
     validatePayload() {
         Log.prototype.validatePayload.call(this);
 
-        if (!('working_time' in this.payload)
-            || !typeof (this.payload.working_time) === 'number'
+        if (
+            !('working_time' in this.payload)
+            || !typeof this.payload.working_time === 'number'
             || this.payload.working_time < 0
         ) {
             const message = i18next.t('The field "working_time" is required for ${this.type} log. ', {thistype: `${this.type}`})
@@ -223,8 +219,11 @@ class LogWithExceptionInfo extends Log {
 
 function logFactory(logType, payload) {
     const logsWithCount = [
-        LogType.deleteObject, LogType.mergeObjects, LogType.copyObject,
-        LogType.undoAction, LogType.redoAction,
+        LogType.deleteObject,
+        LogType.mergeObjects,
+        LogType.copyObject,
+        LogType.undoAction,
+        LogType.redoAction,
     ];
 
     if (logsWithCount.includes(logType)) {

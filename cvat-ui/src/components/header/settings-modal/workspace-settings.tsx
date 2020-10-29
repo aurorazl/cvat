@@ -73,14 +73,10 @@ export default function WorkspaceSettingsComponent(props: Props): JSX.Element {
                         step={1}
                         value={Math.round(autoSaveInterval / (60 * 1000))}
                         onChange={(value: number | undefined): void => {
-                            if (typeof (value) === 'number') {
-                                onChangeAutoSaveInterval(Math.floor(
-                                    clamp(
-                                        value,
-                                        minAutoSaveInterval,
-                                        maxAutoSaveInterval,
-                                    ),
-                                ) * 60 * 1000);
+                            if (typeof value === 'number') {
+                                onChangeAutoSaveInterval(
+                                    Math.floor(clamp(value, minAutoSaveInterval, maxAutoSaveInterval)) * 60 * 1000,
+                                );
                             }
                         }}
                     />
@@ -116,7 +112,10 @@ export default function WorkspaceSettingsComponent(props: Props): JSX.Element {
                     </Checkbox>
                 </Col>
                 <Col>
-                    <Text type='secondary'> {t('Show text for an object on the canvas not only when the object is activated')}  </Text>
+                    <Text type='secondary'>
+                        {' '}
+                        {t('Show text for an object on the canvas not only when the object is activated')}{' '}
+                    </Text>
                 </Col>
             </Row>
             <Row className='cvat-workspace-settings-autoborders'>
@@ -132,7 +131,10 @@ export default function WorkspaceSettingsComponent(props: Props): JSX.Element {
                     </Checkbox>
                 </Col>
                 <Col>
-                    <Text type='secondary'> {t('Enable automatic bordering for polygons and polylines during drawing/editing')} </Text>
+                    <Text type='secondary'>
+                        {' '}
+                        {t('Enable automatic bordering for polygons and polylines during drawing/editing')}{' '}
+                    </Text>
                 </Col>
             </Row>
             <Row className='cvat-workspace-settings-aam-zoom-margin'>
@@ -143,10 +145,8 @@ export default function WorkspaceSettingsComponent(props: Props): JSX.Element {
                         max={maxAAMMargin}
                         value={aamZoomMargin}
                         onChange={(value: number | undefined): void => {
-                            if (typeof (value) === 'number') {
-                                onChangeAAMZoomMargin(Math.floor(
-                                    clamp(value, minAAMMargin, maxAAMMargin),
-                                ));
+                            if (typeof value === 'number') {
+                                onChangeAAMZoomMargin(Math.floor(clamp(value, minAAMMargin, maxAAMMargin)));
                             }
                         }}
                     />

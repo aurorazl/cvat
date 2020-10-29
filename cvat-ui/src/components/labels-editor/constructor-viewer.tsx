@@ -23,7 +23,8 @@ export default function ConstructorViewer(props: ConstructorViewerProps): JSX.El
         <Button key='create' type='ghost' onClick={onCreate} className='cvat-constructor-viewer-new-item'>
             {t('Add label')}
             <Icon type='plus-circle' />
-        </Button>];
+        </Button>,
+    ];
     for (const label of props.labels) {
         list.push(
             <ConstructorViewerItem
@@ -36,9 +37,5 @@ export default function ConstructorViewer(props: ConstructorViewerProps): JSX.El
         );
     }
 
-    return (
-        <div className='cvat-constructor-viewer'>
-            { list }
-        </div>
-    );
+    return <div className='cvat-constructor-viewer'>{list}</div>;
 }

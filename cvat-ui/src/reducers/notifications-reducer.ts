@@ -746,16 +746,11 @@ export default function (state = defaultState, action: AnyAction): Notifications
             };
         }
         case AnnotationActionTypes.UPLOAD_JOB_ANNOTATIONS_FAILED: {
-            const {
-                job,
-                error,
-            } = action.payload;
+            const { job, error } = action.payload;
 
             const {
                 id: jobID,
-                task: {
-                    id: taskID,
-                },
+                task: { id: taskID },
             } = job;
 
             return {

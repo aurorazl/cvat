@@ -53,9 +53,7 @@ interface DispatchToProps {
 export function computeHeight(): number {
     const [sidebar] = window.document.getElementsByClassName('cvat-objects-sidebar');
     const [appearance] = window.document.getElementsByClassName('cvat-objects-appearance-collapse');
-    const [tabs] = Array.from(
-        window.document.querySelectorAll('.cvat-objects-sidebar-tabs > .ant-tabs-card-bar'),
-    );
+    const [tabs] = Array.from(window.document.querySelectorAll('.cvat-objects-sidebar-tabs > .ant-tabs-card-bar'));
 
     if (sidebar && appearance && tabs) {
         const maxHeight = sidebar ? sidebar.clientHeight : 0;
@@ -69,19 +67,9 @@ export function computeHeight(): number {
 
 function mapStateToProps(state: CombinedState): StateToProps {
     const {
-        annotation: {
-            appearanceCollapsed,
-        },
+        annotation: { appearanceCollapsed },
         settings: {
-            shapes: {
-                colorBy,
-                opacity,
-                selectedOpacity,
-                outlined,
-                outlineColor,
-                showBitmap,
-                showProjections,
-            },
+            shapes: { colorBy, opacity, selectedOpacity, outlined, outlineColor, showBitmap, showProjections },
         },
     } = state;
 
@@ -97,13 +85,11 @@ function mapStateToProps(state: CombinedState): StateToProps {
     };
 }
 
-
 function mapDispatchToProps(dispatch: Dispatch<AnyAction>): DispatchToProps {
     return {
         collapseAppearance(): void {
             dispatch(collapseAppearanceAction());
-            const [collapser] = window.document
-                .getElementsByClassName('cvat-objects-appearance-collapse');
+            const [collapser] = window.document.getElementsByClassName('cvat-objects-appearance-collapse');
 
             if (collapser) {
                 const listener = (event: Event): void => {
@@ -166,12 +152,7 @@ function AppearanceBlock(props: Props): JSX.Element {
             activeKey={appearanceCollapsed ? [] : ['appearance']}
             className='cvat-objects-appearance-collapse'
         >
-            <Collapse.Panel
-                header={
-                    <Text strong>{t('Appearance')}</Text>
-                }
-                key='appearance'
-            >
+            <Collapse.Panel header={<Text strong>{t('Appearance')}</Text>} key='appearance'>
                 <div className='cvat-objects-appearance-content'>
                     <Text type='secondary'>{t('Color by')}</Text>
                     <Radio.Group value={colorBy} onChange={changeShapesColorBy}>
@@ -180,19 +161,9 @@ function AppearanceBlock(props: Props): JSX.Element {
                         <Radio.Button value={ColorBy.GROUP}>{t(ColorBy.GROUP)}</Radio.Button>
                     </Radio.Group>
                     <Text type='secondary'>{t('Opacity')}</Text>
-                    <Slider
-                        onChange={changeShapesOpacity}
-                        value={opacity}
-                        min={0}
-                        max={100}
-                    />
+                    <Slider onChange={changeShapesOpacity} value={opacity} min={0} max={100}/>
                     <Text type='secondary'>{t('Selected opacity')}</Text>
-                    <Slider
-                        onChange={changeSelectedShapesOpacity}
-                        value={selectedOpacity}
-                        min={0}
-                        max={100}
-                    />
+                    <Slider onChange={changeSelectedShapesOpacity} value={selectedOpacity} min={0} max={100} />
                     <Checkbox
                         onChange={(event: CheckboxChangeEvent) => {
                             changeShapesOutlinedBorders(event.target.checked, outlineColor);
@@ -211,16 +182,10 @@ function AppearanceBlock(props: Props): JSX.Element {
                             </Button>
                         </ColorPicker>
                     </Checkbox>
-                    <Checkbox
-                        onChange={changeShowBitmap}
-                        checked={showBitmap}
-                    >
+                    <Checkbox onChange={changeShowBitmap} checked={showBitmap}>
                         {t('Show bitmap')}
                     </Checkbox>
-                    <Checkbox
-                        onChange={changeShowProjections}
-                        checked={showProjections}
-                    >
+                    <Checkbox onChange={changeShowProjections} checked={showProjections}>
                         {t('Show projections')}
                     </Checkbox>
                 </div>
@@ -229,7 +194,4 @@ function AppearanceBlock(props: Props): JSX.Element {
     );
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(React.memo(AppearanceBlock));
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(AppearanceBlock));

@@ -18,7 +18,6 @@ import shortcutsReducer from './shortcuts-reducer';
 import userAgreementsReducer from './useragreements-reducer';
 import langReducer from './lang-reducer';
 
-
 export default function createRootReducer(): Reducer {
     return combineReducers({
         auth: authReducer,
