@@ -1,0 +1,63 @@
+metadata:
+  name: pkl.apulis.segmentEveryThing
+  namespace: cvat
+  annotations:
+    name: SegmentEveryThing
+    type: detector
+    framework: pytorch
+    spec:
+    
+spec:
+  description: Weak supervised segmentation from Learning to Segment Every Thing
+  runtime: "python:3.6"
+  handler: main:handler
+  eventTimeout: 30s
+
+  build:
+    image: cvat/pkl.apulis.segmentEveryThing
+    baseImage: pytorch/pytorch:1.6.0-cuda10.1-cudnn7-runtime
+
+    directives:
+      preCopy:
+      - kind: WORKDIR
+        value: /opt/nuclio
+      - kind: RUN
+        value: apt update
+      - kind: RUN
+        value: git clone https://github.com/XudongWang97/seg_every_thing.git seg_every_thing
+      - kind: WORKDIR
+        value: /opt/nuclio/seg_every_thing
+      - kind: RUN
+        value: pip install -r requirements.txt
+      - kind: RUN
+        value: mkdir models && cd models
+      - kind: RUN
+        value: wget https://github.com/XudongWang97/seg_every_thing/releases/download/v0.1/model_hardhat.pkl
+      - kind: WORKDIR
+        value: /opt/nuclio
+      - kind: RUN
+        value: git clone https://github.com/cocodataset/cocoapi.git cocoapi
+      - kind: WORKDIR
+        value: /opt/nuclio/cocoapi/PythonAPI
+      - kind: RUN
+        value: make install
+      - kind: WORKDIR
+        value: /opt/nuclio/seg_every_thing/lib
+      - kind: RUN
+        value: make
+      - kind: WORKDIR
+        value: /opt/nuclio
+
+  triggers:
+    myHttpTrigger:
+      maxWorkers: 2
+      kind: "http"
+      workerAvailabilityTimeoutMilliseconds: 10000
+      attributes:
+        maxRequestBodySize: 33554432 # 32MB
+
+  platform:
+    attributes:
+      restartPolicy:
+        name: always
+        maximumRetryCount: 3
