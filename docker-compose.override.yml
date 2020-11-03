@@ -1,9 +1,9 @@
-version: "3.3"
+version: '3.3'
 
 services:
   cvat:
     environment:
-      CVAT_SHARE_URL: "Mounted from /mnt/share host directory"
+      CVAT_SHARE_URL: '/mnt/share'
     volumes:
       - cvat_share:/home/django/share:ro
 
