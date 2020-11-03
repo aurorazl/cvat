@@ -57,7 +57,7 @@ class ModelHandler:
         t = time.time()
         with c2_utils.NamedCudaScope(0):
             cls_boxes, cls_segms, cls_keyps = infer_engine.im_detect_all(
-                model, image, None, timers=timers
+                self.model, image, None, timers=timers
             )
         logger.info('Inference time: {:.3f}s'.format(time.time() - t))
         for k, v in timers.items():
