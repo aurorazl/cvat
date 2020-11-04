@@ -27,6 +27,7 @@ import { CombinedState } from 'reducers/interfaces';
 import SettingsModal from './settings-modal/settings-modal';
 import { useTranslation } from 'react-i18next';
 import i18n from "i18next";
+import moment from 'moment';
 
 const core = getCore();
 
@@ -307,21 +308,24 @@ function HeaderContainer(props: Props): JSX.Element {
                     <Icon type='github' />
                     <Text className='cvat-text-color'>GitHub</Text>
                 </Button> */}
-                {/* <Button
+                <Button
                     className='cvat-header-button'
                     size='small'
                     onClick={
                         ()=>{
                             const selected: string = lang === 'en-US' ? 'zh-CN' : 'en-US';
                             changeLang(selected);
-
-                            localStorage.language = selected;
+                            window.localStorage.setItem('language', selected);
                             i18n.changeLanguage(selected);
+
+                            if (moment?.locale) {
+                                moment.locale(selected.toLowerCase());
+                            }
                         }
                     }
                 >
                     <Text className='cvat-text-color'>{lang === 'en-US' ? '中文' : 'English'}</Text>
-                </Button> */}
+                </Button>
                 <Button
                     className='cvat-header-button'
                     type='link'

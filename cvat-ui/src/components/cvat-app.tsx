@@ -35,6 +35,12 @@ import '../styles.scss';
 
 import { withTranslation, WithTranslation  } from 'react-i18next';
 
+import { connect } from 'react-redux';
+import { ConfigProvider } from 'antd';
+import enUS from 'antd/es/locale/en_US';
+import zhCN from 'antd/es/locale/zh_CN';
+import { CombinedState } from 'reducers/interfaces';
+
 interface CVATAppProps extends WithTranslation {
     loadFormats: () => void;
     loadUsers: () => void;
@@ -68,6 +74,17 @@ interface CVATAppProps extends WithTranslation {
     notifications: NotificationsState;
     user: any;
     isModelPluginActive: boolean;
+    lang: string;
+}
+
+interface StateToProps {
+    lang: string;
+}
+
+function mapStateToProps(state: CombinedState): StateToProps {
+    return {
+        lang: state.lang.lang,
+    };
 }
 
 class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentProps> {
@@ -249,6 +266,7 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
             keyMap,
             isModelPluginActive,
             t,
+            lang,
         } = this.props;
 
         const readyForRender =
@@ -303,50 +321,54 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
         if (readyForRender) {
             if (user && user.isVerified) {
                 return (
-                    <GlobalErrorBoundary>
-                        <Layout>
-                            <Header />
-                            <Layout.Content style={{ height: '100%' }}>
-                                <ShorcutsDialog />
-                                <GlobalHotKeys keyMap={subKeyMap} handlers={handlers}>
-                                    <Switch>
-                                        <Route exact path='/tasks' component={TasksPageContainer} />
-                                        <Route exact path='/tasks/create' component={CreateTaskPageContainer} />
-                                        <Route exact path='/tasks/:id' component={TaskPageContainer} />
-                                        <Route exact path='/tasks/:tid/jobs/:jid' component={AnnotationPageContainer} />
-                                        {isModelPluginActive && (
-                                            <Route exact path='/models' component={ModelsPageContainer} />
-                                        )}
-                                        <Redirect push to='/tasks' />
-                                    </Switch>
-                                </GlobalHotKeys>
-                                {/* eslint-disable-next-line */}
-                                <a id='downloadAnchor' style={{ display: 'none' }} download />
-                            </Layout.Content>
-                        </Layout>
-                    </GlobalErrorBoundary>
+                    <ConfigProvider locale={lang === 'zh-CN' ? zhCN : enUS}>
+                        <GlobalErrorBoundary>
+                            <Layout>
+                                <Header />
+                                <Layout.Content style={{ height: '100%' }}>
+                                    <ShorcutsDialog />
+                                    <GlobalHotKeys keyMap={subKeyMap} handlers={handlers}>
+                                        <Switch>
+                                            <Route exact path='/tasks' component={TasksPageContainer} />
+                                            <Route exact path='/tasks/create' component={CreateTaskPageContainer} />
+                                            <Route exact path='/tasks/:id' component={TaskPageContainer} />
+                                            <Route exact path='/tasks/:tid/jobs/:jid' component={AnnotationPageContainer} />
+                                            {isModelPluginActive && (
+                                                <Route exact path='/models' component={ModelsPageContainer} />
+                                            )}
+                                            <Redirect push to='/tasks' />
+                                        </Switch>
+                                    </GlobalHotKeys>
+                                    {/* eslint-disable-next-line */}
+                                    <a id='downloadAnchor' style={{ display: 'none' }} download />
+                                </Layout.Content>
+                            </Layout>
+                        </GlobalErrorBoundary>
+                    </ConfigProvider>
                 );
             }
 
             return (
-                <GlobalErrorBoundary>
-                    <Switch>
-                        <Route exact path='/auth/register' component={RegisterPageContainer} />
-                        <Route exact path='/auth/login' component={LoginPageContainer} />
-                        <Route
-                            exact
-                            path='/auth/login-with-token/:sessionId/:token'
-                            component={LoginWithTokenComponent}
-                        />
-                        <Route exact path='/auth/password/reset' component={ResetPasswordPageComponent} />
-                        <Route
-                            exact
-                            path='/auth/password/reset/confirm'
-                            component={ResetPasswordPageConfirmComponent}
-                        />
-                        <Redirect to='/auth/login' />
-                    </Switch>
-                </GlobalErrorBoundary>
+                <ConfigProvider locale={lang === 'zh-CN' ? zhCN : enUS}>
+                    <GlobalErrorBoundary>
+                        <Switch>
+                            <Route exact path='/auth/register' component={RegisterPageContainer} />
+                            <Route exact path='/auth/login' component={LoginPageContainer} />
+                            <Route
+                                exact
+                                path='/auth/login-with-token/:sessionId/:token'
+                                component={LoginWithTokenComponent}
+                            />
+                            <Route exact path='/auth/password/reset' component={ResetPasswordPageComponent} />
+                            <Route
+                                exact
+                                path='/auth/password/reset/confirm'
+                                component={ResetPasswordPageConfirmComponent}
+                            />
+                            <Redirect to='/auth/login' />
+                        </Switch>
+                    </GlobalErrorBoundary>
+                </ConfigProvider>
             );
         }
 
@@ -354,4 +376,4 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
     }
 }
 
-export default withRouter(withTranslation()(CVATApplication));
+export default withRouter(connect(mapStateToProps)(withTranslation()(CVATApplication)));
