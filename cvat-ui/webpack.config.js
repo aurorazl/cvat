@@ -30,13 +30,6 @@ module.exports = {
         inline: true,
         port: 3000,
         historyApiFallback: true,
-        proxy: {	
-            '/api': {	
-              target: 'http://10.31.3.230:8080',	
-              changeOrigin: true,	
-              secure: false	
-            },	
-        },        
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.jsx', '.js', '.json'],

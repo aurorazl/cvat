@@ -8,7 +8,7 @@ import {
 } from './interfaces';
 
 const defaultState: LangState = {
-    lang: localStorage.language || navigator.language || LangType.ZH_CN,
+    lang: LangType.ZH_CN,
 };
 
 export default (state = defaultState, action: AnyAction): LangState => {
