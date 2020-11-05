@@ -6,6 +6,7 @@ export default {
     'The task ${taskID} will be deleted': 'The task ${taskID} will be deleted',
     'All related data (images, annotations) will be lost. Continue?': 'All related data (images, annotations) will be lost. Continue?',
     'Delete': 'Delete',
+    'Open bug tracker': 'Open bug tracker',
     // dump-submenu.tsx
     "Dump annotations": "Dump annotations",
     // export-submenu.tsx
