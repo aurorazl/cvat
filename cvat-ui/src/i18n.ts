@@ -7,9 +7,8 @@ import { initReactI18next } from "react-i18next";
 import en from './locale/en-US';
 import cn from './locale/zh-CN';
 
-const lng = localStorage.language || navigator.language;
-
-moment.locale(lng);
+const lng: string = localStorage.language || navigator.language;
+moment.locale(lng.toLowerCase());
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next

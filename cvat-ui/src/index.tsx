@@ -25,9 +25,6 @@ import { resetErrors, resetMessages } from './actions/notification-actions';
 import { CombinedState, NotificationsState } from './reducers/interfaces';
 
 import './i18n';
-import { ConfigProvider } from 'antd';
-// import enUS from 'antd/es/locale/en_US';
-import zhCN from 'antd/es/locale/zh_CN';
 
 createCVATStore(createRootReducer);
 const cvatStore = getCVATStore();
@@ -128,16 +125,12 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
 const ReduxAppWrapper = connect(mapStateToProps, mapDispatchToProps)(CVATApplication);
 
 ReactDOM.render(
-    (
-        <Provider store={cvatStore}>
-            <ConfigProvider locale={zhCN}>
-                <BrowserRouter>
-                    <ReduxAppWrapper />
-                </BrowserRouter>
-            </ConfigProvider>
-            <LayoutGrid />
-        </Provider>
-    ),
+    <Provider store={cvatStore}>
+        <BrowserRouter>
+            <ReduxAppWrapper />
+        </BrowserRouter>
+        <LayoutGrid />
+    </Provider>,
     document.getElementById('root'),
 );
 
