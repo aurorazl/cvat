@@ -76,7 +76,7 @@ COPY components /tmp/components
 # Install and initialize CVAT, copy all necessary files
 COPY cvat/requirements/ /tmp/requirements/
 COPY supervisord.conf mod_wsgi.conf wait-for-it.sh manage.py ${HOME}/
-RUN python3 -m pip install --no-cache-dir -r /tmp/requirements/${DJANGO_CONFIGURATION}.txt
+RUN pip install -r /tmp/requirements/${DJANGO_CONFIGURATION}.txt
 
 ARG CLAM_AV
 ENV CLAM_AV=${CLAM_AV}
