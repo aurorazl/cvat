@@ -1,0 +1,88 @@
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: cvat_backend
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      jobmanager-node: pod
+  template:
+    metadata:
+      name: cvat_backend
+      labels:
+        jobmanager-node: pod
+        app: cvat_backend
+    spec:
+      nodeSelector:
+        jobmanager: active
+        archType: amd64
+      containers:
+        - name: cvat_db
+          image: harbor.sigsus.cn:8443/library/postgres:10-alpine
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5432
+              hostPort: 5432
+              name: cvat_db
+              protocol: TCP
+          env:
+            - name: POSTGRES_USER
+              value: root
+            - name: POSTGRES_DB
+              value: cvat
+            - name: POSTGRES_HOST_AUTH_METHOD
+              value: trust
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: cvat_db
+
+        - name: cvat_redis
+          image: harbor.sigsus.cn:8443/library/redis:4.0-alpine
+          imagePullPolicy: Always
+
+        - name: cvat
+          image: harbor.sigsus.cn:8443/library/cvat/backend
+          imagePullPolicy: Always
+          env:
+            - name: DJANGO_MODWSGI_EXTRA_ARGS
+              value: ''
+            - name: ALLOWED_HOSTS
+              value: '*'
+            - name: CVAT_REDIS_HOST
+              value: '127.0.0.1'
+            - name: CVAT_POSTGRES_HOST
+              value: '127.0.0.1'
+          volumeMounts:
+            - mountPath: /home/django/data
+              name: cvat_data
+            - mountPath: /home/django/keys
+              name: cvat_keys
+            - mountPath: /home/django/logs
+              name: cvat_logs
+            - mountPath: /home/django/models
+              name: cvat_models
+          ports:
+            - containerPort: 8080
+              hostPort: 8082
+              name: cvat-port
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 3
+            periodSeconds: 30
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 10
+
+      volumes:
+        - name: cvat_db
+          hostPath:
+            path: /var/lib/postgres
+
+      tolerations:
+        - key: CriticalAddonsOnly
+          operator: Exists
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule

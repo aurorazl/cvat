@@ -1,0 +1,42 @@
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: cvat_frontend
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      jobmanager-node: pod
+  template:
+    metadata:
+      name: cvat_frontend
+      labels:
+        jobmanager-node: pod
+        app: cvat_frontend
+    spec:
+      nodeSelector:
+        jobmanager: active
+        archType: amd64
+      containers:
+        - name: cvat_ui
+          image: harbor.sigsus.cn:8443/library/cvat/ui
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              hostPort: 8081
+              name: cvat_frontend_port
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 3
+            periodSeconds: 30
+            successThreshold: 1
+            tcpSocket:
+              port: 80
+            timeoutSeconds: 10
+
+      tolerations:
+        - key: CriticalAddonsOnly
+          operator: Exists
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
