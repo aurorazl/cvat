@@ -14,6 +14,7 @@ import av
 import numpy as np
 from pyunpack import Archive
 from PIL import Image, ImageFile
+import filetype
 
 # fixes: "OSError:broken data stream" when executing line 72 while loading images downloaded from the web
 # see: https://stackoverflow.com/questions/42462431/oserror-broken-data-stream-when-reading-image-file
@@ -407,8 +408,15 @@ class Mpeg4CompressedChunkWriter(Mpeg4ChunkWriter):
         output_container.close()
         return [(input_w, input_h)]
 
+def judge_file_mime(path):
+    ### replace:       mimetypes.guess_type
+    mime = filetype.guess(path)
+    if mime:
+        return (mime.mime,None)
+    return (None,None)
+
 def _is_archive(path):
-    mime = mimetypes.guess_type(path)
+    mime = judge_file_mime(path)
     mime_type = mime[0]
     encoding = mime[1]
     supportedArchives = ['application/x-rar-compressed',
@@ -417,11 +425,11 @@ def _is_archive(path):
     return mime_type in supportedArchives or encoding in supportedArchives
 
 def _is_video(path):
-    mime = mimetypes.guess_type(path)
+    mime = judge_file_mime(path)
     return mime[0] is not None and mime[0].startswith('video')
 
 def _is_image(path):
-    mime = mimetypes.guess_type(path)
+    mime = judge_file_mime(path)
     # Exclude vector graphic images because Pillow cannot work with them
     return mime[0] is not None and mime[0].startswith('image') and \
         not mime[0].startswith('image/svg')
@@ -430,11 +438,11 @@ def _is_dir(path):
     return os.path.isdir(path)
 
 def _is_pdf(path):
-    mime = mimetypes.guess_type(path)
+    mime = judge_file_mime(path)
     return mime[0] == 'application/pdf'
 
 def _is_zip(path):
-    mime = mimetypes.guess_type(path)
+    mime = judge_file_mime(path)
     mime_type = mime[0]
     encoding = mime[1]
     supportedArchives = ['application/zip']
