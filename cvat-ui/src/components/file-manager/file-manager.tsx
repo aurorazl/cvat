@@ -17,11 +17,27 @@ import consts from 'consts';
 
 import { withTranslation, WithTranslation  } from 'react-i18next';
 import { isZh } from 'utils/lang-utils';
+import { CombinedState } from 'reducers/interfaces';
+import { connect } from 'react-redux';
 
 export interface Files {
     local: File[];
     share: string[];
     remote: string[];
+}
+
+interface StateToProps {
+    lang: string;
+}
+
+function mapStateToProps(state: CombinedState): StateToProps {
+    const {
+        lang: {lang}
+    } = state;
+
+    return {
+        lang
+    };
 }
 
 interface State {
@@ -36,7 +52,7 @@ interface Props {
     onLoadData: (key: string, success: () => void, failure: () => void) => void;
 }
 
-class FileManager extends React.PureComponent<Props & WithTranslation, State> {
+class FileManager extends React.PureComponent<Props & WithTranslation, State & StateToProps> {
     public constructor(props: Props & WithTranslation) {
         super(props);
 
@@ -143,7 +159,7 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State> {
 
         const { SHARE_MOUNT_GUIDE_URL } = consts;
         const { treeData, t } = this.props;
-        const { expandedKeys, files } = this.state;
+        const { expandedKeys, files, lang } = this.state;
 
         return (
             <Tabs.TabPane key='share' tab={t('Connected file share')}>
@@ -184,7 +200,7 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State> {
                     <div className='cvat-empty-share-tree'>
                         <Empty />
                         <Paragraph className='cvat-text-color'>
-                            { !isZh() ?
+                            { lang !== 'zh-CN' ?
                                 (<>
                                     Please, be sure you had
                                     <Text strong>

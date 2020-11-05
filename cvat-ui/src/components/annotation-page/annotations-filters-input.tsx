@@ -19,13 +19,13 @@ import {
 import { CombinedState } from 'reducers/interfaces';
 
 import { useTranslation } from 'react-i18next';
-import { isZh } from 'utils/lang-utils';
 
 interface StateToProps {
     annotationsFilters: string[];
     annotationsFiltersHistory: string[];
     searchForwardShortcut: string;
     searchBackwardShortcut: string;
+    lang: string; 
 }
 
 interface DispatchToProps {
@@ -38,9 +38,11 @@ function mapStateToProps(state: CombinedState): StateToProps {
             annotations: { filters: annotationsFilters, filtersHistory: annotationsFiltersHistory },
         },
         shortcuts: { normalizedKeyMap },
+        lang: {lang}
     } = state;
 
     return {
+        lang,
         annotationsFilters,
         annotationsFiltersHistory,
         searchForwardShortcut: normalizedKeyMap.SEARCH_FORWARD,
@@ -65,14 +67,14 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
     };
 }
 
-function filtersHelpModalContent(searchForwardShortcut: string, searchBackwardShortcut: string): JSX.Element {
+function filtersHelpModalContent(searchForwardShortcut: string, searchBackwardShortcut: string, lang: string): JSX.Element {
     const { t } = useTranslation();
     return (
         <>
             <Paragraph>
                 <Title level={3}>{t('General')}</Title>
             </Paragraph>
-            { isZh() ?
+            { lang === 'zh-CN' ?
                 <Paragraph>
                     你可以使用过滤器仅显示帧上的对象子集或者使用热键
                     <Text strong>{` ${searchForwardShortcut} `}</Text>
@@ -88,7 +90,7 @@ function filtersHelpModalContent(searchForwardShortcut: string, searchBackwardSh
                     <Text strong>{` ${searchBackwardShortcut} `}</Text>
                 </Paragraph>
             }
-            { isZh() ?
+            { lang === 'zh-CN' ?
                 <Paragraph>
                     <Text strong>支持的属性：</Text>
                     width, height, label, serverID, clientID, type, shape, occluded
@@ -149,6 +151,7 @@ function AnnotationsFiltersInput(props: StateToProps & DispatchToProps): JSX.Ele
         searchForwardShortcut,
         searchBackwardShortcut,
         changeAnnotationsFilters,
+        lang,
     } = props;
 
     const [underCursor, setUnderCursor] = useState(false);
@@ -156,6 +159,7 @@ function AnnotationsFiltersInput(props: StateToProps & DispatchToProps): JSX.Ele
     const modalContent = filtersHelpModalContent(
         searchForwardShortcut,
         searchBackwardShortcut,
+        lang,
     );
 
     return (

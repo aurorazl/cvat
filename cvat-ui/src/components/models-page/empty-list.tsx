@@ -10,10 +10,27 @@ import Icon from 'antd/lib/icon';
 import consts from 'consts';
 import { EmptyTasksIcon as EmptyModelsIcon } from 'icons';
 import { useTranslation } from 'react-i18next';
-import { isZh } from 'utils/lang-utils';
+import { CombinedState } from 'reducers/interfaces';
+import { connect } from 'react-redux';
 
-export default function EmptyListComponent(): JSX.Element {
+interface StateToProps {
+    lang: string;
+}
+
+function mapStateToProps(state: CombinedState): StateToProps {
+    const {
+        lang: {lang}
+    } = state;
+
+    return {
+        lang
+    };
+}
+
+ function EmptyListComponent(props: StateToProps): JSX.Element {
     const { t } = useTranslation();
+    const { lang } = props;
+
     return (
         <div className='cvat-empty-models-list'>
             <Row type='flex' justify='center' align='middle'>
@@ -33,7 +50,7 @@ export default function EmptyListComponent(): JSX.Element {
             </Row>
             <Row type='flex' justify='center' align='middle'>
                 <Col>
-                    { isZh() ? 
+                    { lang === 'zh-CN' ? 
                         <Text type='secondary'>
                             请使用 <a href={`${consts.NUCLIO_GUIDE}`}>nuclio</a> 部署模型
                         </Text> :
@@ -46,3 +63,5 @@ export default function EmptyListComponent(): JSX.Element {
         </div>
     );
 }
+
+export default connect(mapStateToProps)(EmptyListComponent);
