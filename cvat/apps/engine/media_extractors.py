@@ -18,13 +18,12 @@ from pyunpack import Archive
 from PIL import Image, ImageFile
 import filetype
 
-from utils import DirectoryUtils
+from cvat.apps.engine import DirectoryUtils
 
 # fixes: "OSError:broken data stream" when executing line 72 while loading images downloaded from the web
 # see: https://stackoverflow.com/questions/42462431/oserror-broken-data-stream-when-reading-image-file
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-from cvat.apps.engine.mime_types import mimetypes
 
 def get_mime(path):
     for type_name, type_def in MEDIA_TYPES.items():
