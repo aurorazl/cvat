@@ -19,6 +19,9 @@ import {
 import { CombinedState } from 'reducers/interfaces';
 
 import { useTranslation } from 'react-i18next';
+import HelpLink from 'components/help-link';
+import getCore from 'cvat-core-wrapper';
+import linkConsts from 'help-link-consts';
 
 interface StateToProps {
     annotationsFilters: string[];
@@ -145,6 +148,9 @@ function filtersHelpModalContent(searchForwardShortcut: string, searchBackwardSh
 
 function AnnotationsFiltersInput(props: StateToProps & DispatchToProps): JSX.Element {
     const { t } = useTranslation();
+    const core = getCore();
+    const baseURL = core.config.backendAPI.slice(0, -7);
+
     const {
         annotationsFilters,
         annotationsFiltersHistory,
@@ -163,12 +169,13 @@ function AnnotationsFiltersInput(props: StateToProps & DispatchToProps): JSX.Ele
     );
 
     return (
+        <>
         <Select
             className='cvat-annotations-filters-input'
             allowClear
             value={annotationsFilters}
             mode='tags'
-            style={{ width: '100%' }}
+            style={{ width: '95%' }}
             placeholder={
                 underCursor ? (
                     <>
@@ -205,6 +212,8 @@ function AnnotationsFiltersInput(props: StateToProps & DispatchToProps): JSX.Ele
                 ),
             )}
         </Select>
+        <HelpLink helpLink={`${baseURL}/${linkConsts.FILTER_URL}`} styles={{display:'inline-block', width: '5%', position: 'absolute'}}/>
+        </>  
     );
 }
 

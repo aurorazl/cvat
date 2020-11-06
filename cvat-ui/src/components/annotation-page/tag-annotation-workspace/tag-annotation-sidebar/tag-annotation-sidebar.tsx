@@ -27,6 +27,8 @@ import Tag from 'antd/lib/tag';
 import getCore from 'cvat-core-wrapper';
 import ShortcutsSelect from './shortcuts-select';
 import { useTranslation, Trans } from 'react-i18next';
+import HelpLink from 'components/help-link';
+import linkConsts from 'help-link-consts';
 
 const cvat = getCore();
 
@@ -90,6 +92,8 @@ function mapDispatchToProps(dispatch: ThunkDispatch<CombinedState, {}, Action>):
 
 function TagAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Element {
     const { t } = useTranslation();
+    const baseURL = cvat.config.backendAPI.slice(0, -7);
+
     const {
         states,
         labels,
@@ -202,6 +206,7 @@ function TagAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Elemen
         <>
             <GlobalHotKeys keyMap={subKeyMap} handlers={handlers} allowChanges />
             <Layout.Sider {...siderProps}>
+                <HelpLink helpLink={`${baseURL}/${linkConsts.ANNOTATION_WITH_TAGS_URL}`}/>
                 {/* eslint-disable-next-line */}
                 <span
                     className={`cvat-objects-sidebar-sider

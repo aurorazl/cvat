@@ -9,6 +9,9 @@ import Button from 'antd/lib/button';
 import Tooltip from 'antd/lib/tooltip';
 import Text from 'antd/lib/typography/Text';
 import { useTranslation } from 'react-i18next';
+import HelpLink from 'components/help-link';
+import getCore from 'cvat-core-wrapper';
+import linkConsts from 'help-link-consts';
 
 interface Props {
     labels: any[];
@@ -20,16 +23,22 @@ interface Props {
 
 function SetupTagPopover(props: Props): JSX.Element {
     const { t } = useTranslation();
+    const core = getCore();
+    const baseURL = core.config.backendAPI.slice(0, -7);
+
     const { labels, selectedLabeID, repeatShapeShortcut, onChangeLabel, onSetup } = props;
 
     return (
         <div className='cvat-draw-shape-popover-content'>
-            <Row type='flex' justify='start'>
+            <Row type='flex' justify='space-between'>
                 <Col>
                     <Text className='cvat-text-color' strong>
                         {t('Setup tag')}
                     </Text>
                 </Col>
+                <Col>
+                    <HelpLink helpLink={`${baseURL}/${linkConsts.ANNOTATION_WITH_TAGS_URL}`}/>
+                </Col>                
             </Row>
             <Row type='flex' justify='start'>
                 <Col>

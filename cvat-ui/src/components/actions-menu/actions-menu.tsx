@@ -5,6 +5,7 @@
 import './styles.scss';
 import React from 'react';
 import Menu, { ClickParam } from 'antd/lib/menu';
+import Tooltip from 'antd/lib/tooltip';
 import Modal from 'antd/lib/modal';
 
 import DumpSubmenu from './dump-submenu';
@@ -12,6 +13,8 @@ import LoadSubmenu from './load-submenu';
 import ExportSubmenu from './export-submenu';
 
 import { useTranslation } from 'react-i18next';
+import getCore from 'cvat-core-wrapper';
+import linkConsts from 'help-link-consts';
 
 interface Props {
     taskID: number;
@@ -38,6 +41,9 @@ export enum Actions {
 
 export default function ActionsMenuComponent(props: Props): JSX.Element {
     const { t } = useTranslation();
+    const core = getCore();
+    const baseURL = core.config.backendAPI.slice(0, -7);
+
     const {
         taskID,
         taskMode,
@@ -118,7 +124,9 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
             })}
             {!!bugTracker && <Menu.Item key={Actions.OPEN_BUG_TRACKER}>{t('Open bug tracker')}</Menu.Item>}
             <Menu.Item disabled={inferenceIsActive} key={Actions.RUN_AUTO_ANNOTATION}>
+            <Tooltip title={<a href={`${baseURL}/${linkConsts.AUTOMATIC_ANNOTATION_URL}`} target="blank">查看帮助</a>} placement='left' mouseLeaveDelay={0.2}>
                 {t('Automatic annotation')}
+            </Tooltip>   
             </Menu.Item>
             <hr />
             <Menu.Item key={Actions.DELETE_TASK}>{t('Delete')}</Menu.Item>

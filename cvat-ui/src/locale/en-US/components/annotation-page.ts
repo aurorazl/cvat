@@ -30,7 +30,7 @@ export default {
     'Number of points:': 'Number of points:',
     'Shape': 'Shape',
     'Track': 'Track',
-    'Press ${repeatShapeShortcut} to draw again': 'Press ${repeatShapeShortcut} to draw again',
+    'Press ${repeatShapeShortcut} to draw again': 'Press {{repeatShapeShortcut}} to draw again',
     //annotation-page\standard-workspace\controls-side-bar\fit-control.tsx
     'Fit the image [Double Click]': 'Fit the image [Double Click]',
     //annotation-page\standard-workspace\controls-side-bar\group-control.tsx

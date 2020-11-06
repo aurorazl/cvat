@@ -11,6 +11,8 @@ import { Canvas } from 'cvat-canvas-wrapper';
 import { ActiveControl } from 'reducers/interfaces';
 
 import { useTranslation } from 'react-i18next';
+import getCore from 'cvat-core-wrapper';
+import linkConsts from 'help-link-consts';
 
 interface Props {
     canvasInstance: Canvas;
@@ -22,6 +24,8 @@ interface Props {
 
 function GroupControl(props: Props): JSX.Element {
     const { t } = useTranslation();
+    const core = getCore();
+    const baseURL = core.config.backendAPI.slice(0, -7);    
     const { switchGroupShortcut, resetGroupShortcut, activeControl, canvasInstance,groupObjects } = props;
 
     const dynamicIconProps =
@@ -42,10 +46,10 @@ function GroupControl(props: Props): JSX.Element {
                   },
               };
 
-    const title = 
-    t('Group shapes/tracks ${switchGroupShortcut}.').replace('${switchGroupShortcut}', `${switchGroupShortcut}`) + t(' Select and press ${resetGroupShortcut} to reset a group').replace('${resetGroupShortcut}', `${resetGroupShortcut}`);
+    const title = <a href={`${baseURL}/${linkConsts.SHAPE_GROUPING_URL}`} target="blank">
+    {t('Group shapes/tracks ${switchGroupShortcut}.').replace('${switchGroupShortcut}', `${switchGroupShortcut}`) + t(' Select and press ${resetGroupShortcut} to reset a group').replace('${resetGroupShortcut}', `${resetGroupShortcut}`)}</a>;
     return (
-        <Tooltip title={title} placement='right' mouseLeaveDelay={0}>
+        <Tooltip title={title} placement='right' mouseLeaveDelay={0.2}>
             <Icon {...dynamicIconProps} component={GroupIcon} />
         </Tooltip>
     );

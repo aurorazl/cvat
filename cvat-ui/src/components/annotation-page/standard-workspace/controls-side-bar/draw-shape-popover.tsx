@@ -18,6 +18,11 @@ import { clamp } from 'utils/math';
 import { useTranslation } from 'react-i18next';
 import { transShapeType } from 'utils/lang-utils';
 
+import HelpLink from 'components/help-link';
+import getCore from 'cvat-core-wrapper';
+import linkConsts from 'help-link-consts';
+import { getShapeLinkUrl } from 'utils/link-utils';
+
 interface Props {
     shapeType: ShapeType;
     labels: any[];
@@ -37,6 +42,9 @@ interface Props {
 
 function DrawShapePopoverComponent(props: Props): JSX.Element {
     const { t } = useTranslation();
+    const core = getCore();
+    const baseURL = core.config.backendAPI.slice(0, -7);
+
     const {
         labels,
         shapeType,
@@ -56,9 +64,12 @@ function DrawShapePopoverComponent(props: Props): JSX.Element {
 
     return (
         <div className='cvat-draw-shape-popover-content'>
-            <Row type='flex' justify='start'>
+            <Row type='flex' justify='space-between'>
                 <Col>
                     <Text className='cvat-text-color' strong>{t('Draw new ${shapeType}').replace('${shapeType}', transShapeType(`${shapeType}`))}</Text>
+                </Col>
+                <Col>
+                    <HelpLink helpLink={`${baseURL}/${getShapeLinkUrl(shapeType)}`}/>
                 </Col>
             </Row>
             <Row type='flex' justify='start'>
@@ -163,12 +174,12 @@ function DrawShapePopoverComponent(props: Props): JSX.Element {
             )}
             <Row type='flex' justify='space-around'>
                 <Col span={12}>
-                    <Tooltip title={t('Press ${repeatShapeShortcut} to draw again').replace('${repeatShapeShortcut}', `${repeatShapeShortcut}`)} mouseLeaveDelay={0}>
+                    <Tooltip title={<a href={`${baseURL}/${linkConsts.SHAPE_MODE_BASICS_URL}`} target="blank">{t('Press ${repeatShapeShortcut} to draw again', {repeatShapeShortcut: `${repeatShapeShortcut}`})}</a>} mouseLeaveDelay={0.2}>
                         <Button onClick={onDrawShape}>{t('Shape')}</Button>
                     </Tooltip>
                 </Col>
                 <Col span={12}>
-                    <Tooltip title={t('Press ${repeatShapeShortcut} to draw again').replace('${repeatShapeShortcut}', `${repeatShapeShortcut}`)} mouseLeaveDelay={0}>
+                    <Tooltip title={<a href={`${baseURL}/${linkConsts.TRACK_MODE_BASICS_URL}`} target="blank">{t('Press ${repeatShapeShortcut} to draw again', {repeatShapeShortcut: `${repeatShapeShortcut}`})}</a>} mouseLeaveDelay={0.2}>
                         <Button onClick={onDrawTrack}>{t('Track')}</Button>
                     </Tooltip>
                 </Col>

@@ -31,6 +31,9 @@ import DetectorRunner from 'components/model-runner-modal/detector-runner';
 import { withTranslation, WithTranslation  } from 'react-i18next';
 import InputNumber from 'antd/lib/input-number';
 
+import HelpLink from 'components/help-link';
+import linkConsts from 'help-link-consts'
+
 interface StateToProps {
     canvasInstance: Canvas;
     labels: any[];
@@ -715,14 +718,19 @@ export class ToolsControlComponent extends React.PureComponent<Props, State> {
 
     private renderPopoverContent(): JSX.Element {
         const { t } = this.props;
+        const core = getCore();
+        const baseURL = core.config.backendAPI.slice(0, -7);        
         return (
             <div className='cvat-tools-control-popover-content'>
-                <Row type='flex' justify='start'>
+                <Row type='flex' justify='space-between'>
                     <Col>
                         <Text className='cvat-text-color' strong>
                             {t('AI Tools')}
                         </Text>
                     </Col>
+                    <Col>
+                        <HelpLink helpLink={`${baseURL}/${linkConsts.AI_TOOLS_URL}`}/>
+                    </Col>                    
                 </Row>
                 <Tabs type='card' tabBarGutter={8}>
                     <Tabs.TabPane key='interactors' tab={t('Interactors')}>
