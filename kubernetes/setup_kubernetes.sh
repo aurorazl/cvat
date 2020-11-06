@@ -13,7 +13,7 @@ k8s_images=(
     $k8s_url/coredns:1.6.7
     plndr/kube-vip:0.1.7
   )
-for image in $k8s_images;
+for image in ${k8s_images[@]};
     do
         docker pull $harbor_prefix$image
         docker tag $harbor_prefix$image $image
