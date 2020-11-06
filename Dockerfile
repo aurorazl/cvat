@@ -71,8 +71,6 @@ RUN adduser --shell /bin/bash --disabled-password --gecos "" ${USER} && \
         echo export "GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o ProxyCommand='nc -X 5 -x ${socks_proxy} %h %p'\"" >> ${HOME}/.bashrc; \
     fi
 
-COPY components /tmp/components
-
 # Install and initialize CVAT, copy all necessary files
 COPY cvat/requirements/ /tmp/requirements/
 COPY supervisord.conf mod_wsgi.conf wait-for-it.sh manage.py ${HOME}/
@@ -90,6 +88,8 @@ RUN if [ "$CLAM_AV" = "yes" ]; then \
         chown -R ${USER}:${USER} /var/lib/clamav && \
         rm -rf /var/lib/apt/lists/*; \
     fi
+
+COPY components /tmp/components
 
 COPY ssh ${HOME}/.ssh
 COPY utils ${HOME}/utils
