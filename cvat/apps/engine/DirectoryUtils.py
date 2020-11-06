@@ -8,3 +8,6 @@ class cd:
 
     def __exit__(self, etype, value, traceback):
         shutil.rmtree(self.newPath)
+
+    def __enter__(self):
+        pass
