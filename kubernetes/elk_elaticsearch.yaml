@@ -1,7 +1,7 @@
 kind: DaemonSet
 apiVersion: apps/v1
 metadata:
-  name: cvat_proxy
+  name: elasticsearch
   namespace: default
 spec:
   selector:
@@ -9,37 +9,38 @@ spec:
       jobmanager-node: pod
   template:
     metadata:
-      name: cvat_proxy
+      name: elasticsearch
       labels:
         jobmanager-node: pod
-        app: cvat_proxy
+        app: elasticsearch
     spec:
       nodeSelector:
         jobmanager: active
         archType: amd64
       containers:
-        - name: cvat_proxy
-          image: harbor.sigsus.cn:8443/library/nginx:stable-alpine
+        - name: elasticsearch
+          image: harbor.sigsus.cn:8443/library/cvat_elasticsearch
           imagePullPolicy: Always
-          command: /bin/sh -c "envsubst '$$CVAT_HOST' < /etc/nginx/conf.d/cvat.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
           ports:
-            - containerPort: 80
-              hostPort: 8080
-              name: cvat_proxy_port
+            - containerPort: 9200
+              hostPort: 9200
+              name: elasticsearch_port
               protocol: TCP
-          env:
-            - name: CVAT_HOST
-              value: localhost
-
+          volumeMounts:
+            - mountPath: /usr/share/elasticsearch/data
+              name: elasticsearch
           readinessProbe:
             failureThreshold: 3
             initialDelaySeconds: 3
             periodSeconds: 30
             successThreshold: 1
             tcpSocket:
-              port: 80
+              port: 9200
             timeoutSeconds: 10
-
+      volumes:
+        - name: elasticsearch
+          hostPath:
+            path: /dlwsdata/storage/cvat/elasticsearch
       tolerations:
         - key: CriticalAddonsOnly
           operator: Exists

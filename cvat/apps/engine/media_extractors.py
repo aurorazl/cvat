@@ -7,7 +7,9 @@ import tempfile
 import shutil
 import zipfile
 import io
+import time
 import itertools
+import random
 from abc import ABC, abstractmethod
 
 import av
@@ -22,9 +24,9 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 from cvat.apps.engine.mime_types import mimetypes
 
-def get_mime(name):
+def get_mime(path):
     for type_name, type_def in MEDIA_TYPES.items():
-        if type_def['has_mime_type'](name):
+        if type_def['has_mime_type'](path):
             return type_name
 
     return 'unknown'
@@ -176,9 +178,13 @@ class PdfReader(ImageListReader):
         )
 
 class ZipReader(ImageListReader):
+    ## source_path may be buff(eg,byteio) or realpath
     def __init__(self, source_path, step=1, start=0, stop=None):
         self._zip_source = zipfile.ZipFile(source_path[0], mode='r')
+        exctract_path = "./{}-{}".format(str(time.time()),random.randint(1,1111))
+        self._zip_source.extractall(path=exctract_path)
         file_list = [f for f in self._zip_source.namelist() if get_mime(f) == 'image']
+        shutil.rmtree(exctract_path)
         super().__init__(file_list, step, start, stop)
 
     def __del__(self):
@@ -410,11 +416,9 @@ class Mpeg4CompressedChunkWriter(Mpeg4ChunkWriter):
 
 def judge_file_mime(path):
     ### replace:       mimetypes.guess_type
-    return mimetypes.guess_type(path)
     mime = filetype.guess(path)
     if mime:
         return (mime.mime,None)
-
     return (None,None)
 
 def _is_archive(path):
