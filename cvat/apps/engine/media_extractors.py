@@ -18,6 +18,8 @@ from pyunpack import Archive
 from PIL import Image, ImageFile
 import filetype
 
+from utils import DirectoryUtils
+
 # fixes: "OSError:broken data stream" when executing line 72 while loading images downloaded from the web
 # see: https://stackoverflow.com/questions/42462431/oserror-broken-data-stream-when-reading-image-file
 ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -183,8 +185,8 @@ class ZipReader(ImageListReader):
         self._zip_source = zipfile.ZipFile(source_path[0], mode='r')
         exctract_path = "./{}-{}".format(str(time.time()),random.randint(1,1111))
         self._zip_source.extractall(path=exctract_path)
-        file_list = [f for f in self._zip_source.namelist() if get_mime(f) == 'image']
-        shutil.rmtree(exctract_path)
+        with DirectoryUtils.cd(exctract_path):
+            file_list = [f for f in self._zip_source.namelist() if get_mime(os.path.join(exctract_path,f)) == 'image']
         super().__init__(file_list, step, start, stop)
 
     def __del__(self):
