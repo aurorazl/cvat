@@ -1,7 +1,7 @@
 kind: DaemonSet
 apiVersion: apps/v1
 metadata:
-  name: cvat_backend
+  name: cvat-backend
   namespace: default
 spec:
   selector:
@@ -9,22 +9,22 @@ spec:
       jobmanager-node: pod
   template:
     metadata:
-      name: cvat_backend
+      name: cvat-backend
       labels:
         jobmanager-node: pod
-        app: cvat_backend
+        app: cvat-backend
     spec:
       nodeSelector:
         jobmanager: active
         archType: amd64
       containers:
-        - name: cvat_db
+        - name: cvat-db
           image: harbor.sigsus.cn:8443/library/postgres:10-alpine
           imagePullPolicy: Always
           ports:
             - containerPort: 5432
               hostPort: 5432
-              name: cvat_db
+              name: cvat-db
               protocol: TCP
           env:
             - name: POSTGRES_USER
@@ -35,14 +35,14 @@ spec:
               value: trust
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: cvat_db
+              name: cvat-db
 
-        - name: cvat_redis
+        - name: cvat-redis
           image: harbor.sigsus.cn:8443/library/redis:4.0-alpine
           imagePullPolicy: Always
 
         - name: cvat
-          image: harbor.sigsus.cn:8443/library/cvat/backend
+          image: harbor.sigsus.cn:8443/library/cvat/server
           imagePullPolicy: Always
           env:
             - name: DJANGO_MODWSGI_EXTRA_ARGS
@@ -56,26 +56,26 @@ spec:
             - name: DJANGO_LOG_SERVER_HOST
               value: '127.0.0.1'
             - name: DJANGO_LOG_SERVER_PORT
-              value: 5001
+              value: '5001'
             - name: DJANGO_LOG_VIEWER_HOST
               value: '127.0.0.1'
             - name: DJANGO_LOG_VIEWER_PORT
-              value: 5601
+              value: '5601'
             - name: CVAT_ANALYTICS
-              value: 1
+              value: '1'
             - name: no_proxy
               value: kibana,logstash,nuclio,${no_proxy}
             - name: CVAT_SERVERLESS
-              value: 1
+              value: '1'
           volumeMounts:
             - mountPath: /home/django/data
-              name: cvat_data
+              name: cvat-data
             - mountPath: /home/django/keys
-              name: cvat_keys
+              name: cvat-keys
             - mountPath: /home/django/logs
-              name: cvat_logs
+              name: cvat-logs
             - mountPath: /home/django/models
-              name: cvat_models
+              name: cvat-models
           ports:
             - containerPort: 8080
               hostPort: 8082
@@ -91,19 +91,19 @@ spec:
             timeoutSeconds: 10
 
       volumes:
-        - name: cvat_db
+        - name: cvat-db
           hostPath:
             path: /var/lib/postgres
-        - name: cvat_data
+        - name: cvat-data
           hostPath:
             path: /dlwsdata/storage/cvat/data
-        - name: cvat_keys
+        - name: cvat-keys
           hostPath:
             path: /dlwsdata/storage/cvat/keys
-        - name: cvat_logs
+        - name: cvat-logs
           hostPath:
             path: /dlwsdata/storage/cvat/logs
-        - name: cvat_models
+        - name: cvat-models
           hostPath:
             path: /dlwsdata/storage/cvat/models
 

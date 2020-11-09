@@ -1,6 +1,6 @@
 #!/bin/bash
 
-harbor_prefix=$1
+harbor_prefix=harbor.sigsus.cn:8443/sz_gongdianju/
 k8s_version=v1.18.2
 k8s_url=k8s.gcr.io
 k8s_images=(
@@ -12,6 +12,8 @@ k8s_images=(
     $k8s_url/etcd:3.4.3-0
     $k8s_url/coredns:1.6.7
     plndr/kube-vip:0.1.7
+    weaveworks/weave-kube:2.7.0
+    weaveworks/weave-npc:2.7.0
   )
 for image in ${k8s_images[@]};
     do
@@ -19,4 +21,4 @@ for image in ${k8s_images[@]};
         docker tag $harbor_prefix$image $image
     done
 
-kubeadm init
+kubeadm init --kubernetes-version=v1.18.2
