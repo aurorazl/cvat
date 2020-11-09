@@ -103,7 +103,7 @@ export default {
     'Run tracking with the active tracker': 'Run tracking with the active tracker',
     '${copyShortcut} and ${pasteShortcut}': '{{copyShortcut}} and {{pasteShortcut}}',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\objects-list-header.tsx
-    'Switch lock property for all ${switchLockAllShortcut}': 'Switch lock property for all ${switchLockAllShortcut}',
+    'Switch lock property for all ${switchLockAllShortcut}': 'Switch lock property for all {{switchLockAllShortcut}}',
     'Switch hidden property for all ${switchHiddenAllShortcut}': 'Switch hidden property for all {{switchHiddenAllShortcut}}',
     'Expand/collapse all': 'Expand/collapse all',
     'Sort by': 'Sort by',

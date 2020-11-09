@@ -103,7 +103,7 @@ export default {
     'Run tracking with the active tracker': '使用激活的跟踪模型进行跟踪',
     '${copyShortcut} and ${pasteShortcut}': '{{copyShortcut}} 和 {{pasteShortcut}}',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\objects-list-header.tsx
-    'Switch lock property for all ${switchLockAllShortcut}': '锁定/解锁所有标注${switchLockAllShortcut}',
+    'Switch lock property for all ${switchLockAllShortcut}': '锁定/解锁所有标注{{switchLockAllShortcut}}',
     'Switch hidden property for all ${switchHiddenAllShortcut}': '隐藏/显示所有标注{{switchLockAllShortcut}}',
     'Expand/collapse all': '展开/折叠所有',
     'Sort by': '排序',

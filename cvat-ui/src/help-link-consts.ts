@@ -35,6 +35,9 @@ const SHAPE_GROUPING_URL = 'documentation/user_guide.html#shape-grouping';
 const FILTER_URL = 'documentation/user_guide.html#filter';
 const SHORTCUTS_URL = 'documentation/user_guide.html#shortcuts';
 const PLAYER = 'documentation/user_guide.html#player';
+const SAVE_WORK = 'documentation/user_guide.html#save-work';
+const UNDO_REDO_BUTTONS = 'documentation/user_guide.html#undo-redo-buttons';
+const OBJECTS = 'documentation/user_guide.html#objects';
 
 export default {
     CREATING_AN_ANNOTATION_TASK_URL,
@@ -70,4 +73,7 @@ export default {
     FILTER_URL,
     SHORTCUTS_URL,
     PLAYER,
+    SAVE_WORK,
+    UNDO_REDO_BUTTONS,
+    OBJECTS,
 };

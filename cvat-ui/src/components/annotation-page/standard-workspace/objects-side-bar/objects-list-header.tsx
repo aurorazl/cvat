@@ -12,6 +12,8 @@ import Tooltip from 'antd/lib/tooltip';
 import AnnotationsFiltersInput from 'components/annotation-page/annotations-filters-input';
 import { StatesOrdering } from 'reducers/interfaces';
 import { useTranslation } from 'react-i18next';
+import getCore from 'cvat-core-wrapper';
+import linkConsts from 'help-link-consts';
 
 interface StatesOrderingSelectorComponentProps {
     statesOrdering: StatesOrdering;
@@ -41,6 +43,8 @@ function StatesOrderingSelectorComponent(props: StatesOrderingSelectorComponentP
 }
 
 const StatesOrderingSelector = React.memo(StatesOrderingSelectorComponent);
+const core = getCore();
+const baseURL = core.config.backendAPI.slice(0, -7);
 
 interface Props {
     statesHidden: boolean;
@@ -85,7 +89,7 @@ function ObjectListHeader(props: Props): JSX.Element {
             </Row>
             <Row type='flex' justify='space-between' align='middle'>
                 <Col span={2}>
-                    <Tooltip title={t('Switch lock property for all ${switchLockAllShortcut}').replace('${switchLockAllShortcut}', `${switchLockAllShortcut}`)} mouseLeaveDelay={0}>
+                    <Tooltip title={<a href={`${baseURL}/${linkConsts.OBJECTS}`} target="blank">{t('Switch lock property for all ${switchLockAllShortcut}', {switchLockAllShortcut: `${switchLockAllShortcut}`})}</a>} mouseLeaveDelay={0.2}>
                         { statesLocked ? (
                                 <Icon type='lock' onClick={unlockAllStates} theme='filled' />
                             ) : (
@@ -94,7 +98,7 @@ function ObjectListHeader(props: Props): JSX.Element {
                     </Tooltip>
                 </Col>
                 <Col span={2}>
-                    <Tooltip title={t('Switch hidden property for all ${switchHiddenAllShortcut}', {switchHiddenAllShortcut: `${switchHiddenAllShortcut}`})} mouseLeaveDelay={0}>
+                    <Tooltip title={<a href={`${baseURL}/${linkConsts.OBJECTS}`} target="blank">{t('Switch hidden property for all ${switchHiddenAllShortcut}', {switchHiddenAllShortcut: `${switchHiddenAllShortcut}`})}</a>} mouseLeaveDelay={0.2}>
                         { statesHidden ? (
                                 <Icon type='eye-invisible' onClick={showAllStates} />
                             ) : (
@@ -103,7 +107,7 @@ function ObjectListHeader(props: Props): JSX.Element {
                     </Tooltip>
                 </Col>
                 <Col span={2}>
-                    <Tooltip title={t('Expand/collapse all')} mouseLeaveDelay={0}>
+                            <Tooltip title={<a href={`${baseURL}/${linkConsts.OBJECTS}`} target="blank">{t('Expand/collapse all')}</a>} mouseLeaveDelay={0.2}>
                         { statesCollapsed ? (
                                 <Icon type='caret-down' onClick={expandAllStates} />
                             ) : (

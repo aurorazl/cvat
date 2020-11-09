@@ -16,8 +16,10 @@ import { Canvas } from 'cvat-canvas-wrapper';
 import getCore from 'cvat-core-wrapper';
 import consts from 'consts';
 import { withTranslation, WithTranslation  } from 'react-i18next';
+import linkConsts from 'help-link-consts';
 
 const cvat = getCore();
+const baseURL = cvat.config.backendAPI.slice(0, -7);
 
 const MAX_DISTANCE_TO_OPEN_SHAPE = 50;
 
@@ -838,7 +840,7 @@ class CanvasWrapperComponent extends React.PureComponent<Props> {
                         defaultValue={0}
                         onChange={(value: SliderValue): void => onSwitchZLayer(value as number)}
                     />
-                    <Tooltip title={t('Add new layer ${maxZLayer + 1} and switch to it').replace('${maxZLayer + 1}', `${maxZLayer + 1}`)} mouseLeaveDelay={0}>
+                    <Tooltip title={<a href={`${baseURL}/${linkConsts.WORKSPACE_URL}`} target="blank">{t('Add new layer ${maxZLayer + 1} and switch to it').replace('${maxZLayer + 1}', `${maxZLayer + 1}`)}</a>} mouseLeaveDelay={0.2}>
                         <Icon type='plus-circle' onClick={onAddZLayer} />
                     </Tooltip>
                 </div>
