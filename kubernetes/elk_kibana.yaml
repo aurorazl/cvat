@@ -17,6 +17,7 @@ spec:
       nodeSelector:
         jobmanager: active
         archType: amd64
+      hostNetwork: true
       containers:
         - name: kibana
           image: harbor.sigsus.cn:8443/library/cvat_kibana
