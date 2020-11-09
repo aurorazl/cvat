@@ -26,6 +26,9 @@ spec:
               hostPort: 8081
               name: frontend-port
               protocol: TCP
+          env:
+          - name: REACT_APP_API_URL
+            value: "/cvat"
           readinessProbe:
             failureThreshold: 3
             initialDelaySeconds: 3
