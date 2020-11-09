@@ -1,7 +1,7 @@
 kind: DaemonSet
 apiVersion: apps/v1
 metadata:
-  name: cvat-frontend
+  name: elasticsearch
   namespace: default
 spec:
   selector:
@@ -9,32 +9,38 @@ spec:
       jobmanager-node: pod
   template:
     metadata:
-      name: cvat-frontend
+      name: elasticsearch
       labels:
         jobmanager-node: pod
-        app: cvat-frontend
+        app: elasticsearch
     spec:
       nodeSelector:
         jobmanager: active
         archType: amd64
       containers:
-        - name: cvat-ui
-          image: harbor.sigsus.cn:8443/library/cvat/ui
-          imagePullPolicy: IfNotPresent
+        - name: elasticsearch
+          image: harbor.sigsus.cn:8443/library/cvat_elasticsearch
+          imagePullPolicy: Always
           ports:
-            - containerPort: 80
-              hostPort: 8081
-              name: frontend-port
+            - containerPort: 9200
+              hostPort: 9200
+              name: elasticsearch_port
               protocol: TCP
+          volumeMounts:
+            - mountPath: /usr/share/elasticsearch/data
+              name: elasticsearch
           readinessProbe:
             failureThreshold: 3
             initialDelaySeconds: 3
             periodSeconds: 30
             successThreshold: 1
             tcpSocket:
-              port: 80
+              port: 9200
             timeoutSeconds: 10
-
+      volumes:
+        - name: elasticsearch
+          hostPath:
+            path: /dlwsdata/storage/cvat/elasticsearch
       tolerations:
         - key: CriticalAddonsOnly
           operator: Exists

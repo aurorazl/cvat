@@ -1,0 +1,61 @@
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: nuclio
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      jobmanager-node: pod
+  template:
+    metadata:
+      name: nuclio
+      labels:
+        jobmanager-node: pod
+        app: nuclio
+    spec:
+      nodeSelector:
+        jobmanager: active
+        archType: amd64
+      containers:
+        - name: nuclio
+          image: harbor.sigsus.cn:8443/library/quay.io/nuclio/dashboard:1.4.8-amd64
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8070
+              hostPort: 8070
+              name: cvat_db
+              protocol: TCP
+          env:
+            - name: POSTGRES_USER
+              value: root
+            - name: POSTGRES_DB
+              value: cvat
+            - name: POSTGRES_HOST_AUTH_METHOD
+              value: trust
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp
+            - mountPath: /var/run/docker.sock
+              name: docker
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 3
+            periodSeconds: 30
+            successThreshold: 1
+            tcpSocket:
+              port: 8070
+            timeoutSeconds: 10
+      volumes:
+        - name: tmp
+          hostPath:
+            path: /tmp
+        - name: docker
+          hostPath:
+            path: /var/run/docker.sock
+
+      tolerations:
+        - key: CriticalAddonsOnly
+          operator: Exists
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule

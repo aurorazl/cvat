@@ -106,7 +106,7 @@ def _save_task_to_db(db_task):
     db_task.data.save()
     db_task.save()
 
-def _count_files(data, meta_info_file=None):
+def _count_files(data, meta_info_file=None,upload_dir=None):
     share_root = settings.SHARE_ROOT
     server_files = []
 
@@ -129,12 +129,12 @@ def _count_files(data, meta_info_file=None):
         if not os.path.dirname(v[0]).startswith(v[1])]
 
     def count_files(file_mapping, counter):
-        for rel_path, full_path in file_mapping.items():
+        for file_name, full_path in file_mapping.items():
             mime = get_mime(full_path)
             if mime in counter:
-                counter[mime].append(rel_path)
-            elif findall('meta_info.txt$', rel_path):
-                meta_info_file.append(rel_path)
+                counter[mime].append(file_name)
+            elif findall('meta_info.txt$', file_name):
+                meta_info_file.append(file_name)
             else:
                 slogger.glob.warn("Skip '{}' file (its mime type doesn't "
                     "correspond to a video or an image file)".format(full_path))
@@ -142,7 +142,7 @@ def _count_files(data, meta_info_file=None):
     counter = { media_type: [] for media_type in MEDIA_TYPES.keys() }
 
     count_files(
-        file_mapping={ f:f for f in data['remote_files'] or data['client_files']},
+        file_mapping={ f:os.path.join(upload_dir,f) for f in data['remote_files'] or data['client_files']},
         counter=counter,
     )
 
@@ -225,7 +225,7 @@ def _create_thread(tid, data):
         data['remote_files'] = _download_data(data['remote_files'], upload_dir)
 
     meta_info_file = []
-    media = _count_files(data, meta_info_file)
+    media = _count_files(data, meta_info_file,upload_dir)
     media, task_mode = _validate_data(media, meta_info_file)
     if meta_info_file:
         assert settings.USE_CACHE and db_data.storage_method == StorageMethodChoice.CACHE, \

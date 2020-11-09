@@ -7,7 +7,9 @@ import tempfile
 import shutil
 import zipfile
 import io
+import time
 import itertools
+import random
 from abc import ABC, abstractmethod
 
 import av
@@ -16,15 +18,16 @@ from pyunpack import Archive
 from PIL import Image, ImageFile
 import filetype
 
+from cvat.apps.engine import DirectoryUtils
+
 # fixes: "OSError:broken data stream" when executing line 72 while loading images downloaded from the web
 # see: https://stackoverflow.com/questions/42462431/oserror-broken-data-stream-when-reading-image-file
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-from cvat.apps.engine.mime_types import mimetypes
 
-def get_mime(name):
+def get_mime(path):
     for type_name, type_def in MEDIA_TYPES.items():
-        if type_def['has_mime_type'](name):
+        if type_def['has_mime_type'](path):
             return type_name
 
     return 'unknown'
@@ -176,9 +179,13 @@ class PdfReader(ImageListReader):
         )
 
 class ZipReader(ImageListReader):
+    ## source_path may be buff(eg,byteio) or realpath
     def __init__(self, source_path, step=1, start=0, stop=None):
         self._zip_source = zipfile.ZipFile(source_path[0], mode='r')
-        file_list = [f for f in self._zip_source.namelist() if get_mime(f) == 'image']
+        exctract_path = "./{}-{}".format(str(time.time()),random.randint(1,1111))
+        self._zip_source.extractall(path=exctract_path)
+        with DirectoryUtils.cd(exctract_path):
+            file_list = [f for f in self._zip_source.namelist() if get_mime(os.path.join(exctract_path,f)) == 'image']
         super().__init__(file_list, step, start, stop)
 
     def __del__(self):

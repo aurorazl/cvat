@@ -4,7 +4,7 @@ ARG http_proxy
 ARG https_proxy
 ARG no_proxy
 ARG socks_proxy
-ARG TZ
+ARG TZ='Etc/UTC'
 
 ENV TERM=xterm \
     http_proxy=${http_proxy}   \
@@ -15,8 +15,8 @@ ENV TERM=xterm \
     LC_ALL='C.UTF-8' \
     TZ=${TZ}
 
-ARG USER
-ARG DJANGO_CONFIGURATION
+ARG USER='django'
+ARG DJANGO_CONFIGURATION='production'
 ENV DJANGO_CONFIGURATION=${DJANGO_CONFIGURATION}
 
 RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
@@ -71,14 +71,12 @@ RUN adduser --shell /bin/bash --disabled-password --gecos "" ${USER} && \
         echo export "GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o ProxyCommand='nc -X 5 -x ${socks_proxy} %h %p'\"" >> ${HOME}/.bashrc; \
     fi
 
-COPY components /tmp/components
-
 # Install and initialize CVAT, copy all necessary files
 COPY cvat/requirements/ /tmp/requirements/
 COPY supervisord.conf mod_wsgi.conf wait-for-it.sh manage.py ${HOME}/
-RUN python3 -m pip install --no-cache-dir -r /tmp/requirements/${DJANGO_CONFIGURATION}.txt
+RUN pip install -r /tmp/requirements/${DJANGO_CONFIGURATION}.txt
 
-ARG CLAM_AV
+ARG CLAM_AV='no'
 ENV CLAM_AV=${CLAM_AV}
 RUN if [ "$CLAM_AV" = "yes" ]; then \
         apt-get update && \
@@ -90,6 +88,8 @@ RUN if [ "$CLAM_AV" = "yes" ]; then \
         chown -R ${USER}:${USER} /var/lib/clamav && \
         rm -rf /var/lib/apt/lists/*; \
     fi
+
+COPY components /tmp/components
 
 COPY ssh ${HOME}/.ssh
 COPY utils ${HOME}/utils
