@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT
 
-// import './styles.scss';
+import './styles.scss';
 import React from 'react';
 import Icon from 'antd/lib/icon';
 
@@ -15,7 +15,7 @@ export default function HelpLinkComponent(props: Props): JSX.Element {
     const { helpLink, styles } = props;
 
     return (
-        <div style={{...styles}} onClick={(): void => {
+        <div className= "cvat-help-link" style={{...styles}} onClick={(): void => {
             window.open(`${helpLink}`, '_blank');
         }}>
             <Icon type='question-circle' />

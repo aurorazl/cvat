@@ -14,6 +14,8 @@ import Text from 'antd/lib/typography/Text';
 import { clamp } from 'utils/math';
 
 import { useTranslation } from 'react-i18next';
+import getCore from 'cvat-core-wrapper';
+import linkConsts from 'help-link-consts';
 
 interface Props {
     startFrame: number;
@@ -29,6 +31,9 @@ interface Props {
 
 function PlayerNavigation(props: Props): JSX.Element {
     const { t } = useTranslation();
+    const core = getCore();
+    const baseURL = core.config.backendAPI.slice(0, -7);
+
     const {
         startFrame,
         stopFrame,
@@ -77,7 +82,7 @@ function PlayerNavigation(props: Props): JSX.Element {
                 </Row>
             </Col>
             <Col>
-                <Tooltip title={t('Press ${focusFrameInputShortcut} to focus here').replace('${focusFrameInputShortcut}', `${focusFrameInputShortcut}`)} mouseLeaveDelay={0}>
+                <Tooltip title={<a href={`${baseURL}/${linkConsts.PLAYER}`} target="blank">{t('Press ${focusFrameInputShortcut} to focus here', {focusFrameInputShortcut: `${focusFrameInputShortcut}`})}</a>} mouseLeaveDelay={0.2}>
                     <InputNumber
                         className='cvat-player-frame-selector'
                         type='number'

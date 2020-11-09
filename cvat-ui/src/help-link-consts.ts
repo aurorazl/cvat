@@ -34,6 +34,7 @@ const AUTOMATIC_ANNOTATION_URL = 'documentation/user_guide.html#automatic-annota
 const SHAPE_GROUPING_URL = 'documentation/user_guide.html#shape-grouping';
 const FILTER_URL = 'documentation/user_guide.html#filter';
 const SHORTCUTS_URL = 'documentation/user_guide.html#shortcuts';
+const PLAYER = 'documentation/user_guide.html#player';
 
 export default {
     CREATING_AN_ANNOTATION_TASK_URL,
@@ -68,4 +69,5 @@ export default {
     SHAPE_GROUPING_URL,
     FILTER_URL,
     SHORTCUTS_URL,
+    PLAYER,
 };

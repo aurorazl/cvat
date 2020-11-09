@@ -37,7 +37,7 @@ export default {
     'Group shapes/tracks ${switchGroupShortcut}.': 'Group shapes/tracks ${switchGroupShortcut}.',
     ' Select and press ${resetGroupShortcut} to reset a group': 'Select and press ${resetGroupShortcut} to reset a group',
     //annotation-page\standard-workspace\controls-side-bar\merge-control.tsx
-    'Merge shapes/tracks ${switchMergeShortcut}': 'Merge shapes/tracks ${switchMergeShortcut}',
+    'Merge shapes/tracks ${switchMergeShortcut}': 'Merge shapes/tracks {{switchMergeShortcut}}',
     //annotation-page\standard-workspace\controls-side-bar\move-control.tsx
     'Move the image': 'Move the image',
     //annotation-page\standard-workspace\controls-side-bar\resize-control.tsx
@@ -50,7 +50,7 @@ export default {
     'Press ${repeatShapeShortcut} to add a tag again': 'Press ${repeatShapeShortcut} to add a tag again',
     'Tag': 'Tag',
     //annotation-page\standard-workspace\controls-side-bar\split-control.tsx
-    'Split a track ${switchSplitShortcut}': 'Split a track ${switchSplitShortcut}',
+    'Split a track ${switchSplitShortcut}': 'Split a track {{switchSplitShortcut}}',
     // annotation-page\standard-workspace\controls-side-bar\tools-control.tsx
     'Canvas raises event "canvas.interacted" when interaction is off': 'Canvas raises event "canvas.interacted" when interaction is off',
     'Interaction error occured': 'Interaction error occured',
@@ -159,12 +159,12 @@ export default {
     'Redo: ${redoAction} ${redoShortcut}': 'Redo: {{redoAction}} {{redoShortcut}}',
     // cvat-ui\src\components\annotation-page\top-bar\player-buttons.tsx
     'Go to the first frame': 'Go to the first frame',
-    'Go back with a step ${backwardShortcut}': 'Go back with a step ${backwardShortcut}',
+    'Go back with a step ${backwardShortcut}': 'Go back with a step {{backwardShortcut}}',
     'Go back ${previousFrameShortcut}': 'Go back ${previousFrameShortcut}',
-    'Play ${playPauseShortcut}': 'Play ${playPauseShortcut}',
-    'Pause ${playPauseShortcut}': 'Pause ${playPauseShortcut}',
+    'Play ${playPauseShortcut}': 'Play {{playPauseShortcut}}',
+    'Pause ${playPauseShortcut}': 'Pause {{playPauseShortcut}}',
     'Go next ${nextFrameShortcut}': 'Go next ${nextFrameShortcut}',
-    'Go next with a step ${forwardShortcut}': 'Go next with a step ${forwardShortcut}',
+    'Go next with a step ${forwardShortcut}': 'Go next with a step {{forwardShortcut}}',
     'Go to the last frame': 'Go to the last frame',
     'Go back': 'Go back',
     'Go back with a filter': 'Go back with a filter',
@@ -174,7 +174,7 @@ export default {
     'Go next to an empty frame': 'Go next to an empty frame',
     // cvat-ui\src\components\annotation-page\top-bar\player-navigation.tsx
     'Create frame URL': 'Create frame URL',
-    'Press ${focusFrameInputShortcut} to focus here': 'Press ${focusFrameInputShortcut} to focus here',
+    'Press ${focusFrameInputShortcut} to focus here': 'Press {{focusFrameInputShortcut}} to focus here',
     // cvat-ui\src\components\annotation-page\top-bar\right-group.tsx
     'Fullscreen': 'Fullscreen',
     'Info': 'Info',

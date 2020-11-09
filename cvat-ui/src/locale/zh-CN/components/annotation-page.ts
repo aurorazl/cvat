@@ -37,7 +37,7 @@ export default {
     'Group shapes/tracks ${switchGroupShortcut}.': '分组形状/轨迹 ${switchGroupShortcut}.',
     ' Select and press ${resetGroupShortcut} to reset a group': '选中并按下${resetGroupShortcut}重置分组',
     //annotation-page\standard-workspace\controls-side-bar\merge-control.tsx
-    'Merge shapes/tracks ${switchMergeShortcut}': '合并形状/轨迹 ${switchMergeShortcut}',
+    'Merge shapes/tracks ${switchMergeShortcut}': '合并形状/轨迹 {{switchMergeShortcut}}',
     //annotation-page\standard-workspace\controls-side-bar\move-control.tsx
     'Move the image': '移动图片',
     //annotation-page\standard-workspace\controls-side-bar\resize-control.tsx
@@ -50,7 +50,7 @@ export default {
     'Press ${repeatShapeShortcut} to add a tag again': '按下${repeatShapeShortcut}再次添加标记',
     'Tag': '标记',
     //annotation-page\standard-workspace\controls-side-bar\split-control.tsx
-    'Split a track ${switchSplitShortcut}': '分割轨迹 ${switchSplitShortcut}',
+    'Split a track ${switchSplitShortcut}': '分割轨迹 {{switchSplitShortcut}}',
     // annotation-page\standard-workspace\controls-side-bar\tools-control.tsx
     'Canvas raises event "canvas.interacted" when interaction is off': '当交互关闭时，Canvas 触发了 "canvas.interacted" 事件',
     'Interaction error occured': '发生了交互错误',
@@ -159,22 +159,22 @@ export default {
     'Redo: ${redoAction} ${redoShortcut}': '恢复: {{redoAction}} {{redoShortcut}}',
     // cvat-ui\src\components\annotation-page\top-bar\player-buttons.tsx
     'Go to the first frame': '跳转到第一帧',
-    'Go back with a step ${backwardShortcut}': '以步长值回退 ${backwardShortcut}',
+    'Go back with a step ${backwardShortcut}': '以步长值回退 {{backwardShortcut}}',
     'Go back ${previousFrameShortcut}': '回退 ${previousFrameShortcut}',
-    'Play ${playPauseShortcut}': '播放 ${playPauseShortcut}',
-    'Pause ${playPauseShortcut}': '暂停 ${playPauseShortcut}',
+    'Play ${playPauseShortcut}': '播放 {{playPauseShortcut}}',
+    'Pause ${playPauseShortcut}': '暂停 {{playPauseShortcut}}',
     'Go next ${nextFrameShortcut}': '前进 ${nextFrameShortcut}',
-    'Go next with a step ${forwardShortcut}': '以步长值前进 ${forwardShortcut}',
+    'Go next with a step ${forwardShortcut}': '以步长值前进 {{forwardShortcut}}',
     'Go to the last frame': '跳转到最后一帧',
     'Go back': '回退',
-    'Go back with a filter': 'Go back with a filter',
+    'Go back with a filter': '根据过滤器回退',
     'Go back to an empty frame': '回退到空帧',
     'Go next': '前进',
-    'Go next with a filter': 'Go next with a filter',
+    'Go next with a filter': '根据过滤器前进',
     'Go next to an empty frame': '前进到空帧',    
     // cvat-ui\src\components\annotation-page\top-bar\player-navigation.tsx
     'Create frame URL': '创建帧URL',
-    'Press ${focusFrameInputShortcut} to focus here': '获取焦点 ${focusFrameInputShortcut}',
+    'Press ${focusFrameInputShortcut} to focus here': '获取焦点 {{focusFrameInputShortcut}}',
     // cvat-ui\src\components\annotation-page\top-bar\right-group.tsx
     'Fullscreen': '全屏',
     'Info': '信息',

@@ -25,6 +25,8 @@ import {
 } from 'icons';
 
 import { useTranslation } from 'react-i18next';
+import getCore from 'cvat-core-wrapper';
+import linkConsts from 'help-link-consts';
 
 interface Props {
     playing: boolean;
@@ -48,6 +50,9 @@ interface Props {
 
 function PlayerButtons(props: Props): JSX.Element {
     const { t } = useTranslation();
+    const core = getCore();
+    const baseURL = core.config.backendAPI.slice(0, -7);
+
     const {
         playing,
         playPauseShortcut,
@@ -103,10 +108,10 @@ function PlayerButtons(props: Props): JSX.Element {
 
     return (
         <Col className='cvat-player-buttons'>
-            <Tooltip title={t('Go to the first frame')} mouseLeaveDelay={0}>
+            <Tooltip title={<a href={`${baseURL}/${linkConsts.PLAYER}`} target="blank">{t('Go to the first frame')}</a>} mouseLeaveDelay={0.2}>
                 <Icon className='cvat-player-first-button' component={FirstIcon} onClick={onFirstFrame} />
             </Tooltip>
-            <Tooltip title={t('Go back with a step ${backwardShortcut}').replace('${backwardShortcut}', `${backwardShortcut}`)} mouseLeaveDelay={0}>
+            <Tooltip title={<a href={`${baseURL}/${linkConsts.PLAYER}`} target="blank">{t('Go back with a step ${backwardShortcut}', {backwardShortcut: `${backwardShortcut}`})}</a>} mouseLeaveDelay={0.2}>
                 <Icon className='cvat-player-backward-button' component={BackJumpIcon} onClick={onBackward} />
             </Tooltip>
             <Popover
@@ -114,7 +119,7 @@ function PlayerButtons(props: Props): JSX.Element {
                 placement='bottom'
                 content={
                     <>
-                        <Tooltip title={`${prevRegularText}`} mouseLeaveDelay={0}>
+                        <Tooltip title={<a href={`${baseURL}/${linkConsts.PLAYER}`} target="blank">{`${prevRegularText}`}</a>} mouseLeaveDelay={0.2}>
                             <Icon
                                 className='cvat-player-previous-inlined-button'
                                 component={PreviousIcon}
@@ -123,7 +128,7 @@ function PlayerButtons(props: Props): JSX.Element {
                                 }}
                             />
                         </Tooltip>
-                        <Tooltip title={`${prevFilteredText}`} mouseLeaveDelay={0}>
+                            <Tooltip title={<a href={`${baseURL}/${linkConsts.PLAYER}`} target="blank">{`${prevFilteredText}`}</a>} mouseLeaveDelay={0.2}>
                             <Icon
                                 className='cvat-player-previous-filtered-inlined-button'
                                 component={PreviousFilteredIcon}
@@ -132,7 +137,7 @@ function PlayerButtons(props: Props): JSX.Element {
                                 }}
                             />
                         </Tooltip>
-                        <Tooltip title={`${prevEmptyText}`} mouseLeaveDelay={0}>
+                            <Tooltip title={<a href={`${baseURL}/${linkConsts.PLAYER}`} target="blank">{`${prevEmptyText}`}</a>} mouseLeaveDelay={0.2}>
                             <Icon
                                 className='cvat-player-previous-empty-inlined-button'
                                 component={PreviousEmptyIcon}
@@ -146,19 +151,19 @@ function PlayerButtons(props: Props): JSX.Element {
             >
                 <Tooltip
                     placement='top'
-                    mouseLeaveDelay={0}
-                    title={`${prevButtonTooltipMessage} ${previousFrameShortcut}`}
+                    mouseLeaveDelay={0.2}
+                    title={<a href={`${baseURL}/${linkConsts.PLAYER}`} target="blank">{`${prevButtonTooltipMessage} ${previousFrameShortcut}`}</a>}
                 >
                     {prevButton}
                 </Tooltip>
             </Popover>
 
             {!playing ? (
-                    <Tooltip title={t('Play ${playPauseShortcut}').replace('${playPauseShortcut}', `${playPauseShortcut}`)} mouseLeaveDelay={0}>
+                    <Tooltip title={<a href={`${baseURL}/${linkConsts.PLAYER}`} target="blank">{t('Play ${playPauseShortcut}', {playPauseShortcut: `${playPauseShortcut}`})}</a>} mouseLeaveDelay={0.2}>
                         <Icon className='cvat-player-play-button' component={PlayIcon} onClick={onSwitchPlay} />
                     </Tooltip>
                 ) : (
-                    <Tooltip title={t('Pause ${playPauseShortcut}').replace('${playPauseShortcut}', `${playPauseShortcut}`)} mouseLeaveDelay={0}>
+                <Tooltip title={<a href={`${baseURL}/${linkConsts.PLAYER}`} target="blank">{t('Pause ${playPauseShortcut}', {playPauseShortcut: `${playPauseShortcut}`})}</a>} mouseLeaveDelay={0.2}>
                         <Icon className='cvat-player-pause-button' component={PauseIcon} onClick={onSwitchPlay} />
                     </Tooltip>
                 )}
@@ -168,7 +173,7 @@ function PlayerButtons(props: Props): JSX.Element {
                 placement='bottom'
                 content={
                     <>
-                        <Tooltip title={`${nextRegularText}`} mouseLeaveDelay={0}>
+                        <Tooltip title={<a href={`${baseURL}/${linkConsts.PLAYER}`} target="blank">{`${nextRegularText}`}</a>} mouseLeaveDelay={0.2}>
                             <Icon
                                 className='cvat-player-next-inlined-button'
                                 component={NextIcon}
@@ -177,7 +182,7 @@ function PlayerButtons(props: Props): JSX.Element {
                                 }}
                             />
                         </Tooltip>
-                        <Tooltip title={`${nextFilteredText}`} mouseLeaveDelay={0}>
+                            <Tooltip title={<a href={`${baseURL}/${linkConsts.PLAYER}`} target="blank">{`${nextFilteredText}`}</a>} mouseLeaveDelay={0.2}>
                             <Icon
                                 className='cvat-player-next-filtered-inlined-button'
                                 component={NextFilteredIcon}
@@ -186,7 +191,7 @@ function PlayerButtons(props: Props): JSX.Element {
                                 }}
                             />
                         </Tooltip>
-                        <Tooltip title={`${nextEmptyText}`} mouseLeaveDelay={0}>
+                            <Tooltip title={<a href={`${baseURL}/${linkConsts.PLAYER}`} target="blank">{`${nextEmptyText}`}</a>} mouseLeaveDelay={0.2}>
                             <Icon
                                 className='cvat-player-next-empty-inlined-button'
                                 component={NextEmptyIcon}
@@ -198,14 +203,14 @@ function PlayerButtons(props: Props): JSX.Element {
                     </>
                 }
             >
-                <Tooltip placement='top' mouseLeaveDelay={0} title={`${nextButtonTooltipMessage} ${nextFrameShortcut}`}>
+                <Tooltip placement='top' mouseLeaveDelay={0} title={<a href={`${baseURL}/${linkConsts.PLAYER}`} target="blank">{`${nextButtonTooltipMessage} ${nextFrameShortcut}`}</a>}>
                     {nextButton}
                 </Tooltip>
             </Popover>
-            <Tooltip title={t('Go next with a step ${forwardShortcut}').replace('${forwardShortcut}', `${forwardShortcut}`)} mouseLeaveDelay={0}>
+            <Tooltip title={<a href={`${baseURL}/${linkConsts.PLAYER}`} target="blank">{t('Go next with a step ${forwardShortcut}', {forwardShortcut: `${forwardShortcut}`})}</a>} mouseLeaveDelay={0.2}>
                 <Icon className='cvat-player-forward-button' component={ForwardJumpIcon} onClick={onForward} />
             </Tooltip>
-            <Tooltip title={t('Go to the last frame')} mouseLeaveDelay={0}>
+            <Tooltip title={<a href={`${baseURL}/${linkConsts.PLAYER}`} target="blank">{t('Go to the last frame')}</a>} mouseLeaveDelay={0.2}>
                 <Icon className='cvat-player-last-button' component={LastIcon} onClick={onLastFrame} />
             </Tooltip>
         </Col>

@@ -11,6 +11,8 @@ import { Canvas } from 'cvat-canvas-wrapper';
 import { ActiveControl } from 'reducers/interfaces';
 
 import { useTranslation } from 'react-i18next';
+import getCore from 'cvat-core-wrapper';
+import linkConsts from 'help-link-consts';
 
 interface Props {
     canvasInstance: Canvas;
@@ -21,6 +23,9 @@ interface Props {
 
 function SplitControl(props: Props): JSX.Element {
     const { t } = useTranslation();
+    const core = getCore();
+    const baseURL = core.config.backendAPI.slice(0, -7);
+
     const { switchSplitShortcut, activeControl, canvasInstance, splitTrack } = props;
 
     const dynamicIconProps =
@@ -42,7 +47,7 @@ function SplitControl(props: Props): JSX.Element {
               };
 
     return (
-        <Tooltip title={t('Split a track ${switchSplitShortcut}').replace('${switchSplitShortcut}', `${switchSplitShortcut}`)} placement='right' mouseLeaveDelay={0}>
+        <Tooltip title={<a href={`${baseURL}/${linkConsts.TRACK_MODE_ADVANCED_URL}`} target="blank">{t('Split a track ${switchSplitShortcut}', {switchSplitShortcut: `${switchSplitShortcut}`})}</a>} placement='right' mouseLeaveDelay={0.2}>
             <Icon {...dynamicIconProps} component={SplitIcon} />
         </Tooltip>
     );

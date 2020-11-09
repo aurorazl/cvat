@@ -11,6 +11,8 @@ import { Canvas } from 'cvat-canvas-wrapper';
 import { ActiveControl } from 'reducers/interfaces';
 
 import { useTranslation } from 'react-i18next';
+import getCore from 'cvat-core-wrapper';
+import linkConsts from 'help-link-consts';
 
 interface Props {
     canvasInstance: Canvas;
@@ -21,6 +23,9 @@ interface Props {
 
 function MergeControl(props: Props): JSX.Element {
     const { t } = useTranslation();
+    const core = getCore();
+    const baseURL = core.config.backendAPI.slice(0, -7);
+
     const { switchMergeShortcut, activeControl, canvasInstance, mergeObjects } = props;
 
     const dynamicIconProps =
@@ -42,7 +47,7 @@ function MergeControl(props: Props): JSX.Element {
               };
 
     return (
-        <Tooltip title={t('Merge shapes/tracks ${switchMergeShortcut}').replace('${switchMergeShortcut}', `${switchMergeShortcut}`)} placement='right' mouseLeaveDelay={0}>
+        <Tooltip title={<a href={`${baseURL}/${linkConsts.TRACK_MODE_BASICS_URL}`} target="blank">{t('Merge shapes/tracks ${switchMergeShortcut}', {switchMergeShortcut: `${switchMergeShortcut}`})}</a>} placement='right' mouseLeaveDelay={0.2}>
             <Icon {...dynamicIconProps} component={MergeIcon} />
         </Tooltip>
     );
