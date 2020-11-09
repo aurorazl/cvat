@@ -126,7 +126,7 @@ const ReduxAppWrapper = connect(mapStateToProps, mapDispatchToProps)(CVATApplica
 
 ReactDOM.render(
     <Provider store={cvatStore}>
-        <BrowserRouter>
+        <BrowserRouter basename='/cvat'>
             <ReduxAppWrapper />
         </BrowserRouter>
         <LayoutGrid />
