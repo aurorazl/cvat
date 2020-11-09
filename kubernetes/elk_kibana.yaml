@@ -24,7 +24,7 @@ spec:
           ports:
             - containerPort: 5601
               hostPort: 5601
-              name: kibana_port
+              name: kibana-port
               protocol: TCP
           readinessProbe:
             failureThreshold: 3

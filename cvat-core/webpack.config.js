@@ -17,6 +17,7 @@ const nodeConfig = {
         path: path.resolve(__dirname, 'dist'),
         filename: 'cvat-core.node.js',
         libraryTarget: 'commonjs',
+        publicPath: '/cvat/',
     },
     module: {
         rules: [

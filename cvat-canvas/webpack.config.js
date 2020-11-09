@@ -18,6 +18,7 @@ const nodeConfig = {
         filename: 'cvat-canvas.node.js',
         library: 'canvas',
         libraryTarget: 'commonjs',
+        publicPath: '/cvat/',
     },
     resolve: {
         extensions: ['.ts', '.js', '.json'],

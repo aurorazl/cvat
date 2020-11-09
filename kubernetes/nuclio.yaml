@@ -24,7 +24,7 @@ spec:
           ports:
             - containerPort: 8070
               hostPort: 8070
-              name: cvat_db
+              name: cvat-db
               protocol: TCP
           env:
             - name: POSTGRES_USER

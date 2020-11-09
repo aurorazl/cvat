@@ -20,6 +20,7 @@ const cvatData = {
         filename: '[name].[contenthash].min.js',
         library: 'cvatData',
         libraryTarget: 'window',
+        publicPath: '/cvat/',
     },
     module: {
         rules: [
