@@ -58,7 +58,7 @@ const cvatData = {
                 use: {
                     loader: 'worker-loader',
                     options: {
-                        publicPath: '/3rdparty/',
+                        publicPath: '/cvat/3rdparty/',
                         name: '3rdparty/[name].[contenthash].js',
                     },
                 },
