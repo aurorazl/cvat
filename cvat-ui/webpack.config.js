@@ -100,7 +100,7 @@ module.exports = {
                 use: {
                     loader: 'worker-loader',
                     options: {
-                        publicPath: '/',
+                        publicPath: '/cvat/',
                         name: '3rdparty/[name].[contenthash].js',
                     },
                 },
@@ -111,7 +111,7 @@ module.exports = {
                 use: {
                     loader: 'worker-loader',
                     options: {
-                        publicPath: '/',
+                        publicPath: '/cvat/',
                         name: '[name].[contenthash].js',
                     },
                 },
