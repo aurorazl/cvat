@@ -151,8 +151,6 @@ spec:
               value: 'true'
             - name: no_proxy
               value: 172.28.0.1,${no_proxy}
-            - name: POSTGRES_HOST_AUTH_METHOD
-              value: trust
           readinessProbe:
             failureThreshold: 3
             initialDelaySeconds: 3
