@@ -109,11 +109,12 @@ spec:
 ---
 # The Nuclio dashboard offers a UI to manage functions
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
   name: nuclio-dashboard
   namespace: nuclio
 spec:
+  replicas: 1
   selector:
     matchLabels:
       nuclio.io/env: test
@@ -132,7 +133,6 @@ spec:
       nodeSelector:
         jobmanager: active
         archType: amd64
-      hostNetwork: true
       containers:
         - name: nuclio-dashboard
           image: harbor.sigsus.cn:8443/library/nuclio/dashboard:1.5.4-amd64
@@ -141,9 +141,6 @@ spec:
           volumeMounts:
             - mountPath: /var/run/docker.sock
               name: docker-sock
-            - name: registry-credentials
-              mountPath: '/etc/nuclio/dashboard/registry-credentials'
-              readOnly: true
             - mountPath: /tmp
               name: tmp
           env:
@@ -163,10 +160,6 @@ spec:
         - name: docker-sock
           hostPath:
             path: /var/run/docker.sock
-        - name: registry-credentials
-          secret:
-            secretName: registry-credentials
-            optional: true
         - name: tmp
           hostPath:
             path: /tmp

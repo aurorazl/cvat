@@ -2,6 +2,7 @@ import base64
 import json
 from functools import wraps
 from enum import Enum
+import logging
 
 import django_rq
 import requests
@@ -34,27 +35,31 @@ class LambdaGateway:
 
     def _http(self, method="get", scheme=None, host=None, port=None,
         url=None, headers=None, data=None):
-        NUCLIO_GATEWAY = '{}://{}:{}'.format(
-            scheme or settings.NUCLIO['SCHEME'],
-            host or settings.NUCLIO['HOST'],
-            port or settings.NUCLIO['PORT'])
-        extra_headers = {
-            'x-nuclio-project-name': 'cvat',
-            'x-nuclio-function-namespace': 'nuclio',
-        }
-        if headers:
-            extra_headers.update(headers)
-        NUCLIO_TIMEOUT = settings.NUCLIO['DEFAULT_TIMEOUT']
+        try:
+            NUCLIO_GATEWAY = '{}://{}:{}'.format(
+                scheme or settings.NUCLIO['SCHEME'],
+                host or settings.NUCLIO['HOST'],
+                port or settings.NUCLIO['PORT'])
+            extra_headers = {
+                'x-nuclio-project-name': 'cvat',
+                'x-nuclio-function-namespace': 'nuclio',
+            }
+            if headers:
+                extra_headers.update(headers)
+            NUCLIO_TIMEOUT = settings.NUCLIO['DEFAULT_TIMEOUT']
 
-        if url:
-            url = "{}{}".format(NUCLIO_GATEWAY, url)
-        else:
-            url = NUCLIO_GATEWAY
+            if url:
+                url = "{}{}".format(NUCLIO_GATEWAY, url)
+            else:
+                url = NUCLIO_GATEWAY
 
-        reply = getattr(requests, method)(url, headers=extra_headers,
-            timeout=NUCLIO_TIMEOUT, json=data)
-        reply.raise_for_status()
-        response = reply.json()
+            reply = getattr(requests, method)(url, headers=extra_headers,
+                timeout=NUCLIO_TIMEOUT, json=data)
+            reply.raise_for_status()
+            response = reply.json()
+        except Exception as e:
+            logging.exception(e)
+            raise
 
         return response
 
