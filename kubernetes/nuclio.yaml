@@ -17,6 +17,7 @@ spec:
       nodeSelector:
         jobmanager: active
         archType: amd64
+      hostNetwork: true
       containers:
         - name: nuclio
           image: harbor.sigsus.cn:8443/library/quay.io/nuclio/dashboard:1.4.8-amd64
