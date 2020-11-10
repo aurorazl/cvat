@@ -24,7 +24,7 @@ spec:
           ports:
             - containerPort: 5001
               hostPort: 5001
-              name: elasticsearch-port
+              name: ls-port
               protocol: TCP
 
           readinessProbe:
