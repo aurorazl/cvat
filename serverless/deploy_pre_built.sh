@@ -55,4 +55,4 @@ nuctl deploy fbrs --project-name cvat -n nuclio\
     --run-image harbor.sigsus.cn:8443/library/cvat/pth.saic-vul.fbrs \
     --file "$SCRIPT_DIR/pytorch/saic-vul/fbrs/nuclio/function.yaml" \
 
-nuctl get function
+nuctl get function -n nuclio

@@ -138,6 +138,9 @@ spec:
           image: harbor.sigsus.cn:8443/library/nuclio/dashboard:1.5.4-amd64
           ports:
             - containerPort: 8070
+              hostPort: 8070
+              name: nuclio-ds-port
+              protocol: TCP
           volumeMounts:
             - mountPath: /var/run/docker.sock
               name: docker-sock
