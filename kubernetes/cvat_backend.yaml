@@ -17,6 +17,7 @@ spec:
       nodeSelector:
         jobmanager: active
         archType: amd64
+      hostNetwork: true
       containers:
         - name: cvat-db
           image: harbor.sigsus.cn:8443/library/postgres:10-alpine
@@ -78,7 +79,7 @@ spec:
               name: cvat-models
           ports:
             - containerPort: 8080
-              hostPort: 8082
+              hostPort: 8080
               name: cvat-port
               protocol: TCP
           readinessProbe:

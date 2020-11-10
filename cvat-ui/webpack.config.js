@@ -22,7 +22,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].[contenthash].min.js',
-        publicPath: '/',
+        publicPath: '/cvat/',
     },
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
