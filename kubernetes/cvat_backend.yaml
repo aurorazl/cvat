@@ -68,6 +68,8 @@ spec:
               value: kibana,logstash,nuclio,${no_proxy}
             - name: CVAT_SERVERLESS
               value: '1'
+            - name: CVAT_NUCLIO_HOST
+              value: '127.0.0.1'
           volumeMounts:
             - mountPath: /home/django/data
               name: cvat-data
