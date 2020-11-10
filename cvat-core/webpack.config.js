@@ -70,7 +70,7 @@ const webConfig = {
                 use: {
                     loader: 'worker-loader',
                     options: {
-                        publicPath: '/static/engine/js/3rdparty/',
+                        publicPath: '/cvat/static/engine/js/3rdparty/',
                         name: '[name].[contenthash].js',
                     },
                 },
@@ -81,7 +81,7 @@ const webConfig = {
                 use: {
                     loader: 'worker-loader',
                     options: {
-                        publicPath: '/static/engine/js/',
+                        publicPath: '/cvat/static/engine/js/',
                         name: '[name].[contenthash].js',
                     },
                 },
