@@ -22,7 +22,7 @@ spec:
           image: harbor.sigsus.cn:8443/library/cvat_elasticsearch
           imagePullPolicy: Always
           ports:
-            - containerPort: 9211
+            - containerPort: 9200
               hostPort: 9211
               name: es-port
               protocol: TCP
@@ -35,7 +35,7 @@ spec:
             periodSeconds: 30
             successThreshold: 1
             tcpSocket:
-              port: 9211
+              port: 9200
             timeoutSeconds: 10
       volumes:
         - name: elasticsearch
