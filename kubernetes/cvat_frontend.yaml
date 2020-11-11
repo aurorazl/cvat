@@ -19,7 +19,7 @@ spec:
         archType: amd64
       containers:
         - name: cvat-ui
-          image: harbor.sigsus.cn:8443/library/cvat/ui
+          image: harbor.sigsus.cn:8443/sz_gongdianju/cvat/frontend
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80

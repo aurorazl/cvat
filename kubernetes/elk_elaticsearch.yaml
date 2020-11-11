@@ -19,7 +19,7 @@ spec:
         archType: amd64
       containers:
         - name: elasticsearch
-          image: harbor.sigsus.cn:8443/library/cvat_elasticsearch
+          image: harbor.sigsus.cn:8443/sz_gongdianju/cvat_elasticsearch
           imagePullPolicy: Always
           ports:
             - containerPort: 9200

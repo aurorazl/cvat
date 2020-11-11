@@ -20,7 +20,7 @@ spec:
       hostNetwork: true
       containers:
         - name: cvat-db
-          image: harbor.sigsus.cn:8443/library/postgres:10-alpine
+          image: harbor.sigsus.cn:8443/sz_gongdianju/postgres:10-alpine
           imagePullPolicy: Always
           ports:
             - containerPort: 5432
@@ -39,11 +39,11 @@ spec:
               name: cvat-db
 
         - name: cvat-redis
-          image: harbor.sigsus.cn:8443/library/redis:4.0-alpine
+          image: harbor.sigsus.cn:8443/sz_gongdianju/redis:4.0-alpine
           imagePullPolicy: Always
 
         - name: cvat
-          image: harbor.sigsus.cn:8443/library/cvat/server
+          image: harbor.sigsus.cn:8443/sz_gongdianju/cvat/server
           imagePullPolicy: Always
           env:
             - name: DJANGO_MODWSGI_EXTRA_ARGS

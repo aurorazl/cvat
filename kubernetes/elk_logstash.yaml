@@ -20,7 +20,7 @@ spec:
       hostNetwork: true
       containers:
         - name: logstash
-          image: harbor.sigsus.cn:8443/library/cvat_logstash
+          image: harbor.sigsus.cn:8443/sz_gongdianju/cvat_logstash
           imagePullPolicy: Always
           ports:
             - containerPort: 5002
