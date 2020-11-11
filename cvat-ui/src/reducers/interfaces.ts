@@ -129,6 +129,13 @@ export interface ShareFileInfo {
     type: 'DIR' | 'REG';
 }
 
+export interface DatasetInfo {
+    // get this data from cvat-core
+    id: number;
+    name: string;
+    path: string;
+}
+
 export interface ShareItem {
     name: string;
     type: 'DIR' | 'REG';
@@ -512,8 +519,13 @@ export interface CombinedState {
     shortcuts: ShortcutsState;
     meta: MetaState;
     lang: LangState;
+    platform: PlatformState;
 }
 
 export interface LangState {
     lang: string;
+}
+
+export interface PlatformState {
+    datasets: DatasetInfo[];
 }

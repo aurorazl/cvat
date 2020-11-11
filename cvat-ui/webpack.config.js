@@ -22,7 +22,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].[contenthash].min.js',
-        publicPath: '/cvat/',
+        publicPath: '/',
     },
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
@@ -30,6 +30,18 @@ module.exports = {
         inline: true,
         port: 3000,
         historyApiFallback: true,
+        proxy: {
+            '/api': {
+              target: 'http://10.31.3.230:8080',
+              changeOrigin: true,
+              secure: false,
+            },
+            '/ai_arts/api': {
+              target: 'http://219.133.167.42:6688',
+              changeOrigin: true,
+              secure: false,
+            },
+        },
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.jsx', '.js', '.json'],

@@ -312,6 +312,15 @@ function build() {
                 const result = await PluginRegistry.apiWrapper(cvat.tasks.get, filter);
                 return result;
             },
+
+            /**
+             * Method returns ai platform datasets
+             * @param {*} filter
+             */
+            async getDatasets(filter = {}) {
+                const result = await PluginRegistry.apiWrapper(cvat.tasks.getDatasets, filter);
+                return result;
+            },
         },
         /**
          * Namespace is used for getting jobs

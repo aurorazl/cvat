@@ -9,7 +9,8 @@ import { TreeNodeNormal } from 'antd/lib/tree/Tree';
 import FileManagerComponent, { Files } from 'components/file-manager/file-manager';
 
 import { loadShareDataAsync } from 'actions/share-actions';
-import { ShareItem, CombinedState } from 'reducers/interfaces';
+import { ShareItem, CombinedState, DatasetInfo } from 'reducers/interfaces';
+import { loadPlatformDataAsync } from 'actions/platform-actions';
 
 interface OwnProps {
     ref: any;
@@ -18,10 +19,12 @@ interface OwnProps {
 
 interface StateToProps {
     treeData: TreeNodeNormal[];
+    platformData: DatasetInfo[];
 }
 
 interface DispatchToProps {
     getTreeData(key: string, success: () => void, failure: () => void): void;
+    getPlatformData(success: () => void, failure: () => void): void;
 }
 
 function mapStateToProps(state: CombinedState): StateToProps {
@@ -41,8 +44,11 @@ function mapStateToProps(state: CombinedState): StateToProps {
     }
 
     const { root } = state.share;
+    const { datasets } = state.platform;
+
     return {
         treeData: convert([root], ''),
+        platformData: datasets || [],
     };
 }
 
@@ -50,6 +56,9 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
     return {
         getTreeData: (key: string, success: () => void, failure: () => void): void => {
             dispatch(loadShareDataAsync(key, success, failure));
+        },
+        getPlatformData: (success: () => void, failure: () => void): void => {
+            dispatch(loadPlatformDataAsync(success, failure));
         },
     };
 }
@@ -68,11 +77,13 @@ export class FileManagerContainer extends React.PureComponent<Props> {
     }
 
     public render(): JSX.Element {
-        const { treeData, getTreeData, withRemote } = this.props;
+        const { treeData, getTreeData, withRemote, getPlatformData, platformData } = this.props;
         return (
             <FileManagerComponent
                 treeData={treeData}
                 onLoadData={getTreeData}
+                platformData={platformData}
+                onLoadPlatformData={getPlatformData}
                 withRemote={withRemote}
                 ref={(component): void => {
                     this.managerComponentRef = component;

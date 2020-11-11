@@ -810,6 +810,28 @@
                 }
             }
 
+            // 下面几个是访问aiarts平台的接口
+            async function getDatasetsFromPlat() {
+                const { aiBackendAPI, aiToken } = config;
+
+                let response = null;
+                try {
+                    response = await Axios.get(`/ai_arts/api/datasets/?pageNum=1&pageSize=100`, {
+                        proxy: true,
+                        headers: {
+                            'Authorization': `Bearer ${aiToken}`
+                        }
+                    });
+                    // response = await Axios.get(`${aiBackendAPI}/datasets/?pageNum=1&pageSize=100&${filter}`, {
+                    //     proxy: config.proxy,
+                    // });
+                } catch (errorData) {
+                    throw generateError(errorData);
+                }
+
+                return response.data.data.datasets;
+            }
+
             Object.defineProperties(
                 this,
                 Object.freeze({
@@ -840,6 +862,7 @@
                             createTask,
                             deleteTask,
                             exportDataset,
+                            getDatasets: getDatasetsFromPlat,
                         }),
                         writable: false,
                     },
