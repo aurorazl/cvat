@@ -1,12 +1,12 @@
 #!/bin/bash
-nuctl delete function faster_rcnn_inception_v2_coco
-nuctl delete function mask_rcnn_inception_resnet_v2_atrous_coco
-nuctl delete function yolo-v3-tf
-nuctl delete function text-detection-0004
-nuctl delete function intel.semantic-segmentation-adas-0001
-nuctl delete function person-reidentification-retail-0300
-nuctl delete function openvino.dextr
-nuctl delete function mask_rcnn
-nuctl delete function faster_rcnn_inception_v2_coco
-nuctl delete function siammask
-nuctl delete function fbrs
+nuctl delete function faster-rcnn-inception-v2-coco -n nuclio
+nuctl delete function mask-rcnn-inception-resnet-v2-atrous-coco -n nuclio
+nuctl delete function yolo-v3-tf -n nuclio
+nuctl delete function text-detection-0004 -n nuclio
+nuctl delete function intel.semantic-segmentation-adas-0001 -n nuclio
+nuctl delete function person-reidentification-retail-0300 -n nuclio
+nuctl delete function openvino-dextr -n nuclio
+nuctl delete function mask-rcnn -n nuclio
+nuctl delete function faster-rcnn-inception-v2-coco -n nuclio
+nuctl delete function siammask -n nuclio
+nuctl delete function fbrs -n nuclio

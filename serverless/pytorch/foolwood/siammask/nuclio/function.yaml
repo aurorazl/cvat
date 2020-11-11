@@ -16,14 +16,11 @@ spec:
     - name: PYTHONPATH
       value: /opt/nuclio/SiamMask:/opt/nuclio/SiamMask/experiments/siammask_sharp
 
-  runRegistry: harbor.sigsus.cn:8443/library/
-
   build:
     image: cvat/pth.foolwood.siammask
-    baseImage: harbor.sigsus.cn:8443/library/continuumio/miniconda3
+    baseImage: harbor.sigsus.cn:8443/sz_gongdianju/continuumio/miniconda3
     noBaseImagePull: true
-    onbuildImage: harbor.sigsus.cn:8443/library/nuclio/handler-builder-python-onbuild:1.5.1-amd64
-    registry: harbor.sigsus.cn:8443/library/
+    onbuildImage: harbor.sigsus.cn:8443/sz_gongdianju/nuclio/handler-builder-python-onbuild:1.5.1-amd64
 
     directives:
       preCopy:

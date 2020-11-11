@@ -20,7 +20,7 @@ spec:
       hostNetwork: true
       containers:
         - name: kibana
-          image: harbor.sigsus.cn:8443/library/cvat_kibana
+          image: harbor.sigsus.cn:8443/sz_gongdianju/cvat_kibana
           imagePullPolicy: Always
           ports:
             - containerPort: 5601
