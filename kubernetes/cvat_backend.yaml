@@ -43,7 +43,7 @@ spec:
           imagePullPolicy: Always
 
         - name: cvat
-          image: harbor.sigsus.cn:8443/sz_gongdianju/cvat/server
+          image: harbor.sigsus.cn:8443/sz_gongdianju/cvat/backend
           imagePullPolicy: Always
           env:
             - name: DJANGO_MODWSGI_EXTRA_ARGS
