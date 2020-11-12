@@ -24,7 +24,7 @@ nuctl deploy text-detection-0004 --project-name cvat -n nuclio\
     --file "$SCRIPT_DIR/openvino/omz/intel/text-detection-0004/nuclio/function.yaml" \
     --volume "$SCRIPT_DIR/openvino/common:/opt/nuclio/common"
 
-nuctl deploy intel.semantic-segmentation-adas-0001 --project-name cvat -n nuclio\
+nuctl deploy intel-semantic-segmentation-adas-0001 --project-name cvat -n nuclio\
     --run-image harbor.sigsus.cn:8443/sz_gongdianju/cvat/openvino.omz.intel.semantic-segmentation-adas-0001 \
     --file "$SCRIPT_DIR/openvino/omz/intel/semantic-segmentation-adas-0001/nuclio/function.yaml" \
     --volume "$SCRIPT_DIR/openvino/common:/opt/nuclio/common"
@@ -43,7 +43,7 @@ nuctl deploy mask-rcnn --project-name cvat -n nuclio\
     --run-image harbor.sigsus.cn:8443/sz_gongdianju/cvat/tf.matterport.mask_rcnn \
     --file "$SCRIPT_DIR/tensorflow/matterport/mask_rcnn/nuclio/function.yaml"
 
-nuctl deploy faster-rcnn-inception-v2-coco --project-name cvat -n nuclio\
+nuctl deploy tf-faster-rcnn-inception-v2-coco --project-name cvat -n nuclio\
     --run-image harbor.sigsus.cn:8443/sz_gongdianju/cvat/tf.faster_rcnn_inception_v2_coco \
     --file "$SCRIPT_DIR/tensorflow/faster_rcnn_inception_v2_coco/nuclio/function.yaml"
 
