@@ -156,7 +156,7 @@ def _count_files(data, meta_info_file=None,upload_dir=None):
         files = [os.path.join(path,i) for i in os.listdir(path) if os.path.isfile(i)]
         platform_files.extend(files)
 
-    data['server_files'] = platform_files
+    data['platform_files'] = platform_files
 
     def count_files(file_mapping, counter):
         for file_name, full_path in file_mapping.items():
