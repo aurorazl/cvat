@@ -9,7 +9,7 @@ import ActionsMenuComponent, { Actions } from 'components/actions-menu/actions-m
 import { CombinedState } from 'reducers/interfaces';
 
 import { modelsActions } from 'actions/models-actions';
-import { dumpAnnotationsAsync, loadAnnotationsAsync, exportDatasetAsync, deleteTaskAsync } from 'actions/tasks-actions';
+import { dumpAnnotationsAsync, loadAnnotationsAsync, exportDatasetAsync, deleteTaskAsync, exportToPlatformAsync } from 'actions/tasks-actions';
 import { ClickParam } from 'antd/lib/menu';
 
 interface OwnProps {
@@ -30,6 +30,7 @@ interface DispatchToProps {
     exportDataset: (taskInstance: any, exporter: any) => void;
     deleteTask: (taskInstance: any) => void;
     openRunModelWindow: (taskInstance: any) => void;
+    exportToPlatform: (taskInstance: any) => void;
 }
 
 function mapStateToProps(state: CombinedState, own: OwnProps): StateToProps {
@@ -70,6 +71,9 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
         openRunModelWindow: (taskInstance: any): void => {
             dispatch(modelsActions.showRunModelDialog(taskInstance));
         },
+        exportToPlatform: (taskInstance: any): void => {
+            dispatch(exportToPlatformAsync(taskInstance));
+        },
     };
 }
 
@@ -87,6 +91,7 @@ function ActionsMenuContainer(props: OwnProps & StateToProps & DispatchToProps):
         exportDataset,
         deleteTask,
         openRunModelWindow,
+        exportToPlatform,
     } = props;
 
     function onClickMenu(params: ClickParam, file?: File): void {
@@ -120,6 +125,8 @@ function ActionsMenuContainer(props: OwnProps & StateToProps & DispatchToProps):
                 window.open(`${taskInstance.bugTracker}`, '_blank');
             } else if (action === Actions.RUN_AUTO_ANNOTATION) {
                 openRunModelWindow(taskInstance);
+            } else if (action === Actions.EXPORT_TO_PLATFORM) {
+                exportToPlatform(taskInstance);
             }
         }
     }

@@ -1454,6 +1454,21 @@
             const result = await PluginRegistry.apiWrapper.call(this, Task.prototype.delete);
             return result;
         }
+
+        /**
+            * Method exports a task to ai platform
+            * @method exportToPlatform
+            * @memberof module:API.cvat.classes.Task
+            * @readonly
+            * @instance
+            * @async
+            * @throws {module:API.cvat.exceptions.ServerError}
+            * @throws {module:API.cvat.exceptions.PluginError}
+        */
+        async exportToPlatform() {
+            const result = await PluginRegistry.apiWrapper.call(this, Task.prototype.exportToPlatform);
+            return result;
+        }
     }
 
     module.exports = {
@@ -1952,6 +1967,11 @@
 
     Task.prototype.logger.log.implementation = async function (logType, payload, wait) {
         const result = await loggerStorage.log(logType, { ...payload, task_id: this.id }, wait);
+        return result;
+    };
+
+    Task.prototype.exportToPlatform.implementation = async function () {
+        const result = await serverProxy.tasks.exportToPlatform(this.id);
         return result;
     };
 })();

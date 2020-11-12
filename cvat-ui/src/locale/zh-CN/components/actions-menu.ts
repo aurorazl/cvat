@@ -13,4 +13,6 @@ export default {
     "Export as a dataset": "导出数据集",
     // load-submenu.tsx
     "Upload annotations": "上传标注",
+    // export-platform-submenu.tsx
+    "Export to AI platform": "导出至AI平台",
 }

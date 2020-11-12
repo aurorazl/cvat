@@ -832,6 +832,16 @@
                 return response.data.data.datasets;
             }
 
+            async function exportToPlatform(id) {
+                const { backendAPI } = config;
+
+                try {
+                    await Axios.post(`${backendAPI}/tasks/${id}`);
+                } catch (errorData) {
+                    throw generateError(errorData);
+                }
+            }
+
             Object.defineProperties(
                 this,
                 Object.freeze({
@@ -863,6 +873,7 @@
                             deleteTask,
                             exportDataset,
                             getDatasets: getDatasetsFromPlat,
+                            exportToPlatform,
                         }),
                         writable: false,
                     },

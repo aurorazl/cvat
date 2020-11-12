@@ -13,4 +13,6 @@ export default {
     "Export as a dataset": "Export as a dataset",
     // load-submenu.tsx
     "Upload annotations": "Upload annotations",
+    // export-platform-submenu.tsx
+    "Export to AI platform": "Export to AI platform",
 }
