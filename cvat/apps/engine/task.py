@@ -8,6 +8,7 @@ import os
 import sys
 from re import findall
 import rq
+import re
 import shutil
 from traceback import print_exception
 from urllib import error as urlerror
@@ -65,6 +66,21 @@ def _copy_data_from_share(server_files, upload_dir):
             if not os.path.exists(target_dir):
                 os.makedirs(target_dir)
             shutil.copyfile(source_path, target_path)
+
+def _copy_data_for_full_path_files(platform_files,upload_dir):
+    job = rq.get_current_job()
+    job.meta['status'] = 'Data are being copied from share..'
+    job.save_meta()
+
+    for path in platform_files:
+        target_path = os.path.join(upload_dir,  os.path.basename(path))
+        if os.path.isdir(path):
+            copy_tree(path, target_path)
+        else:
+            target_dir = os.path.dirname(target_path)
+            if not os.path.exists(target_dir):
+                os.makedirs(target_dir)
+            shutil.copyfile(path, target_path)
 
 def _save_task_to_db(db_task):
     job = rq.get_current_job()
@@ -128,6 +144,18 @@ def _count_files(data, meta_info_file=None,upload_dir=None):
     data['server_files'] = [v[1] for v in zip([""] + server_files, server_files)
         if not os.path.dirname(v[0]).startswith(v[1])]
 
+    # support dlws aiart platform datasource
+    platform_files = []
+    for path in data["platform_files"]:
+        path = os.path.normpath(path)
+        path = re.sub("^/home", "/dlws/home", path)
+        if '..' in path.split(os.path.sep):
+            raise ValueError("Don't use '..' inside file paths")
+        if not os.path.isdir(path):
+            raise ValueError("Only support directory")
+        files = [os.path.join(path,i) for i in os.listdir(path) if os.path.isfile(i)]
+        platform_files.extend(files)
+
     def count_files(file_mapping, counter):
         for file_name, full_path in file_mapping.items():
             mime = get_mime(full_path)
@@ -148,6 +176,11 @@ def _count_files(data, meta_info_file=None,upload_dir=None):
 
     count_files(
         file_mapping={ f:os.path.abspath(os.path.join(share_root, f)) for f in data['server_files']},
+        counter=counter,
+    )
+
+    count_files(
+        file_mapping={ os.path.basename(f):f for f in data['platform_files']},
         counter=counter,
     )
 
@@ -233,6 +266,9 @@ def _create_thread(tid, data):
 
     if data['server_files']:
         _copy_data_from_share(data['server_files'], upload_dir)
+
+    if data['platform_files']:
+        _copy_data_for_full_path_files(data['platform_files'], upload_dir)
 
     av_scan_paths(upload_dir)
 
