@@ -387,6 +387,7 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
     def data(self, request, pk):
         if request.method == 'POST':
             db_task = self.get_object() # call check_object_permissions as well
+            slogger.task[pk].info(request.data, exc_info=True)
             serializer = DataSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             db_data = serializer.save()

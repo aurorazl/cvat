@@ -114,6 +114,19 @@ class RemoteFileSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return instance.file if instance else instance
 
+class PlatformFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.PlatformFile
+        fields = ('file', )
+
+    # pylint: disable=no-self-use
+    def to_internal_value(self, data):
+        return {'file': data}
+
+    # pylint: disable=no-self-use
+    def to_representation(self, instance):
+        return instance.file if instance else instance
+
 class RqStatusSerializer(serializers.Serializer):
     state = serializers.ChoiceField(choices=[
         "Queued", "Started", "Finished", "Failed"])
@@ -170,12 +183,13 @@ class DataSerializer(serializers.ModelSerializer):
     client_files = ClientFileSerializer(many=True, default=[])
     server_files = ServerFileSerializer(many=True, default=[])
     remote_files = RemoteFileSerializer(many=True, default=[])
+    platform_files = PlatformFileSerializer(many=True, default=[])
     use_cache = serializers.BooleanField(default=False)
 
     class Meta:
         model = models.Data
         fields = ('chunk_size', 'size', 'image_quality', 'start_frame', 'stop_frame', 'frame_filter',
-            'compressed_chunk_type', 'original_chunk_type', 'client_files', 'server_files', 'remote_files', 'use_zip_chunks',
+            'compressed_chunk_type', 'original_chunk_type', 'client_files', 'server_files', 'remote_files','platform_files', 'use_zip_chunks',
             'use_cache')
 
     # pylint: disable=no-self-use
