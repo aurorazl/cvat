@@ -14,6 +14,7 @@ module.exports = {
     'Value must be an array. But ${typeof (clientFiles)} has been got.': '值必须是数组。当前是{{typeofclientFiles}}。',
     'Array values must be a File. But ${value.constructor.name} has been got.': '数组值必须是文件。当前是{{valueconstructorname}}。',
     'Value must be an array. But ${typeof (remoteFiles)} has been got.': '值必须是数组。当前是{{typeofremoteFiles}}。',
+    'Value must be an array. But ${typeof (platformFiles)} has been got.': '值必须是数组。当前是{{typeofremoteFiles}}。',
     'Array values must be a string. But ${typeof (value)} has been got.': '数组值必须是字符串。当前是{{typeofvalue}}。',
     'Filter value must be a string. But ${typeof (filter)} has been got.': 'Filter值必须是字符串。当前是{{typeoffilter}}。',
     'Chunk size value must be a positive number. But value ${chunkSize} has been got.': '块大小值必须为正数。当前是{{chunkSize}}。',

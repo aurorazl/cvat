@@ -49,6 +49,7 @@ const defaultState = {
         local: [],
         share: [],
         remote: [],
+        platform: [],
     },
 };
 
@@ -104,12 +105,14 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
     };
 
     private handleSubmitBasicConfiguration = (values: BaseConfiguration): void => {
+        console.log('handleSubmitBasicConfiguration: ', values)
         this.setState({
             basic: { ...values },
         });
     };
 
     private handleSubmitAdvancedConfiguration = (values: AdvancedConfiguration): void => {
+        console.log('handleSubmitBasicConfiguration: ', values)
         this.setState({
             advanced: { ...values },
         });

@@ -31,8 +31,9 @@ module.exports = {
         port: 3000,
         historyApiFallback: true,
         proxy: {
-            '/api': {
-              target: 'http://10.31.3.230:8080',
+            '/cvat/api': {
+            //   target: 'http://10.31.3.230:8080',
+              target: 'http://219.133.167.42:30000',
               changeOrigin: true,
               secure: false,
             },

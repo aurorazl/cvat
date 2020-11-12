@@ -14,6 +14,7 @@ module.exports = {
     'Value must be an array. But ${typeof (clientFiles)} has been got.': 'Value must be an array. But {{typeofclientFiles}} has been got.',
     'Array values must be a File. But ${value.constructor.name} has been got.': 'Array values must be a File. But {{valueconstructorname}} has been got.',
     'Value must be an array. But ${typeof (remoteFiles)} has been got.': 'Value must be an array. But {{typeofremoteFiles}} has been got.',
+    'Value must be an array. But ${typeof (platformFiles)} has been got.': 'Value must be an array. But {{typeofplatformFiles}} has been got.',
     'Array values must be a string. But ${typeof (value)} has been got.': 'Array values must be a string. But {{typeofvalue}} has been got.',
     'Filter value must be a string. But ${typeof (filter)} has been got.': 'Filter value must be a string. But {{typeoffilter}} has been got.',
     'Chunk size value must be a positive number. But value ${chunkSize} has been got.': 'Chunk size value must be a positive number. But value {{chunkSize}} has been got.',
