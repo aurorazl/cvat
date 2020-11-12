@@ -153,8 +153,9 @@ def _count_files(data, meta_info_file=None,upload_dir=None):
             raise ValueError("Don't use '..' inside file paths")
         if not os.path.isdir(path):
             raise ValueError("Only support directory")
-        files = [os.path.join(path,i) for i in os.listdir(path) if os.path.isfile(i)]
+        files = [os.path.join(path,i) for i in os.listdir(path) if os.path.isfile(os.path.join(path,i))]
         platform_files.extend(files)
+    data['platform_files'] = platform_files
 
     def count_files(file_mapping, counter):
         for file_name, full_path in file_mapping.items():
@@ -246,7 +247,7 @@ def _download_data(urls, upload_dir):
 @transaction.atomic
 def _create_thread(tid, data):
     slogger.glob.info("create task #{}".format(tid))
-
+    slogger.glob.info("create task #{}".format(data))
     db_task = models.Task.objects.select_for_update().get(pk=tid)
     db_data = db_task.data
     if db_task.data.size != 0:

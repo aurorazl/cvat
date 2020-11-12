@@ -114,6 +114,19 @@ class RemoteFileSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return instance.file if instance else instance
 
+class PlatformFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.PlatformFile
+        fields = ('file', )
+
+    # pylint: disable=no-self-use
+    def to_internal_value(self, data):
+        return {'file': data}
+
+    # pylint: disable=no-self-use
+    def to_representation(self, instance):
+        return instance.file if instance else instance
+
 class RqStatusSerializer(serializers.Serializer):
     state = serializers.ChoiceField(choices=[
         "Queued", "Started", "Finished", "Failed"])
@@ -170,12 +183,13 @@ class DataSerializer(serializers.ModelSerializer):
     client_files = ClientFileSerializer(many=True, default=[])
     server_files = ServerFileSerializer(many=True, default=[])
     remote_files = RemoteFileSerializer(many=True, default=[])
+    platform_files = PlatformFileSerializer(many=True, default=[])
     use_cache = serializers.BooleanField(default=False)
 
     class Meta:
         model = models.Data
         fields = ('chunk_size', 'size', 'image_quality', 'start_frame', 'stop_frame', 'frame_filter',
-            'compressed_chunk_type', 'original_chunk_type', 'client_files', 'server_files', 'remote_files', 'use_zip_chunks',
+            'compressed_chunk_type', 'original_chunk_type', 'client_files', 'server_files', 'remote_files','platform_files', 'use_zip_chunks',
             'use_cache')
 
     # pylint: disable=no-self-use
@@ -203,6 +217,7 @@ class DataSerializer(serializers.ModelSerializer):
         client_files = validated_data.pop('client_files')
         server_files = validated_data.pop('server_files')
         remote_files = validated_data.pop('remote_files')
+        platform_files = validated_data.pop('platform_files')
         validated_data.pop('use_zip_chunks')
         validated_data.pop('use_cache')
         db_data = models.Data.objects.create(**validated_data)
@@ -226,6 +241,10 @@ class DataSerializer(serializers.ModelSerializer):
         for f in remote_files:
             remote_file = models.RemoteFile(data=db_data, **f)
             remote_file.save()
+
+        for f in platform_files:
+            platform_file = models.PlatformFile(data=db_data, **f)
+            platform_file.save()
 
         db_data.save()
         return db_data
