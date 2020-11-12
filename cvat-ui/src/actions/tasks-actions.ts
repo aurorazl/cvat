@@ -35,6 +35,9 @@ export enum TasksActionTypes {
     UPDATE_TASK_SUCCESS = 'UPDATE_TASK_SUCCESS',
     UPDATE_TASK_FAILED = 'UPDATE_TASK_FAILED',
     HIDE_EMPTY_TASKS = 'HIDE_EMPTY_TASKS',
+    EXPORT_TO_PLATFORM = 'EXPORT_TO_PLATFORM',
+    EXPORT_TO_PLATFORM_SUCCESS = 'EXPORT_TO_PLATFORM_SUCCESS',
+    EXPORT_TO_PLATFORM_FAILED = 'EXPORT_TO_PLATFORM_FAILED',
 }
 
 function getTasks(): AnyAction {
@@ -524,4 +527,52 @@ export function hideEmptyTasks(hideEmpty: boolean): AnyAction {
     };
 
     return action;
+}
+
+function exportToPlatform(taskID: number): AnyAction {
+    const action = {
+        type: TasksActionTypes.EXPORT_TO_PLATFORM,
+        payload: {
+            taskID,
+        },
+    };
+
+    return action;
+}
+
+function exportToPlatformSuccess(taskID: number): AnyAction {
+    const action = {
+        type: TasksActionTypes.EXPORT_TO_PLATFORM_SUCCESS,
+        payload: {
+            taskID,
+        },
+    };
+
+    return action;
+}
+
+function exportToPlatformFailed(taskID: number, error: any): AnyAction {
+    const action = {
+        type: TasksActionTypes.EXPORT_TO_PLATFORM_FAILED,
+        payload: {
+            taskID,
+            error,
+        },
+    };
+
+    return action;
+}
+
+export function exportToPlatformAsync(taskInstance: any): ThunkAction<Promise<void>, {}, {}, AnyAction> {
+    return async (dispatch: ActionCreator<Dispatch>): Promise<void> => {
+        try {
+            dispatch(exportToPlatform(taskInstance.id));
+            await taskInstance.exportToPlatform();
+        } catch (error) {
+            dispatch(exportToPlatformFailed(taskInstance.id, error));
+            return;
+        }
+
+        dispatch(exportToPlatformSuccess(taskInstance.id));
+    };
 }
