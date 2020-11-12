@@ -159,6 +159,7 @@ def _count_files(data, meta_info_file=None,upload_dir=None):
     data['platform_files'] = platform_files
 
     def count_files(file_mapping, counter):
+        slogger.glob.info("file_mapping #{}".format(file_mapping))
         for file_name, full_path in file_mapping.items():
             mime = get_mime(full_path)
             if mime in counter:
