@@ -83,6 +83,10 @@ spec:
               name: cvat-models
             - mountPath: /home/django/share
               name: cvat-share
+            - mountPath: /data
+              name: cvat-share
+            - mountPath: /dlws/home
+              name: home
           ports:
             - containerPort: 8082
               hostPort: 8082
@@ -116,6 +120,9 @@ spec:
         - name: cvat-share
           hostPath:
             path: /dlwsdata/storage
+        - name: home
+          hostPath:
+            path: /dlwsdata/work
 
       tolerations:
         - key: CriticalAddonsOnly
