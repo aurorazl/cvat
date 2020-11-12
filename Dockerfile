@@ -73,8 +73,10 @@ RUN adduser --shell /bin/bash --disabled-password --gecos "" ${USER} && \
 
 # Install and initialize CVAT, copy all necessary files
 COPY cvat/requirements/ /tmp/requirements/
-COPY supervisord.conf mod_wsgi.conf wait-for-it.sh manage.py ${HOME}/
+RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
 RUN pip install -r /tmp/requirements/${DJANGO_CONFIGURATION}.txt
+
+COPY supervisord.conf mod_wsgi.conf wait-for-it.sh manage.py ${HOME}/
 
 ARG CLAM_AV='no'
 ENV CLAM_AV=${CLAM_AV}

@@ -97,12 +97,7 @@ spec:
   env:
     - name: NUCLIO_PYTHON_EXE_PATH
       value: /opt/nuclio/common/python3
-  volumes:
-    - volume:
-        hostPath:
-          path: '/root/cvat/serverless/openvino/common'
-      volumeMount:
-        mountPath: '/opt/nuclio/common'
+
   build:
     image: cvat/openvino.omz.public.faster_rcnn_inception_v2_coco
     baseImage: openvino/ubuntu18_dev:2020.2
