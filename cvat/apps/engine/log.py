@@ -35,7 +35,7 @@ class TaskLoggerStorage:
         server_file = logging.FileHandler(filename=task.get_log_path())
         formatter = logging.Formatter(LOGGING['formatters']['standard']['format'])
         server_file.setFormatter(formatter)
-        logger.handlers = [server_file]
+        logger.addHandler(server_file)
 
         return logger
 
