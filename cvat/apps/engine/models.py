@@ -237,6 +237,14 @@ class RemoteFile(models.Model):
     class Meta:
         default_permissions = ()
 
+# For Platform
+class PlatformFile(models.Model):
+    data = models.ForeignKey(Data, on_delete=models.CASCADE, null=True, related_name='platform_files')
+    file = models.CharField(max_length=1024)
+
+    class Meta:
+        default_permissions = ()
+
 class Segment(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     start_frame = models.IntegerField()

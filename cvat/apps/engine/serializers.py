@@ -203,6 +203,7 @@ class DataSerializer(serializers.ModelSerializer):
         client_files = validated_data.pop('client_files')
         server_files = validated_data.pop('server_files')
         remote_files = validated_data.pop('remote_files')
+        platform_files = validated_data.pop('platform_files')
         validated_data.pop('use_zip_chunks')
         validated_data.pop('use_cache')
         db_data = models.Data.objects.create(**validated_data)
@@ -226,6 +227,10 @@ class DataSerializer(serializers.ModelSerializer):
         for f in remote_files:
             remote_file = models.RemoteFile(data=db_data, **f)
             remote_file.save()
+
+        for f in platform_files:
+            platform_file = models.PlatformFile(data=db_data, **f)
+            platform_file.save()
 
         db_data.save()
         return db_data
