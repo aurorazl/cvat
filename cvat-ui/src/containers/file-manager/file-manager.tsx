@@ -85,7 +85,7 @@ export class FileManagerContainer extends React.PureComponent<Props> {
                 platformData={platformData}
                 onLoadPlatformData={getPlatformData}
                 withRemote={withRemote}
-                ref={(component): void => {
+                ref={(component: any): void => {
                     this.managerComponentRef = component;
                 }}
             />

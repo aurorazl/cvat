@@ -12,7 +12,7 @@ import Paragraph from 'antd/lib/typography/Paragraph';
 import Upload, { RcFile } from 'antd/lib/upload';
 import Empty from 'antd/lib/empty';
 import Tree, { AntTreeNode, TreeNodeNormal } from 'antd/lib/tree/Tree';
-import Select, { SelectValue, LabeledValue } from 'antd/lib/select';
+import Select, { OptionProps } from 'antd/lib/select';
 
 import consts from 'consts';
 
@@ -53,6 +53,7 @@ interface Props {
     platformData: DatasetInfo[];
     onLoadData: (key: string, success: () => void, failure: () => void) => void;
     onLoadPlatformData: (success: () => void, failure: () => void) => void;
+    onChangeDataset(value: string): void;
 }
 
 const { Option } = Select;
@@ -276,23 +277,6 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
                     showSearch
                     style={{ width: '100%' }}
                     placeholder={t('Select a dataset')}
-                    // optionFilterProp="children"
-                    // onChange={onChange}
-                    // onFocus={onFocus}
-                    // onBlur={onBlur}
-                    // onSearch={onSearch}
-                    // filterOption={(input, option) =>
-                    //     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    // }
-                >
-                    {platformData.map((ds: any) => (
-                        <Option key={ds.id} value={`${ds.path}`}>
-                            {ds.name}
-                        </Option>
-                    ))}
-                </Select>
-                {/* <Select
-                    showSearch
                     filterOption={(input: string, option: React.ReactElement<OptionProps>) => {
                         const { children } = option.props;
                         if (typeof children === 'string') {
@@ -301,15 +285,21 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
 
                         return false;
                     }}
-                    value={`${selectedLabeID}`}
-                    onChange={onChangeLabel}
+                    onChange={(value: string): void => {
+                        this.setState({
+                            files: {
+                                ...files,
+                                platform: [value],
+                            },
+                        });
+                    }}
                 >
-                    {labels.map((label: any) => (
-                            <Select.Option key={label.id} value={`${label.id}`}>
-                                {label.name}
-                            </Select.Option>
+                    {platformData.map((ds: any) => (
+                        <Option key={ds.id} value={`${ds.path}`}>
+                            {ds.name}
+                        </Option>
                     ))}
-                </Select>                 */}
+                </Select>
             </Tabs.TabPane>
         );
     }
@@ -340,4 +330,5 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
     }
 }
 
-export default connect(mapStateToProps)(withTranslation(undefined, { withRef: true })(FileManager));
+export default withTranslation(undefined, { withRef: true })(FileManager);
+// export default connect(mapStateToProps)(withTranslation(undefined, { withRef: true })(FileManager));
