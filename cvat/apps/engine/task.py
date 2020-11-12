@@ -153,16 +153,11 @@ def _count_files(data, meta_info_file=None,upload_dir=None):
             raise ValueError("Don't use '..' inside file paths")
         if not os.path.isdir(path):
             raise ValueError("Only support directory")
-        slogger.glob.info("path #{}".format(path))
-        files = [os.path.join(path,i) for i in os.listdir(path) if os.path.isfile(i)]
-        slogger.glob.info("files #{}".format(files))
+        files = [os.path.join(path,i) for i in os.listdir(path) if os.path.isfile(os.path.join(path,i))]
         platform_files.extend(files)
-        slogger.glob.info("platform_files #{}".format(platform_files))
-
     data['platform_files'] = platform_files
 
     def count_files(file_mapping, counter):
-        slogger.glob.info("file_mapping #{}".format(file_mapping))
         for file_name, full_path in file_mapping.items():
             mime = get_mime(full_path)
             if mime in counter:
