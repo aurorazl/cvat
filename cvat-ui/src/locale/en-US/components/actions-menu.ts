@@ -14,5 +14,5 @@ export default {
     // load-submenu.tsx
     "Upload annotations": "Upload annotations",
     // export-platform-submenu.tsx
-    "Export to AI platform": "Export to AI platform",
+    "Push to AI platform": "Push to AI platform",
 }
