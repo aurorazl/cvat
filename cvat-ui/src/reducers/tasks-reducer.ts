@@ -347,12 +347,14 @@ export default (state: TasksState = defaultState, action: AnyAction): TasksState
         }
         // 推送任务至AI平台
         case TasksActionTypes.EXPORT_TO_PLATFORM: {
+            const { taskId } = action.payload;
+
             return {
                 ...state,
                 activities: {
                     ...state.activities,
                     pushes: {
-                        taskId: null,
+                        taskId,
                         status: '',
                         error: '',
                     },
@@ -361,6 +363,7 @@ export default (state: TasksState = defaultState, action: AnyAction): TasksState
         }
         case TasksActionTypes.EXPORT_TO_PLATFORM_SUCCESS: {
             const { taskId } = action.payload;
+
             return {
                 ...state,
                 activities: {
@@ -374,12 +377,15 @@ export default (state: TasksState = defaultState, action: AnyAction): TasksState
             };
         }
         case TasksActionTypes.EXPORT_TO_PLATFORM_FAILED: {
+            const { taskId } = action.payload;
+
             return {
                 ...state,
                 activities: {
                     ...state.activities,
                     pushes: {
                         ...state.activities.pushes,
+                        taskId,
                         status: 'FAILED',
                         error: action.payload.error.toString(),
                     },

@@ -832,11 +832,15 @@
             async function exportToPlatform(id) {
                 const { backendAPI } = config;
 
+                let response = null;
                 try {
-                    await Axios.get(`${backendAPI}/tasks/${id}/save_to_platform?format=COCO 1.0`);
+                    response = await Axios.get(`${backendAPI}/tasks/${id}/save_to_platform?format=COCO 1.0`);
                 } catch (errorData) {
                     throw generateError(errorData);
                 }
+
+                let { data, status, statusText } = response;
+                return { data, status, statusText };
             }
 
             Object.defineProperties(
