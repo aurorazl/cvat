@@ -36,6 +36,11 @@ const defaultState: TasksState = {
             status: '',
             error: '',
         },
+        pushes: {
+            taskId: null,
+            status: '',
+            error: '',
+        },
     },
 };
 
@@ -338,6 +343,47 @@ export default (state: TasksState = defaultState, action: AnyAction): TasksState
             return {
                 ...state,
                 hideEmpty: action.payload.hideEmpty,
+            };
+        }
+        // 推送任务至AI平台
+        case TasksActionTypes.EXPORT_TO_PLATFORM: {
+            return {
+                ...state,
+                activities: {
+                    ...state.activities,
+                    pushes: {
+                        taskId: null,
+                        status: '',
+                        error: '',
+                    },
+                },
+            };
+        }
+        case TasksActionTypes.EXPORT_TO_PLATFORM_SUCCESS: {
+            const { taskId } = action.payload;
+            return {
+                ...state,
+                activities: {
+                    ...state.activities,
+                    pushes: {
+                        ...state.activities.pushes,
+                        taskId,
+                        status: 'PUSHED',
+                    },
+                },
+            };
+        }
+        case TasksActionTypes.EXPORT_TO_PLATFORM_FAILED: {
+            return {
+                ...state,
+                activities: {
+                    ...state.activities,
+                    pushes: {
+                        ...state.activities.pushes,
+                        status: 'FAILED',
+                        error: action.payload.error.toString(),
+                    },
+                },
             };
         }
         case BoundariesActionTypes.RESET_AFTER_ERROR:

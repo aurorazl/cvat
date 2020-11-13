@@ -822,9 +822,6 @@
                             'Authorization': `Bearer ${aiToken}`
                         }
                     });
-                    // response = await Axios.get(`${aiBackendAPI}/datasets/?pageNum=1&pageSize=100&${filter}`, {
-                    //     proxy: config.proxy,
-                    // });
                 } catch (errorData) {
                     throw generateError(errorData);
                 }
@@ -836,7 +833,7 @@
                 const { backendAPI } = config;
 
                 try {
-                    await Axios.post(`${backendAPI}/tasks/${id}`);
+                    await Axios.get(`${backendAPI}/tasks/${id}/save_to_platform?format=COCO 1.0`);
                 } catch (errorData) {
                     throw generateError(errorData);
                 }

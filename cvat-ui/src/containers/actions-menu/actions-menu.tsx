@@ -22,6 +22,7 @@ interface StateToProps {
     dumpActivities: string[] | null;
     exportActivities: string[] | null;
     inferenceIsActive: boolean;
+    pushActivity: any;
 }
 
 interface DispatchToProps {
@@ -41,7 +42,7 @@ function mapStateToProps(state: CombinedState, own: OwnProps): StateToProps {
     const {
         formats: { annotationFormats },
         tasks: {
-            activities: { dumps, loads, exports: activeExports },
+            activities: { dumps, loads, exports: activeExports, pushes },
         },
     } = state;
 
@@ -51,6 +52,7 @@ function mapStateToProps(state: CombinedState, own: OwnProps): StateToProps {
         loadActivity: tid in loads ? loads[tid] : null,
         annotationFormats,
         inferenceIsActive: tid in state.models.inferences,
+        pushActivity: tid === pushes['taskId'] ? pushes : null,
     };
 }
 
@@ -85,6 +87,7 @@ function ActionsMenuContainer(props: OwnProps & StateToProps & DispatchToProps):
         dumpActivities,
         exportActivities,
         inferenceIsActive,
+        pushActivity,
 
         loadAnnotations,
         dumpAnnotations,
@@ -142,6 +145,7 @@ function ActionsMenuContainer(props: OwnProps & StateToProps & DispatchToProps):
             dumpActivities={dumpActivities}
             exportActivities={exportActivities}
             inferenceIsActive={inferenceIsActive}
+            pushActivity={pushActivity}
             onClickMenu={onClickMenu}
         />
     );

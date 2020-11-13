@@ -67,6 +67,11 @@ export interface TasksState {
             status: string;
             error: string;
         };
+        pushes: {
+            taskId: number | null;
+            status: string;
+            error: string;
+        };
     };
 }
 
