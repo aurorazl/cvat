@@ -144,12 +144,12 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
             <hr />
             <Menu.Item key={Actions.DELETE_TASK}>{t('Delete')}</Menu.Item>
         </Menu>
-            {pushActivity['status'] === 'PUSHED' ? (
+            {pushActivity && pushActivity['status'] === 'PUSHED' ? (
                 notification.success({
                     message: t('Push succeeded!'),
                 })
             ) : null}
-            {pushActivity['status'] === 'FAILED' ? (
+            {pushActivity && pushActivity['status'] === 'FAILED' ? (
                 notification.error({
                     message: t('Push failed!'),
                 })
