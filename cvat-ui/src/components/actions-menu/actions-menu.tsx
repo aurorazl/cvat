@@ -129,7 +129,7 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
                     {t('Automatic annotation')}
                 </Tooltip>
             </Menu.Item>
-            <Menu.Item key={Actions.EXPORT_TO_PLATFORM}>{t('Export to AI platform')}</Menu.Item>
+            <Menu.Item key={Actions.EXPORT_TO_PLATFORM}>{t('Push to AI platform')}</Menu.Item>
             <hr />
             <Menu.Item key={Actions.DELETE_TASK}>{t('Delete')}</Menu.Item>
         </Menu>
