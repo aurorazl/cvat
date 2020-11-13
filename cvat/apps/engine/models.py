@@ -80,6 +80,9 @@ class Data(models.Model):
     def get_upload_dirname(self):
         return os.path.join(self.get_data_dirname(), "raw")
 
+    def get_export_to_platform_dirname(self):
+        return os.path.join(self.get_data_dirname(), "platform")
+
     def get_compressed_cache_dirname(self):
         return os.path.join(self.get_data_dirname(), "compressed")
 
