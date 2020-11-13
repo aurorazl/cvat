@@ -548,6 +548,29 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
                     return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
                 return Response(data)
 
+    @action(detail=True, methods=['GET',],
+            serializer_class=LabeledDataSerializer)
+    def save_to_platform(self, request, pk):
+        db_task = self.get_object()  # force to call check_object_permissions
+        if request.method == 'GET':
+            format_name = request.query_params.get('format')
+            if format_name:
+                result = _export_annotations_return_file_path(db_task=db_task,
+                                           rq_id="/api/v1/tasks/{}/save_to_platform/{}".format(pk, format_name),
+                                           request=request,
+                                           action=request.query_params.get("action", "").lower(),
+                                           callback=dm.views.export_task_annotations,
+                                           format_name=format_name,
+                                           filename=request.query_params.get("filename", "").lower(),
+                                           )
+                if isinstance(result,Response):
+                    return result
+                slogger.task[pk].info("export platform {}".format(result), exc_info=True)
+            else:
+                data = dm.task.get_task_data(pk)
+                slogger.task[pk].info("export platform {}".format(data), exc_info=True)
+            return Response(status=status.HTTP_201_CREATED)
+
     @swagger_auto_schema(method='get', operation_summary='When task is being created the method returns information about a status of the creation process')
     @action(detail=True, methods=['GET'], serializer_class=RqStatusSerializer)
     def status(self, request, pk):
@@ -853,6 +876,67 @@ def _export_annotations(db_task, rq_id, request, format_name, action, callback, 
                 else:
                     if osp.exists(file_path):
                         return Response(status=status.HTTP_201_CREATED)
+            elif rq_job.is_failed:
+                exc_info = str(rq_job.exc_info)
+                rq_job.delete()
+                return Response(exc_info,
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            else:
+                return Response(status=status.HTTP_202_ACCEPTED)
+
+    try:
+        if request.scheme:
+            server_address = request.scheme + '://'
+        server_address += request.get_host()
+    except Exception:
+        server_address = None
+
+    ttl = dm.views.CACHE_TTL.total_seconds()
+    queue.enqueue_call(func=callback,
+        args=(db_task.id, format_name, server_address), job_id=rq_id,
+        meta={ 'request_time': timezone.localtime() },
+        result_ttl=ttl, failure_ttl=ttl)
+    return Response(status=status.HTTP_202_ACCEPTED)
+
+
+def _export_annotations_return_file_path(db_task, rq_id, request, format_name, action, callback, filename):
+    if action not in {"", "download"}:
+        raise serializers.ValidationError(
+            "Unexpected action specified for the request")
+
+    format_desc = {f.DISPLAY_NAME: f
+        for f in dm.views.get_export_formats()}.get(format_name)
+    if format_desc is None:
+        raise serializers.ValidationError(
+            "Unknown format specified for the request")
+    elif not format_desc.ENABLED:
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    queue = django_rq.get_queue("default")
+
+    rq_job = queue.fetch_job(rq_id)
+    if rq_job:
+        last_task_update_time = timezone.localtime(db_task.updated_date)
+        request_time = rq_job.meta.get('request_time', None)
+        if request_time is None or request_time < last_task_update_time:
+            rq_job.cancel()
+            rq_job.delete()
+        else:
+            if rq_job.is_finished:
+                file_path = rq_job.return_value
+                if action == "download" and osp.exists(file_path):
+                    rq_job.delete()
+
+                    timestamp = datetime.strftime(last_task_update_time,
+                        "%Y_%m_%d_%H_%M_%S")
+                    filename = filename or \
+                        "task_{}-{}-{}{}".format(
+                        db_task.name, timestamp,
+                        format_name, osp.splitext(file_path)[1])
+                    return file_path
+                else:
+                    if osp.exists(file_path):
+                        return file_path
             elif rq_job.is_failed:
                 exc_info = str(rq_job.exc_info)
                 rq_job.delete()
