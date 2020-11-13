@@ -66,6 +66,7 @@ class Data(models.Model):
     original_chunk_type = models.CharField(max_length=32, choices=DataChoice.choices(),
         default=DataChoice.IMAGESET)
     storage_method = models.CharField(max_length=15, choices=StorageMethodChoice.choices(), default=StorageMethodChoice.FILE_SYSTEM)
+    exported = models.PositiveIntegerField(default=0)
 
     class Meta:
         default_permissions = ()

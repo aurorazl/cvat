@@ -45,6 +45,7 @@ from cvat.apps.engine.serializers import (
     TaskSerializer, UserSerializer, PluginsSerializer,
 )
 from cvat.apps.engine.utils import av_scan_paths
+from cvat.apps.dataset_manager.util import unzip_archive
 
 from . import models, task
 from .log import clogger, slogger
@@ -565,7 +566,10 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
                                            )
                 if isinstance(result,Response):
                     return result
-                slogger.task[pk].info("export platform {}".format(result), exc_info=True)
+                save_path = os.path.join(db_task.data.get_export_to_platform_dirname(),"format_{}".format(format_name.lower()))
+                unzip_archive(result,save_path)
+                db_task.data.exported = 1
+                db_task.save()
             else:
                 data = dm.task.get_task_data(pk)
                 slogger.task[pk].info("export platform {}".format(data), exc_info=True)
