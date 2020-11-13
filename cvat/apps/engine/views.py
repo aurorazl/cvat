@@ -568,6 +568,7 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
                     return result
                 save_path = os.path.join(db_task.data.get_export_to_platform_dirname(),"format_{}".format(format_name.lower()))
                 unzip_archive(result,save_path)
+                os.system("cp {}/annotations/instances_default.json {}/annotations/instance.json")
                 db_task.data.exported = 1
                 db_task.save()
             else:
