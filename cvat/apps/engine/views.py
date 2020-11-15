@@ -570,7 +570,7 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
                 unzip_archive(result,save_path)
                 os.system("cp {}/annotations/instances_default.json {}/annotations/instance.json".format(save_path,save_path))
                 db_task.data.exported = 1
-                db_task.save()
+                db_task.data.save()
             else:
                 data = dm.task.get_task_data(pk)
                 slogger.task[pk].info("export platform {}".format(data), exc_info=True)

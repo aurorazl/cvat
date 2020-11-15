@@ -70,6 +70,9 @@ class Data(models.Model):
 
     class Meta:
         default_permissions = ()
+        indexes = [
+            models.Index(fields=['exported']),
+        ]
 
     def get_frame_step(self):
         match = re.search("step\s*=\s*([1-9]\d*)", self.frame_filter)
