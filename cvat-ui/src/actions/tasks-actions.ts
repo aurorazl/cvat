@@ -529,33 +529,33 @@ export function hideEmptyTasks(hideEmpty: boolean): AnyAction {
     return action;
 }
 
-function exportToPlatform(taskID: number): AnyAction {
+function exportToPlatform(taskId: number): AnyAction {
     const action = {
         type: TasksActionTypes.EXPORT_TO_PLATFORM,
         payload: {
-            taskID,
+            taskId,
         },
     };
 
     return action;
 }
 
-function exportToPlatformSuccess(taskID: number): AnyAction {
+function exportToPlatformSuccess(taskId: number): AnyAction {
     const action = {
         type: TasksActionTypes.EXPORT_TO_PLATFORM_SUCCESS,
         payload: {
-            taskID,
+            taskId,
         },
     };
 
     return action;
 }
 
-function exportToPlatformFailed(taskID: number, error: any): AnyAction {
+function exportToPlatformFailed(taskId: number, error: any): AnyAction {
     const action = {
         type: TasksActionTypes.EXPORT_TO_PLATFORM_FAILED,
         payload: {
-            taskID,
+            taskId,
             error,
         },
     };
