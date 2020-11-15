@@ -665,12 +665,14 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
         )
 
 
-def DataView(request):
-    queryset = Data.objects.all().filter(exported=1).order_by('id')
-    data=[]
-    for one in queryset:
-        data.append({"name":one.tasks.name,"path":"/home/django/data/data/{}/platform".format(one.id),"dataSetId":one.id})
-    return Response(data=data)
+class DataViewSet(viewsets.ViewSet):
+
+    def list(self,request):
+        queryset = Data.objects.all().filter(exported=1).order_by('id')
+        data=[]
+        for one in queryset:
+            data.append({"name":one.tasks.name,"path":"/home/django/data/data/{}/platform".format(one.id),"dataSetId":one.id})
+        return Response(data=data)
 
 @method_decorator(name='retrieve', decorator=swagger_auto_schema(operation_summary='Method returns details of a job'))
 @method_decorator(name='update', decorator=swagger_auto_schema(operation_summary='Method updates a job by id'))
