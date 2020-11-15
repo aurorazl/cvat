@@ -36,7 +36,7 @@ import cvat.apps.dataset_manager.views # pylint: disable=unused-import
 from cvat.apps.authentication import auth
 from cvat.apps.dataset_manager.serializers import DatasetFormatsSerializer
 from cvat.apps.engine.frame_provider import FrameProvider
-from cvat.apps.engine.models import Job, StatusChoice, Task, StorageMethodChoice
+from cvat.apps.engine.models import Job, StatusChoice, Task, StorageMethodChoice,Data
 from cvat.apps.engine.serializers import (
     AboutSerializer, AnnotationFileSerializer, BasicUserSerializer,
     DataMetaSerializer, DataSerializer, ExceptionSerializer,
@@ -663,6 +663,14 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
             format_name=format_name,
             filename=request.query_params.get("filename", "").lower(),
         )
+
+
+def DataView(request):
+    queryset = Data.objects.all().filter(exported=1).order_by('id')
+    data=[]
+    for one in queryset:
+        data.append({"name":one.tasks.name,"path":"/home/django/data/data/{}/platform".format(one.id),"dataSetId":one.id})
+    return Response(data=data)
 
 @method_decorator(name='retrieve', decorator=swagger_auto_schema(operation_summary='Method returns details of a job'))
 @method_decorator(name='update', decorator=swagger_auto_schema(operation_summary='Method updates a job by id'))
