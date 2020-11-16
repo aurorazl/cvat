@@ -36,7 +36,7 @@ import cvat.apps.dataset_manager.views # pylint: disable=unused-import
 from cvat.apps.authentication import auth
 from cvat.apps.dataset_manager.serializers import DatasetFormatsSerializer
 from cvat.apps.engine.frame_provider import FrameProvider
-from cvat.apps.engine.models import Job, StatusChoice, Task, StorageMethodChoice
+from cvat.apps.engine.models import Job, StatusChoice, Task, StorageMethodChoice,Data
 from cvat.apps.engine.serializers import (
     AboutSerializer, AnnotationFileSerializer, BasicUserSerializer,
     DataMetaSerializer, DataSerializer, ExceptionSerializer,
@@ -564,12 +564,15 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
                                            format_name=format_name,
                                            filename=request.query_params.get("filename", "").lower(),
                                            )
-                if isinstance(result,Response):
+                if isinstance(result,Response) and result.status_code>300:
                     return result
                 save_path = os.path.join(db_task.data.get_export_to_platform_dirname(),"format_{}".format(format_name.lower().split(" ")[0]))
                 unzip_archive(result,save_path)
                 os.system("cp {}/annotations/instances_default.json {}/annotations/instance.json".format(save_path,save_path))
+                path = db_task.data.platform_files.first().file
+                os.system("ln -s {} {}".format(path,os.path.join(save_path,"images")))
                 db_task.data.exported = 1
+                db_task.data.save()
                 db_task.save()
             else:
                 data = dm.task.get_task_data(pk)
@@ -662,6 +665,16 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
             format_name=format_name,
             filename=request.query_params.get("filename", "").lower(),
         )
+
+
+class DataViewSet(viewsets.ViewSet):
+
+    def list(self,request):
+        queryset = Data.objects.all().filter(exported=1).order_by('id')
+        data=[]
+        for one in queryset:
+            data.append({"name":one.tasks.first().name,"convertOutPath":"/home/django/data/data/{}/platform".format(one.id),"dataSetId":one.id})
+        return Response(data=data)
 
 @method_decorator(name='retrieve', decorator=swagger_auto_schema(operation_summary='Method returns details of a job'))
 @method_decorator(name='update', decorator=swagger_auto_schema(operation_summary='Method updates a job by id'))
