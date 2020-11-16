@@ -564,7 +564,7 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
                                            format_name=format_name,
                                            filename=request.query_params.get("filename", "").lower(),
                                            )
-                if isinstance(result,Response) and result.status_code>300:
+                if isinstance(result,Response):
                     return result
                 save_path = os.path.join(db_task.data.get_export_to_platform_dirname(),"format_{}".format(format_name.lower().split(" ")[0]))
                 unzip_archive(result,save_path)
