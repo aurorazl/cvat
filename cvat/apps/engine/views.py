@@ -660,6 +660,7 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
 
 
 class DataViewSet(viewsets.ViewSet):
+    permission_classes = ()
 
     def list(self,request):
         queryset = Data.objects.all().filter(exported=1).order_by('id')
