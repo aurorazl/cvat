@@ -1273,7 +1273,6 @@
                 platformFiles: {
                     get: () => [...data.files.platform_files],
                     set: (platformFiles) => {
-                        console.log('platformFiles', platformFiles)
                         if (!Array.isArray(platformFiles)) {
                             throw new ArgumentError(
                                 i18next.t('Value must be an array. But ${typeof (platformFiles)} has been got.', {typeofplatformFiles: `${typeof (platformFiles)}`}),
