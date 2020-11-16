@@ -45,7 +45,7 @@ from cvat.apps.engine.serializers import (
     TaskSerializer, UserSerializer, PluginsSerializer,
 )
 from cvat.apps.engine.utils import av_scan_paths
-from cvat.apps.dataset_manager.util import unzip_archive
+
 
 from . import models, task
 from .log import clogger, slogger
@@ -560,20 +560,12 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
                                            rq_id="/api/v1/tasks/{}/save_to_platform/{}".format(pk, format_name),
                                            request=request,
                                            action=request.query_params.get("action", "").lower(),
-                                           callback=dm.views.export_task_annotations,
+                                           callback=dm.views.export_task_annotations_to_platform,
                                            format_name=format_name,
                                            filename=request.query_params.get("filename", "").lower(),
                                            )
-                if isinstance(result,Response) and result.status_code>300:
+                if isinstance(result,Response):
                     return result
-                save_path = os.path.join(db_task.data.get_export_to_platform_dirname(),"format_{}".format(format_name.lower().split(" ")[0]))
-                unzip_archive(result,save_path)
-                os.system("cp {}/annotations/instances_default.json {}/annotations/instance.json".format(save_path,save_path))
-                path = db_task.data.platform_files.first().file
-                os.system("ln -s {} {}".format(path,os.path.join(save_path,"images")))
-                db_task.data.exported = 1
-                db_task.data.save()
-                db_task.save()
             else:
                 data = dm.task.get_task_data(pk)
                 slogger.task[pk].info("export platform {}".format(data), exc_info=True)
@@ -668,12 +660,13 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
 
 
 class DataViewSet(viewsets.ViewSet):
+    permission_classes = ()
 
     def list(self,request):
         queryset = Data.objects.all().filter(exported=1).order_by('id')
         data=[]
         for one in queryset:
-            data.append({"name":one.tasks.first().name,"convertOutPath":"/home/django/data/data/{}/platform".format(one.id),"dataSetId":one.id})
+            data.append({"name":one.tasks.first().name,"convertOutPath":"/data/cvat/data/data/{}/platform".format(one.id),"dataSetId":one.id,"convertStatus":"finished"})
         return Response(data=data)
 
 @method_decorator(name='retrieve', decorator=swagger_auto_schema(operation_summary='Method returns details of a job'))
