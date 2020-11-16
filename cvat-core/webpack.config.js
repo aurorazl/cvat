@@ -17,7 +17,7 @@ const nodeConfig = {
         path: path.resolve(__dirname, 'dist'),
         filename: 'cvat-core.node.js',
         libraryTarget: 'commonjs',
-        publicPath: '/cvat/',
+        publicPath: '/annotations/',
     },
     module: {
         rules: [
@@ -70,7 +70,7 @@ const webConfig = {
                 use: {
                     loader: 'worker-loader',
                     options: {
-                        publicPath: '/cvat/static/engine/js/3rdparty/',
+                        publicPath: '/annotations/static/engine/js/3rdparty/',
                         name: '[name].[contenthash].js',
                     },
                 },
@@ -81,7 +81,7 @@ const webConfig = {
                 use: {
                     loader: 'worker-loader',
                     options: {
-                        publicPath: '/cvat/static/engine/js/',
+                        publicPath: '/annotations/static/engine/js/',
                         name: '[name].[contenthash].js',
                     },
                 },
