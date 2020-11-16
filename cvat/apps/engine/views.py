@@ -671,16 +671,16 @@ class DataViewSet(viewsets.ViewSet):
             data.append({"name":one.tasks.first().name,"convertOutPath":"/data/cvat/data/data/{}/platform".format(one.id),"dataSetId":one.id,"convertStatus":"finished"})
         return Response(data=data)
 
-    @action(detail=True, methods=['GET'])
-    def datasets(self, request):
-        if request.method == 'GET':
-            req = urlrequest.Request("http://{}/ai_arts/api/datasets/?pageNum=1&pageSize=9999".format(settings.VIP_MASTER), headers={'User-Agent': 'Mozilla/5.0',"Authorization":"Bearer "+settings.AIART_TOKEN})
-            try:
-                response=urlrequest.urlopen(req)
-                content = json.loads(response.read().decode("utf-8"))
-                return Response(content)
-            except Exception as e:
-                return Response(data=str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+class DataSetViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        req = urlrequest.Request("http://{}/ai_arts/api/datasets/?pageNum=1&pageSize=9999".format(settings.VIP_MASTER), headers={'User-Agent': 'Mozilla/5.0',"Authorization":"Bearer "+settings.AIART_TOKEN})
+        try:
+            response=urlrequest.urlopen(req)
+            content = json.loads(response.read().decode("utf-8"))
+            return Response(content)
+        except Exception as e:
+            return Response(data=str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @method_decorator(name='retrieve', decorator=swagger_auto_schema(operation_summary='Method returns details of a job'))
