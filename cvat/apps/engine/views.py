@@ -666,7 +666,7 @@ class DataViewSet(viewsets.ViewSet):
         queryset = Data.objects.all().filter(exported=1).order_by('id')
         data=[]
         for one in queryset:
-            data.append({"name":one.tasks.first().name,"convertOutPath":"/data/cvat/data/data/{}/platform".format(one.id),"dataSetId":one.id})
+            data.append({"name":one.tasks.first().name,"convertOutPath":"/data/cvat/data/data/{}/platform".format(one.id),"dataSetId":one.id,"convertStatus":"finished"})
         return Response(data=data)
 
 @method_decorator(name='retrieve', decorator=swagger_auto_schema(operation_summary='Method returns details of a job'))
