@@ -18,6 +18,7 @@ from datumaro.util import to_snake_case
 
 from .formats.registry import EXPORT_FORMATS, IMPORT_FORMATS
 from .util import current_function_name
+from cvat.apps.dataset_manager.util import unzip_archive
 
 
 _MODULE_NAME = __package__ + '.' + osp.splitext(osp.basename(__file__))[0]
@@ -85,6 +86,19 @@ def export_task_as_dataset(task_id, dst_format=None, server_url=None):
 
 def export_task_annotations(task_id, dst_format=None, server_url=None):
     return export_task(task_id, dst_format, server_url=server_url, save_images=False)
+
+def export_task_annotations_to_platform(task_id, dst_format=None, server_url=None):
+    path = export_task(task_id, dst_format, server_url=server_url, save_images=False)
+    db_task = Task.objects.get(pk=task_id)
+    save_path = os.path.join(db_task.data.get_export_to_platform_dirname(),
+                             "format_{}".format(dst_format.lower().split(" ")[0]))
+    unzip_archive(path, save_path)
+    os.system("cp {}/annotations/instances_default.json {}/annotations/instance.json".format(save_path, save_path))
+    path = db_task.data.platform_files.first().file
+    os.system("ln -s {} {}".format(path, os.path.join(save_path, "images")))
+    db_task.data.exported = 1
+    db_task.data.save()
+    db_task.save()
 
 def clear_export_cache(task_id, file_path, file_ctime):
     try:
