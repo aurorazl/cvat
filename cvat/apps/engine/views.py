@@ -569,6 +569,8 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
                 save_path = os.path.join(db_task.data.get_export_to_platform_dirname(),"format_{}".format(format_name.lower().split(" ")[0]))
                 unzip_archive(result,save_path)
                 os.system("cp {}/annotations/instances_default.json {}/annotations/instance.json".format(save_path,save_path))
+                path = db_task.data.platform_files.first()
+                os.system("ls -n {} {}".format(path,os.path.join(save_path,"images")))
                 db_task.data.exported = 1
                 db_task.data.save()
                 db_task.save()
@@ -671,7 +673,7 @@ class DataViewSet(viewsets.ViewSet):
         queryset = Data.objects.all().filter(exported=1).order_by('id')
         data=[]
         for one in queryset:
-            data.append({"name":one.tasks.first().name,"path":"/home/django/data/data/{}/platform".format(one.id),"dataSetId":one.id})
+            data.append({"name":one.tasks.first().name,"convertOutPath":"/home/django/data/data/{}/platform".format(one.id),"dataSetId":one.id})
         return Response(data=data)
 
 @method_decorator(name='retrieve', decorator=swagger_auto_schema(operation_summary='Method returns details of a job'))
