@@ -569,7 +569,7 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
                 save_path = os.path.join(db_task.data.get_export_to_platform_dirname(),"format_{}".format(format_name.lower().split(" ")[0]))
                 unzip_archive(result,save_path)
                 os.system("cp {}/annotations/instances_default.json {}/annotations/instance.json".format(save_path,save_path))
-                path = db_task.data.platform_files.first()
+                path = db_task.data.platform_files.first().file
                 slogger.task[pk].info("ls -n {} {}".format(path,os.path.join(save_path,"images")))
                 os.system("ls -n {} {}".format(path,os.path.join(save_path,"images")))
                 db_task.data.exported = 1
