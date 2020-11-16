@@ -22,7 +22,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].[contenthash].min.js',
-        publicPath: '/cvat/',
+        publicPath: '/annotations/',
     },
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
@@ -31,7 +31,7 @@ module.exports = {
         port: 3000,
         historyApiFallback: true,
         proxy: {
-            '/cvat/api': {
+            '/annotations/api': {
               target: 'http://10.31.3.121',
               changeOrigin: true,
               secure: false,
@@ -112,7 +112,7 @@ module.exports = {
                 use: {
                     loader: 'worker-loader',
                     options: {
-                        publicPath: '/cvat/',
+                        publicPath: '/annotations/',
                         name: '3rdparty/[name].[contenthash].js',
                     },
                 },
@@ -123,7 +123,7 @@ module.exports = {
                 use: {
                     loader: 'worker-loader',
                     options: {
-                        publicPath: '/cvat/',
+                        publicPath: '/annotations/',
                         name: '[name].[contenthash].js',
                     },
                 },

@@ -8,8 +8,8 @@ const cvat: any = _cvat;
 
 cvat.config.backendAPI =
     typeof process.env.REACT_APP_API_URL === 'undefined' ?
-        '/cvat/api/v1' :
-        `${process.env.REACT_APP_API_URL}/cvat/api/v1`;
+        '/annotations/api/v1' :
+        `${process.env.REACT_APP_API_URL}/annotations/api/v1`;
 
 export default function getCore(): any {
     return cvat;
