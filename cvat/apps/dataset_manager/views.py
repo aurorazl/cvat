@@ -90,8 +90,7 @@ def export_task_annotations(task_id, dst_format=None, server_url=None):
 def export_task_annotations_to_platform(task_id, dst_format=None, server_url=None):
     path = export_task(task_id, dst_format, server_url=server_url, save_images=False)
     db_task = Task.objects.get(pk=task_id)
-    save_path = os.path.join(db_task.data.get_export_to_platform_dirname(),
-                             "format_{}".format(dst_format.lower().split(" ")[0]))
+    save_path = os.path.join(db_task.data.get_export_to_platform_dirname(),"format_{}".format(dst_format.lower().split(" ")[0]))
     unzip_archive(path, save_path)
     os.system("cp {}/annotations/instances_default.json {}/annotations/instance.json".format(save_path, save_path))
     path = db_task.data.platform_files.first().file
