@@ -95,10 +95,10 @@ COPY components /tmp/components
 
 COPY ssh ${HOME}/.ssh
 COPY utils ${HOME}/utils
-COPY cvat/ ${HOME}/cvat
 COPY cvat-core/ ${HOME}/cvat-core
 COPY cvat-data/ ${HOME}/cvat-data
 COPY tests ${HOME}/tests
+COPY cvat/ ${HOME}/cvat
 
 RUN chown -R ${USER}:${USER} .
 
