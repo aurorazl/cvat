@@ -812,7 +812,7 @@
 
             // 下面几个是访问aiarts平台的接口
             async function getDatasetsFromPlat() {
-                const { aiBackendAPI, aiToken } = config;
+                const { aiToken } = config;
 
                 let response = null;
                 try {
