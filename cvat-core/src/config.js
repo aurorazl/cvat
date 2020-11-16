@@ -5,5 +5,5 @@
 module.exports = {
     backendAPI: 'http://localhost:7000/api/v1',
     proxy: false,
-    aiToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjMwMDAwLCJleHAiOjE5MTU2NzExODEuNTN9.hOhdXUw902g41mj5G3oJbkvE5-OImgySDiAa6B5AY48'
+    aiToken: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjMwMDAwLCJleHAiOjE5MTU2NzExODEsInVzZXJuYW1lIjoiYWRtaW4ifQ.JnyxZ5xOTyQeWFeRMH1badCzxpJ1rc3MF5Wk_eaLgAs'
 };
