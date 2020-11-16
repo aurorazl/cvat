@@ -810,17 +810,14 @@
                 }
             }
 
-            // 下面几个是访问aiarts平台的接口
+            // 获取ai平台数据集
             async function getDatasetsFromPlat() {
-                const { aiToken } = config;
+                const { backendAPI } = config;
 
                 let response = null;
                 try {
-                    response = await Axios.get(`/ai_arts/api/datasets/?pageNum=1&pageSize=100`, {
-                        proxy: true,
-                        headers: {
-                            'Authorization': `Bearer ${aiToken}`
-                        }
+                    response = await Axios.get(`${backendAPI}/datasets`, {
+                        proxy: config.proxy,
                     });
                 } catch (errorData) {
                     throw generateError(errorData);
