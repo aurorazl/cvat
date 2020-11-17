@@ -7,6 +7,7 @@ export default {
     'All related data (images, annotations) will be lost. Continue?': '所有关联数据（图片、标注）将会被丢弃。是否继续？',
     'Delete': '删除',
     'Open bug tracker': '打开问题跟踪',
+    'View Help': '查看帮助',
     // dump-submenu.tsx
     "Dump annotations": "导出标注",
     // export-submenu.tsx
