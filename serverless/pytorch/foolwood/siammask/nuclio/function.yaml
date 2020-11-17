@@ -15,7 +15,8 @@ spec:
   env:
     - name: PYTHONPATH
       value: /opt/nuclio/SiamMask:/opt/nuclio/SiamMask/experiments/siammask_sharp
-
+  nodeSelector:
+    archType: amd64
   build:
     image: cvat/pth.foolwood.siammask
     baseImage: harbor.sigsus.cn:8443/sz_gongdianju/continuumio/miniconda3
