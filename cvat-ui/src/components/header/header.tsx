@@ -249,7 +249,7 @@ function HeaderContainer(props: Props): JSX.Element {
         <Layout.Header className='cvat-header'>
             <div className='cvat-left-header'>
                 {/* <Icon className='cvat-logo-icon' component={ApulisLogo} /> */}
-                <h1 className='cvat-logo-h1'>{t('Apulis Annotation Platform')}</h1>
+                <h1 className='cvat-logo-h1'>{t('Apulis Data Annotation Platform')}</h1>
 
                 <Button
                     className='cvat-header-button'

@@ -62,5 +62,5 @@ export default {
     'Help': 'Help',
     'Press ${switchSettingsShortcut} to switch': 'Press ${switchSettingsShortcut} to switch',
     'OK': 'OK',
-    'Apulis Annotation Platform': 'Apulis Annotation Platform',
+    'Apulis Data Annotation Platform': 'Apulis Data Annotation Platform',
   }
