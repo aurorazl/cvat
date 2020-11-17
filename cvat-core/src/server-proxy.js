@@ -85,7 +85,7 @@
             Axios.defaults.xsrfCookieName = 'csrftoken';
             const workerAxios = new WorkerWrappedAxios();
 
-            let token = store.get('token');
+            let token = store.get('token_diff');
             if (token) {
                 Axios.defaults.headers.common.Authorization = `Token ${token}`;
             }
@@ -216,7 +216,7 @@
                 }
 
                 token = authenticationResponse.data.key;
-                store.set('token', token);
+                store.set('token_diff', token);
                 Axios.defaults.headers.common.Authorization = `Token ${token}`;
             }
 
@@ -229,7 +229,7 @@
                     throw generateError(errorData);
                 }
 
-                store.remove('token');
+                store.remove('token_diff');
                 Axios.defaults.headers.common.Authorization = '';
             }
 

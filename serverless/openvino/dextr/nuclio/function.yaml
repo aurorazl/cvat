@@ -13,6 +13,7 @@ spec:
   runtime: 'python:3.6'
   handler: main:handler
   eventTimeout: 30s
+
   env:
     - name: NUCLIO_PYTHON_EXE_PATH
       value: /opt/nuclio/common/python3
@@ -20,7 +21,8 @@ spec:
   build:
     image: cvat/openvino.dextr
     baseImage: openvino/ubuntu18_runtime:2020.2
-
+    nodeSelector:
+        archType: amd64
     directives:
       preCopy:
         - kind: USER

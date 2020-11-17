@@ -15,6 +15,8 @@ spec:
   runtime: 'python:3.6'
   handler: main:handler
   eventTimeout: 30s
+  nodeSelector:
+    archType: amd64
   env:
     - name: NUCLIO_PYTHON_EXE_PATH
       value: /opt/nuclio/common/python3

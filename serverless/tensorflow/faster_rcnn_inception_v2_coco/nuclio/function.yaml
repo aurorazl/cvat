@@ -94,7 +94,8 @@ spec:
   runtime: 'python:3.6'
   handler: main:handler
   eventTimeout: 30s
-
+  nodeSelector:
+    archType: amd64
   build:
     image: cvat/tf.faster_rcnn_inception_v2_coco
     baseImage: tensorflow/tensorflow:2.1.1
