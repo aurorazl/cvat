@@ -14,7 +14,7 @@ export default {
     'Sign in': '登录',
     //login-page.tsx
     'Login': '登录',
-    'New to CVAT? Create': '首次使用CVAT？创建',
+    'New to CVAT? Create': '首次使用ADAP？创建',
     'an account': '一个账号',
     'Forgot your password?': '忘记密码？',
   }
