@@ -248,7 +248,8 @@ function HeaderContainer(props: Props): JSX.Element {
     return (
         <Layout.Header className='cvat-header'>
             <div className='cvat-left-header'>
-                <Icon className='cvat-logo-icon' component={ApulisLogo} />
+                {/* <Icon className='cvat-logo-icon' component={ApulisLogo} /> */}
+                <h1 className='cvat-logo-h1'>依瞳数据标注平台</h1>
 
                 <Button
                     className='cvat-header-button'
