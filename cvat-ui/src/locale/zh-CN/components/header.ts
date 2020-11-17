@@ -26,7 +26,7 @@ export default {
     'Black': '黑色',
     'Red': '红色',
     'Green': '绿色',
-    'Blue': '蓝色',    
+    'Blue': '蓝色',
     // cvat-ui\src\components\header\settings-modal\settings-modal.tsx
     'Close': '关闭',
     'Player': '播放',
@@ -61,5 +61,6 @@ export default {
     'Analytics': '分析',
     'Help': '帮助',
     'Press ${switchSettingsShortcut} to switch': '按${switchSettingsShortcut}开关',
-    'OK': '确定'
+    'OK': '确定',
+    'Apulis Data Annotation Platform': '依瞳数据标注平台',
   }
