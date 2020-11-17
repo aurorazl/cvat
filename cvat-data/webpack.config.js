@@ -20,7 +20,7 @@ const cvatData = {
         filename: '[name].[contenthash].min.js',
         library: 'cvatData',
         libraryTarget: 'window',
-        publicPath: '/cvat/',
+        publicPath: '/annotations/',
     },
     module: {
         rules: [
@@ -48,7 +48,7 @@ const cvatData = {
                 use: {
                     loader: 'worker-loader',
                     options: {
-                        publicPath: '/cvat/',
+                        publicPath: '/annotations/',
                         name: '[name].[contenthash].js',
                     },
                 },
@@ -58,7 +58,7 @@ const cvatData = {
                 use: {
                     loader: 'worker-loader',
                     options: {
-                        publicPath: '/cvat/3rdparty/',
+                        publicPath: '/annotations/3rdparty/',
                         name: '3rdparty/[name].[contenthash].js',
                     },
                 },
