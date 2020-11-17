@@ -249,7 +249,7 @@ function HeaderContainer(props: Props): JSX.Element {
         <Layout.Header className='cvat-header'>
             <div className='cvat-left-header'>
                 {/* <Icon className='cvat-logo-icon' component={ApulisLogo} /> */}
-                <h1 className='cvat-logo-h1'>依瞳数据标注平台</h1>
+                <h1 className='cvat-logo-h1'>{t('Apulis Annotation Platform')}</h1>
 
                 <Button
                     className='cvat-header-button'
@@ -260,6 +260,7 @@ function HeaderContainer(props: Props): JSX.Element {
                         event.preventDefault();
                         history.push('/tasks?page=1');
                     }}
+                    style={{marginLeft: 20}}
                 >
                     {t('Tasks')}
                 </Button>
@@ -344,8 +345,8 @@ function HeaderContainer(props: Props): JSX.Element {
                 </Button>
                 <Dropdown overlay={menu} className='cvat-header-menu-dropdown'>
                     <span>
-                        <Icon className='cvat-header-account-icon' component={AccountIcon} />
-                        <Text strong>
+                        <Icon className='cvat-header-account-icon' component={AccountIcon} style={{color:'#fff'}}/>
+                        <Text strong style={{color:'#fff'}}>
                             {user.username.length > 14 ? `${user.username.slice(0, 10)} ...` : user.username}
                         </Text>
                         <Icon className='cvat-header-menu-icon' type='caret-down' />
