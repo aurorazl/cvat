@@ -11,6 +11,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const CopyPlugin = require('copy-webpack-plugin');
+const assetsDir = path.resolve(__dirname, 'src/assets');
 
 module.exports = {
     target: 'web',
@@ -22,9 +23,11 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].[contenthash].min.js',
+        // publicPath: process.env.NODE_ENV === 'development'?'/':'/annotations/',
         publicPath: '/annotations/',
     },
     devServer: {
+        writeToDisk: true,
         contentBase: path.join(__dirname, 'dist'),
         compress: false,
         inline: true,
@@ -36,11 +39,11 @@ module.exports = {
               changeOrigin: true,
               secure: false,
             },
-            '/ai_arts/api': {
-              target: 'http://219.133.167.42:6688',
-              changeOrigin: true,
-              secure: false,
-            },
+            // '/ai_arts/api': {
+            //   target: 'http://219.133.167.42:6688',
+            //   changeOrigin: true,
+            //   secure: false,
+            // },
         },
     },
     resolve: {
@@ -134,6 +137,8 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './src/index.html',
             inject: 'body',
+            // Adds the given favicon path to the output HTML
+            favicon: `${assetsDir}/favicon.ico`,
         }),
         new Dotenv({
             systemvars: true,
@@ -142,6 +147,10 @@ module.exports = {
             {
                 from: '../cvat-data/src/js/3rdparty/avc.wasm',
                 to: '3rdparty/',
+            },
+            {
+                from: `${assetsDir}/favicon.ico`,
+                to: 'favicon.ico'
             },
         ]),
     ],
