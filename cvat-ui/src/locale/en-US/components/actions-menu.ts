@@ -7,6 +7,7 @@ export default {
     'All related data (images, annotations) will be lost. Continue?': 'All related data (images, annotations) will be lost. Continue?',
     'Delete': 'Delete',
     'Open bug tracker': 'Open bug tracker',
+    'View Help': 'View Help',
     // dump-submenu.tsx
     "Dump annotations": "Dump annotations",
     // export-submenu.tsx

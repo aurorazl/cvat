@@ -61,5 +61,6 @@ export default {
     'Analytics': '分析',
     'Help': '帮助',
     'Press ${switchSettingsShortcut} to switch': '按${switchSettingsShortcut}开关',
-    'OK': '确定'
+    'OK': '确定',
+    'Apulis Data Annotation Platform': '依瞳数据标注平台',
   }

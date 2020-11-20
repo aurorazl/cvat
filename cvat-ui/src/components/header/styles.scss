@@ -10,7 +10,9 @@
     padding-right: 0;
     line-height: 0;
     height: $header-height;
-    background: $header-color;
+    // background: $header-color;
+    background: #001529;
+    color: hsla(0,0%,100%,.65);
 }
 
 .cvat-left-header {
@@ -33,8 +35,20 @@
     }
 }
 
+.cvat-logo-h1 {
+    display: inline-block;
+    margin: 0 0 0 12px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 20px;
+    vertical-align: middle;
+    animation: fade-in;
+    animation-duration: .3s;
+}
+
 .ant-btn.cvat-header-button {
-    color: $text-color;
+    // color: $text-color;
+    color: #fff;
     padding: 0 10px;
     margin-right: 10px;
 }
