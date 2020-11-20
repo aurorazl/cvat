@@ -193,9 +193,9 @@ class ServerViewSet(viewsets.ViewSet):
 
 class ProjectFilter(filters.FilterSet):
     name = filters.CharFilter(field_name="name", lookup_expr="icontains")
-    owner = filters.CharFilter(field_name="owner__username", lookup_expr="icontains")
+    owner = filters.CharFilter(field_name="owner", lookup_expr="icontains")
     status = filters.CharFilter(field_name="status", lookup_expr="icontains")
-    assignee = filters.CharFilter(field_name="assignee__username", lookup_expr="icontains")
+    assignee = filters.CharFilter(field_name="assignee", lookup_expr="icontains")
 
     class Meta:
         model = models.Project
@@ -221,7 +221,7 @@ class ProjectFilter(filters.FilterSet):
 class ProjectViewSet(auth.ProjectGetQuerySetMixin, viewsets.ModelViewSet):
     queryset = models.Project.objects.all().order_by('-id')
     serializer_class = ProjectSerializer
-    search_fields = ("name", "owner__username", "assignee__username", "status")
+    search_fields = ("name", "owner", "assignee", "status")
     filterset_class = ProjectFilter
     ordering_fields = ("id", "name", "owner", "status", "assignee")
     http_method_names = ['get', 'post', 'head', 'patch', 'delete']
@@ -247,7 +247,7 @@ class ProjectViewSet(auth.ProjectGetQuerySetMixin, viewsets.ModelViewSet):
         if self.request.data.get('owner', None):
             serializer.save()
         else:
-            serializer.save(owner=self.request.user)
+            serializer.save(owner=self.request.user.username)
 
     @swagger_auto_schema(method='get', operation_summary='Returns information of the tasks of the project with the selected id',
         responses={'200': TaskSerializer(many=True)})
@@ -270,10 +270,10 @@ class ProjectViewSet(auth.ProjectGetQuerySetMixin, viewsets.ModelViewSet):
 class TaskFilter(filters.FilterSet):
     project = filters.CharFilter(field_name="project__name", lookup_expr="icontains")
     name = filters.CharFilter(field_name="name", lookup_expr="icontains")
-    owner = filters.CharFilter(field_name="owner__username", lookup_expr="icontains")
+    owner = filters.CharFilter(field_name="owner", lookup_expr="icontains")
     mode = filters.CharFilter(field_name="mode", lookup_expr="icontains")
     status = filters.CharFilter(field_name="status", lookup_expr="icontains")
-    assignee = filters.CharFilter(field_name="assignee__username", lookup_expr="icontains")
+    assignee = filters.CharFilter(field_name="assignee", lookup_expr="icontains")
 
     class Meta:
         model = Task
@@ -315,7 +315,7 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
             "segment_set__job_set",
         ).order_by('-id')
     serializer_class = TaskSerializer
-    search_fields = ("name", "owner__username", "mode", "status")
+    search_fields = ("name", "owner", "mode", "status")
     filterset_class = TaskFilter
     ordering_fields = ("id", "name", "owner", "status", "assignee")
 
@@ -349,8 +349,8 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
             validate_task_limit(owner)
             serializer.save()
         else:
-            validate_task_limit(self.request.user)
-            serializer.save(owner=self.request.user)
+            validate_task_limit(self.request.user.username)
+            serializer.save(owner=self.request.user.username)
 
     def perform_destroy(self, instance):
         task_dirname = instance.get_task_dirname()

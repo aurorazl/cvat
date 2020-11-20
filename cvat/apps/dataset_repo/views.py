@@ -14,7 +14,7 @@ import cvat.apps.dataset_repo.dataset_repo as CVATGit
 import django_rq
 import json
 
-@login_required
+
 def check_process(request, rq_id):
     try:
         queue = django_rq.get_queue('default')
@@ -34,9 +34,7 @@ def check_process(request, rq_id):
         return HttpResponseBadRequest(str(ex))
 
 
-@login_required
-@permission_required(perm=['engine.task.create'],
-    fn=objectgetter(models.Task, 'tid'), raise_exception=True)
+
 def create(request, tid):
     try:
         slogger.task[tid].info("create repository request")
@@ -54,9 +52,7 @@ def create(request, tid):
         return HttpResponseBadRequest(str(ex))
 
 
-@login_required
-@permission_required(perm=['engine.task.access'],
-    fn=objectgetter(models.Task, 'tid'), raise_exception=True)
+
 def push_repository(request, tid):
     try:
         slogger.task[tid].info("push repository request")
@@ -74,9 +70,7 @@ def push_repository(request, tid):
         return HttpResponseBadRequest(str(ex))
 
 
-@login_required
-@permission_required(perm=['engine.task.access'],
-    fn=objectgetter(models.Task, 'tid'), raise_exception=True)
+
 def get_repository(request, tid):
     try:
         slogger.task[tid].info("get repository request")
@@ -89,7 +83,7 @@ def get_repository(request, tid):
         return HttpResponseBadRequest(str(ex))
 
 
-@login_required
+
 def get_meta_info(request):
     try:
         db_git_records = GitData.objects.all()

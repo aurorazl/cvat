@@ -248,6 +248,8 @@ def _download_data(urls, upload_dir):
 def _create_thread(tid, data):
     slogger.glob.info("create task #{}".format(tid))
     slogger.glob.info("create task #{}".format(data))
+    import logging
+    logging.error([111,tid])
     db_task = models.Task.objects.select_for_update().get(pk=tid)
     db_data = db_task.data
     if db_task.data.size != 0:

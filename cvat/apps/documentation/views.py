@@ -11,7 +11,7 @@ def UserGuideView(request):
     doc_path = os.path.join(module_dir, 'user_guide.md')
 
     return render(request, 'documentation/user_guide.html',
-        context={"user_guide": open(doc_path, "r").read()})
+        context={"user_guide": open(doc_path, "r",encoding="utf-8").read()})
 
 def XmlFormatView(request):
     module_dir = os.path.dirname(__file__)

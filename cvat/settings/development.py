@@ -24,6 +24,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'postgres': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': os.getenv('CVAT_POSTGRES_HOST', '10.31.3.121'),
+        'NAME': os.getenv('CVAT_POSTGRES_DBNAME', 'cvat'),
+        'USER': os.getenv('CVAT_POSTGRES_USER', 'root'),
+        'PASSWORD': os.getenv('CVAT_POSTGRES_PASSWORD', ''),
     }
 }
 
@@ -31,6 +38,7 @@ DATABASES = {
 UI_SCHEME = os.environ.get('UI_SCHEME', 'http')
 UI_HOST = os.environ.get('UI_HOST', 'localhost')
 UI_PORT = os.environ.get('UI_PORT', 3000)
+
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [UI_HOST]
 UI_URL = '{}://{}'.format(UI_SCHEME, UI_HOST)
@@ -42,3 +50,36 @@ ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '{}/auth/login'.format(UI_UR
 
 CORS_ORIGIN_WHITELIST = [UI_URL]
 CORS_REPLACE_HTTPS_REFERER = True
+
+NUCLIO = {
+    'SCHEME': 'http',
+    'HOST': '10.31.3.121',
+    'PORT': 8070,
+    'DEFAULT_TIMEOUT': 120
+}
+os.environ["DJANGO_LOG_VIEWER_HOST"] = "10.31.3.121"
+os.environ["DJANGO_LOG_VIEWER_PORT"] = "5601"
+
+### how to run worker in development mode?
+### 1. run a ubuntu container 2. install python3/git 3. git clone project 4. install requirement.txt
+RQ_QUEUES = {
+    'default': {
+        'HOST': '10.31.3.88',
+        'PORT': 6379,
+        'DB': 0,
+        'DEFAULT_TIMEOUT': '4h'
+    },
+    'low': {
+        'HOST': '10.31.3.88',
+        'PORT': 6379,
+        'DB': 0,
+        'DEFAULT_TIMEOUT': '24h'
+    }
+}
+
+
+CACHEOPS_REDIS = {
+    'host': '10.31.3.88', # redis-server is on same machine
+    'port': 6379,        # default redis port
+    'db': 1,             # SELECT non-default redis database
+}

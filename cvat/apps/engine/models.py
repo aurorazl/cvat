@@ -148,10 +148,8 @@ class Image(models.Model):
 
 class Project(models.Model):
     name = SafeCharField(max_length=256)
-    owner = models.ForeignKey(User, null=True, blank=True,
-        on_delete=models.SET_NULL, related_name="+")
-    assignee = models.ForeignKey(User, null=True,  blank=True,
-        on_delete=models.SET_NULL, related_name="+")
+    owner = SafeCharField(max_length=256,null=True, blank=True,)
+    assignee = SafeCharField(max_length=256,null=True, blank=True,)
     bug_tracker = models.CharField(max_length=2000, blank=True, default="")
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now_add=True)
@@ -168,10 +166,8 @@ class Task(models.Model):
         related_query_name="task")
     name = SafeCharField(max_length=256)
     mode = models.CharField(max_length=32)
-    owner = models.ForeignKey(User, null=True, blank=True,
-        on_delete=models.SET_NULL, related_name="owners")
-    assignee = models.ForeignKey(User, null=True,  blank=True,
-        on_delete=models.SET_NULL, related_name="assignees")
+    owner = SafeCharField(max_length=256,null=True, blank=True,)
+    assignee = SafeCharField(max_length=256,null=True, blank=True,)
     bug_tracker = models.CharField(max_length=2000, blank=True, default="")
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -262,7 +258,7 @@ class Segment(models.Model):
 
 class Job(models.Model):
     segment = models.ForeignKey(Segment, on_delete=models.CASCADE)
-    assignee = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    assignee = SafeCharField(max_length=256,null=True, blank=True,)
     status = models.CharField(max_length=32, choices=StatusChoice.choices(),
         default=StatusChoice.ANNOTATION)
 
@@ -361,7 +357,7 @@ class Annotation(models.Model):
 
 class Commit(models.Model):
     id = models.BigAutoField(primary_key=True)
-    author = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    author = SafeCharField(max_length=256,null=True, blank=True,)
     version = models.PositiveIntegerField(default=0)
     timestamp = models.DateTimeField(auto_now=True)
     message = models.CharField(max_length=4096, default="")

@@ -11,7 +11,11 @@ from rest_framework.permissions import BasePermission
 from django.core import signing
 from rest_framework import authentication, exceptions
 from rest_framework.authentication import TokenAuthentication as _TokenAuthentication
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication as _JSONWebTokenAuthentication,jwt_get_username_from_payload
 from django.contrib.auth import login
+from django.utils.translation import ugettext as _
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 
 # Even with token authorization it is very important to have a valid session id
 # in cookies because in some cases we cannot use token authorization (e.g. when
@@ -24,6 +28,33 @@ class TokenAuthentication(_TokenAuthentication):
         if auth is not None and session.session_key is None:
             login(request, auth[0], 'django.contrib.auth.backends.ModelBackend')
         return auth
+
+
+class JSONWebTokenAuthentication(_JSONWebTokenAuthentication):
+    def authenticate_credentials(self, payload):
+        """
+        Returns an active user that matches the payload's user id and email.
+        """
+        User = get_user_model()
+        username = jwt_get_username_from_payload(payload)
+
+        if not username:
+            msg = _('Invalid payload.')
+            raise exceptions.AuthenticationFailed(msg)
+
+        try:
+            user = User(username=username,id=1)
+            user.groups.add(Group(name="admin",id=1))
+        except User.DoesNotExist:
+            msg = _('Invalid signature.')
+            raise exceptions.AuthenticationFailed(msg)
+
+        if not user.is_active:
+            msg = _('User account is disabled.')
+            raise exceptions.AuthenticationFailed(msg)
+
+        return user
+
 
 def register_signals():
     from django.db.models.signals import post_migrate, post_save

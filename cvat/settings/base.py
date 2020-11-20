@@ -20,6 +20,7 @@ import fcntl
 import shutil
 import subprocess
 import mimetypes
+import datetime
 mimetypes.add_type("application/wasm", ".wasm", True)
 
 from pathlib import Path
@@ -94,6 +95,12 @@ try:
 except Exception:
     pass
 
+JWT_AUTH = {
+    'JWT_SECRET_KEY': 'Sign key for JWT',
+    'JWT_ALGORITHM': 'HS256',
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+}
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -135,10 +142,12 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'cvat.apps.authentication.auth.TokenAuthentication',
-        'cvat.apps.authentication.auth.SignatureAuthentication',
+        'cvat.apps.authentication.auth.JSONWebTokenAuthentication',
+        # 'cvat.apps.authentication.auth.TokenAuthentication',
+        # 'cvat.apps.authentication.auth.SignatureAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication'
+        'rest_framework.authentication.BasicAuthentication',
+
     ],
     'DEFAULT_VERSIONING_CLASS':
         # Don't try to use URLPathVersioning. It will give you /api/{version}
