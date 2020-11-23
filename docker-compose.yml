@@ -63,7 +63,7 @@ services:
 
   cvat_ui:
     container_name: cvat_ui
-    image: harbor.sigsus.cn:8443/library/cvat/ui
+    image: harbor.sigsus.cn:8443/library/cvat/ui:demo
     restart: always
     build:
       context: .
