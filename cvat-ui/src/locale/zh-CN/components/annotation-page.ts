@@ -68,7 +68,7 @@ export default {
     'Tracking frames': '跟踪帧',
     'No available interactors found': '无可用的辅助标注模型',
     'No available detectors found': '无可用的目标检测模型',
-    'Trackers': '目标跟踪',    
+    'Trackers': '目标跟踪',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\color-picker.tsx
     'Select color': '选择颜色',
@@ -167,11 +167,11 @@ export default {
     'Go next with a step ${forwardShortcut}': '以步长值前进 {{forwardShortcut}}',
     'Go to the last frame': '跳转到最后一帧',
     'Go back': '回退',
-    'Go back with a filter': '根据过滤器回退',
+    'Go back with a filter': '根据筛选条件回退',
     'Go back to an empty frame': '回退到空帧',
     'Go next': '前进',
-    'Go next with a filter': '根据过滤器前进',
-    'Go next to an empty frame': '前进到空帧',    
+    'Go next with a filter': '根据筛选条件前进',
+    'Go next to an empty frame': '前进到空帧',
     // cvat-ui\src\components\annotation-page\top-bar\player-navigation.tsx
     'Create frame URL': '创建帧URL',
     'Press ${focusFrameInputShortcut} to focus here': '获取焦点 {{focusFrameInputShortcut}}',
@@ -206,7 +206,7 @@ export default {
     'Please, be sure information you tried to get exist and you have access': '请确认要获取的信息存在，并且可以访问',
     // cvat-ui\src\components\annotation-page\annotations-filters-input.tsx
     'General': '通用',
-    'You can use filters to display only subset of objects on a frame or to search objects that satisfy the filters using hotkeys': '通过快捷键，可以使用过滤器仅显示一个frame中的部分objects，或者搜索符合过滤器的objects',
+    'You can use filters to display only subset of objects on a frame or to search objects that satisfy the filters using hotkeys': '通过快捷键，可以使用筛选条件仅显示一个frame中的部分objects，或者搜索符合筛选条件的objects',
     'Supported properties:': '支持的属性:',
     'Supported operators:': '支持的操作:',
     'If you have double quotes in your query string,': '如果查询字符串包含双引号,',
@@ -215,8 +215,8 @@ export default {
     'CVAT uses json queries to perform search.': 'CVAT使用json查询器进行查询。',
     'Examples': '示例',
     'Click to open help': '点击打开帮助',
-    'How to use filters?': '如何使用过滤器？',
-    'Annotations filters': '标注过滤器',
+    'How to use filters?': '如何使用条件筛选？',
+    'Annotations filters': '标注条件筛选',
     // cvat-ui\src\components\annotation-page\appearance-block.tsx
     'Appearance': '外观',
     'Color by': '按以下类型设置颜色',

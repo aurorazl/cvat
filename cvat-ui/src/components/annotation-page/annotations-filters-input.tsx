@@ -28,7 +28,7 @@ interface StateToProps {
     annotationsFiltersHistory: string[];
     searchForwardShortcut: string;
     searchBackwardShortcut: string;
-    lang: string; 
+    lang: string;
 }
 
 interface DispatchToProps {
@@ -79,14 +79,14 @@ function filtersHelpModalContent(searchForwardShortcut: string, searchBackwardSh
             </Paragraph>
             { lang === 'zh-CN' ?
                 <Paragraph>
-                    你可以使用过滤器仅显示帧上的对象子集或者使用热键
+                    你可以使用筛选条件仅显示帧上的对象子集或者使用热键
                     <Text strong>{` ${searchForwardShortcut} `}</Text>
                     和
                     <Text strong>{` ${searchBackwardShortcut} `}</Text>
-                    来搜索满足过滤条件的对象。
+                    来搜索满足筛选条件的对象。
                 </Paragraph> :
                 <Paragraph>
-                    You can use filters to display only subset of objects on a frame or to search objects that satisfy the 
+                    You can use filters to display only subset of objects on a frame or to search objects that satisfy the
                     filters using hotkeys
                     <Text strong>{` ${searchForwardShortcut} `}</Text>
                     and
@@ -117,7 +117,7 @@ function filtersHelpModalContent(searchForwardShortcut: string, searchBackwardSh
                         ==, !=, &gt;, &gt;=, &lt;, &lt;=, (), &amp; and |
                     <br />
                     <Text strong>
-                        If you have double quotes in your query string, please escape them using back slash: \&quot; (see 
+                        If you have double quotes in your query string, please escape them using back slash: \&quot; (see
                         the latest example)
                     </Text>
                     <br />
@@ -213,7 +213,7 @@ function AnnotationsFiltersInput(props: StateToProps & DispatchToProps): JSX.Ele
             )}
         </Select>
         <HelpLink helpLink={`${baseURL}/${linkConsts.FILTER_URL}`} styles={{display:'inline-block', width: '5%', position: 'absolute'}}/>
-        </>  
+        </>
     );
 }
 
