@@ -6,11 +6,11 @@ server {
     proxy_set_header        Host $http_host;
     proxy_pass_header       Set-Cookie;
 
-    location ~* /cavt/api/.*|cavt/git/.*|cavt/analytics/.*|cavt/static/.*|cavt/admin(?:/(.*))?.*|cavt/documentation/.*|cavt/django-rq(?:/(.*))? {
-        proxy_pass              http://127.0.0.1:8082;
+    location ~* /api/.*|git/.*|analytics/.*|static/.*|admin(?:/(.*))?.*|documentation/.*|django-rq(?:/(.*))? {
+        proxy_pass              http://cvat:8080;
     }
 
-    location /cavt/ {
-        proxy_pass              http://127.0.0.1:8081;
+    location / {
+        proxy_pass              http://cvat_ui;
     }
 }
