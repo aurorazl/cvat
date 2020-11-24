@@ -107,7 +107,7 @@ function filtersHelpModalContent(searchForwardShortcut: string, searchBackwardSh
                     </Text>
                     <br />
                     所有属性和值均区分大小写。
-                    CVAT使用json查询执行搜索。
+                    ADAP使用json查询执行搜索。
                 </Paragraph> :
                 <Paragraph>
                     <Text strong>Supported properties: </Text>

@@ -102,7 +102,7 @@ export default function Feedback(): JSX.Element {
         <>
             <Popover
                 placement='leftTop'
-                title={<Text className='cvat-text-color'>Help to make CVAT better</Text>}
+                title={<Text className='cvat-text-color'>Help to make ADAP better</Text>}
                 content={renderContent()}
                 visible={visible}
             >

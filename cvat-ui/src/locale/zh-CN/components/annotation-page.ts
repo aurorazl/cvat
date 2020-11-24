@@ -212,7 +212,7 @@ export default {
     'If you have double quotes in your query string,': '如果查询字符串包含双引号,',
     'please escape them using back slash: \&quot; (see the latest example)': '请使用反斜杠"\\"进行转义（参见最后的例子）',
     'All properties and values are case-sensitive.': '所有属性和值是大小写敏感的。',
-    'ADAP uses json queries to perform search.': 'CVAT使用json查询器进行查询。',
+    'ADAP uses json queries to perform search.': 'ADAP使用json查询器进行查询。',
     'Examples': '示例',
     'Click to open help': '点击打开帮助',
     'How to use filters?': '如何使用条件筛选？',
