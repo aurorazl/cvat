@@ -45,7 +45,7 @@ function LoginPageComponent(props: LoginPageComponentProps & RouteComponentProps
                     <Row type='flex' justify='start' align='top'>
                         <Col>
                             <Text strong>
-                            {t('New to CVAT? Create')}
+                            {t('New to ADAP? Create')}
                                 <Link to='/auth/register'> {t('an account')}</Link>
                             </Text>
                         </Col>

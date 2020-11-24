@@ -98,7 +98,7 @@ const defaultKeyMap = ({
     },
     COPY_SHAPE: {
         name: 'Copy shape',
-        description: 'Copy shape to CVAT internal clipboard',
+        description: 'Copy shape to ADAP internal clipboard',
         sequences: ['ctrl+c'],
         action: 'keydown',
     },
@@ -203,7 +203,7 @@ const defaultKeyMap = ({
 
     PASTE_SHAPE: {
         name: 'Paste shape',
-        description: 'Paste a shape from internal CVAT clipboard',
+        description: 'Paste a shape from internal ADAP clipboard',
         sequences: ['ctrl+v'],
         action: 'keydown',
     },

@@ -12,11 +12,11 @@ export default {
     'Please, provide also:': '请同时提供：',
     'Steps to reproduce the issue': '重现此问题的步骤',
     'Your operating system and browser version': '操作系统和浏览器版本',
-    'CVAT version': 'CVAT 版本',
+    'ADAP version': 'ADAP 版本',
     'Update': '更新',
     'update': '更新',
     'the page': '页面',
     'Press': '按下',
     'here': '这里',
-    'if you wish CVAT tried to restore your annotation progress or': '如果希望CVAT尝试恢复您的标注进度或',
+    'if you wish ADAP tried to restore your annotation progress or': '如果希望CVAT尝试恢复您的标注进度或',
   }

@@ -60,7 +60,7 @@ function renderContent(): JSX.Element {
                     url={GITHUB_URL}
                     title='Computer Vision Annotation Tool'
                     image={GITHUB_IMAGE_URL}
-                    description='CVAT'
+                    description='ADAP'
                 >
                     <VKIcon size={32} round />
                 </VKShareButton>

@@ -12,11 +12,11 @@ export default {
     'Please, provide also:': 'Please, provide also:',
     'Steps to reproduce the issue': 'Steps to reproduce the issue',
     'Your operating system and browser version': 'Your operating system and browser version',
-    'CVAT version': 'CVAT version',
+    'ADAP version': 'ADAP version',
     'Update': 'Update',
     'update': 'update',
     'the page': 'the page',
     'Press': 'Press',
     'here': 'here',
-    'if you wish CVAT tried to restore your annotation progress or': 'if you wish CVAT tried to restore your annotation progress or',
+    'if you wish ADAP tried to restore your annotation progress or': 'if you wish ADAP tried to restore your annotation progress or',
   }

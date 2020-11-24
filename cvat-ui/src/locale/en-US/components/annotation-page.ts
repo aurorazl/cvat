@@ -212,7 +212,7 @@ export default {
     'If you have double quotes in your query string,': 'If you have double quotes in your query string,',
     'please escape them using back slash: \&quot; (see the latest example)': 'please escape them using back slash: \&quot; (see the latest example)',
     'All properties and values are case-sensitive.': 'All properties and values are case-sensitive.',
-    'CVAT uses json queries to perform search.': 'CVAT uses json queries to perform search.',
+    'ADAP uses json queries to perform search.': 'ADAP uses json queries to perform search.',
     'Examples': 'Examples',
     'Click to open help': 'Click to open help',
     'How to use filters?': 'How to use filters?',

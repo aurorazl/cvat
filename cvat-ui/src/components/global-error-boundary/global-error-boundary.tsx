@@ -166,7 +166,7 @@ class GlobalErrorBoundary extends React.PureComponent<Props, State> {
                                     <ul>
                                         <li>{t('Steps to reproduce the issue')}</li>
                                         <li>{t('Your operating system and browser version')}</li>
-                                        <li>{t('CVAT version')}</li>
+                                        <li>{t('ADAP version')}</li>
                                         <ul>
                                             <li>
                                                 <Text strong>Server: </Text>
@@ -192,7 +192,7 @@ class GlobalErrorBoundary extends React.PureComponent<Props, State> {
                                         {t('Press')}
                                         {/* eslint-disable-next-line */}
                                         <a onClick={restoreGlobalState}> {t('here')} </a>
-                                        {t('if you wish CVAT tried to restore your annotation progress or')}
+                                        {t('if you wish ADAP tried to restore your annotation progress or')}
                                         {/* eslint-disable-next-line */}
                                         <a onClick={() => window.location.reload()}> {t('update')} </a>
                                         {t('the page')}

@@ -121,7 +121,7 @@ function filtersHelpModalContent(searchForwardShortcut: string, searchBackwardSh
                         the latest example)
                     </Text>
                     <br />
-                    All properties and values are case-sensitive. CVAT uses json queries to perform search.
+                    All properties and values are case-sensitive. ADAP uses json queries to perform search.
                 </Paragraph>
             }
             <Paragraph>

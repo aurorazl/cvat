@@ -206,10 +206,10 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
                                     <Text strong>
                                         <a href={SHARE_MOUNT_GUIDE_URL}> mounted </a>
                                     </Text>
-                                    share before you built CVAT and the shared storage contains files.
+                                    share before you built ADAP and the shared storage contains files.
                                 </>) :
                                 (<>
-                                    请确保在构建CVAT之前已
+                                    请确保在构建ADAP之前已
                                     <Text strong>
                                         <a href={SHARE_MOUNT_GUIDE_URL}> 加载 </a>
                                     </Text>
