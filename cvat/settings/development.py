@@ -84,3 +84,4 @@ CACHEOPS_REDIS = {
 }
 KFSERVING_GATEWAY = "http://121.46.18.84"
 CVAT_SERVERLESS = "True"
+RESTRICTIONS["reduce_task_visibility"] = True
