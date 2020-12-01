@@ -464,3 +464,6 @@ CACHES = {
 
 USE_CACHE = True
 
+USER_MANAGER_CENTER = os.getenv('USER_MANAGER_CENTER', 'http://localhost/custom-user-dashboard-backend')
+
+KFSERVING_GATEWAY = os.getenv('KFSERVING_GATEWAY', "http://localhost")

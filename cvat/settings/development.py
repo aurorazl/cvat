@@ -64,13 +64,13 @@ os.environ["DJANGO_LOG_VIEWER_PORT"] = "5601"
 ### 1. run a ubuntu container 2. install python3/git 3. git clone project 4. install requirement.txt
 RQ_QUEUES = {
     'default': {
-        'HOST': '10.31.3.88',
+        'HOST': '192.168.1.134',
         'PORT': 6379,
         'DB': 0,
         'DEFAULT_TIMEOUT': '4h'
     },
     'low': {
-        'HOST': '10.31.3.88',
+        'HOST': '192.168.1.134',
         'PORT': 6379,
         'DB': 0,
         'DEFAULT_TIMEOUT': '24h'
@@ -79,7 +79,10 @@ RQ_QUEUES = {
 
 
 CACHEOPS_REDIS = {
-    'host': '10.31.3.88', # redis-server is on same machine
+    'host': '192.168.1.134', # redis-server is on same machine
     'port': 6379,        # default redis port
     'db': 1,             # SELECT non-default redis database
 }
+
+USER_MANAGER_CENTER = os.getenv('USER_MANAGER_CENTER', 'http://219.133.167.42:30000/custom-user-dashboard-backend')
+RESTRICTIONS["reduce_task_visibility"] = True

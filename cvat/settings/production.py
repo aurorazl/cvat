@@ -33,3 +33,5 @@ DATABASES = {
         'PASSWORD': os.getenv('CVAT_POSTGRES_PASSWORD', ''),
     }
 }
+
+RESTRICTIONS["reduce_task_visibility"] = os.getenv("reduce_task_visibility",False)
