@@ -1,17 +1,17 @@
 const i18n = require('i18next').default;
 const store = require('store');
 
-let lng = store.get('language') || 'zh-CN';
+let lng = store.get('language') || 'en-US';
 
 i18n
   .init({
     resources: {
       //语言包资源
-      "en-US": { 
-        translation: require('./locales/en-US/index') 
+      "en-US": {
+        translation: require('./locales/en-US/index')
       },
-      "zh-CN": { 
-        translation: require('./locales/zh-CN/index') 
+      "zh-CN": {
+        translation: require('./locales/zh-CN/index')
       }
     },
     lng: lng,
@@ -23,5 +23,5 @@ i18n
     // keySeparator: false,
     // or
     nsSeparator: ':::',
-    keySeparator: '::',   
+    keySeparator: '::',
   });

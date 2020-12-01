@@ -31,7 +31,7 @@ import { NotificationsState } from 'reducers/interfaces';
 import { customWaViewHit } from 'utils/enviroment';
 import showPlatformNotification, { platformInfo, stopNotifications } from 'utils/platform-checker';
 import '../styles.scss';
-
+import SecurityLayout from 'layouts/SecurityLayout'
 
 import { withTranslation, WithTranslation  } from 'react-i18next';
 
@@ -353,7 +353,8 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
                     <GlobalErrorBoundary>
                         <Switch>
                             <Route exact path='/auth/register' component={RegisterPageContainer} />
-                            <Route exact path='/auth/login' component={LoginPageContainer} />
+                            {/* <Route exact path='/auth/login' component={LoginPageContainer} /> */}
+                            <Route exact path='/auth/login' component={SecurityLayout} />
                             <Route
                                 exact
                                 path='/auth/login-with-token/:sessionId/:token'
