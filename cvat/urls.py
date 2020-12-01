@@ -35,8 +35,5 @@ if apps.is_installed('cvat.apps.dataset_repo'):
 if apps.is_installed('cvat.apps.log_viewer'):
     urlpatterns.append(path('analytics/', include('cvat.apps.log_viewer.urls')))
 
-if apps.is_installed('cvat.apps.lambda_manager'):
-    urlpatterns.append(path('', include('cvat.apps.lambda_manager.urls')))
-
 if apps.is_installed('silk'):
     urlpatterns.append(path('profiler/', include('silk.urls')))
