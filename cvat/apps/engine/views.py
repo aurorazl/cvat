@@ -184,9 +184,9 @@ class ServerViewSet(viewsets.ViewSet):
             'ANALYTICS':       False,
             'MODELS':          False,
         }
-        if strtobool(os.environ.get("CVAT_ANALYTICS", '0')):
+        if strtobool(os.environ.get("CVAT_ANALYTICS", '0')) or (hasattr(settings,"CVAT_ANALYTICS") and settings.CVAT_ANALYTICS=="True") :
             response['ANALYTICS'] = True
-        if strtobool(os.environ.get("CVAT_SERVERLESS", '0')):
+        if strtobool(os.environ.get("CVAT_SERVERLESS", '0')) or (hasattr(settings,"CVAT_SERVERLESS") and settings.CVAT_SERVERLESS=="True"):
             response['MODELS'] = True
         return Response(response)
 

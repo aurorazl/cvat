@@ -455,3 +455,4 @@ CACHES = {
 
 USE_CACHE = True
 
+KFSERVING_GATEWAY = os.getenv('KFSERVING_GATEWAY', 'http://127.0.0.1')

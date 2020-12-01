@@ -1,0 +1,29 @@
+apiVersion: 'serving.kubeflow.org/v1alpha2'
+kind: 'InferenceService'
+metadata:
+  name: fbrs
+  namespace: kfserving-system
+  annotations:
+    name: f-BRS
+    type: interactor
+    spec: ''
+    id: fbrs
+    framework: pytorch
+    description: 'f-BRS interactive segmentation'
+  labels:
+    inference: system
+
+spec:
+  default:
+    predictor:
+      minReplicas: 1
+      custom:
+        resource:
+          limits:
+            memory: 5G
+          requests:
+            cpu: 100m
+        container:
+          name: kfserving-container
+          image: harbor.sigsus.cn:8443/sz_gongdianju/apulistech/pth.saic-vul.fbrs
+          args: ['--model_name=fbrs']

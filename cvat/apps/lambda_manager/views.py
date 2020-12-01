@@ -31,30 +31,19 @@ class LambdaType(Enum):
         return self.value
 
 class LambdaGateway:
-    NUCLIO_ROOT_URL = '/api/functions'
+    KFSERVING_ROOT_URL = '/apis/models'
 
     def _http(self, method="get", scheme=None, host=None, port=None,
         url=None, headers=None, data=None):
         try:
-            NUCLIO_GATEWAY = '{}://{}:{}'.format(
-                scheme or settings.NUCLIO['SCHEME'],
-                host or settings.NUCLIO['HOST'],
-                port or settings.NUCLIO['PORT'])
-            extra_headers = {
-                'x-nuclio-project-name': 'cvat',
-                'x-nuclio-function-namespace': 'nuclio',
-            }
-            if headers:
-                extra_headers.update(headers)
-            NUCLIO_TIMEOUT = settings.NUCLIO['DEFAULT_TIMEOUT']
+            KFSERVING_GATEWAY = settings.KFSERVING_GATEWAY
 
             if url:
-                url = "{}{}".format(NUCLIO_GATEWAY, url)
+                url = "{}{}".format(KFSERVING_GATEWAY, url)
             else:
-                url = NUCLIO_GATEWAY
+                url = KFSERVING_GATEWAY
 
-            reply = getattr(requests, method)(url, headers=extra_headers,
-                timeout=NUCLIO_TIMEOUT, json=data)
+            reply = getattr(requests, method)(url, json=data)
             reply.raise_for_status()
             response = reply.json()
         except Exception as e:
@@ -64,12 +53,12 @@ class LambdaGateway:
         return response
 
     def list(self):
-        data = self._http(url=self.NUCLIO_ROOT_URL)
-        response = [LambdaFunction(self, item) for item in data.values()]
+        data = self._http(url=self.KFSERVING_ROOT_URL)
+        response = [LambdaFunction(self, item) for item in data]
         return response
 
     def get(self, func_id):
-        data = self._http(url=self.NUCLIO_ROOT_URL + '/' + func_id)
+        data = self._http(url=self.KFSERVING_ROOT_URL + '/' + func_id)
         response = LambdaFunction(self, data)
         return response
 
@@ -80,41 +69,34 @@ class LambdaGateway:
         # host.docker.internal isn't supported by docker on Linux.
         # There are many workarounds but let's try to use the
         # simple solution.
-        return self._http(method="post", url='/api/function_invocations',
-            data=payload, headers={
-                'x-nuclio-function-name': func.id,
-                'x-nuclio-path': '/'
-            })
+        return self._http(method="post", url=self.KFSERVING_ROOT_URL + '/' + func.id,data=payload)
 
 class LambdaFunction:
     def __init__(self, gateway, data):
         # ID of the function (e.g. omz.public.yolo-v3)
-        self.id = data['metadata']['name']
+        self.id = data['id']
         # type of the function (e.g. detector, interactor)
-        kind = data['metadata']['annotations'].get('type')
+        kind = data['kind']
         try:
             self.kind = LambdaType(kind)
         except ValueError:
             self.kind = LambdaType.UNKNOWN
         # dictionary of labels for the function (e.g. car, person)
-        spec = json.loads(data['metadata']['annotations'].get('spec') or '[]')
-        labels = [item['name'] for item in spec]
+        labels = data['labels']
         if len(labels) != len(set(labels)):
             raise ValidationError(
                 "`{}` lambda function has non-unique labels".format(self.id),
                 code=status.HTTP_404_NOT_FOUND)
         self.labels = labels
         # state of the function
-        self.state = data['status']['state']
+        self.state = data['state']
         # description of the function
-        self.description = data['spec']['description']
-        # http port to access the serverless function
-        self.port = data["status"].get("httpPort")
+        self.description = data['description']
         # framework which is used for the function (e.g. tensorflow, openvino)
-        self.framework = data['metadata']['annotations'].get('framework')
+        self.framework = data['framework']
         # display name for the function
-        self.name = data['metadata']['annotations'].get('name', self.id)
-        self.min_pos_points = int(data['metadata']['annotations'].get('min_pos_points', 1))
+        self.name = data['name']
+        self.min_pos_points = int(data['min_pos_points'])
         self.gateway = gateway
 
     def to_dict(self):
@@ -527,7 +509,7 @@ class FunctionViewSet(viewsets.ViewSet):
 
     def get_permissions(self):
         http_method = self.request.method
-        permissions = [IsAuthenticated]
+        permissions = []
 
         if http_method in ["POST"]:
             permissions.append(auth.TaskAccessPermission)
