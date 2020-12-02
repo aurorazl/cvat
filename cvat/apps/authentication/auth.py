@@ -72,7 +72,8 @@ class JSONWebTokenAuthentication(_JSONWebTokenAuthentication):
 
         try:
             user = User(username=username,id=uid)
-            user.groups.set([Group(name=one_role,id=i) for i,one_role in enumerate(group_list,1)])
+            user.groups.set([])
+            user.groups.set([Group(name=one_role,id=Group.objects.filter(name=one_role).first().id) for one_role in group_list])
 
         except User.DoesNotExist:
             msg = _('Invalid signature.')
