@@ -72,8 +72,7 @@ class JSONWebTokenAuthentication(_JSONWebTokenAuthentication):
 
         try:
             user = User(username=username,id=uid)
-            user.groups.set([])
-            user.groups.set([Group(name=one_role,id=Group.objects.filter(name=one_role).first().id) for one_role in group_list])
+            setattr(user,"permissions",group_list)
 
         except User.DoesNotExist:
             msg = _('Invalid signature.')
@@ -131,11 +130,29 @@ class SignatureAuthentication(authentication.BaseAuthentication):
 
         return (user, None)
 
+# change for usermanager
+def is_group_member(*groups):
+    assert len(groups) > 0, 'You must provide at least one group name'
+    if len(groups) > 3:
+        g = groups[:3] + ('...',)
+    else:
+        g = groups
+    name = 'is_group_member:%s' % ','.join(g)
+    @rules.predicate(name)
+    def fn(user):
+        if not hasattr(user, 'permissions'):
+            return False  # swapped user model, doesn't support groups
+        if not hasattr(user, '_permissions_cache'):  # pragma: no cover
+            user._group_names_cache = set(user.permissions)
+        return set(groups).issubset(user._group_names_cache)
+    return fn
+
+
 # AUTH PREDICATES
-has_admin_role = rules.is_group_member(str(AUTH_ROLE.ADMIN))
-has_user_role = rules.is_group_member(str(AUTH_ROLE.USER))
-has_annotator_role = rules.is_group_member(str(AUTH_ROLE.ANNOTATOR))
-has_observer_role = rules.is_group_member(str(AUTH_ROLE.OBSERVER))
+has_admin_role = is_group_member(str(AUTH_ROLE.ADMIN))
+has_user_role = is_group_member(str(AUTH_ROLE.USER))
+has_annotator_role = is_group_member(str(AUTH_ROLE.ANNOTATOR))
+has_observer_role = is_group_member(str(AUTH_ROLE.OBSERVER))
 
 @rules.predicate
 def is_project_owner(db_user, db_project):
