@@ -419,6 +419,9 @@ LOGGING = {
             'handlers': ['console', 'server_file'],
             'level': 'INFO',
             'propagate': True
+        },
+        "":{
+          "handlers":[],
         }
     },
 }

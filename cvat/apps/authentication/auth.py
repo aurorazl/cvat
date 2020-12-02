@@ -31,7 +31,7 @@ class TokenAuthentication(_TokenAuthentication):
 
 def get_group_from_user_manager_center(token):
     user_manager_center_url = settings.USER_MANAGER_CENTER
-    response = requests.get(url="{}/auth/currentUser".format(user_manager_center_url,),headers={"Authorization": "Bearer " + token.decode()})
+    response = requests.get(url="{}/auth/currentUser".format(user_manager_center_url,),headers={"Authorization": "Bearer " + token.decode()},timeout=5)
     response.raise_for_status()
     roleList = response.json()["permissionList"]
     group_list = []
