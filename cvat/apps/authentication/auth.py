@@ -72,6 +72,9 @@ class JSONWebTokenAuthentication(_JSONWebTokenAuthentication):
 
         try:
             user = User(username=username,id=uid)
+            user.is_staff = True
+            if "admin" in group_list:
+                user.is_superuser = True
             setattr(user,"permissions",group_list)
 
         except User.DoesNotExist:
