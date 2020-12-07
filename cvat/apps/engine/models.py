@@ -12,6 +12,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 
+
 class SafeCharField(models.CharField):
     def get_prep_value(self, value):
         value = super().get_prep_value(value)

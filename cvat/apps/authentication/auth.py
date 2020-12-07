@@ -1,7 +1,7 @@
 # Copyright (C) 2018 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
-
+import requests
 from django.conf import settings
 from django.db.models import Q
 import rules
@@ -29,22 +29,54 @@ class TokenAuthentication(_TokenAuthentication):
             login(request, auth[0], 'django.contrib.auth.backends.ModelBackend')
         return auth
 
+def get_group_from_user_manager_center(token):
+    user_manager_center_url = settings.USER_MANAGER_CENTER
+    response = requests.get(url="{}/auth/currentUser".format(user_manager_center_url,),headers={"Authorization": "Bearer " + token.decode()},timeout=5)
+    response.raise_for_status()
+    roleList = response.json()["permissionList"]
+    group_list = []
+    if "ANNOTATIONS_ADMIN" in roleList:
+        group_list.append("admin")
+    if "ANNOTATIONS_USER" in roleList:
+        group_list.append("user")
+    if "ANNOTATIONS_ANNOTATOR" in roleList:
+        group_list.append("annotator")
+    if "ANNOTATIONS_OBSERVER" in roleList:
+        group_list.append("observer")
+    return group_list
+
 
 class JSONWebTokenAuthentication(_JSONWebTokenAuthentication):
+    def get_jwt_value(self,request):
+        token = super().get_jwt_value(request)
+        self.token = token
+        return token
+
     def authenticate_credentials(self, payload):
         """
         Returns an active user that matches the payload's user id and email.
         """
         User = get_user_model()
-        username = jwt_get_username_from_payload(payload)
+        username = payload.get("userName")
+        uid = payload.get("uid",1)
+
+        try:
+            group_list = get_group_from_user_manager_center(self.token)
+        except Exception as e:
+            msg = _('Failed to request user role from usermanager center!{}'.format(e))
+            raise exceptions.AuthenticationFailed(msg)
 
         if not username:
             msg = _('Invalid payload.')
             raise exceptions.AuthenticationFailed(msg)
 
         try:
-            user = User(username=username,id=1)
-            user.groups.add(Group(name="admin",id=1))
+            user = User(username=username,id=uid)
+            user.is_staff = True
+            if "admin" in group_list:
+                user.is_superuser = True
+            setattr(user,"permissions",group_list)
+
         except User.DoesNotExist:
             msg = _('Invalid signature.')
             raise exceptions.AuthenticationFailed(msg)
@@ -101,11 +133,29 @@ class SignatureAuthentication(authentication.BaseAuthentication):
 
         return (user, None)
 
+# change for usermanager
+def is_group_member(*groups):
+    assert len(groups) > 0, 'You must provide at least one group name'
+    if len(groups) > 3:
+        g = groups[:3] + ('...',)
+    else:
+        g = groups
+    name = 'is_group_member:%s' % ','.join(g)
+    @rules.predicate(name)
+    def fn(user):
+        if not hasattr(user, 'permissions'):
+            return False  # swapped user model, doesn't support groups
+        if not hasattr(user, '_permissions_cache'):  # pragma: no cover
+            user._group_names_cache = set(user.permissions)
+        return set(groups).issubset(user._group_names_cache)
+    return fn
+
+
 # AUTH PREDICATES
-has_admin_role = rules.is_group_member(str(AUTH_ROLE.ADMIN))
-has_user_role = rules.is_group_member(str(AUTH_ROLE.USER))
-has_annotator_role = rules.is_group_member(str(AUTH_ROLE.ANNOTATOR))
-has_observer_role = rules.is_group_member(str(AUTH_ROLE.OBSERVER))
+has_admin_role = is_group_member(str(AUTH_ROLE.ADMIN))
+has_user_role = is_group_member(str(AUTH_ROLE.USER))
+has_annotator_role = is_group_member(str(AUTH_ROLE.ANNOTATOR))
+has_observer_role = is_group_member(str(AUTH_ROLE.OBSERVER))
 
 @rules.predicate
 def is_project_owner(db_user, db_project):
