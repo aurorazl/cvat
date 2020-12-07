@@ -15,6 +15,9 @@ export enum AuthActionTypes {
     LOGIN = 'LOGIN',
     LOGIN_SUCCESS = 'LOGIN_SUCCESS',
     LOGIN_FAILED = 'LOGIN_FAILED',
+    LOGIN_WITH_TOKEN = 'LOGIN_WITH_TOKEN',
+    LOGIN_WITH_TOKEN_SUCCESS = 'LOGIN_WITH_TOKEN_SUCCESS',
+    LOGIN_WITH_TOKEN_FAILED = 'LOGIN_WITH_TOKEN_FAILED',
     REGISTER = 'REGISTER',
     REGISTER_SUCCESS = 'REGISTER_SUCCESS',
     REGISTER_FAILED = 'REGISTER_FAILED',
@@ -42,6 +45,9 @@ export const authActions = {
     login: () => createAction(AuthActionTypes.LOGIN),
     loginSuccess: (user: any) => createAction(AuthActionTypes.LOGIN_SUCCESS, { user }),
     loginFailed: (error: any) => createAction(AuthActionTypes.LOGIN_FAILED, { error }),
+    loginWithToken: (token: string) => createAction(AuthActionTypes.LOGIN_WITH_TOKEN, { token }),
+    loginWithTokenSuccess: (user: any) => createAction(AuthActionTypes.LOGIN_WITH_TOKEN_SUCCESS, { user }),
+    loginWithTokenFailed: (error: any) => createAction(AuthActionTypes.LOGIN_WITH_TOKEN_FAILED, { error }),
     register: () => createAction(AuthActionTypes.REGISTER),
     registerSuccess: (user: any) => createAction(AuthActionTypes.REGISTER_SUCCESS, { user }),
     registerFailed: (error: any) => createAction(AuthActionTypes.REGISTER_FAILED, { error }),
@@ -108,6 +114,22 @@ export const loginAsync = (username: string, password: string): ThunkAction => a
         dispatch(authActions.loginSuccess(users[0]));
     } catch (error) {
         dispatch(authActions.loginFailed(error));
+    }
+};
+
+export const loginWithTokenAsync = (token: string): ThunkAction => async (dispatch) => {
+    dispatch(authActions.loginWithToken(token));
+
+    try {
+        cvat.server.loginWithToken(token);
+        // setTimeout(async() => {
+        //     const users = await cvat.users.get({ self: true });
+        //     dispatch(authActions.loginWithTokenSuccess(users[0]));
+        // }, 1000);
+        const users = await cvat.users.get({ self: true });
+        dispatch(authActions.loginWithTokenSuccess(users[0]));
+    } catch (error) {
+        dispatch(authActions.loginWithTokenFailed(error));
     }
 };
 

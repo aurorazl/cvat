@@ -301,8 +301,8 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
                         <Row>
                             <Col>
                                 <Text>
-                                    {t('The browser you are using is ${info.name} ${info.version} based on ${info.engine} .').replace('${info.name}', `${info.name}`).replace('${info.version}', `${info.version}`).replace('${info.engine}', `${info.engine}`) + 
-                                        t(' CVAT was tested in the latest versions of Chrome and Firefox.') + 
+                                    {t('The browser you are using is ${info.name} ${info.version} based on ${info.engine} .').replace('${info.name}', `${info.name}`).replace('${info.version}', `${info.version}`).replace('${info.engine}', `${info.engine}`) +
+                                        t(' ADAP was tested in the latest versions of Chrome and Firefox.') +
                                         t(' We recommend to use Chrome (or another Chromium based browser)')}
                                 </Text>
                             </Col>

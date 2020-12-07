@@ -7,7 +7,7 @@ import { USER_LOGIN_URL } from 'utils/const';
 const queryString = stringify({
   redirect: window.location.href,
 });
-// console.log(1111, USER_LOGIN_URL + '?' + queryString)
+
 export default () => {
   return (
     <div style={{height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>

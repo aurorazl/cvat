@@ -231,12 +231,12 @@ function HeaderContainer(props: Props): JSX.Element {
                 <Icon type='info-circle' />
                 {t('About')}
             </Menu.Item>
-            {renderChangePasswordItem && (
+            {/* {renderChangePasswordItem && (
                 <Menu.Item onClick={(): void => switchChangePasswordDialog(true)} disabled={changePasswordFetching}>
                     {changePasswordFetching ? <Icon type='loading' /> : <Icon type='edit' />}
                     {t('Change password')}
                 </Menu.Item>
-            )}
+            )} */}
 
             <Menu.Item onClick={onLogout} disabled={logoutFetching}>
                 {logoutFetching ? <Icon type='loading' /> : <Icon type='logout' />}

@@ -23,27 +23,28 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].[contenthash].min.js',
-        // publicPath: process.env.NODE_ENV === 'development'?'/':'/annotations/',
-        publicPath: '/annotations/',
+        publicPath: process.env.NODE_ENV === 'development'?'/':'/annotations/',
+        // publicPath: '/annotations/',
     },
     devServer: {
-        writeToDisk: true,
+        writeToDisk: false,
         contentBase: path.join(__dirname, 'dist'),
         compress: false,
         inline: true,
         port: 3000,
         historyApiFallback: true,
         proxy: {
-            '/annotations/api': {
-              target: 'http://10.31.3.121',
+            '/annotations/api/v1': {
+              target: 'http://192.168.1.83',
               changeOrigin: true,
               secure: false,
             },
-            // '/ai_arts/api': {
-            //   target: 'http://219.133.167.42:6688',
-            //   changeOrigin: true,
-            //   secure: false,
-            // },
+            '/custom-user-dashboard-backend': {
+                // target: 'http://219.133.167.42:30000',
+                target: 'http://192.168.1.83',
+                changeOrigin: true,
+                secure: false,
+            },
         },
     },
     resolve: {

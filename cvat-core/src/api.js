@@ -166,6 +166,19 @@ function build() {
                 return result;
             },
             /**
+             * Method allows to login on a server
+             * @method login
+             * @async
+             * @memberof module:API.cvat.server
+             * @param {string} token token
+             * @throws {module:API.cvat.exceptions.PluginError}
+             * @throws {module:API.cvat.exceptions.ServerError}
+             */
+            async loginWithToken(token) {
+                const result = await PluginRegistry.apiWrapper(cvat.server.loginWithToken, token);
+                return result;
+            },
+            /**
              * Method allows to logout from the server
              * @method logout
              * @async

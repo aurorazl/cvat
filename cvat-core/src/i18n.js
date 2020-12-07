@@ -1,7 +1,7 @@
 const i18n = require('i18next').default;
 const store = require('store');
 
-let lng = store.get('language') || 'en-US';
+let lng = store.get('language') || 'zh-CN';
 
 i18n
   .init({

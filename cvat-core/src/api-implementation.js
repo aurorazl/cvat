@@ -17,6 +17,7 @@
     const { ArgumentError } = require('./exceptions');
     const { Task } = require('./session');
     const i18next = require('i18next').default;
+    const groupTrans = require('./utils/groupTrans');
 
     function attachUsers(task, users) {
         if (task.assignee !== null) {
@@ -95,6 +96,10 @@
             await serverProxy.server.login(username, password);
         };
 
+        cvat.server.loginWithToken.implementation = async (token) => {
+            await serverProxy.server.loginWithToken(token);
+        };
+
         cvat.server.logout.implementation = async () => {
             await serverProxy.server.logout();
         };
@@ -130,11 +135,30 @@
             if ('self' in filter && filter.self) {
                 users = await serverProxy.users.getSelf();
                 users = [users];
+                users = users.map((user) => {
+                    let transUser = {
+                        id: user.id,
+                        username: user.userName,
+                        email: user.email,
+                        first_name: null,
+                        last_name: null,
+                        groups: groupTrans.groupTrans(user.permissionList),
+                        last_login: null,
+                        date_joined: null,
+                        is_staff: true,
+                        is_superuser: true,
+                        is_active: true,
+                        email_verification_required: null,
+                    }
+                    return new User(transUser);
+                });
             } else {
                 users = await serverProxy.users.getUsers();
+                users = users.map((user) => new User(user));
             }
 
-            users = users.map((user) => new User(user));
+            // users = users.map((user) => new User(user));
+
             return users;
         };
 
