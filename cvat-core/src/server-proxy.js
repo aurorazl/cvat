@@ -534,12 +534,12 @@
                 let response = null;
                 try {
                     if (id === null) {
-                        response = await Axios.get(`${userBackendAPI}/users/list?pageNo=1&pageSize=100`, {
+                        response = await Axios.get(`${userBackendAPI}/users/cvat/users?pageNo=1&pageSize=all`, {
                             proxy: config.proxy,
                         });
                         return userTrans.usersListTrans(response);
                     } else {
-                        response = await Axios.get(`${userBackendAPI}/users/detail/${id}`, {
+                        response = await Axios.get(`${userBackendAPI}/users/${id}`, {
                             proxy: config.proxy,
                         });
                         return userTrans.userTrans(response);

@@ -138,7 +138,7 @@
                 users = users.map((user) => {
                     let transUser = {
                         id: user.id,
-                        username: user.userName,
+                        username: user.username || user.userName,
                         email: user.email,
                         first_name: null,
                         last_name: null,

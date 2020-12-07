@@ -1,21 +1,17 @@
 // 将用户系统的permissionList转换成CVAT对应的group
 const groupTrans = (permissionList) => {
-    let groups = [];
-
     if (permissionList.includes('ANNOTATIONS_ADMIN')) {
-        groups.push('admin');
+        return ['admin'];
     }
     if (permissionList.includes('ANNOTATIONS_USER')) {
-        groups.push('user');
+        return ['user'];
     }
     if (permissionList.includes('ANNOTATIONS_ANNOTATOR')) {
-        groups.push('annotator');
+        return ['annotator'];
     }
     if (permissionList.includes('ANNOTATIONS_OBSERVER')) {
-        groups.push('observer');
+        return ['observer'];
     }
-
-    return groups;
 }
 
 module.exports = {
