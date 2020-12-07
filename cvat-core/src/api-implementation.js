@@ -21,21 +21,18 @@
 
     function attachUsers(task, users) {
         if (task.assignee !== null) {
-            // [task.assignee] = users.filter((user) => user.id === task.assignee);
             [task.assignee] = users.filter((user) => user.username === task.assignee);
         }
 
         for (const segment of task.segments) {
             for (const job of segment.jobs) {
                 if (job.assignee !== null) {
-                    // [job.assignee] = users.filter((user) => user.id === job.assignee);
                     [job.assignee] = users.filter((user) => user.username === job.assignee);
                 }
             }
         }
 
         if (task.owner !== null) {
-            // [task.owner] = users.filter((user) => user.id === task.owner);
             [task.owner] = users.filter((user) => user.username === task.owner);
         }
 
