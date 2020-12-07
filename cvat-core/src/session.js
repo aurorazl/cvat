@@ -1509,7 +1509,7 @@
         if (this.id) {
             const jobData = {
                 status: this.status,
-                assignee: this.assignee ? this.assignee.id : null,
+                assignee: this.assignee ? this.assignee.username : null,
             };
 
             await serverProxy.jobs.saveJob(this.id, jobData);
@@ -1718,7 +1718,7 @@
         if (typeof (this.id) !== 'undefined') {
             // If the task has been already created, we update it
             const taskData = {
-                assignee: this.assignee ? this.assignee.id : null,
+                assignee: this.assignee ? this.assignee.username : null,
                 name: this.name,
                 bug_tracker: this.bugTracker,
                 labels: [...this.labels.map((el) => el.toJSON())],
