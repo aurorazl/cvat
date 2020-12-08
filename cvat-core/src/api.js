@@ -174,10 +174,14 @@ function build() {
              * @throws {module:API.cvat.exceptions.PluginError}
              * @throws {module:API.cvat.exceptions.ServerError}
              */
-            async loginWithToken(token) {
-                const result = await PluginRegistry.apiWrapper(cvat.server.loginWithToken, token);
+            loginWithToken(token) {
+                const result = PluginRegistry.apiWrapper(cvat.server.loginWithToken, token);
                 return result;
             },
+            // async loginWithToken(token) {
+            //     const result = await PluginRegistry.apiWrapper(cvat.server.loginWithToken, token);
+            //     return result;
+            // },
             /**
              * Method allows to logout from the server
              * @method logout

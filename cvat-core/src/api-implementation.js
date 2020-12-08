@@ -96,9 +96,12 @@
             await serverProxy.server.login(username, password);
         };
 
-        cvat.server.loginWithToken.implementation = async (token) => {
-            await serverProxy.server.loginWithToken(token);
+        cvat.server.loginWithToken.implementation = (token) => {
+            serverProxy.server.loginWithToken(token);
         };
+        // cvat.server.loginWithToken.implementation = async (token) => {
+        //     await serverProxy.server.loginWithToken(token);
+        // };
 
         cvat.server.logout.implementation = async () => {
             await serverProxy.server.logout();

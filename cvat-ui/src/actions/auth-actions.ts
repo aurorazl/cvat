@@ -137,7 +137,7 @@ export const loginWithTokenAsync = (token: string): ThunkAction => async (dispat
     dispatch(authActions.loginWithToken(token));
 
     try {
-        await cvat.server.loginWithToken(token);
+        cvat.server.loginWithToken(token);
         const users = await cvat.users.get({ self: true });
         dispatch(authActions.loginWithTokenSuccess(users[0]));
     } catch (error) {
