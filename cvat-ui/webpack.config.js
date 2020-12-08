@@ -23,8 +23,8 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].[contenthash].min.js',
-        // publicPath: process.env.NODE_ENV === 'development'?'/':'/annotations/',
-        publicPath: '/annotations/',
+        publicPath: process.env.NODE_ENV === 'development'?'/':'/annotations/',
+        // publicPath: '/annotations/',
     },
     devServer: {
         writeToDisk: true,
