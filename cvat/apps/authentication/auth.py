@@ -29,12 +29,9 @@ class TokenAuthentication(_TokenAuthentication):
             login(request, auth[0], 'django.contrib.auth.backends.ModelBackend')
         return auth
 
-def get_group_from_user_manager_center(token):
-    user_manager_center_url = settings.USER_MANAGER_CENTER
-    response = requests.get(url="{}/auth/currentUser".format(user_manager_center_url,),headers={"Authorization": "Bearer " + token.decode()},timeout=5)
-    response.raise_for_status()
-    roleList = response.json()["permissionList"]
+def parse_permission(roleList):
     group_list = []
+    assert isinstance(roleList,list)
     if "ANNOTATIONS_ADMIN" in roleList:
         group_list.append("admin")
     if "ANNOTATIONS_USER" in roleList:
@@ -45,11 +42,19 @@ def get_group_from_user_manager_center(token):
         group_list.append("observer")
     return group_list
 
+def get_group_from_user_manager_center(token):
+    user_manager_center_url = settings.USER_MANAGER_CENTER
+    response = requests.get(url="{}/auth/currentUser".format(user_manager_center_url,),headers={"Authorization": "Bearer " + token.decode()},timeout=5)
+    response.raise_for_status()
+    roleList = response.json()["permissionList"]
+    return parse_permission(roleList)
+
 
 class JSONWebTokenAuthentication(_JSONWebTokenAuthentication):
     def get_jwt_value(self,request):
         token = super().get_jwt_value(request)
         self.token = token
+        request.token = token
         return token
 
     def authenticate_credentials(self, payload):
@@ -73,8 +78,8 @@ class JSONWebTokenAuthentication(_JSONWebTokenAuthentication):
         try:
             user = User(username=username,id=uid)
             user.is_staff = True
-            if "admin" in group_list:
-                user.is_superuser = True
+            # if "admin" in group_list:
+            #     user.is_superuser = True
             setattr(user,"permissions",group_list)
 
         except User.DoesNotExist:

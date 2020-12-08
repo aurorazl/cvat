@@ -47,10 +47,12 @@ from cvat.apps.engine.serializers import (
     TaskSerializer, UserSerializer, PluginsSerializer,
 )
 from cvat.apps.engine.utils import av_scan_paths
+import requests
 
 
 from . import models, task
 from .log import clogger, slogger
+from cvat.apps.authentication.auth import parse_permission
 
 
 class ServerViewSet(viewsets.ViewSet):
@@ -765,6 +767,24 @@ class UserViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
     mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     queryset = User.objects.prefetch_related('groups').all().order_by('id')
     http_method_names = ['get', 'post', 'head', 'patch', 'delete']
+
+    def get_queryset(self):
+        try:
+            user_manager_center_url = settings.USER_MANAGER_CENTER
+            response = requests.get(url="{}/users/cvat/users".format(user_manager_center_url, ),
+                                    headers={"Authorization": "Bearer " + self.request.token.decode()}, timeout=5)
+            response.raise_for_status()
+            userList = response.json()["result"]
+        except Exception as e:
+            # userList = [{"username":"admin","id":30001,"permissionList":["ANNOTATIONS_ADMIN"]}]
+            userList = []
+            slogger.glob.error(e)
+        users = []
+        for one in userList:
+            user = User(username=one["username"], id=one["id"])
+            setattr(user, "permissions",parse_permission(one["permissionList"]))
+            users.append(user)
+        return users
 
     def get_serializer_class(self):
         user = self.request.user
