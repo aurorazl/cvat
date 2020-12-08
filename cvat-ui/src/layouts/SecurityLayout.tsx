@@ -12,7 +12,8 @@ import { CombinedState } from 'reducers/interfaces';
 interface SecurityLayoutProps extends RouteComponentProps {
   fetching?: boolean;
   user?: any;
-  onLogin: (token: string) => void;
+  // onLogin: (token: string) => void;
+  onLogin: (token: string) => Promise<void>;
 }
 
 interface SecurityLayoutState {
@@ -40,20 +41,35 @@ const mapDispatchToProps: DispatchToProps = {
 };
 
 class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayoutState> {
-
   state: SecurityLayoutState = {
     isReady: false,
   };
+
+  processAuth = (token: string) => {
+    const { location, history, onLogin } = this.props;
+
+    const queryString = stringify({
+      redirect: window.location.href,
+    });
+
+    onLogin(token).then(user=>{
+
+    }).catch(error =>{
+      localStorage.removeItem('token');
+      window.location.href = USER_LOGIN_URL + '?' + queryString;
+    });
+  }
 
   componentDidMount() {
     // console.log('---componentDidMount---')
 
     const { location, history, onLogin } = this.props;
 
+    const queryString = stringify({
+      redirect: window.location.href,
+    });
+
     if (!localStorage.token) {
-      const queryString = stringify({
-        redirect: window.location.href,
-      });
       // if (process.env.NODE_ENV !== 'development') {
       if (!(location && /\?token=/.test(location.search))) {
         window.location.href = USER_LOGIN_URL + '?' + queryString;
@@ -64,10 +80,10 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     let token = localStorage.getItem('token');
 
     if(token){
-      onLogin(token);
       this.setState({
         isReady: true,
       });
+      this.processAuth(token);
     }
 
     if (!token && location && location.search) {
@@ -75,11 +91,10 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
         token = location.search.replace(/\?token=/, '');
         localStorage.setItem('token', token);
 
-        onLogin(token);
-
         this.setState({
           isReady: true,
         });
+        this.processAuth(token);
       }
     }
   }

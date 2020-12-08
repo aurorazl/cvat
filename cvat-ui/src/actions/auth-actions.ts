@@ -117,21 +117,33 @@ export const loginAsync = (username: string, password: string): ThunkAction => a
     }
 };
 
-export const loginWithTokenAsync = (token: string): ThunkAction => async (dispatch) => {
-    dispatch(authActions.loginWithToken(token));
+export const loginWithTokenAsync = (token: string): ThunkAction => async (dispatch): Promise<void> => {
+    return new Promise<void>( async (resolve, reject): Promise<void> => {
+        dispatch(authActions.loginWithToken(token));
 
-    try {
-        cvat.server.loginWithToken(token);
-        // setTimeout(async() => {
-        //     const users = await cvat.users.get({ self: true });
-        //     dispatch(authActions.loginWithTokenSuccess(users[0]));
-        // }, 1000);
-        const users = await cvat.users.get({ self: true });
-        dispatch(authActions.loginWithTokenSuccess(users[0]));
-    } catch (error) {
-        dispatch(authActions.loginWithTokenFailed(error));
-    }
+        try {
+            await cvat.server.loginWithToken(token);
+            const users = await cvat.users.get({ self: true });
+            dispatch(authActions.loginWithTokenSuccess(users[0]));
+            resolve(users[0]);
+        } catch (error) {
+            dispatch(authActions.loginWithTokenFailed(error));
+            reject(error);
+        }
+    });
 };
+
+// export const loginWithTokenAsync = (token: string): ThunkAction => async (dispatch) => {
+//     dispatch(authActions.loginWithToken(token));
+
+//     try {
+//         await cvat.server.loginWithToken(token);
+//         const users = await cvat.users.get({ self: true });
+//         dispatch(authActions.loginWithTokenSuccess(users[0]));
+//     } catch (error) {
+//         dispatch(authActions.loginWithTokenFailed(error));
+//     }
+// };
 
 export const logoutAsync = (): ThunkAction => async (dispatch) => {
     dispatch(authActions.logout());

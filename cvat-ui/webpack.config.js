@@ -23,11 +23,11 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].[contenthash].min.js',
-        publicPath: process.env.NODE_ENV === 'development'?'/':'/annotations/',
-        // publicPath: '/annotations/',
+        // publicPath: process.env.NODE_ENV === 'development'?'/':'/annotations/',
+        publicPath: '/annotations/',
     },
     devServer: {
-        writeToDisk: false,
+        writeToDisk: true,
         contentBase: path.join(__dirname, 'dist'),
         compress: false,
         inline: true,
@@ -40,7 +40,6 @@ module.exports = {
               secure: false,
             },
             '/custom-user-dashboard-backend': {
-                // target: 'http://219.133.167.42:30000',
                 target: 'http://192.168.1.83',
                 changeOrigin: true,
                 secure: false,
