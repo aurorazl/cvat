@@ -341,7 +341,7 @@ CSRF_COOKIE_NAME = "csrftoken"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/annotations/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 os.makedirs(STATIC_ROOT, exist_ok=True)
 
