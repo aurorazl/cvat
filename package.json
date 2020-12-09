@@ -63,7 +63,7 @@
   "homepage": "https://github.com/opencv/cvat#readme",
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+
     }
   }
 }
