@@ -9,8 +9,8 @@
 <head>
     <title>{% block title %} {% endblock %}</title>
     {% compress js file thirdparty %}
-    <script type="text/javascript" src="{% static 'annotations/js/3rdparty/showdown.js' %}"></script>
-    <script type="text/javascript" src="{% static 'annotations/js/3rdparty/showdown-toc.js' %}"></script>
+    <script type="text/javascript" src="{% static 'documentation/js/3rdparty/showdown.js' %}"></script>
+    <script type="text/javascript" src="{% static 'documentation/js/3rdparty/showdown-toc.js' %}"></script>
     {% endcompress %}
 </head>
 
@@ -29,8 +29,8 @@
         // For GitHub documentation we need to have relative links without
         // leading slash. Let's just add the leading slash here to have correct
         // links inside online documentation.
-        user_guide = user_guide.replace(/!\[\]\(static/g, '![](/static');
-        user_guide = user_guide.replace(/!\[\S+?\]\(static/g, '![](/static');
+        user_guide = user_guide.replace(/!\[\]\(static/g, '![](/annotations/static');
+        user_guide = user_guide.replace(/!\[\S+?\]\(static/g, '![](/annotations/static');
         document.body.innerHTML = converter.makeHtml(user_guide);
     </script>
 </body>
