@@ -332,12 +332,12 @@ function HeaderContainer(props: Props): JSX.Element {
                 <Button
                     className='cvat-header-button'
                     type='link'
-                    href={`${tool.server.host}/documentation/user_guide.html`}
+                    href={`${tool.server.host}/documentation/user_guide.html?language=${lang}`}
                     onClick={(event: React.MouseEvent): void => {
                         event.preventDefault();
                         // false positive
                         // eslint-disable-next-line
-                        window.open(`${tool.server.host}/documentation/user_guide.html`, '_blank');
+                        window.open(`${tool.server.host}/documentation/user_guide.html?language=${lang}`, '_blank');
                     }}
                 >
                     <Icon type='question-circle' />
