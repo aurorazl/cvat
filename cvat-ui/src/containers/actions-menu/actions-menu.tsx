@@ -22,6 +22,7 @@ interface StateToProps {
     dumpActivities: string[] | null;
     exportActivities: string[] | null;
     inferenceIsActive: boolean;
+    showModels: boolean;
 }
 
 interface DispatchToProps {
@@ -44,12 +45,19 @@ function mapStateToProps(state: CombinedState, own: OwnProps): StateToProps {
         },
     } = state;
 
+    const {
+        plugins: {
+            list : { MODELS: showModels },
+        },
+    } = state;
+
     return {
         dumpActivities: tid in dumps ? dumps[tid] : null,
         exportActivities: tid in activeExports ? activeExports[tid] : null,
         loadActivity: tid in loads ? loads[tid] : null,
         annotationFormats,
         inferenceIsActive: tid in state.models.inferences,
+        showModels: showModels,
     };
 }
 
@@ -87,6 +95,7 @@ function ActionsMenuContainer(props: OwnProps & StateToProps & DispatchToProps):
         exportDataset,
         deleteTask,
         openRunModelWindow,
+        showModels,
     } = props;
 
     function onClickMenu(params: ClickParam, file?: File): void {
@@ -136,6 +145,7 @@ function ActionsMenuContainer(props: OwnProps & StateToProps & DispatchToProps):
             exportActivities={exportActivities}
             inferenceIsActive={inferenceIsActive}
             onClickMenu={onClickMenu}
+            showModels={showModels}
         />
     );
 }
