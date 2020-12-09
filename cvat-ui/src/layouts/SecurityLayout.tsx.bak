@@ -12,8 +12,8 @@ import { CombinedState } from 'reducers/interfaces';
 interface SecurityLayoutProps extends RouteComponentProps {
   fetching?: boolean;
   user?: any;
-  // onLogin: (token: string) => void;
-  onLogin: (token: string) => Promise<void>;
+  onLogin: (token: string) => void;
+  // onLogin: (token: string) => Promise<void>;
 }
 
 interface SecurityLayoutState {
@@ -41,23 +41,27 @@ const mapDispatchToProps: DispatchToProps = {
 };
 
 class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayoutState> {
+  private collectAuthTimer: number | undefined;
+
   state: SecurityLayoutState = {
     isReady: false,
   };
 
-  processAuth = (token: string) => {
-    const { location, history, onLogin } = this.props;
+  collectAuthInfo = () => {
+    const { location, history, user } = this.props;
 
     const queryString = stringify({
       redirect: window.location.href,
     });
 
-    onLogin(token).then(user=>{
-
-    }).catch(error =>{
+    if(user && user.id){
+      this.setState({
+        isReady: true,
+      });
+    }else{  //token错误
       localStorage.removeItem('token');
       window.location.href = USER_LOGIN_URL + '?' + queryString;
-    });
+    }
   }
 
   componentDidMount() {
@@ -65,11 +69,10 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
 
     const { location, history, onLogin } = this.props;
 
-    const queryString = stringify({
-      redirect: window.location.href,
-    });
-
     if (!localStorage.token) {
+      const queryString = stringify({
+        redirect: window.location.href,
+      });
       // if (process.env.NODE_ENV !== 'development') {
       if (!(location && /\?token=/.test(location.search))) {
         window.location.href = USER_LOGIN_URL + '?' + queryString;
@@ -80,10 +83,8 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     let token = localStorage.getItem('token');
 
     if(token){
-      this.setState({
-        isReady: true,
-      });
-      this.processAuth(token);
+      onLogin(token);
+      this.collectAuthTimer = window.setTimeout(this.collectAuthInfo, 1000);
     }
 
     if (!token && location && location.search) {
@@ -91,10 +92,11 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
         token = location.search.replace(/\?token=/, '');
         localStorage.setItem('token', token);
 
+        onLogin(token);
+
         this.setState({
           isReady: true,
         });
-        this.processAuth(token);
       }
     }
   }
@@ -125,6 +127,10 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     }
 
     return <LoginPage />;
+  }
+
+  componentWillUnmount() {
+    window.clearTimeout(this.collectAuthTimer);
   }
 }
 
