@@ -377,8 +377,8 @@ class BasicUserSerializer(serializers.ModelSerializer):
         ordering = ['-id']
 
 class UserSerializer(serializers.ModelSerializer):
-    groups = serializers.SlugRelatedField(many=True,
-        slug_field='name', queryset=Group.objects.all())
+    # groups = serializers.SlugRelatedField(many=True,slug_field='name', queryset=Group.objects.all())
+    groups = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -388,6 +388,9 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ('last_login', 'date_joined')
         write_only_fields = ('password', )
         ordering = ['-id']
+
+    def get_groups(self,obj):
+        return getattr(obj,"permissions",[])
 
 class ExceptionSerializer(serializers.Serializer):
     system = serializers.CharField(max_length=255)

@@ -84,5 +84,5 @@ CACHEOPS_REDIS = {
     'db': 1,             # SELECT non-default redis database
 }
 
-USER_MANAGER_CENTER = os.getenv('USER_MANAGER_CENTER', 'http://219.133.167.42:30000/custom-user-dashboard-backend')
+USER_MANAGER_CENTER = os.getenv('USER_MANAGER_CENTER', 'http://192.168.1.83/custom-user-dashboard-backend')
 RESTRICTIONS["reduce_task_visibility"] = True
