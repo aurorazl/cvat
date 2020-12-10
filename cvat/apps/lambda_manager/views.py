@@ -172,6 +172,8 @@ class LambdaFunction:
                 code=status.HTTP_400_BAD_REQUEST)
 
         response = self.gateway.invoke(self, payload)
+        if isinstance(response,str):
+            response = json.loads(response)
         if self.kind == LambdaType.DETECTOR:
             if mapping:
                 for item in response:

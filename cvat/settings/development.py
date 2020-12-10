@@ -82,6 +82,6 @@ CACHEOPS_REDIS = {
     'port': 6379,        # default redis port
     'db': 1,             # SELECT non-default redis database
 }
-KFSERVING_GATEWAY = "http://121.46.18.84"
+KFSERVING_GATEWAY = "http://192.168.1.83"
 CVAT_SERVERLESS = "True"
 RESTRICTIONS["reduce_task_visibility"] = True

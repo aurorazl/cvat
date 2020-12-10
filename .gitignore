@@ -36,3 +36,4 @@ yarn-error.log*
 /cvat-ui/package.json
 /cvat-ui/webpack.config.js
 /cvat-ui/src/cvat-core-wrapper.ts
+db.sqlite3*
