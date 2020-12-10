@@ -89,6 +89,7 @@ interface StateToProps {
     switchableAutomaticBordering: boolean;
     keyMap: Record<string, ExtendedKeyMapOptions>;
     canvasBackgroundColor: string;
+    lang: string;
 }
 
 interface DispatchToProps {
@@ -157,6 +158,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
             shapes: { opacity, colorBy, selectedOpacity, outlined, outlineColor, showBitmap, showProjections },
         },
         shortcuts: { keyMap },
+        lang: { lang },
     } = state;
 
     return {
@@ -202,6 +204,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
             activeControl === ActiveControl.DRAW_POLYGON ||
             activeControl === ActiveControl.DRAW_POLYLINE ||
             activeControl === ActiveControl.EDIT,
+        lang,
     };
 }
 

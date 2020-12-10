@@ -31,6 +31,7 @@ interface Props {
     pushActivity: any;
 
     onClickMenu: (params: ClickParam, file?: File) => void;
+    lang: string;
 }
 
 export enum Actions {
@@ -60,6 +61,7 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
         dumpActivities,
         exportActivities,
         loadActivity,
+        lang,
     } = props;
 
     let latestParams: ClickParam | null = null;
@@ -136,7 +138,7 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
             })} */}
             {!!bugTracker && <Menu.Item key={Actions.OPEN_BUG_TRACKER}>{t('Open bug tracker')}</Menu.Item>}
             <Menu.Item disabled={inferenceIsActive} key={Actions.RUN_AUTO_ANNOTATION}>
-        <Tooltip title={<a href={`${baseURL}/${linkConsts.AUTOMATIC_ANNOTATION_URL}`} target="blank">{t('View Help')}</a>} placement='left' mouseLeaveDelay={0.2}>
+        <Tooltip title={<a href={`${baseURL}/${linkConsts[lang].AUTOMATIC_ANNOTATION_URL}`} target="blank">{t('View Help')}</a>} placement='left' mouseLeaveDelay={0.2}>
                     {t('Automatic annotation')}
                 </Tooltip>
             </Menu.Item>

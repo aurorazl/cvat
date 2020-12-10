@@ -19,6 +19,7 @@ interface Props {
     activeControl: ActiveControl;
     switchSplitShortcut: string;
     splitTrack(enabled: boolean): void;
+    lang: string;
 }
 
 function SplitControl(props: Props): JSX.Element {
@@ -26,7 +27,7 @@ function SplitControl(props: Props): JSX.Element {
     const core = getCore();
     const baseURL = core.config.backendAPI.slice(0, -7);
 
-    const { switchSplitShortcut, activeControl, canvasInstance, splitTrack } = props;
+    const { switchSplitShortcut, activeControl, canvasInstance, splitTrack, lang } = props;
 
     const dynamicIconProps =
         activeControl === ActiveControl.SPLIT
@@ -47,7 +48,7 @@ function SplitControl(props: Props): JSX.Element {
               };
 
     return (
-        <Tooltip title={<a href={`${baseURL}/${linkConsts.TRACK_MODE_ADVANCED_URL}`} target="blank">{t('Split a track ${switchSplitShortcut}', {switchSplitShortcut: `${switchSplitShortcut}`})}</a>} placement='right' mouseLeaveDelay={0.2}>
+        <Tooltip title={<a href={`${baseURL}/${linkConsts[lang].TRACK_MODE_ADVANCED_URL}`} target="blank">{t('Split a track ${switchSplitShortcut}', {switchSplitShortcut: `${switchSplitShortcut}`})}</a>} placement='right' mouseLeaveDelay={0.2}>
             <Icon {...dynamicIconProps} component={SplitIcon} />
         </Tooltip>
     );

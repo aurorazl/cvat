@@ -49,6 +49,7 @@ interface StateToProps {
     keyMap: Record<string, ExtendedKeyMapOptions>;
     normalizedKeyMap: Record<string, string>;
     canvasInstance: Canvas;
+    lang: string;
 }
 
 interface DispatchToProps {
@@ -83,6 +84,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
             workspace: { autoSave, autoSaveInterval },
         },
         shortcuts: { keyMap, normalizedKeyMap },
+        lang: { lang },
     } = state;
 
     return {
@@ -104,6 +106,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
         keyMap,
         normalizedKeyMap,
         canvasInstance,
+        lang,
     };
 }
 
@@ -438,6 +441,7 @@ class AnnotationTopBarContainer extends React.PureComponent<Props, State> {
             keyMap,
             normalizedKeyMap,
             canvasInstance,
+            lang,
         } = this.props;
 
         const preventDefault = (event: KeyboardEvent | undefined): void => {
@@ -570,6 +574,7 @@ class AnnotationTopBarContainer extends React.PureComponent<Props, State> {
                     focusFrameInputShortcut={normalizedKeyMap.FOCUS_INPUT_FRAME}
                     onUndoClick={this.undo}
                     onRedoClick={this.redo}
+                    lang={lang}
                 />
             </>
         );

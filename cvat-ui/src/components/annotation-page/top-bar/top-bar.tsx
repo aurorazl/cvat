@@ -54,6 +54,7 @@ interface Props {
     onURLIconClick(): void;
     onUndoClick(): void;
     onRedoClick(): void;
+    lang: string;
 }
 
 export default function AnnotationTopBarComponent(props: Props): JSX.Element {
@@ -97,6 +98,7 @@ export default function AnnotationTopBarComponent(props: Props): JSX.Element {
         onURLIconClick,
         onUndoClick,
         onRedoClick,
+        lang,
     } = props;
 
     return (
@@ -133,6 +135,7 @@ export default function AnnotationTopBarComponent(props: Props): JSX.Element {
                         onSwitchPlay={onSwitchPlay}
                         setPrevButton={setPrevButtonType}
                         setNextButton={setNextButtonType}
+                        lang={lang}
                     />
                     <PlayerNavigation
                         startFrame={startFrame}
@@ -144,6 +147,7 @@ export default function AnnotationTopBarComponent(props: Props): JSX.Element {
                         onSliderChange={onSliderChange}
                         onInputChange={onInputChange}
                         onURLIconClick={onURLIconClick}
+                        lang={lang}
                     />
                 </Row>
             </Col>

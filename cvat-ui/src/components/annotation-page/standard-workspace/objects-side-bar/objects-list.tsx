@@ -25,6 +25,7 @@ interface Props {
     expandAllStates(): void;
     hideAllStates(): void;
     showAllStates(): void;
+    lang: string;
 }
 
 function ObjectListComponent(props: Props): JSX.Element {
@@ -45,6 +46,7 @@ function ObjectListComponent(props: Props): JSX.Element {
         expandAllStates,
         hideAllStates,
         showAllStates,
+        lang,
     } = props;
 
     return (
@@ -63,6 +65,7 @@ function ObjectListComponent(props: Props): JSX.Element {
                 expandAllStates={expandAllStates}
                 hideAllStates={hideAllStates}
                 showAllStates={showAllStates}
+                lang={lang}
             />
             <div className='cvat-objects-sidebar-states-list'>
                 {sortedStatesID.map(

@@ -19,6 +19,7 @@ interface Props {
     repeatShapeShortcut: string;
     onChangeLabel(value: string): void;
     onSetup(labelID: number): void;
+    lang: string;
 }
 
 function SetupTagPopover(props: Props): JSX.Element {
@@ -26,7 +27,7 @@ function SetupTagPopover(props: Props): JSX.Element {
     const core = getCore();
     const baseURL = core.config.backendAPI.slice(0, -7);
 
-    const { labels, selectedLabeID, repeatShapeShortcut, onChangeLabel, onSetup } = props;
+    const { labels, selectedLabeID, repeatShapeShortcut, onChangeLabel, onSetup, lang } = props;
 
     return (
         <div className='cvat-draw-shape-popover-content'>
@@ -37,8 +38,8 @@ function SetupTagPopover(props: Props): JSX.Element {
                     </Text>
                 </Col>
                 <Col>
-                    <HelpLink helpLink={`${baseURL}/${linkConsts.ANNOTATION_WITH_TAGS_URL}`}/>
-                </Col>                
+                    <HelpLink helpLink={`${baseURL}/${linkConsts[lang].ANNOTATION_WITH_TAGS_URL}`}/>
+                </Col>
             </Row>
             <Row type='flex' justify='start'>
                 <Col>

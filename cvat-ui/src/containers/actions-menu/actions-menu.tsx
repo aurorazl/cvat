@@ -23,6 +23,7 @@ interface StateToProps {
     exportActivities: string[] | null;
     inferenceIsActive: boolean;
     pushActivity: any;
+    lang: string;
 }
 
 interface DispatchToProps {
@@ -44,6 +45,7 @@ function mapStateToProps(state: CombinedState, own: OwnProps): StateToProps {
         tasks: {
             activities: { dumps, loads, exports: activeExports, pushes },
         },
+        lang: { lang },
     } = state;
 
     return {
@@ -53,6 +55,7 @@ function mapStateToProps(state: CombinedState, own: OwnProps): StateToProps {
         annotationFormats,
         inferenceIsActive: tid in state.models.inferences,
         pushActivity: tid === pushes['taskId'] ? pushes : null,
+        lang,
     };
 }
 
@@ -95,6 +98,7 @@ function ActionsMenuContainer(props: OwnProps & StateToProps & DispatchToProps):
         deleteTask,
         openRunModelWindow,
         exportToPlatform,
+        lang,
     } = props;
 
     function onClickMenu(params: ClickParam, file?: File): void {
@@ -147,6 +151,7 @@ function ActionsMenuContainer(props: OwnProps & StateToProps & DispatchToProps):
             inferenceIsActive={inferenceIsActive}
             pushActivity={pushActivity}
             onClickMenu={onClickMenu}
+            lang={lang}
         />
     );
 }

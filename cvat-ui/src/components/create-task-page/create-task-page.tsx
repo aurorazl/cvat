@@ -24,13 +24,14 @@ interface Props {
     error: string;
     taskId: number | null;
     installedGit: boolean;
+    lang: string;
 }
 
 export default function CreateTaskPage(props: Props): JSX.Element {
     const { t } = useTranslation();
     const core = getCore();
     const baseURL = core.config.backendAPI.slice(0, -7);
-    const { error, status, taskId, onCreate, installedGit } = props;
+    const { error, status, taskId, onCreate, installedGit, lang } = props;
 
     useEffect(() => {
         if (error) {
@@ -70,7 +71,7 @@ export default function CreateTaskPage(props: Props): JSX.Element {
         <Row type='flex' justify='center' align='top' className='cvat-create-task-form-wrapper'>
             <Col md={20} lg={16} xl={14} xxl={9}>
                 <Text className='cvat-title'>{t('Create a new task')}</Text>
-                <HelpLink helpLink={`${baseURL}/${linkConsts.CREATING_AN_ANNOTATION_TASK_URL}`} styles={{position: 'absolute', top: 10, right: 10}}/>
+                <HelpLink helpLink={`${baseURL}/${linkConsts[lang].CREATING_AN_ANNOTATION_TASK_URL}`} styles={{position: 'absolute', top: 10, right: 10}}/>
                 <CreateTaskContent taskId={taskId} status={status} onCreate={onCreate} installedGit={installedGit}/>
             </Col>
         </Row>

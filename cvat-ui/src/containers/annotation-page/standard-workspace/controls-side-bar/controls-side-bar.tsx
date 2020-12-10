@@ -25,6 +25,7 @@ interface StateToProps {
     activeControl: ActiveControl;
     keyMap: Record<string, ExtendedKeyMapOptions>;
     normalizedKeyMap: Record<string, string>;
+    lang: string;
 }
 
 interface DispatchToProps {
@@ -47,6 +48,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
             player: { rotateAll },
         },
         shortcuts: { keyMap, normalizedKeyMap },
+        lang: { lang },
     } = state;
 
     return {
@@ -55,6 +57,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
         activeControl,
         normalizedKeyMap,
         keyMap,
+        lang,
     };
 }
 

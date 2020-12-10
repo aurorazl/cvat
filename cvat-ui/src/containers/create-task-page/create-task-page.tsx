@@ -14,6 +14,7 @@ interface StateToProps {
     status: string;
     error: string;
     installedGit: boolean;
+    lang: string;
 }
 
 interface DispatchToProps {
@@ -28,9 +29,12 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
 
 function mapStateToProps(state: CombinedState): StateToProps {
     const { creates } = state.tasks.activities;
+    const { lang } = state.lang;
+
     return {
         ...creates,
         installedGit: state.plugins.list.GIT_INTEGRATION,
+        lang,
     };
 }
 

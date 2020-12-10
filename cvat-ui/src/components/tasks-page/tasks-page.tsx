@@ -28,6 +28,7 @@ interface TasksPageProps extends WithTranslation {
     numberOfHiddenTasks: number;
     onGetTasks: (gettingQuery: TasksQuery) => void;
     hideEmptyTasks: (hideEmpty: boolean) => void;
+    lang: string;
 }
 
 function getSearchField(gettingQuery: TasksQuery): string {
@@ -192,7 +193,7 @@ class TasksPageComponent extends React.PureComponent<TasksPageProps & RouteCompo
     }
 
     public render(): JSX.Element {
-        const { tasksFetching, gettingQuery, numberOfVisibleTasks } = this.props;
+        const { tasksFetching, gettingQuery, numberOfVisibleTasks,lang } = this.props;
 
         if (tasksFetching) {
             return <Spin size='large' className='cvat-spinner' />;
@@ -200,7 +201,7 @@ class TasksPageComponent extends React.PureComponent<TasksPageProps & RouteCompo
 
         return (
             <div className='cvat-tasks-page'>
-                <TopBar onSearch={this.handleSearch} searchValue={getSearchField(gettingQuery)} />
+                <TopBar onSearch={this.handleSearch} searchValue={getSearchField(gettingQuery)} lang={lang}/>
                 {numberOfVisibleTasks ? (
                         <TaskListContainer
                             onSwitchPage={this.handlePagination}
