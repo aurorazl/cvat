@@ -39,6 +39,7 @@ interface Props {
     pasteShape(): void;
     resetGroup(): void;
     redrawShape(): void;
+    lang: string;
 }
 
 export default function ControlsSideBarComponent(props: Props): JSX.Element {
@@ -55,6 +56,7 @@ export default function ControlsSideBarComponent(props: Props): JSX.Element {
         pasteShape,
         resetGroup,
         redrawShape,
+        lang,
     } = props;
 
     const preventDefault = (event: KeyboardEvent | undefined): void => {
@@ -216,6 +218,7 @@ export default function ControlsSideBarComponent(props: Props): JSX.Element {
                 canvasInstance={canvasInstance}
                 activeControl={activeControl}
                 mergeObjects={mergeObjects}
+                lang={lang}
             />
             <GroupControl
                 switchGroupShortcut={normalizedKeyMap.SWITCH_GROUP_MODE}
@@ -223,12 +226,14 @@ export default function ControlsSideBarComponent(props: Props): JSX.Element {
                 canvasInstance={canvasInstance}
                 activeControl={activeControl}
                 groupObjects={groupObjects}
+                lang={lang}
             />
             <SplitControl
                 canvasInstance={canvasInstance}
                 switchSplitShortcut={normalizedKeyMap.SWITCH_SPLIT_MODE}
                 activeControl={activeControl}
                 splitTrack={splitTrack}
+                lang={lang}
             />
         </Layout.Sider>
     );

@@ -8,7 +8,7 @@ from django.views.generic import RedirectView
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.http import JsonResponse
 from django.conf import settings
-from cvat.apps.authentication.auth import TokenAuthentication
+from cvat.apps.authentication.auth import TokenAuthentication,JSONWebTokenAuthentication
 
 def login_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME,
     login_url=None, redirect_methods=['GET']):
@@ -18,9 +18,11 @@ def login_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME,
             if request.user.is_authenticated:
                 return view_func(request, *args, **kwargs)
             else:
-                tokenAuth = TokenAuthentication()
+                tokenAuth = JSONWebTokenAuthentication()
                 auth = tokenAuth.authenticate(request)
+
                 if auth is not None:
+                    request.user = auth[0]
                     return view_func(request, *args, **kwargs)
 
                 login_url = '{}/login'.format(settings.UI_URL)

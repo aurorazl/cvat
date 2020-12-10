@@ -12,18 +12,19 @@ import Paragraph from 'antd/lib/typography/Paragraph';
 import Upload, { RcFile } from 'antd/lib/upload';
 import Empty from 'antd/lib/empty';
 import Tree, { AntTreeNode, TreeNodeNormal } from 'antd/lib/tree/Tree';
+import Select, { OptionProps } from 'antd/lib/select';
 
 import consts from 'consts';
 
 import { withTranslation, WithTranslation  } from 'react-i18next';
-import { isZh } from 'utils/lang-utils';
-import { CombinedState } from 'reducers/interfaces';
+import { CombinedState, DatasetInfo } from 'reducers/interfaces';
 import { connect } from 'react-redux';
 
 export interface Files {
     local: File[];
     share: string[];
     remote: string[];
+    platform: string[];
 }
 
 interface StateToProps {
@@ -43,14 +44,19 @@ function mapStateToProps(state: CombinedState): StateToProps {
 interface State {
     files: Files;
     expandedKeys: string[];
-    active: 'local' | 'share' | 'remote';
+    active: 'local' | 'share' | 'remote' | 'platform';
 }
 
 interface Props {
     withRemote: boolean;
     treeData: TreeNodeNormal[];
+    platformData: DatasetInfo[];
     onLoadData: (key: string, success: () => void, failure: () => void) => void;
+    onLoadPlatformData: (success: () => void, failure: () => void) => void;
+    onChangeDataset(value: string): void;
 }
+
+const { Option } = Select;
 
 class FileManager extends React.PureComponent<Props & WithTranslation, State & StateToProps> {
     public constructor(props: Props & WithTranslation) {
@@ -61,12 +67,15 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
                 local: [],
                 share: [],
                 remote: [],
+                platform: [],
             },
             expandedKeys: [],
             active: 'local',
+            lang: 'zh-CN',
         };
 
         this.loadData('/');
+        this.loadPlatformData();
     }
 
     public getFiles(): Files {
@@ -75,6 +84,7 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
             local: active === 'local' ? files.local : [],
             share: active === 'share' ? files.share : [],
             remote: active === 'remote' ? files.remote : [],
+            platform: active === 'platform' ? files.platform : [],
         };
     }
 
@@ -87,6 +97,15 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
             onLoadData(key, success, failure);
         });
 
+    private loadPlatformData = (): Promise<void> =>
+        new Promise<void>((resolve, reject): void => {
+            const { onLoadPlatformData } = this.props;
+
+            const success = (): void => resolve();
+            const failure = (): void => reject();
+            onLoadPlatformData(success, failure);
+        });
+
     public reset(): void {
         this.setState({
             expandedKeys: [],
@@ -95,7 +114,9 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
                 local: [],
                 share: [],
                 remote: [],
+                platform: [],
             },
+            lang: 'zh-CN',
         });
     }
 
@@ -246,6 +267,43 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
         );
     }
 
+    private renderPlatformSelector(): JSX.Element {
+        const { files } = this.state;
+        const { platformData, t } = this.props;
+
+        return (
+            <Tabs.TabPane key='platform' tab={t('AI Platform')}>
+                <Select
+                    showSearch
+                    style={{ width: '100%' }}
+                    placeholder={t('Select a dataset')}
+                    filterOption={(input: string, option: React.ReactElement<OptionProps>) => {
+                        const { children } = option.props;
+                        if (typeof children === 'string') {
+                            return children.toLowerCase().includes(input.toLowerCase());
+                        }
+
+                        return false;
+                    }}
+                    onChange={(value: string): void => {
+                        this.setState({
+                            files: {
+                                ...files,
+                                platform: [value],
+                            },
+                        });
+                    }}
+                >
+                    {platformData.map((ds: any) => (
+                        <Option key={ds.id} value={`${ds.path}`}>
+                            {ds.name}
+                        </Option>
+                    ))}
+                </Select>
+            </Tabs.TabPane>
+        );
+    }
+
     public render(): JSX.Element {
         const { withRemote } = this.props;
         const { active } = this.state;
@@ -265,6 +323,7 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
                     {this.renderLocalSelector()}
                     {this.renderShareSelector()}
                     {withRemote && this.renderRemoteSelector()}
+                    {this.renderPlatformSelector()}
                 </Tabs>
             </>
         );
@@ -272,3 +331,4 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
 }
 
 export default withTranslation(undefined, { withRef: true })(FileManager);
+// export default connect(mapStateToProps)(withTranslation(undefined, { withRef: true })(FileManager));

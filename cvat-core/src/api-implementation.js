@@ -17,22 +17,23 @@
     const { ArgumentError } = require('./exceptions');
     const { Task } = require('./session');
     const i18next = require('i18next').default;
+    const groupTrans = require('./utils/groupTrans');
 
     function attachUsers(task, users) {
         if (task.assignee !== null) {
-            [task.assignee] = users.filter((user) => user.id === task.assignee);
+            [task.assignee] = users.filter((user) => user.username === task.assignee);
         }
 
         for (const segment of task.segments) {
             for (const job of segment.jobs) {
                 if (job.assignee !== null) {
-                    [job.assignee] = users.filter((user) => user.id === job.assignee);
+                    [job.assignee] = users.filter((user) => user.username === job.assignee);
                 }
             }
         }
 
         if (task.owner !== null) {
-            [task.owner] = users.filter((user) => user.id === task.owner);
+            [task.owner] = users.filter((user) => user.username === task.owner);
         }
 
         return task;
@@ -95,6 +96,13 @@
             await serverProxy.server.login(username, password);
         };
 
+        cvat.server.loginWithToken.implementation = (token) => {
+            serverProxy.server.loginWithToken(token);
+        };
+        // cvat.server.loginWithToken.implementation = async (token) => {
+        //     await serverProxy.server.loginWithToken(token);
+        // };
+
         cvat.server.logout.implementation = async () => {
             await serverProxy.server.logout();
         };
@@ -130,11 +138,30 @@
             if ('self' in filter && filter.self) {
                 users = await serverProxy.users.getSelf();
                 users = [users];
+                users = users.map((user) => {
+                    let transUser = {
+                        id: user.id,
+                        username: user.username || user.userName,
+                        email: user.email,
+                        first_name: null,
+                        last_name: null,
+                        groups: groupTrans.groupTrans(user.permissionList),
+                        last_login: null,
+                        date_joined: null,
+                        is_staff: true,
+                        is_superuser: true,
+                        is_active: true,
+                        email_verification_required: null,
+                    }
+                    return new User(transUser);
+                });
             } else {
                 users = await serverProxy.users.getUsers();
+                users = users.map((user) => new User(user));
             }
 
-            users = users.map((user) => new User(user));
+            // users = users.map((user) => new User(user));
+
             return users;
         };
 
@@ -215,6 +242,11 @@
 
         cvat.server.installedApps.implementation = async () => {
             const result = await serverProxy.server.installedApps();
+            return result;
+        };
+
+        cvat.tasks.getDatasets.implementation = async (filter) => {
+            const result = await serverProxy.tasks.getDatasets(filter);
             return result;
         };
 

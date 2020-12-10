@@ -67,6 +67,11 @@ export interface TasksState {
             status: string;
             error: string;
         };
+        pushes: {
+            taskId: number | null;
+            status: string;
+            error: string;
+        };
     };
 }
 
@@ -127,6 +132,13 @@ export interface ShareFileInfo {
     // get this data from cvat-core
     name: string;
     type: 'DIR' | 'REG';
+}
+
+export interface DatasetInfo {
+    // get this data from cvat-core
+    id: number;
+    name: string;
+    path: string;
 }
 
 export interface ShareItem {
@@ -512,8 +524,13 @@ export interface CombinedState {
     shortcuts: ShortcutsState;
     meta: MetaState;
     lang: LangState;
+    platform: PlatformState;
 }
 
 export interface LangState {
     lang: string;
+}
+
+export interface PlatformState {
+    datasets: DatasetInfo[];
 }

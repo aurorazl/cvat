@@ -31,17 +31,20 @@ export default function (state = defaultState, action: AuthActions | BoundariesA
                 initialized: true,
             };
         case AuthActionTypes.LOGIN:
+        case AuthActionTypes.LOGIN_WITH_TOKEN:
             return {
                 ...state,
                 fetching: true,
             };
         case AuthActionTypes.LOGIN_SUCCESS:
+        case AuthActionTypes.LOGIN_WITH_TOKEN_SUCCESS:
             return {
                 ...state,
                 fetching: false,
                 user: action.payload.user,
             };
         case AuthActionTypes.LOGIN_FAILED:
+        case AuthActionTypes.LOGIN_WITH_TOKEN_FAILED:
             return {
                 ...state,
                 fetching: false,

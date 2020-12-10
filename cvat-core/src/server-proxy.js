@@ -9,6 +9,7 @@
     const config = require('./config');
     const DownloadWorker = require('./download.worker');
     const i18next = require('i18next').default;
+    const userTrans = require('./utils/userTrans');
 
     function generateError(errorData) {
         if (errorData.response) {
@@ -85,9 +86,9 @@
             Axios.defaults.xsrfCookieName = 'csrftoken';
             const workerAxios = new WorkerWrappedAxios();
 
-            let token = store.get('token_diff');
+            let token = store.get('token');
             if (token) {
-                Axios.defaults.headers.common.Authorization = `Token ${token}`;
+                Axios.defaults.headers.common.Authorization = `Bearer ${token}`;
             }
 
             async function about() {
@@ -216,8 +217,14 @@
                 }
 
                 token = authenticationResponse.data.key;
-                store.set('token_diff', token);
-                Axios.defaults.headers.common.Authorization = `Token ${token}`;
+                store.set('token', token);
+                Axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+            }
+
+            function loginWithToken(token) {
+                // Axios.defaults.headers.common.Authorization = '';
+                Axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+                store.set('token', token);
             }
 
             async function logout() {
@@ -229,7 +236,7 @@
                     throw generateError(errorData);
                 }
 
-                store.remove('token_diff');
+                store.remove('token');
                 Axios.defaults.headers.common.Authorization = '';
             }
 
@@ -500,19 +507,42 @@
                 }
             }
 
+            // async function getUsers(id = null) {
+            //     const { backendAPI } = config;
+
+            //     let response = null;
+            //     try {
+            //         if (id === null) {
+            //             response = await Axios.get(`${backendAPI}/users?page_size=all`, {
+            //                 proxy: config.proxy,
+            //             });
+            //         } else {
+            //             response = await Axios.get(`${backendAPI}/users/${id}`, {
+            //                 proxy: config.proxy,
+            //             });
+            //         }
+            //     } catch (errorData) {
+            //         throw generateError(errorData);
+            //     }
+
+            //     return response.data.results;
+            // }
+
             async function getUsers(id = null) {
-                const { backendAPI } = config;
+                const { userBackendAPI } = config;
 
                 let response = null;
                 try {
                     if (id === null) {
-                        response = await Axios.get(`${backendAPI}/users?page_size=all`, {
+                        response = await Axios.get(`${userBackendAPI}/users/cvat/users?pageNo=1&pageSize=all`, {
                             proxy: config.proxy,
                         });
+                        return userTrans.usersListTrans(response);
                     } else {
-                        response = await Axios.get(`${backendAPI}/users/${id}`, {
+                        response = await Axios.get(`${userBackendAPI}/users/${id}`, {
                             proxy: config.proxy,
                         });
+                        return userTrans.userTrans(response);
                     }
                 } catch (errorData) {
                     throw generateError(errorData);
@@ -521,12 +551,27 @@
                 return response.data.results;
             }
 
+            // async function getSelf() {
+            //     const { backendAPI } = config;
+
+            //     let response = null;
+            //     try {
+            //         response = await Axios.get(`${backendAPI}/users/self`, {
+            //             proxy: config.proxy,
+            //         });
+            //     } catch (errorData) {
+            //         throw generateError(errorData);
+            //     }
+
+            //     return response.data;
+            // }
+
             async function getSelf() {
-                const { backendAPI } = config;
+                const { userBackendAPI } = config;
 
                 let response = null;
                 try {
-                    response = await Axios.get(`${backendAPI}/users/self`, {
+                    response = await Axios.get(`${userBackendAPI}/auth/currentUser`, {
                         proxy: config.proxy,
                     });
                 } catch (errorData) {
@@ -563,6 +608,7 @@
                         {
                             proxy: config.proxy,
                             responseType: 'arraybuffer',
+                            headers:{ 'Authorization': 'Bearer ' + token }
                         },
                     );
                 } catch (errorData) {
@@ -810,6 +856,36 @@
                 }
             }
 
+            // 获取ai平台数据集
+            async function getDatasetsFromPlat() {
+                const { backendAPI } = config;
+
+                let response = null;
+                try {
+                    response = await Axios.get(`${backendAPI}/datasets`, {
+                        proxy: config.proxy,
+                    });
+                } catch (errorData) {
+                    throw generateError(errorData);
+                }
+
+                return response.data.data.datasets;
+            }
+
+            async function exportToPlatform(id) {
+                const { backendAPI } = config;
+
+                let response = null;
+                try {
+                    response = await Axios.get(`${backendAPI}/tasks/${id}/save_to_platform?format=COCO 1.0`);
+                } catch (errorData) {
+                    throw generateError(errorData);
+                }
+
+                let { data, status, statusText } = response;
+                return { data, status, statusText };
+            }
+
             Object.defineProperties(
                 this,
                 Object.freeze({
@@ -820,6 +896,7 @@
                             formats,
                             exception,
                             login,
+                            loginWithToken,
                             logout,
                             changePassword,
                             requestPasswordReset,
@@ -840,6 +917,8 @@
                             createTask,
                             deleteTask,
                             exportDataset,
+                            getDatasets: getDatasetsFromPlat,
+                            exportToPlatform,
                         }),
                         writable: false,
                     },

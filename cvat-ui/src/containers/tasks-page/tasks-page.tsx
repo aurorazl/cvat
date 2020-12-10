@@ -16,6 +16,7 @@ interface StateToProps {
     numberOfTasks: number;
     numberOfVisibleTasks: number;
     numberOfHiddenTasks: number;
+    lang: string;
 }
 
 interface DispatchToProps {
@@ -25,6 +26,7 @@ interface DispatchToProps {
 
 function mapStateToProps(state: CombinedState): StateToProps {
     const { tasks } = state;
+    const { lang } = state.lang;
 
     return {
         tasksFetching: state.tasks.fetching,
@@ -34,6 +36,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
         numberOfHiddenTasks: tasks.hideEmpty
             ? tasks.current.filter((task: Task): boolean => !task.instance.jobs.length).length
             : 0,
+        lang,
     };
 }
 

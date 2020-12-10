@@ -47,6 +47,7 @@ interface StateToProps {
     trackers: Model[];
     curZOrder: number;
     aiToolsRef: MutableRefObject<any>;
+    lang: string;
 }
 
 interface DispatchToProps {
@@ -65,6 +66,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
     const { instance: canvasInstance, activeControl } = annotation.canvas;
     const { models } = state;
     const { interactors, detectors, trackers } = models;
+    const { lang } = state.lang;
 
     return {
         interactors,
@@ -79,6 +81,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
         frame,
         curZOrder: annotation.annotations.zLayer.cur,
         aiToolsRef: annotation.aiToolsRef,
+        lang,
     };
 }
 
@@ -717,9 +720,9 @@ export class ToolsControlComponent extends React.PureComponent<Props, State> {
     }
 
     private renderPopoverContent(): JSX.Element {
-        const { t } = this.props;
+        const { t, lang } = this.props;
         const core = getCore();
-        const baseURL = core.config.backendAPI.slice(0, -7);        
+        const baseURL = core.config.backendAPI.slice(0, -7);
         return (
             <div className='cvat-tools-control-popover-content'>
                 <Row type='flex' justify='space-between'>
@@ -729,8 +732,8 @@ export class ToolsControlComponent extends React.PureComponent<Props, State> {
                         </Text>
                     </Col>
                     <Col>
-                        <HelpLink helpLink={`${baseURL}/${linkConsts.AI_TOOLS_URL}`}/>
-                    </Col>                    
+                        <HelpLink helpLink={`${baseURL}/${linkConsts[lang].AI_TOOLS_URL}`}/>
+                    </Col>
                 </Row>
                 <Tabs type='card' tabBarGutter={8}>
                     <Tabs.TabPane key='interactors' tab={t('Interactors')}>

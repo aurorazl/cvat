@@ -7,7 +7,7 @@
     const PluginRegistry = require('./plugins');
     const loggerStorage = require('./logger-storage');
     const serverProxy = require('./server-proxy');
-    const { 
+    const {
         getFrame, getRanges, getPreview, clear: clearFrames,
     } = require('./frames');
     const { ArgumentError } = require('./exceptions');
@@ -22,9 +22,9 @@
                 value: {
                     async upload(file, loader) {
                         const result = await PluginRegistry.apiWrapper.call(
-                            this, 
-                            prototype.annotations.upload, 
-                            file, 
+                            this,
+                            prototype.annotations.upload,
+                            file,
                             loader,
                         );
                         return result;
@@ -42,9 +42,9 @@
 
                     async dump(dumper, name = null) {
                         const result = await PluginRegistry.apiWrapper.call(
-                            this, 
-                            prototype.annotations.dump, 
-                            dumper, 
+                            this,
+                            prototype.annotations.dump,
+                            dumper,
                             name,
                         );
                         return result;
@@ -57,8 +57,8 @@
 
                     async put(arrayOfObjects = []) {
                         const result = await PluginRegistry.apiWrapper.call(
-                            this, 
-                            prototype.annotations.put, 
+                            this,
+                            prototype.annotations.put,
                             arrayOfObjects,
                         );
                         return result;
@@ -66,10 +66,10 @@
 
                     async get(frame, allTracks = false, filters = []) {
                         const result = await PluginRegistry.apiWrapper.call(
-                            this, 
+                            this,
                             prototype.annotations.get,
-                            frame, 
-                            allTracks, 
+                            frame,
+                            allTracks,
                             filters,
                         );
                         return result;
@@ -77,10 +77,10 @@
 
                     async search(filters, frameFrom, frameTo) {
                         const result = await PluginRegistry.apiWrapper.call(
-                            this, 
+                            this,
                             prototype.annotations.search,
-                            filters, 
-                            frameFrom, 
+                            filters,
+                            frameFrom,
                             frameTo
                         );
                         return result;
@@ -88,9 +88,9 @@
 
                     async searchEmpty(frameFrom, frameTo) {
                         const result = await PluginRegistry.apiWrapper.call(
-                            this, 
+                            this,
                             prototype.annotations.searchEmpty,
-                            frameFrom, 
+                            frameFrom,
                             frameTo
                         );
                         return result;
@@ -99,9 +99,9 @@
                     async select(objectStates, x, y) {
                         const result = await PluginRegistry.apiWrapper.call(
                             this,
-                            prototype.annotations.select, 
-                            objectStates, 
-                            x, 
+                            prototype.annotations.select,
+                            objectStates,
+                            x,
                             y
                         );
                         return result;
@@ -109,8 +109,8 @@
 
                     async merge(objectStates) {
                         const result = await PluginRegistry.apiWrapper.call(
-                            this, 
-                            prototype.annotations.merge, 
+                            this,
+                            prototype.annotations.merge,
                             objectStates
                         );
                         return result;
@@ -118,9 +118,9 @@
 
                     async split(objectState, frame) {
                         const result = await PluginRegistry.apiWrapper.call(
-                            this, 
-                            prototype.annotations.split, 
-                            objectState, 
+                            this,
+                            prototype.annotations.split,
+                            objectState,
                             frame
                         );
                         return result;
@@ -128,9 +128,9 @@
 
                     async group(objectStates, reset = false) {
                         const result = await PluginRegistry.apiWrapper.call(
-                            this, 
+                            this,
                             prototype.annotations.group,
-                            objectStates, 
+                            objectStates,
                             reset
                         );
                         return result;
@@ -148,8 +148,8 @@
 
                     async exportDataset(format) {
                         const result = await PluginRegistry.apiWrapper.call(
-                            this, 
-                            prototype.annotations.exportDataset, 
+                            this,
+                            prototype.annotations.exportDataset,
                             format
                         );
                         return result;
@@ -166,10 +166,10 @@
                 value: {
                     async get(frame, isPlaying = false, step = 1) {
                         const result = await PluginRegistry.apiWrapper.call(
-                            this, 
-                            prototype.frames.get, 
-                            frame, 
-                            isPlaying, 
+                            this,
+                            prototype.frames.get,
+                            frame,
+                            isPlaying,
                             step
                         );
                         return result;
@@ -189,10 +189,10 @@
                 value: {
                     async log(logType, payload = {}, wait = false) {
                         const result = await PluginRegistry.apiWrapper.call(
-                            this, 
-                            prototype.logger.log, 
-                            logType, 
-                            payload, 
+                            this,
+                            prototype.logger.log,
+                            logType,
+                            payload,
                             wait
                         );
                         return result;
@@ -229,18 +229,18 @@
                 value: {
                     async subscribe(evType, callback) {
                         const result = await PluginRegistry.apiWrapper.call(
-                            this, 
-                            prototype.events.subscribe, 
-                            evType, 
+                            this,
+                            prototype.events.subscribe,
+                            evType,
                             callback
                         );
                         return result;
                     },
                     async unsubscribe(evType, callback = null) {
                         const result = await PluginRegistry.apiWrapper.call(
-                            this, 
-                            prototype.events.unsubscribe, 
-                            evType, 
+                            this,
+                            prototype.events.unsubscribe,
+                            evType,
                             callback
                         );
                         return result;
@@ -903,6 +903,7 @@
                 server_files: [],
                 client_files: [],
                 remote_files: [],
+                platform_files: [],
             });
 
             if (Array.isArray(initialData.segments)) {
@@ -1262,6 +1263,34 @@
                     },
                 },
                 /**
+                    * List of files from ai platform
+                    * @name platformFiles
+                    * @type {File[]}
+                    * @memberof module:API.cvat.classes.Task
+                    * @instance
+                    * @throws {module:API.cvat.exceptions.ArgumentError}
+                */
+                platformFiles: {
+                    get: () => [...data.files.platform_files],
+                    set: (platformFiles) => {
+                        if (!Array.isArray(platformFiles)) {
+                            throw new ArgumentError(
+                                i18next.t('Value must be an array. But ${typeof (platformFiles)} has been got.', {typeofplatformFiles: `${typeof (platformFiles)}`}),
+                            );
+                        }
+
+                        for (const value of platformFiles) {
+                            if (typeof (value) !== 'string') {
+                                throw new ArgumentError(
+                                    i18next.t('Array values must be a string. But ${typeof (value)} has been got.', {typeofvalue: `${typeof (value)}`}),
+                                );
+                            }
+                        }
+
+                        Array.prototype.push.apply(data.files.platform_files, platformFiles);
+                    },
+                },
+                /**
                     * The first frame of a video to annotation
                     * @name startFrame
                     * @type {integer}
@@ -1424,6 +1453,21 @@
             const result = await PluginRegistry.apiWrapper.call(this, Task.prototype.delete);
             return result;
         }
+
+        /**
+            * Method exports a task to ai platform
+            * @method exportToPlatform
+            * @memberof module:API.cvat.classes.Task
+            * @readonly
+            * @instance
+            * @async
+            * @throws {module:API.cvat.exceptions.ServerError}
+            * @throws {module:API.cvat.exceptions.PluginError}
+        */
+        async exportToPlatform() {
+            const result = await PluginRegistry.apiWrapper.call(this, Task.prototype.exportToPlatform);
+            return result;
+        }
     }
 
     module.exports = {
@@ -1465,7 +1509,7 @@
         if (this.id) {
             const jobData = {
                 status: this.status,
-                assignee: this.assignee ? this.assignee.id : null,
+                assignee: this.assignee ? this.assignee.username : null,
             };
 
             await serverProxy.jobs.saveJob(this.id, jobData);
@@ -1674,7 +1718,7 @@
         if (typeof (this.id) !== 'undefined') {
             // If the task has been already created, we update it
             const taskData = {
-                assignee: this.assignee ? this.assignee.id : null,
+                assignee: this.assignee ? this.assignee.username : null,
                 name: this.name,
                 bug_tracker: this.bugTracker,
                 labels: [...this.labels.map((el) => el.toJSON())],
@@ -1703,6 +1747,7 @@
             client_files: this.clientFiles,
             server_files: this.serverFiles,
             remote_files: this.remoteFiles,
+            platform_files: this.platformFiles,
             image_quality: this.imageQuality,
             use_zip_chunks: this.useZipChunks,
             use_cache: this.useCache,
@@ -1921,6 +1966,11 @@
 
     Task.prototype.logger.log.implementation = async function (logType, payload, wait) {
         const result = await loggerStorage.log(logType, { ...payload, task_id: this.id }, wait);
+        return result;
+    };
+
+    Task.prototype.exportToPlatform.implementation = async function () {
+        const result = await serverProxy.tasks.exportToPlatform(this.id);
         return result;
     };
 })();

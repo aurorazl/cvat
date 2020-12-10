@@ -20,13 +20,14 @@ interface Props {
     switchGroupShortcut: string;
     resetGroupShortcut: string;
     groupObjects(enabled: boolean): void;
+    lang: string;
 }
 
 function GroupControl(props: Props): JSX.Element {
     const { t } = useTranslation();
     const core = getCore();
-    const baseURL = core.config.backendAPI.slice(0, -7);    
-    const { switchGroupShortcut, resetGroupShortcut, activeControl, canvasInstance,groupObjects } = props;
+    const baseURL = core.config.backendAPI.slice(0, -7);
+    const { switchGroupShortcut, resetGroupShortcut, activeControl, canvasInstance, groupObjects, lang } = props;
 
     const dynamicIconProps =
         activeControl === ActiveControl.GROUP
@@ -46,7 +47,7 @@ function GroupControl(props: Props): JSX.Element {
                   },
               };
 
-    const title = <a href={`${baseURL}/${linkConsts.SHAPE_GROUPING_URL}`} target="blank">
+    const title = <a href={`${baseURL}/${linkConsts[lang].SHAPE_GROUPING_URL}`} target="blank">
     {t('Group shapes/tracks ${switchGroupShortcut}.').replace('${switchGroupShortcut}', `${switchGroupShortcut}`) + t(' Select and press ${resetGroupShortcut} to reset a group').replace('${resetGroupShortcut}', `${resetGroupShortcut}`)}</a>;
     return (
         <Tooltip title={title} placement='right' mouseLeaveDelay={0.2}>

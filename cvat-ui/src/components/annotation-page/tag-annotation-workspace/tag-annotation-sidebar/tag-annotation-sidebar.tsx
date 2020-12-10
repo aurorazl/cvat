@@ -40,6 +40,7 @@ interface StateToProps {
     frameNumber: number;
     keyMap: Record<string, ExtendedKeyMapOptions>;
     normalizedKeyMap: Record<string, string>;
+    lang: string;
 }
 
 interface DispatchToProps {
@@ -60,6 +61,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
             canvas: { instance: canvasInstance },
         },
         shortcuts: { keyMap, normalizedKeyMap },
+        lang: { lang },
     } = state;
 
     return {
@@ -70,6 +72,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
         frameNumber,
         keyMap,
         normalizedKeyMap,
+        lang,
     };
 }
 
@@ -105,6 +108,7 @@ function TagAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Elemen
         onRememberObject,
         createAnnotations,
         keyMap,
+        lang,
     } = props;
 
     const preventDefault = (event: KeyboardEvent | undefined): void => {
@@ -206,7 +210,7 @@ function TagAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.Elemen
         <>
             <GlobalHotKeys keyMap={subKeyMap} handlers={handlers} allowChanges />
             <Layout.Sider {...siderProps}>
-                <HelpLink helpLink={`${baseURL}/${linkConsts.ANNOTATION_WITH_TAGS_URL}`}/>
+                <HelpLink helpLink={`${baseURL}/${linkConsts[lang].ANNOTATION_WITH_TAGS_URL}`}/>
                 {/* eslint-disable-next-line */}
                 <span
                     className={`cvat-objects-sidebar-sider

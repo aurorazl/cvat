@@ -5,10 +5,12 @@
 import os
 import os.path as osp
 import shutil
+import json
 import traceback
 from datetime import datetime
 from distutils.util import strtobool
 from tempfile import mkstemp
+from urllib import request as urlrequest
 
 import django_rq
 from django.apps import apps
@@ -36,7 +38,7 @@ import cvat.apps.dataset_manager.views # pylint: disable=unused-import
 from cvat.apps.authentication import auth
 from cvat.apps.dataset_manager.serializers import DatasetFormatsSerializer
 from cvat.apps.engine.frame_provider import FrameProvider
-from cvat.apps.engine.models import Job, StatusChoice, Task, StorageMethodChoice
+from cvat.apps.engine.models import Job, StatusChoice, Task, StorageMethodChoice,Data
 from cvat.apps.engine.serializers import (
     AboutSerializer, AnnotationFileSerializer, BasicUserSerializer,
     DataMetaSerializer, DataSerializer, ExceptionSerializer,
@@ -45,9 +47,12 @@ from cvat.apps.engine.serializers import (
     TaskSerializer, UserSerializer, PluginsSerializer,
 )
 from cvat.apps.engine.utils import av_scan_paths
+import requests
+
 
 from . import models, task
 from .log import clogger, slogger
+from cvat.apps.authentication.auth import parse_permission
 
 
 class ServerViewSet(viewsets.ViewSet):
@@ -190,9 +195,9 @@ class ServerViewSet(viewsets.ViewSet):
 
 class ProjectFilter(filters.FilterSet):
     name = filters.CharFilter(field_name="name", lookup_expr="icontains")
-    owner = filters.CharFilter(field_name="owner__username", lookup_expr="icontains")
+    owner = filters.CharFilter(field_name="owner", lookup_expr="icontains")
     status = filters.CharFilter(field_name="status", lookup_expr="icontains")
-    assignee = filters.CharFilter(field_name="assignee__username", lookup_expr="icontains")
+    assignee = filters.CharFilter(field_name="assignee", lookup_expr="icontains")
 
     class Meta:
         model = models.Project
@@ -218,7 +223,7 @@ class ProjectFilter(filters.FilterSet):
 class ProjectViewSet(auth.ProjectGetQuerySetMixin, viewsets.ModelViewSet):
     queryset = models.Project.objects.all().order_by('-id')
     serializer_class = ProjectSerializer
-    search_fields = ("name", "owner__username", "assignee__username", "status")
+    search_fields = ("name", "owner", "assignee", "status")
     filterset_class = ProjectFilter
     ordering_fields = ("id", "name", "owner", "status", "assignee")
     http_method_names = ['get', 'post', 'head', 'patch', 'delete']
@@ -244,7 +249,7 @@ class ProjectViewSet(auth.ProjectGetQuerySetMixin, viewsets.ModelViewSet):
         if self.request.data.get('owner', None):
             serializer.save()
         else:
-            serializer.save(owner=self.request.user)
+            serializer.save(owner=self.request.user.username)
 
     @swagger_auto_schema(method='get', operation_summary='Returns information of the tasks of the project with the selected id',
         responses={'200': TaskSerializer(many=True)})
@@ -267,10 +272,10 @@ class ProjectViewSet(auth.ProjectGetQuerySetMixin, viewsets.ModelViewSet):
 class TaskFilter(filters.FilterSet):
     project = filters.CharFilter(field_name="project__name", lookup_expr="icontains")
     name = filters.CharFilter(field_name="name", lookup_expr="icontains")
-    owner = filters.CharFilter(field_name="owner__username", lookup_expr="icontains")
+    owner = filters.CharFilter(field_name="owner", lookup_expr="icontains")
     mode = filters.CharFilter(field_name="mode", lookup_expr="icontains")
     status = filters.CharFilter(field_name="status", lookup_expr="icontains")
-    assignee = filters.CharFilter(field_name="assignee__username", lookup_expr="icontains")
+    assignee = filters.CharFilter(field_name="assignee", lookup_expr="icontains")
 
     class Meta:
         model = Task
@@ -312,7 +317,7 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
             "segment_set__job_set",
         ).order_by('-id')
     serializer_class = TaskSerializer
-    search_fields = ("name", "owner__username", "mode", "status")
+    search_fields = ("name", "owner", "mode", "status")
     filterset_class = TaskFilter
     ordering_fields = ("id", "name", "owner", "status", "assignee")
 
@@ -346,8 +351,8 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
             validate_task_limit(owner)
             serializer.save()
         else:
-            validate_task_limit(self.request.user)
-            serializer.save(owner=self.request.user)
+            validate_task_limit(self.request.user.username)
+            serializer.save(owner=self.request.user.username)
 
     def perform_destroy(self, instance):
         task_dirname = instance.get_task_dirname()
@@ -387,6 +392,7 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
     def data(self, request, pk):
         if request.method == 'POST':
             db_task = self.get_object() # call check_object_permissions as well
+            slogger.task[pk].info(request.data, exc_info=True)
             serializer = DataSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             db_data = serializer.save()
@@ -547,6 +553,28 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
                     return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
                 return Response(data)
 
+    @action(detail=True, methods=['GET',],
+            serializer_class=LabeledDataSerializer)
+    def save_to_platform(self, request, pk):
+        db_task = self.get_object()  # force to call check_object_permissions
+        if request.method == 'GET':
+            format_name = request.query_params.get('format')
+            if format_name:
+                result = _export_annotations_return_file_path(db_task=db_task,
+                                           rq_id="/api/v1/tasks/{}/save_to_platform/{}".format(pk, format_name),
+                                           request=request,
+                                           action=request.query_params.get("action", "").lower(),
+                                           callback=dm.views.export_task_annotations_to_platform,
+                                           format_name=format_name,
+                                           filename=request.query_params.get("filename", "").lower(),
+                                           )
+                if isinstance(result,Response):
+                    return result
+            else:
+                data = dm.task.get_task_data(pk)
+                slogger.task[pk].info("export platform {}".format(data), exc_info=True)
+            return Response(status=status.HTTP_201_CREATED)
+
     @swagger_auto_schema(method='get', operation_summary='When task is being created the method returns information about a status of the creation process')
     @action(detail=True, methods=['GET'], serializer_class=RqStatusSerializer)
     def status(self, request, pk):
@@ -634,6 +662,29 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
             filename=request.query_params.get("filename", "").lower(),
         )
 
+
+class DataViewSet(viewsets.ViewSet):
+    permission_classes = ()
+
+    def list(self,request):
+        queryset = Data.objects.all().filter(exported=1).order_by('id')
+        data=[]
+        for one in queryset:
+            data.append({"name":one.tasks.first().name,"convertOutPath":"/data/cvat/data/data/{}/platform".format(one.id),"dataSetId":one.id,"convertStatus":"finished"})
+        return Response(data=data)
+
+class DataSetViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        req = urlrequest.Request("http://{}/ai_arts/api/datasets/?pageNum=1&pageSize=9999".format(settings.VIP_MASTER), headers={'User-Agent': 'Mozilla/5.0',"Authorization":"Bearer "+settings.AIART_TOKEN})
+        try:
+            response=urlrequest.urlopen(req)
+            content = json.loads(response.read().decode("utf-8"))
+            return Response(content)
+        except Exception as e:
+            return Response(data=str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 @method_decorator(name='retrieve', decorator=swagger_auto_schema(operation_summary='Method returns details of a job'))
 @method_decorator(name='update', decorator=swagger_auto_schema(operation_summary='Method updates a job by id'))
 @method_decorator(name='partial_update', decorator=swagger_auto_schema(
@@ -716,6 +767,24 @@ class UserViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
     mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     queryset = User.objects.prefetch_related('groups').all().order_by('id')
     http_method_names = ['get', 'post', 'head', 'patch', 'delete']
+
+    def get_queryset(self):
+        try:
+            user_manager_center_url = settings.USER_MANAGER_CENTER
+            response = requests.get(url="{}/users/cvat/users".format(user_manager_center_url, ),
+                                    headers={"Authorization": "Bearer " + self.request.token.decode()}, timeout=5)
+            response.raise_for_status()
+            userList = response.json()["result"]
+        except Exception as e:
+            # userList = [{"username":"admin","id":30001,"permissionList":["ANNOTATIONS_ADMIN"]}]
+            userList = []
+            slogger.glob.error(e)
+        users = []
+        for one in userList:
+            user = User(username=one["username"], id=one["id"])
+            setattr(user, "permissions",parse_permission(one["permissionList"]))
+            users.append(user)
+        return users
 
     def get_serializer_class(self):
         user = self.request.user
@@ -852,6 +921,67 @@ def _export_annotations(db_task, rq_id, request, format_name, action, callback, 
                 else:
                     if osp.exists(file_path):
                         return Response(status=status.HTTP_201_CREATED)
+            elif rq_job.is_failed:
+                exc_info = str(rq_job.exc_info)
+                rq_job.delete()
+                return Response(exc_info,
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            else:
+                return Response(status=status.HTTP_202_ACCEPTED)
+
+    try:
+        if request.scheme:
+            server_address = request.scheme + '://'
+        server_address += request.get_host()
+    except Exception:
+        server_address = None
+
+    ttl = dm.views.CACHE_TTL.total_seconds()
+    queue.enqueue_call(func=callback,
+        args=(db_task.id, format_name, server_address), job_id=rq_id,
+        meta={ 'request_time': timezone.localtime() },
+        result_ttl=ttl, failure_ttl=ttl)
+    return Response(status=status.HTTP_202_ACCEPTED)
+
+
+def _export_annotations_return_file_path(db_task, rq_id, request, format_name, action, callback, filename):
+    if action not in {"", "download"}:
+        raise serializers.ValidationError(
+            "Unexpected action specified for the request")
+
+    format_desc = {f.DISPLAY_NAME: f
+        for f in dm.views.get_export_formats()}.get(format_name)
+    if format_desc is None:
+        raise serializers.ValidationError(
+            "Unknown format specified for the request")
+    elif not format_desc.ENABLED:
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    queue = django_rq.get_queue("default")
+
+    rq_job = queue.fetch_job(rq_id)
+    if rq_job:
+        last_task_update_time = timezone.localtime(db_task.updated_date)
+        request_time = rq_job.meta.get('request_time', None)
+        if request_time is None or request_time < last_task_update_time:
+            rq_job.cancel()
+            rq_job.delete()
+        else:
+            if rq_job.is_finished:
+                file_path = rq_job.return_value
+                if action == "download" and osp.exists(file_path):
+                    rq_job.delete()
+
+                    timestamp = datetime.strftime(last_task_update_time,
+                        "%Y_%m_%d_%H_%M_%S")
+                    filename = filename or \
+                        "task_{}-{}-{}{}".format(
+                        db_task.name, timestamp,
+                        format_name, osp.splitext(file_path)[1])
+                    return file_path
+                else:
+                    if osp.exists(file_path):
+                        return file_path
             elif rq_job.is_failed:
                 exc_info = str(rq_job.exc_info)
                 rq_job.delete()

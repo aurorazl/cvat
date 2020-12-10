@@ -31,7 +31,7 @@ import { NotificationsState } from 'reducers/interfaces';
 import { customWaViewHit } from 'utils/enviroment';
 import showPlatformNotification, { platformInfo, stopNotifications } from 'utils/platform-checker';
 import '../styles.scss';
-
+import SecurityLayout from 'layouts/SecurityLayout'
 
 import { withTranslation, WithTranslation  } from 'react-i18next';
 
@@ -301,8 +301,8 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
                         <Row>
                             <Col>
                                 <Text>
-                                    {t('The browser you are using is ${info.name} ${info.version} based on ${info.engine} .').replace('${info.name}', `${info.name}`).replace('${info.version}', `${info.version}`).replace('${info.engine}', `${info.engine}`) + 
-                                        t(' ADAP was tested in the latest versions of Chrome and Firefox.') + 
+                                    {t('The browser you are using is ${info.name} ${info.version} based on ${info.engine} .').replace('${info.name}', `${info.name}`).replace('${info.version}', `${info.version}`).replace('${info.engine}', `${info.engine}`) +
+                                        t(' ADAP was tested in the latest versions of Chrome and Firefox.') +
                                         t(' We recommend to use Chrome (or another Chromium based browser)')}
                                 </Text>
                             </Col>
@@ -353,7 +353,8 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
                     <GlobalErrorBoundary>
                         <Switch>
                             <Route exact path='/auth/register' component={RegisterPageContainer} />
-                            <Route exact path='/auth/login' component={LoginPageContainer} />
+                            {/* <Route exact path='/auth/login' component={LoginPageContainer} /> */}
+                            <Route exact path='/auth/login' component={SecurityLayout} />
                             <Route
                                 exact
                                 path='/auth/login-with-token/:sessionId/:token'

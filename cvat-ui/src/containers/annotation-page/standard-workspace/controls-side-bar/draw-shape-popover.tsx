@@ -30,6 +30,7 @@ interface StateToProps {
     canvasInstance: Canvas;
     shapeType: ShapeType;
     labels: any[];
+    lang: string;
 }
 
 function mapDispatchToProps(dispatch: any): DispatchToProps {
@@ -53,6 +54,7 @@ function mapStateToProps(state: CombinedState, own: OwnProps): StateToProps {
             job: { labels },
         },
         shortcuts: { normalizedKeyMap },
+        lang: { lang },
     } = state;
 
     return {
@@ -60,6 +62,7 @@ function mapStateToProps(state: CombinedState, own: OwnProps): StateToProps {
         canvasInstance,
         labels,
         normalizedKeyMap,
+        lang,
     };
 }
 
@@ -152,7 +155,7 @@ class DrawShapePopoverContainer extends React.PureComponent<Props, State> {
     public render(): JSX.Element {
         const { rectDrawingMethod, cuboidDrawingMethod, selectedLabelID, numberOfPoints } = this.state;
 
-        const { normalizedKeyMap, labels, shapeType } = this.props;
+        const { normalizedKeyMap, labels, shapeType, lang } = this.props;
 
         return (
             <DrawShapePopoverComponent
@@ -170,6 +173,7 @@ class DrawShapePopoverContainer extends React.PureComponent<Props, State> {
                 onChangeCuboidDrawingMethod={this.onChangeCuboidDrawingMethod}
                 onDrawTrack={this.onDrawTrack}
                 onDrawShape={this.onDrawShape}
+                lang={lang}
             />
         );
     }

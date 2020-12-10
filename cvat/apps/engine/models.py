@@ -12,6 +12,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 
+
 class SafeCharField(models.CharField):
     def get_prep_value(self, value):
         value = super().get_prep_value(value)
@@ -66,9 +67,13 @@ class Data(models.Model):
     original_chunk_type = models.CharField(max_length=32, choices=DataChoice.choices(),
         default=DataChoice.IMAGESET)
     storage_method = models.CharField(max_length=15, choices=StorageMethodChoice.choices(), default=StorageMethodChoice.FILE_SYSTEM)
+    exported = models.PositiveIntegerField(default=0)
 
     class Meta:
         default_permissions = ()
+        indexes = [
+            models.Index(fields=['exported']),
+        ]
 
     def get_frame_step(self):
         match = re.search("step\s*=\s*([1-9]\d*)", self.frame_filter)
@@ -79,6 +84,9 @@ class Data(models.Model):
 
     def get_upload_dirname(self):
         return os.path.join(self.get_data_dirname(), "raw")
+
+    def get_export_to_platform_dirname(self):
+        return os.path.join(self.get_data_dirname(), "platform")
 
     def get_compressed_cache_dirname(self):
         return os.path.join(self.get_data_dirname(), "compressed")
@@ -141,10 +149,8 @@ class Image(models.Model):
 
 class Project(models.Model):
     name = SafeCharField(max_length=256)
-    owner = models.ForeignKey(User, null=True, blank=True,
-        on_delete=models.SET_NULL, related_name="+")
-    assignee = models.ForeignKey(User, null=True,  blank=True,
-        on_delete=models.SET_NULL, related_name="+")
+    owner = SafeCharField(max_length=256,null=True, blank=True,)
+    assignee = SafeCharField(max_length=256,null=True, blank=True,)
     bug_tracker = models.CharField(max_length=2000, blank=True, default="")
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now_add=True)
@@ -161,10 +167,8 @@ class Task(models.Model):
         related_query_name="task")
     name = SafeCharField(max_length=256)
     mode = models.CharField(max_length=32)
-    owner = models.ForeignKey(User, null=True, blank=True,
-        on_delete=models.SET_NULL, related_name="owners")
-    assignee = models.ForeignKey(User, null=True,  blank=True,
-        on_delete=models.SET_NULL, related_name="assignees")
+    owner = SafeCharField(max_length=256,null=True, blank=True,)
+    assignee = SafeCharField(max_length=256,null=True, blank=True,)
     bug_tracker = models.CharField(max_length=2000, blank=True, default="")
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -237,6 +241,14 @@ class RemoteFile(models.Model):
     class Meta:
         default_permissions = ()
 
+# For Platform
+class PlatformFile(models.Model):
+    data = models.ForeignKey(Data, on_delete=models.CASCADE, null=True, related_name='platform_files')
+    file = models.CharField(max_length=1024)
+
+    class Meta:
+        default_permissions = ()
+
 class Segment(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     start_frame = models.IntegerField()
@@ -247,7 +259,7 @@ class Segment(models.Model):
 
 class Job(models.Model):
     segment = models.ForeignKey(Segment, on_delete=models.CASCADE)
-    assignee = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    assignee = SafeCharField(max_length=256,null=True, blank=True,)
     status = models.CharField(max_length=32, choices=StatusChoice.choices(),
         default=StatusChoice.ANNOTATION)
 
@@ -346,7 +358,7 @@ class Annotation(models.Model):
 
 class Commit(models.Model):
     id = models.BigAutoField(primary_key=True)
-    author = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    author = SafeCharField(max_length=256,null=True, blank=True,)
     version = models.PositiveIntegerField(default=0)
     timestamp = models.DateTimeField(auto_now=True)
     message = models.CharField(max_length=4096, default="")

@@ -38,6 +38,7 @@ interface StateToProps {
     keyMap: Record<string, ExtendedKeyMapOptions>;
     normalizedKeyMap: Record<string, string>;
     canvasInstance: Canvas;
+    lang: string;
 }
 
 interface DispatchToProps {
@@ -74,6 +75,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
             shapes: { colorBy },
         },
         shortcuts: { keyMap, normalizedKeyMap },
+        lang: { lang },
     } = state;
 
     let statesHidden = true;
@@ -108,6 +110,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
         keyMap,
         normalizedKeyMap,
         canvasInstance,
+        lang,
     };
 }
 
@@ -255,6 +258,7 @@ class ObjectsListContainer extends React.PureComponent<Props, State> {
             canvasInstance,
             colors,
             colorBy,
+            lang
         } = this.props;
         const { objectStates, sortedStatesID, statesOrdering } = this.state;
 
@@ -436,6 +440,7 @@ class ObjectsListContainer extends React.PureComponent<Props, State> {
                     expandAllStates={this.onExpandAllStates}
                     hideAllStates={this.onHideAllStates}
                     showAllStates={this.onShowAllStates}
+                    lang={lang}
                 />
             </>
         );

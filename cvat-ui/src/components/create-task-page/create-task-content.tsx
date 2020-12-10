@@ -49,6 +49,7 @@ const defaultState = {
         local: [],
         share: [],
         remote: [],
+        platform: [],
     },
 };
 

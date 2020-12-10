@@ -60,6 +60,7 @@ interface Props {
     expandAllStates(): void;
     hideAllStates(): void;
     showAllStates(): void;
+    lang: string;
 }
 
 function ObjectListHeader(props: Props): JSX.Element {
@@ -78,6 +79,7 @@ function ObjectListHeader(props: Props): JSX.Element {
         expandAllStates,
         hideAllStates,
         showAllStates,
+        lang,
     } = props;
 
     return (
@@ -89,7 +91,7 @@ function ObjectListHeader(props: Props): JSX.Element {
             </Row>
             <Row type='flex' justify='space-between' align='middle'>
                 <Col span={2}>
-                    <Tooltip title={<a href={`${baseURL}/${linkConsts.OBJECTS}`} target="blank">{t('Switch lock property for all ${switchLockAllShortcut}', {switchLockAllShortcut: `${switchLockAllShortcut}`})}</a>} mouseLeaveDelay={0.2}>
+                    <Tooltip title={<a href={`${baseURL}/${linkConsts[lang].OBJECTS}`} target="blank">{t('Switch lock property for all ${switchLockAllShortcut}', {switchLockAllShortcut: `${switchLockAllShortcut}`})}</a>} mouseLeaveDelay={0.2}>
                         { statesLocked ? (
                                 <Icon type='lock' onClick={unlockAllStates} theme='filled' />
                             ) : (
@@ -98,7 +100,7 @@ function ObjectListHeader(props: Props): JSX.Element {
                     </Tooltip>
                 </Col>
                 <Col span={2}>
-                    <Tooltip title={<a href={`${baseURL}/${linkConsts.OBJECTS}`} target="blank">{t('Switch hidden property for all ${switchHiddenAllShortcut}', {switchHiddenAllShortcut: `${switchHiddenAllShortcut}`})}</a>} mouseLeaveDelay={0.2}>
+                    <Tooltip title={<a href={`${baseURL}/${linkConsts[lang].OBJECTS}`} target="blank">{t('Switch hidden property for all ${switchHiddenAllShortcut}', {switchHiddenAllShortcut: `${switchHiddenAllShortcut}`})}</a>} mouseLeaveDelay={0.2}>
                         { statesHidden ? (
                                 <Icon type='eye-invisible' onClick={showAllStates} />
                             ) : (
@@ -107,7 +109,7 @@ function ObjectListHeader(props: Props): JSX.Element {
                     </Tooltip>
                 </Col>
                 <Col span={2}>
-                            <Tooltip title={<a href={`${baseURL}/${linkConsts.OBJECTS}`} target="blank">{t('Expand/collapse all')}</a>} mouseLeaveDelay={0.2}>
+                            <Tooltip title={<a href={`${baseURL}/${linkConsts[lang].OBJECTS}`} target="blank">{t('Expand/collapse all')}</a>} mouseLeaveDelay={0.2}>
                         { statesCollapsed ? (
                                 <Icon type='caret-down' onClick={expandAllStates} />
                             ) : (

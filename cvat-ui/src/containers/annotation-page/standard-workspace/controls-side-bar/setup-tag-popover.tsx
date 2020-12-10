@@ -24,6 +24,7 @@ interface StateToProps {
     jobInstance: any;
     labels: any[];
     frame: number;
+    lang: string;
 }
 
 function mapDispatchToProps(dispatch: any): DispatchToProps {
@@ -47,6 +48,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
             },
         },
         shortcuts: { normalizedKeyMap },
+        lang: { lang },
     } = state;
 
     return {
@@ -55,6 +57,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
         labels,
         frame,
         normalizedKeyMap,
+        lang,
     };
 }
 
@@ -100,7 +103,7 @@ class DrawShapePopoverContainer extends React.PureComponent<Props, State> {
 
     public render(): JSX.Element {
         const { selectedLabelID } = this.state;
-        const { normalizedKeyMap, labels } = this.props;
+        const { normalizedKeyMap, labels, lang } = this.props;
 
         return (
             <SetupTagPopoverComponent
@@ -109,6 +112,7 @@ class DrawShapePopoverContainer extends React.PureComponent<Props, State> {
                 repeatShapeShortcut={normalizedKeyMap.SWITCH_DRAW_MODE}
                 onChangeLabel={this.onChangeLabel}
                 onSetup={this.onSetup}
+                lang={lang}
             />
         );
     }

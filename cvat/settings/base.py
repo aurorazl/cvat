@@ -20,6 +20,7 @@ import fcntl
 import shutil
 import subprocess
 import mimetypes
+import datetime
 mimetypes.add_type("application/wasm", ".wasm", True)
 
 from pathlib import Path
@@ -94,6 +95,12 @@ try:
 except Exception:
     pass
 
+JWT_AUTH = {
+    'JWT_SECRET_KEY': 'Sign key for JWT',
+    'JWT_ALGORITHM': 'HS256',
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+}
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -135,10 +142,12 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'cvat.apps.authentication.auth.TokenAuthentication',
-        'cvat.apps.authentication.auth.SignatureAuthentication',
+        'cvat.apps.authentication.auth.JSONWebTokenAuthentication',
+        # 'cvat.apps.authentication.auth.TokenAuthentication',
+        # 'cvat.apps.authentication.auth.SignatureAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication'
+        'rest_framework.authentication.BasicAuthentication',
+
     ],
     'DEFAULT_VERSIONING_CLASS':
         # Don't try to use URLPathVersioning. It will give you /api/{version}
@@ -318,6 +327,8 @@ CACHEOPS_DEGRADE_ON_FAILURE = True
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = os.getenv('TZ', 'Etc/UTC')
+VIP_MASTER = os.getenv('VIP_MASTER', '127.0.0.1')
+AIART_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjMwMDAwLCJleHAiOjE5MTU2NzExODEsInVzZXJuYW1lIjoiYWRtaW4ifQ.JnyxZ5xOTyQeWFeRMH1badCzxpJ1rc3MF5Wk_eaLgAs"
 
 USE_I18N = True
 
@@ -330,7 +341,7 @@ CSRF_COOKIE_NAME = "csrftoken"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/annotations/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 os.makedirs(STATIC_ROOT, exist_ok=True)
 
@@ -408,6 +419,9 @@ LOGGING = {
             'handlers': ['console', 'server_file'],
             'level': 'INFO',
             'propagate': True
+        },
+        "":{
+          "handlers":[],
         }
     },
 }
@@ -453,3 +467,6 @@ CACHES = {
 
 USE_CACHE = True
 
+USER_MANAGER_CENTER = os.getenv('USER_MANAGER_CENTER', 'http://localhost/custom-user-dashboard-backend')
+
+KFSERVING_GATEWAY = os.getenv('KFSERVING_GATEWAY', "http://localhost")

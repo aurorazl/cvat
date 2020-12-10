@@ -20,13 +20,16 @@ interface VisibleTopBarProps {
     onSearch: (value: string) => void;
     searchValue: string;
 }
+interface Props {
+    lang: string;
+}
 
-function TopBarComponent(props: VisibleTopBarProps & RouteComponentProps): JSX.Element {
+function TopBarComponent(props: VisibleTopBarProps & RouteComponentProps & Props): JSX.Element {
     const { t } = useTranslation();
     const core = getCore();
     const baseURL = core.config.backendAPI.slice(0, -7);
 
-    const { searchValue, history, onSearch } = props;
+    const { searchValue, history, onSearch, lang } = props;
 
     return (
         <>
@@ -39,7 +42,7 @@ function TopBarComponent(props: VisibleTopBarProps & RouteComponentProps): JSX.E
                 <Col md={11} lg={9} xl={8} xxl={7}>
                     <Text className='cvat-title'>{t('Tasks')}</Text>
                     <Input.Search defaultValue={searchValue} onSearch={onSearch} size='large' placeholder={t('Search')}/>
-                    <HelpLink helpLink={`${baseURL}/${linkConsts.SEARCH_URL}`} styles={{marginLeft: 10}}/>
+                    <HelpLink helpLink={`${baseURL}/${linkConsts[lang].SEARCH_URL}`} styles={{marginLeft: 10}}/>
                 </Col>
                 <Col md={{ span: 11 }} lg={{ span: 9 }} xl={{ span: 8 }} xxl={{ span: 7 }}>
                     <Button

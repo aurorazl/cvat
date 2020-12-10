@@ -20,7 +20,7 @@ spec:
       hostNetwork: true
       containers:
         - name: cvat-proxy
-          image: harbor.sigsus.cn:8443/library/nginx:stable-alpine
+          image: harbor.sigsus.cn:8443/sz_gongdianju/nginx:stable-alpine
           imagePullPolicy: Always
           command:
             [

@@ -17,6 +17,7 @@ import settingsReducer from './settings-reducer';
 import shortcutsReducer from './shortcuts-reducer';
 import userAgreementsReducer from './useragreements-reducer';
 import langReducer from './lang-reducer';
+import platformReducer from './platform-reducer';
 
 export default function createRootReducer(): Reducer {
     return combineReducers({
@@ -34,5 +35,6 @@ export default function createRootReducer(): Reducer {
         shortcuts: shortcutsReducer,
         userAgreements: userAgreementsReducer,
         lang: langReducer,
+        platform: platformReducer,
     });
 }

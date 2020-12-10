@@ -212,7 +212,7 @@ function AnnotationsFiltersInput(props: StateToProps & DispatchToProps): JSX.Ele
                 ),
             )}
         </Select>
-        <HelpLink helpLink={`${baseURL}/${linkConsts.FILTER_URL}`} styles={{display:'inline-block', width: '5%', position: 'absolute'}}/>
+        <HelpLink helpLink={`${baseURL}/${linkConsts[lang].FILTER_URL}`} styles={{display:'inline-block', width: '5%', position: 'absolute'}}/>
         </>
     );
 }

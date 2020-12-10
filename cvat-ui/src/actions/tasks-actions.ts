@@ -35,6 +35,9 @@ export enum TasksActionTypes {
     UPDATE_TASK_SUCCESS = 'UPDATE_TASK_SUCCESS',
     UPDATE_TASK_FAILED = 'UPDATE_TASK_FAILED',
     HIDE_EMPTY_TASKS = 'HIDE_EMPTY_TASKS',
+    EXPORT_TO_PLATFORM = 'EXPORT_TO_PLATFORM',
+    EXPORT_TO_PLATFORM_SUCCESS = 'EXPORT_TO_PLATFORM_SUCCESS',
+    EXPORT_TO_PLATFORM_FAILED = 'EXPORT_TO_PLATFORM_FAILED',
 }
 
 function getTasks(): AnyAction {
@@ -410,6 +413,7 @@ export function createTaskAsync(data: any): ThunkAction<Promise<void>, {}, {}, A
         taskInstance.clientFiles = data.files.local;
         taskInstance.serverFiles = data.files.share;
         taskInstance.remoteFiles = data.files.remote;
+        taskInstance.platformFiles = data.files.platform;
 
         if (data.advanced.repository) {
             const [gitPlugin] = (await cvat.plugins.list()).filter((plugin: any): boolean => plugin.name === 'Git');
@@ -523,4 +527,52 @@ export function hideEmptyTasks(hideEmpty: boolean): AnyAction {
     };
 
     return action;
+}
+
+function exportToPlatform(taskId: number): AnyAction {
+    const action = {
+        type: TasksActionTypes.EXPORT_TO_PLATFORM,
+        payload: {
+            taskId,
+        },
+    };
+
+    return action;
+}
+
+function exportToPlatformSuccess(taskId: number): AnyAction {
+    const action = {
+        type: TasksActionTypes.EXPORT_TO_PLATFORM_SUCCESS,
+        payload: {
+            taskId,
+        },
+    };
+
+    return action;
+}
+
+function exportToPlatformFailed(taskId: number, error: any): AnyAction {
+    const action = {
+        type: TasksActionTypes.EXPORT_TO_PLATFORM_FAILED,
+        payload: {
+            taskId,
+            error,
+        },
+    };
+
+    return action;
+}
+
+export function exportToPlatformAsync(taskInstance: any): ThunkAction<Promise<void>, {}, {}, AnyAction> {
+    return async (dispatch: ActionCreator<Dispatch>): Promise<void> => {
+        try {
+            dispatch(exportToPlatform(taskInstance.id));
+            await taskInstance.exportToPlatform();
+        } catch (error) {
+            dispatch(exportToPlatformFailed(taskInstance.id, error));
+            return;
+        }
+
+        dispatch(exportToPlatformSuccess(taskInstance.id));
+    };
 }

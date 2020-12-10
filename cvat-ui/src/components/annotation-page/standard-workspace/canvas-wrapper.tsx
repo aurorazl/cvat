@@ -90,6 +90,7 @@ interface Props extends WithTranslation {
     onSwitchGrid(enabled: boolean): void;
     onSwitchAutomaticBordering(enabled: boolean): void;
     onFetchAnnotation(): void;
+    lang: string;
 }
 
 class CanvasWrapperComponent extends React.PureComponent<Props> {
@@ -711,6 +712,7 @@ class CanvasWrapperComponent extends React.PureComponent<Props> {
             onSwitchGrid,
             onSwitchAutomaticBordering,
             t,
+            lang,
         } = this.props;
 
         const preventDefault = (event: KeyboardEvent | undefined): void => {
@@ -840,7 +842,7 @@ class CanvasWrapperComponent extends React.PureComponent<Props> {
                         defaultValue={0}
                         onChange={(value: SliderValue): void => onSwitchZLayer(value as number)}
                     />
-                    <Tooltip title={<a href={`${baseURL}/${linkConsts.WORKSPACE_URL}`} target="blank">{t('Add new layer ${maxZLayer + 1} and switch to it').replace('${maxZLayer + 1}', `${maxZLayer + 1}`)}</a>} mouseLeaveDelay={0.2}>
+                    <Tooltip title={<a href={`${baseURL}/${linkConsts[lang].WORKSPACE_URL}`} target="blank">{t('Add new layer ${maxZLayer + 1} and switch to it').replace('${maxZLayer + 1}', `${maxZLayer + 1}`)}</a>} mouseLeaveDelay={0.2}>
                         <Icon type='plus-circle' onClick={onAddZLayer} />
                     </Tooltip>
                 </div>

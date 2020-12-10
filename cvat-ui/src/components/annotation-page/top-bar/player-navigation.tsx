@@ -27,6 +27,7 @@ interface Props {
     onSliderChange(value: SliderValue): void;
     onInputChange(value: number): void;
     onURLIconClick(): void;
+    lang: string;
 }
 
 function PlayerNavigation(props: Props): JSX.Element {
@@ -44,6 +45,7 @@ function PlayerNavigation(props: Props): JSX.Element {
         onSliderChange,
         onInputChange,
         onURLIconClick,
+        lang,
     } = props;
 
     const [frameInputValue, setFrameInputValue] = useState<number>(frameNumber);
@@ -82,7 +84,7 @@ function PlayerNavigation(props: Props): JSX.Element {
                 </Row>
             </Col>
             <Col>
-                <Tooltip title={<a href={`${baseURL}/${linkConsts.PLAYER}`} target="blank">{t('Press ${focusFrameInputShortcut} to focus here', {focusFrameInputShortcut: `${focusFrameInputShortcut}`})}</a>} mouseLeaveDelay={0.2}>
+                <Tooltip title={<a href={`${baseURL}/${linkConsts[lang].PLAYER}`} target="blank">{t('Press ${focusFrameInputShortcut} to focus here', {focusFrameInputShortcut: `${focusFrameInputShortcut}`})}</a>} mouseLeaveDelay={0.2}>
                     <InputNumber
                         className='cvat-player-frame-selector'
                         type='number'

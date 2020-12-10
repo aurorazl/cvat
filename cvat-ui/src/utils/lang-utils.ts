@@ -1,7 +1,7 @@
 import i18n from "i18next";
 import { Moment } from 'moment';
 
-const getLanguage = () => i18n.language || window.localStorage.language;
+export const getLanguage = () => i18n.language || window.localStorage.language;
 
 export function isZh(): boolean {
     return getLanguage() === 'zh-CN';

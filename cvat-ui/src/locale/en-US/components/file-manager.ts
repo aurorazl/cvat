@@ -3,6 +3,8 @@ export default {
   'My computer': 'My computer',
   'Connected file share': 'Connected file share',
   'Remote sources': 'Remote sources',
+  'AI Platform': 'AI Platform',
+  'Select a dataset': 'Select a dataset',
   'Enter one URL per line': 'Enter one URL per line',
   'Click or drag files to this area': 'Click or drag files to this area',
   'Support for a bulk images or a single video': 'Support for a bulk images or a single video',

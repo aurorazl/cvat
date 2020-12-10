@@ -230,13 +230,13 @@ function HeaderContainer(props: Props): JSX.Element {
             {/* <Menu.Item onClick={showAboutModal}>
                 <Icon type='info-circle' />
                 {t('About')}
-            </Menu.Item> */}
-            {renderChangePasswordItem && (
+            </Menu.Item>
+            {/* {renderChangePasswordItem && (
                 <Menu.Item onClick={(): void => switchChangePasswordDialog(true)} disabled={changePasswordFetching}>
                     {changePasswordFetching ? <Icon type='loading' /> : <Icon type='edit' />}
                     {t('Change password')}
                 </Menu.Item>
-            )}
+            )} */}
 
             <Menu.Item onClick={onLogout} disabled={logoutFetching}>
                 {logoutFetching ? <Icon type='loading' /> : <Icon type='logout' />}
@@ -332,12 +332,12 @@ function HeaderContainer(props: Props): JSX.Element {
                 <Button
                     className='cvat-header-button'
                     type='link'
-                    href={`${tool.server.host}/documentation/user_guide.html`}
+                    href={`${tool.server.host}/documentation/user_guide.html?language=${lang}`}
                     onClick={(event: React.MouseEvent): void => {
                         event.preventDefault();
                         // false positive
                         // eslint-disable-next-line
-                        window.open(`${tool.server.host}/documentation/user_guide.html`, '_blank');
+                        window.open(`${tool.server.host}/documentation/user_guide.html?language=${lang}`, '_blank');
                     }}
                 >
                     <Icon type='question-circle' />
