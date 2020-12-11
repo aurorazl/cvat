@@ -50,14 +50,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
             </Row>
             <Row type='flex' justify='center' align='middle'>
                 <Col>
-                    { lang === 'zh-CN' ? 
-                        <Text type='secondary'>
-                            请使用 <a href={`${consts.NUCLIO_GUIDE}`}>nuclio</a> 部署模型
-                        </Text> :
-                        <Text type='secondary'>deploy a model with &nbsp;
-                            <a href={`${consts.NUCLIO_GUIDE}`}>nuclio</a>
-                        </Text>
-                    }
+                    <Text type='secondary'>{t('deploy a model with kfserving')}</Text>
                 </Col>
             </Row>
         </div>

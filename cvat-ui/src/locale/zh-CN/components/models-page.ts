@@ -10,5 +10,5 @@ export default {
     // src\components\models-page\empty-list.tsx
     'No models deployed yet...': '尚未部署任何模型...',
     'To annotate your tasks automatically': '为了自动化标注你的任务',
-    'deploy a model with': '部署模型',    
+    'deploy a model with kfserving': '请使用kfserving部署模型',
   }
