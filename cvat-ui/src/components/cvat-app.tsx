@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT
 
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.less';
 import { Col, Row } from 'antd/lib/grid';
 import Layout from 'antd/lib/layout';
 import Modal from 'antd/lib/modal';

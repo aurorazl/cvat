@@ -12,6 +12,7 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const CopyPlugin = require('copy-webpack-plugin');
 const assetsDir = path.resolve(__dirname, 'src/assets');
+const serveriusTheme = require('./src/theme/serverius-theme/index.js');
 
 module.exports = {
     target: 'web',
@@ -93,6 +94,33 @@ module.exports = {
                     },
                     'postcss-loader',
                     'sass-loader',
+                ],
+            },
+            {
+                test: /\.less$/,
+                use: [
+                    'style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 2,
+                        },
+                    },
+                    {
+                        loader: 'less-loader', // compiles Less to CSS
+                        options: {
+                            lessOptions: {
+                                modifyVars: {
+                                    // 'primary-color': '#F60',
+                                    // 'link-color': '#F60',
+                                    // or
+                                    'hack': `true; @import "src/theme/serverius.less";`, // Override with less file
+                                },
+                                // modifyVars: serveriusTheme,
+                                javascriptEnabled: true,
+                            },
+                        }
+                    },
                 ],
             },
             {
