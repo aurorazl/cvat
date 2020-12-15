@@ -323,6 +323,8 @@ function HeaderContainer(props: Props): JSX.Element {
                             if (moment?.locale) {
                                 moment.locale(selected.toLowerCase());
                             }
+
+                            document.title = t('Apulis Data Annotation Platform') as string;
                         }
                     }
                 >
