@@ -210,7 +210,7 @@ function HeaderContainer(props: Props): JSX.Element {
 
     const menu = (
         <Menu className='cvat-header-menu' mode='vertical'>
-            {user.isStaff && (
+            {/* {user.isStaff && (
                 <Menu.Item
                     onClick={(): void => {
                         // false positive
@@ -221,7 +221,7 @@ function HeaderContainer(props: Props): JSX.Element {
                     <Icon type='control' />
                     {t('Admin page')}
                 </Menu.Item>
-            )}
+            )} */}
 
             <Menu.Item title={t('Press ${switchSettingsShortcut} to switch').replace('${switchSettingsShortcut}', `${switchSettingsShortcut}`)} onClick={() => switchSettingsDialog(true)}>
                 <Icon type='setting' />
