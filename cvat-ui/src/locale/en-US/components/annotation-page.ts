@@ -69,6 +69,7 @@ export default {
     'No available interactors found': 'No available interactors found',
     'No available detectors found': 'No available detectors found',
     'Trackers': 'Trackers',
+    'Tracking error occured': 'Tracking error occured',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\color-picker.tsx
     'Select color': 'Select color',

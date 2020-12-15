@@ -69,6 +69,7 @@ export default {
     'No available interactors found': '无可用的辅助标注模型',
     'No available detectors found': '无可用的目标检测模型',
     'Trackers': '目标跟踪',
+    'Tracking error occured': '跟踪发生错误',
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar
     // cvat-ui\src\components\annotation-page\standard-workspace\objects-side-bar\color-picker.tsx
     'Select color': '选择颜色',
