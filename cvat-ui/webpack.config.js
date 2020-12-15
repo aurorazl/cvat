@@ -12,7 +12,7 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const CopyPlugin = require('copy-webpack-plugin');
 const assetsDir = path.resolve(__dirname, 'src/assets');
-const serveriusTheme = require('./src/theme/serverius-theme/index.js');
+// const serveriusTheme = require('./src/theme/serverius-theme/index.js');
 
 module.exports = {
     target: 'web',
