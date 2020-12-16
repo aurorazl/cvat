@@ -27,6 +27,9 @@
     &:hover {
         background-color: $hover-menu-color;
     }
+    .ant-typography {
+        color: #fff;
+    }
 }
 
 .ant-menu-item.cvat-menu-load-submenu-item {
@@ -42,6 +45,9 @@
             height: 100%;
             text-align: left;
         }
+    }
+    .ant-typography {
+        color: #fff;
     }
 }
 

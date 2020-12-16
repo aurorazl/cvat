@@ -153,7 +153,6 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
                             className='cvat-item-open-task-button'
                             type='primary'
                             size='large'
-                            ghost
                             href={`/tasks/${id}`}
                             onClick={(e: React.MouseEvent): void => {
                                 e.preventDefault();
