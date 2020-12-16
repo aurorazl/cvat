@@ -21,6 +21,8 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { transMoment } from 'utils/lang-utils';
 import AutomaticAnnotationProgress from './automatic-annotation-progress';
 
+// import 'theme/customize.less';
+
 export interface TaskItemProps extends WithTranslation {
     taskInstance: any;
     previewImage: string;
