@@ -370,6 +370,7 @@
                         try {
                             const response = await Axios.get(`${url}`, {
                                 proxy: config.proxy,
+                                headers:{ 'Authorization': 'Bearer ' + token }
                             });
                             if (response.status === 202) {
                                 setTimeout(request, 3000);
@@ -724,6 +725,7 @@
                     async function request() {
                         Axios.get(`${url}`, {
                             proxy: config.proxy,
+                            headers:{ 'Authorization': 'Bearer ' + token }
                         })
                             .then((response) => {
                                 if (response.status === 202) {
