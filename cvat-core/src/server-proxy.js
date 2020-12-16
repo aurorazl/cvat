@@ -877,7 +877,10 @@
 
                 let response = null;
                 try {
-                    response = await Axios.get(`${backendAPI}/tasks/${id}/save_to_platform?format=COCO 1.0`);
+                    response = await Axios.get(`${backendAPI}/tasks/${id}/save_to_platform?format=COCO 1.0`, {
+                        proxy: config.proxy,
+                        headers:{ 'Authorization': 'Bearer ' + token },
+                    });
                 } catch (errorData) {
                     throw generateError(errorData);
                 }
