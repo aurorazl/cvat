@@ -28,6 +28,7 @@ import SettingsModal from './settings-modal/settings-modal';
 import { useTranslation } from 'react-i18next';
 import i18n from "i18next";
 import moment from 'moment';
+import { useCookies } from 'react-cookie';
 
 const core = getCore();
 
@@ -152,6 +153,8 @@ function HeaderContainer(props: Props): JSX.Element {
     const { CHANGELOG_URL, LICENSE_URL, GITTER_URL, FORUM_URL, GITHUB_URL } = consts;
 
     const history = useHistory();
+
+    const [cookies, setCookie] = useCookies(['language']);
 
     function showAboutModal(): void {
         Modal.info({
@@ -325,6 +328,8 @@ function HeaderContainer(props: Props): JSX.Element {
                             }
 
                             document.title = t('Apulis Data Annotation Platform') as string;
+
+                            setCookie('language', selected, { path: '/' });
                         }
                     }
                 >
