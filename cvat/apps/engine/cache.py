@@ -50,7 +50,7 @@ class CacheInteraction:
                 images.append(frame)
             extractor.save_as_chunk([(image, source_path, None) for image in images], buff)
         else:
-            with open(db_data.get_dummy_chunk_path(chunk_number), 'r') as dummy_file:
+            with open(db_data.get_dummy_chunk_path(chunk_number), 'r',encoding="utf-8") as dummy_file:
                 images = [os.path.join(db_data.get_upload_dirname(), line.strip()) for line in dummy_file]
             extractor.save_as_chunk([(image, image, None) for image in images], buff)
         buff.seek(0)

@@ -359,8 +359,9 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
         super().perform_destroy(instance)
         shutil.rmtree(task_dirname, ignore_errors=True)
         if instance.data and not instance.data.tasks.all():
-            shutil.rmtree(instance.data.get_data_dirname(), ignore_errors=True)
-            instance.data.delete()
+            pass
+            # shutil.rmtree(instance.data.get_data_dirname(), ignore_errors=True)
+            # instance.data.delete()
 
     @swagger_auto_schema(method='get', operation_summary='Returns a list of jobs for a specific task',
         responses={'200': JobSerializer(many=True)})

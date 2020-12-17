@@ -51,7 +51,8 @@ RUN apt-get update && \
         git-lfs \
         ssh \
         poppler-utils \
-        curl
+        curl \
+        unrar
 
 RUN python3 -m pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/ && \
     python3 -m pip install --no-cache-dir -U pip==20.0.1 setuptools==49.6.0 wheel==0.35.1 && \
@@ -109,4 +110,5 @@ RUN mkdir data share media keys logs /tmp/supervisord
 RUN python3 manage.py collectstatic
 
 EXPOSE 8080 8443
+ENV PYTHONIOENCODING="utf-8"
 ENTRYPOINT ["/usr/bin/supervisord"]
