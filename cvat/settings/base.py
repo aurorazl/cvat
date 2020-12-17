@@ -99,6 +99,7 @@ JWT_AUTH = {
     'JWT_SECRET_KEY': 'Sign key for JWT',
     'JWT_ALGORITHM': 'HS256',
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+    'JWT_AUTH_COOKIE': "token"
 }
 
 INSTALLED_APPS = [
