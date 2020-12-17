@@ -47,16 +47,20 @@
             width: 100%;
             height: 100%;
             text-align: left;
-            > .ant-typography {
-                color: #fff;
-                &:hover {
-                    color: #f60;
-                }        
-            }
+            &:hover {
+                color: #f60;
+            }            
         }
     }
+    // .ant-typography {
+    //     color: #fff;
+    //     &:hover {
+    //         color: #f60;
+    //     }
+    // }
 }
 
 .cvat-menu-icon {
     transform: scale(0.5);
+    // color: #f60;
 }
