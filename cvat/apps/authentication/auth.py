@@ -189,7 +189,7 @@ def is_task_assignee(db_user, db_task):
 
 @rules.predicate
 def is_task_annotator(db_user, db_task):
-    db_segments = list(db_task.segment_set.prefetch_related('job_set__assignee').all())
+    db_segments = list(db_task.segment_set.prefetch_related('job_set').all())
     return any([is_job_annotator(db_user, db_job)
         for db_segment in db_segments for db_job in db_segment.job_set.all()])
 

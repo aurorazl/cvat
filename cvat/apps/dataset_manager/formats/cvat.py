@@ -525,7 +525,7 @@ def load(file_object, annotations):
 
 def _export(dst_file, task_data, anno_callback, save_images=False):
     with TemporaryDirectory() as temp_dir:
-        with open(osp.join(temp_dir, 'annotations.xml'), 'wb') as f:
+        with open(osp.join(temp_dir, 'annotations.xml'), 'wb',encoding="utf-8") as f:
             anno_callback(f, task_data)
 
         if save_images:

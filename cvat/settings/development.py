@@ -23,7 +23,7 @@ SENDFILE_BACKEND = 'sendfile.backends.development'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3.v020'),
     },
     'postgres': {
         'ENGINE': 'django.db.backends.postgresql',
