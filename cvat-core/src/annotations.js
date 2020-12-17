@@ -284,7 +284,6 @@
         }
 
         let result = null;
-        debugger
         result = await serverProxy.tasks.exportDataset(session.id, format);
 
         return result;

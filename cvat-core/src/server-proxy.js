@@ -222,13 +222,10 @@
             }
 
             function loginWithToken(token) {
-                // Axios.defaults.headers.common.Authorization = '';
                 Axios.defaults.headers.common.Authorization = `Bearer ${token}`;
                 store.set('token', token);
                 const language = store.get('language') || 'zh-CN';
                 const cookies = `token=${token};language=${language}`;
-                console.log(666, cookies)
-                debugger
                 Axios.defaults.headers.common.Cookie = cookies;
             }
 
@@ -371,14 +368,11 @@
                 console.log(666, id, format)
                 const { backendAPI } = config;
                 let url = `${backendAPI}/tasks/${id}/dataset?format=${format}`;
-debugger
-console.log(111, token)
+
                 return new Promise((resolve, reject) => {
-                    console.log(222, token)
-                    debugger
+
                     async function request() {
-                        console.log(333, token)
-                        debugger
+
                         try {
                             const response = await Axios.get(`${url}`, {
                                 proxy: config.proxy,
