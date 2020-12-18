@@ -10,6 +10,7 @@
     const DownloadWorker = require('./download.worker');
     const i18next = require('i18next').default;
     const userTrans = require('./utils/userTrans');
+    const Cookies = require('js-cookie');
 
     function generateError(errorData) {
         if (errorData.response) {
@@ -227,6 +228,10 @@
                 const language = store.get('language') || 'zh-CN';
                 const cookies = `token=${token};language=${language}`;
                 Axios.defaults.headers.common.Cookie = cookies;
+
+                //写入Cookies
+                Cookies.set('token', token, { expires: 7 });
+                Cookies.set('language', language);
             }
 
             async function logout() {
