@@ -226,24 +226,26 @@ class LabelsEditor extends React.PureComponent<LabelsEditortProps & WithTranslat
                 }
             >
                 <Tabs.TabPane
-                    tab={
-                        <span>
-                            <Icon type='edit' />
-                            <Text>{t('Raw')}</Text>
-                        </span>
-                    }
+                    // tab={
+                    //     <span>
+                    //         <Icon type='edit' />
+                    //         <Text>{t('Raw')}</Text>
+                    //     </span>
+                    // }
+                    tab={t('Raw')}
                     key='1'
                 >
                     <RawViewer labels={[...savedLabels, ...unsavedLabels]} onSubmit={this.handleRawSubmit} />
                 </Tabs.TabPane>
 
                 <Tabs.TabPane
-                    tab={
-                        <span>
-                            <Icon type='build' />
-                            <Text>{t('Constructor')}</Text>
-                        </span>
-                    }
+                    // tab={
+                    //     <span>
+                    //         <Icon type='build' />
+                    //         <Text>{t('Constructor')}</Text>
+                    //     </span>
+                    // }
+                    tab={t('Constructor')}
                     key='2'
                 >
                     {constructorMode === ConstructorMode.SHOW && (

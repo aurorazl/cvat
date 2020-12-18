@@ -103,7 +103,7 @@ class RawViewer extends React.PureComponent<Props & WithTranslation> {
                     <Col offset={1}>
                         <Tooltip title={t('Do not save the label')} mouseLeaveDelay={0}>
                             <Button
-                                style={{ width: '150px' }}
+                                style={{ width: '150px', backgroundColor: '#C75757' }}
                                 type='danger'
                                 onClick={(): void => {
                                     form.resetFields();

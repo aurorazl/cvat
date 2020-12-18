@@ -242,7 +242,7 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
 
                 <Col span={18}>{loading ? <Alert message={status} /> : null}</Col>
                 <Col span={6}>
-                    <Button loading={loading} disabled={loading} type='primary'onClick={this.handleSubmitClick}>
+                    <Button loading={loading} disabled={loading} type='primary'onClick={this.handleSubmitClick} className='cvat-create-task-submit'>
                         {t('Submit')}
                     </Button>
                 </Col>

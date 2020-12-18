@@ -35,4 +35,13 @@
             width: 120px;
         }
     }
+
+    .cvat-create-task-submit {
+        border-color: #000A28;
+        border-width: 1px;
+        background-color: #FF7519;
+        &:hover {
+            background: #f60;
+        }
+    }
 }
