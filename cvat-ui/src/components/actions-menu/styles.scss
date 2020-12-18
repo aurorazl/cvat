@@ -62,5 +62,11 @@
 
 .cvat-menu-icon {
     transform: scale(0.5);
-    // color: #f60;
+    path {
+        fill: currentColor;
+    }
+    color: #485966;
+    &:hover {
+        color: #f60;
+    }
 }
