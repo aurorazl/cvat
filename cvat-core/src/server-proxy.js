@@ -230,7 +230,7 @@
                 Axios.defaults.headers.common.Cookie = cookies;
 
                 //写入Cookies
-                Cookies.set('token', token, { expires: 7 });
+                Cookies.set('token', token);
                 Cookies.set('language', language);
             }
 
