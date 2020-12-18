@@ -111,12 +111,12 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
     return (
         <>
         <Menu selectable={false} className='cvat-actions-menu' onClick={onClickMenuWrapper}>
-            {/* {DumpSubmenu({
+            {DumpSubmenu({
                 taskMode,
                 dumpers,
                 dumpActivities,
                 menuKey: Actions.DUMP_TASK_ANNO,
-            })} */}
+            })}
             {LoadSubmenu({
                 loaders,
                 loadActivity,
@@ -125,18 +125,18 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
                 },
                 menuKey: Actions.LOAD_TASK_ANNO,
             })}
-            {/* {ExportSubmenu({
+            {ExportSubmenu({
                 exporters: dumpers,
                 exportActivities,
                 menuKey: Actions.EXPORT_TASK_DATASET,
-            })} */}
+            })}
             {/* {PushSubmenu({
                 taskMode,
                 dumpers,
                 dumpActivities,
                 menuKey: Actions.EXPORT_TO_PLATFORM,
             })} */}
-            {/* {!!bugTracker && <Menu.Item key={Actions.OPEN_BUG_TRACKER}>{t('Open bug tracker')}</Menu.Item>}
+            {!!bugTracker && <Menu.Item key={Actions.OPEN_BUG_TRACKER}>{t('Open bug tracker')}</Menu.Item>}
             <Menu.Item disabled={inferenceIsActive} key={Actions.RUN_AUTO_ANNOTATION}>
                 <Tooltip title={<a href={`${baseURL}/${linkConsts[lang].AUTOMATIC_ANNOTATION_URL}`} target="blank">{t('View Help')}</a>} placement='left' mouseLeaveDelay={0.2}>
                     {t('Automatic annotation')}
@@ -144,7 +144,7 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
             </Menu.Item>
             <Menu.Item key={Actions.EXPORT_TO_PLATFORM}>{t('Push to AI platform')}</Menu.Item>
             <hr />
-            <Menu.Item key={Actions.DELETE_TASK}>{t('Delete')}</Menu.Item> */}
+            <Menu.Item key={Actions.DELETE_TASK}>{t('Delete')}</Menu.Item>
         </Menu>
             {pushActivity && pushActivity['status'] === 'PUSHED' ? (
                 notification.success({

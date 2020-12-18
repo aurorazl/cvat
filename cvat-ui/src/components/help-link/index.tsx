@@ -18,7 +18,7 @@ export default function HelpLinkComponent(props: Props): JSX.Element {
         <div className= "cvat-help-link" style={{...styles}} onClick={(): void => {
             window.open(`${helpLink}`, '_blank');
         }}>
-            <Icon type='question-circle' />
+            <Icon type='question-circle' theme="filled" style={{color:'#17A2B8'}}/>
         </div>
     );
 }
