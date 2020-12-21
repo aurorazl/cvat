@@ -11,6 +11,8 @@ import subprocess
 import os
 
 from django.core.exceptions import ValidationError
+from django.conf import settings
+from django.utils import translation
 
 Import = namedtuple("Import", ["module", "name", "alias"])
 
@@ -74,3 +76,12 @@ def av_scan_paths(*paths):
         res = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if res.returncode:
             raise ValidationError(res.stdout)
+
+def setup_language_for_uid_on_thread(uid):
+    user_language = settings.GLOBAL_LANGUAGE_CACHE.get(uid)
+    if user_language:
+        translation.activate(user_language)
+
+def setup_language(user_language):
+    if user_language:
+        translation.activate(user_language)

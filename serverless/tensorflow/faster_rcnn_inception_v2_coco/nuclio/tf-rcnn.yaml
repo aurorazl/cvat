@@ -99,13 +99,16 @@ spec:
   default:
     predictor:
       minReplicas: 1
+      maxReplicas: 1
       custom:
-        resource:
+        resources:
           limits:
             memory: 5G
+            nvidia.com/gpu: 0
           requests:
             cpu: 100m
+            nvidia.com/gpu: 0
         container:
           name: kfserving-container
-          image: harbor.sigsus.cn:8443/sz_gongdianju/apulistech/tf.faster_rcnn_inception_v2_coco
+          image: harbor.sigsus.cn:8443/library/apulistech/tf.faster_rcnn_inception_v2_coco
           args: ['--model_name=tf-faster-rcnn-inception-v2-coco']

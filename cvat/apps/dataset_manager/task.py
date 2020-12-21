@@ -2,7 +2,7 @@
 # Copyright (C) 2019-2020 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
-
+import os
 from collections import OrderedDict
 from enum import Enum
 
@@ -17,7 +17,7 @@ from cvat.apps.profiler import silk_profile
 from .annotation import AnnotationIR, AnnotationManager
 from .bindings import TaskData
 from .formats.registry import make_exporter, make_importer
-
+from cvat.apps.engine.utils import setup_language
 
 class dotdict(OrderedDict):
     """dot.notation access to dictionary attributes"""
@@ -748,19 +748,26 @@ def export_task(task_id, dst_file, format_name,
         task.export(f, exporter, host=server_url, save_images=save_images)
 
 @transaction.atomic
-def import_task_annotations(task_id, src_file, format_name):
+def import_task_annotations(task_id, src_file, format_name,language):
+    setup_language(language)
     task = TaskAnnotation(task_id)
     task.init_from_db()
 
     importer = make_importer(format_name)
+    split_result = src_file.split("cvat_")
+    if len(split_result) == 2:
+        src_file = os.path.join(settings.BASE_DIR, "tmp", "cvat_" + split_result[1])
     with open(src_file, 'rb') as f:
         task.import_annotations(f, importer)
 
 @transaction.atomic
-def import_job_annotations(job_id, src_file, format_name):
+def import_job_annotations(job_id, src_file, format_name,language):
+    setup_language(language)
     job = JobAnnotation(job_id)
     job.init_from_db()
-
     importer = make_importer(format_name)
+    split_result = src_file.split("cvat_")
+    if len(split_result)==2:
+        src_file = os.path.join(settings.BASE_DIR,"tmp","cvat_"+split_result[1])
     with open(src_file, 'rb') as f:
         job.import_annotations(f, importer)

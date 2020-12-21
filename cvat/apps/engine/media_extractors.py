@@ -19,6 +19,7 @@ from PIL import Image, ImageFile
 import filetype
 
 from cvat.apps.engine import DirectoryUtils
+from django.utils.translation import gettext
 
 # fixes: "OSError:broken data stream" when executing line 72 while loading images downloaded from the web
 # see: https://stackoverflow.com/questions/42462431/oserror-broken-data-stream-when-reading-image-file
@@ -83,7 +84,7 @@ class IMediaReader(ABC):
 class ImageListReader(IMediaReader):
     def __init__(self, source_path, step=1, start=0, stop=None):
         if not source_path:
-            raise Exception('No image found')
+            raise Exception(gettext('No image found'))
 
         if stop is None:
             stop = len(source_path)
@@ -150,7 +151,7 @@ class ArchiveReader(DirectoryReader):
 class PdfReader(ImageListReader):
     def __init__(self, source_path, step=1, start=0, stop=None):
         if not source_path:
-            raise Exception('No PDF found')
+            raise Exception(gettext('No PDF found'))
 
         self._pdf_source = source_path[0]
 
@@ -184,8 +185,7 @@ class ZipReader(ImageListReader):
         self._zip_source = zipfile.ZipFile(source_path[0], mode='r')
         exctract_path = "./{}-{}".format(str(time.time()),random.randint(1,1111))
         self._zip_source.extractall(path=exctract_path)
-        with DirectoryUtils.cd(exctract_path):
-            file_list = [f for f in self._zip_source.namelist() if get_mime(os.path.join(exctract_path,f)) == 'image']
+        file_list = [f for f in self._zip_source.namelist() if get_mime(os.path.join(exctract_path,f)) == 'image']
         super().__init__(file_list, step, start, stop)
 
     def __del__(self):
@@ -342,7 +342,7 @@ class Mpeg4ChunkWriter(IChunkWriter):
 
     def save_as_chunk(self, images, chunk_path):
         if not images:
-            raise Exception('no images to save')
+            raise Exception(gettext('no images to save'))
 
         input_w = images[0][0].width
         input_h = images[0][0].height
@@ -385,7 +385,7 @@ class Mpeg4CompressedChunkWriter(Mpeg4ChunkWriter):
 
     def save_as_chunk(self, images, chunk_path):
         if not images:
-            raise Exception('no images to save')
+            raise Exception(gettext('no images to save'))
 
         input_w = images[0][0].width
         input_h = images[0][0].height

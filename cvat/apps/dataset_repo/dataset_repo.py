@@ -30,9 +30,7 @@ def _have_no_access_exception(ex):
             stdout = subprocess.PIPE).stdout.decode('utf-8').split('\n')
         keys = list(filter(len, list(map(lambda x: x.strip(), keys))))
         raise Exception(
-            'Could not connect to the remote repository. ' +
-            'Please make sure you have the correct access rights and the repository exists. ' +
-            'Available public keys are: ' + str(keys)
+            gettext('Could not connect to the remote repository. Please make sure you have the correct access rights and the repository exists. Available public keys are: ') + str(keys)
         )
     else:
         raise ex
@@ -97,7 +95,7 @@ class Git:
                 host = ssh_match.group(2)
                 repos = "{}{}".format(ssh_match.group(3), ssh_match.group(4))
             else:
-                raise Exception("Git repository URL does not satisfy pattern")
+                raise Exception(gettext("Git repository URL does not satisfy pattern"))
 
             if not repos.endswith(".git"):
                 repos += ".git"
@@ -111,7 +109,7 @@ class Git:
     # Method creates the main branch if repostory doesn't have any branches
     def _create_master_branch(self):
         if len(self._rep.heads):
-            raise Exception("Some heads already exists")
+            raise Exception(gettext("Some heads already exists"))
         readme_md_name = os.path.join(self._cwd, "README.md")
         with open(readme_md_name, "w"):
             pass
@@ -225,7 +223,7 @@ class Git:
                 raise git.exc.GitError("Actual and saved repository URLs aren't match")
         except git.exc.GitError:
             if wo_remote:
-                raise Exception('Local repository is failed')
+                raise Exception(gettext('Local repository is failed'))
             slogger.task[self._tid].info("Local repository initialization..")
             shutil.rmtree(self._cwd, True)
             self._clone()
@@ -291,7 +289,7 @@ class Git:
                         break
             os.remove(dump_name)
         else:
-            raise Exception("Got unknown annotation file type")
+            raise Exception(gettext("Got unknown annotation file type"))
 
         self._rep.git.add(self._annotation_file)
 
@@ -371,7 +369,7 @@ def initial_create(tid, git_path, lfs, user):
         path = path[1:]
         _split = os.path.splitext(path)
         if len(_split) < 2 or _split[1] not in [".xml", ".zip"]:
-            raise Exception("Only .xml and .zip formats are supported")
+            raise Exception(gettext("Only .xml and .zip formats are supported"))
 
         db_git = GitData()
         db_git.url = git_path

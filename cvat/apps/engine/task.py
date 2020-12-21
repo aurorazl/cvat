@@ -17,8 +17,9 @@ from urllib import request as urlrequest
 
 from cvat.apps.engine.media_extractors import get_mime, MEDIA_TYPES, Mpeg4ChunkWriter, ZipChunkWriter, Mpeg4CompressedChunkWriter, ZipCompressedChunkWriter
 from cvat.apps.engine.models import DataChoice, StorageMethodChoice
-from cvat.apps.engine.utils import av_scan_paths
+from cvat.apps.engine.utils import av_scan_paths,setup_language
 from cvat.apps.engine.prepare import prepare_meta
+from django.utils.translation import gettext
 
 import django_rq
 from django.conf import settings
@@ -30,10 +31,10 @@ from .log import slogger
 
 ############################# Low Level server API
 
-def create(tid, data):
+def create(tid, data,language):
     """Schedule the task"""
     q = django_rq.get_queue('default')
-    q.enqueue_call(func=_create_thread, args=(tid, data),
+    q.enqueue_call(func=_create_thread, args=(tid, data,language),
         job_id="/api/v1/tasks/{}".format(tid))
 
 @transaction.atomic
@@ -53,7 +54,7 @@ def rq_handler(job, exc_type, exc_value, traceback):
 
 def _copy_data_from_share(server_files, upload_dir):
     job = rq.get_current_job()
-    job.meta['status'] = 'Data are being copied from share..'
+    job.meta['status'] = gettext('Data are being copied from share..')
     job.save_meta()
 
     for path in server_files:
@@ -69,7 +70,7 @@ def _copy_data_from_share(server_files, upload_dir):
 
 def _copy_data_for_full_path_files(platform_files,upload_dir):
     job = rq.get_current_job()
-    job.meta['status'] = 'Data are being copied from share..'
+    job.meta['status'] = gettext('Data are being copied from share..')
     job.save_meta()
 
     for path in platform_files:
@@ -84,7 +85,7 @@ def _copy_data_for_full_path_files(platform_files,upload_dir):
 
 def _save_task_to_db(db_task):
     job = rq.get_current_job()
-    job.meta['status'] = 'Task is being saved in database'
+    job.meta['status'] = gettext('Task is being saved in database')
     job.save_meta()
 
     segment_size = db_task.segment_size
@@ -198,7 +199,7 @@ def _validate_data(counter, meta_info_file=None):
                 multiple_entries += len(counter[media_type])
 
             if meta_info_file and media_type != 'video':
-                raise Exception('File with meta information can only be uploaded with video file')
+                raise Exception(gettext('File with meta information can only be uploaded with video file'))
 
     if unique_entries == 1 and multiple_entries > 0 or unique_entries > 1:
         unique_types = ', '.join([k for k, v in MEDIA_TYPES.items() if v['unique']])
@@ -213,7 +214,7 @@ def _validate_data(counter, meta_info_file=None):
     task_modes = [MEDIA_TYPES[media_type]['mode'] for media_type, media_files in counter.items() if media_files]
 
     if not all(mode == task_modes[0] for mode in task_modes):
-        raise Exception('Could not combine different task modes for data')
+        raise Exception(gettext('Could not combine different task modes for data'))
 
     return counter, task_modes[0]
 
@@ -223,9 +224,9 @@ def _download_data(urls, upload_dir):
     for url in urls:
         name = os.path.basename(urlrequest.url2pathname(urlparse.urlparse(url).path))
         if name in local_files:
-            raise Exception("filename collision: {}".format(name))
+            raise Exception(gettext("filename collision: {}").format(name))
         slogger.glob.info("Downloading: {}".format(url))
-        job.meta['status'] = '{} is being downloaded..'.format(url)
+        job.meta['status'] = gettext('{} is being downloaded..').format(url)
         job.save_meta()
 
         req = urlrequest.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
@@ -237,19 +238,18 @@ def _download_data(urls, upload_dir):
                         break
                     tfp.write(block)
         except urlerror.HTTPError as err:
-            raise Exception("Failed to download " + url + ". " + str(err.code) + ' - ' + err.reason)
+            raise Exception(gettext("Failed to download ") + url + ". " + str(err.code) + ' - ' + err.reason)
         except urlerror.URLError as err:
-            raise Exception("Invalid URL: " + url + ". " + err.reason)
+            raise Exception(gettext("Invalid URL: ") + url + ". " + err.reason)
 
         local_files[name] = True
     return list(local_files.keys())
 
 @transaction.atomic
-def _create_thread(tid, data):
+def _create_thread(tid, data,language):
     slogger.glob.info("create task #{}".format(tid))
     slogger.glob.info("create task #{}".format(data))
-    import logging
-    logging.error([111,tid])
+    setup_language(language)
     db_task = models.Task.objects.select_for_update().get(pk=tid)
     db_data = db_task.data
     if db_task.data.size != 0:
@@ -276,7 +276,7 @@ def _create_thread(tid, data):
     av_scan_paths(upload_dir)
 
     job = rq.get_current_job()
-    job.meta['status'] = 'Media files are being extracted...'
+    job.meta['status'] = gettext('Media files are being extracted...')
     job.save_meta()
 
     db_images = []
@@ -285,7 +285,7 @@ def _create_thread(tid, data):
     for media_type, media_files in media.items():
         if media_files:
             if extractor is not None:
-                raise Exception('Combined data types are not supported')
+                raise Exception(gettext('Combined data types are not supported'))
             extractor = MEDIA_TYPES[media_type]['extractor'](
                 source_path=[os.path.join(upload_dir, f) for f in media_files],
                 step=db_data.get_frame_step(),
@@ -303,7 +303,7 @@ def _create_thread(tid, data):
         if not hasattr(update_progress, 'call_counter'):
             update_progress.call_counter = 0
 
-        status_template = 'Images are being compressed {}'
+        status_template = gettext('Images are being compressed {}')
         if progress:
             current_progress = '{}%'.format(round(progress * 100))
         else:
@@ -355,7 +355,7 @@ def _create_thread(tid, data):
                         except Exception as ex:
                             base_msg = str(ex) if isinstance(ex, AssertionError) else \
                                 'Invalid meta information was upload.'
-                            job.meta['status'] = '{} Start prepare valid meta information.'.format(base_msg)
+                            job.meta['status'] = gettext('{} Start prepare valid meta information.').format(base_msg)
                             job.save_meta()
                             meta_info, smooth_decoding = prepare_meta(
                                 media_file=media_files[0],
@@ -381,7 +381,7 @@ def _create_thread(tid, data):
                     if os.path.exists(db_data.get_meta_path()):
                         os.remove(db_data.get_meta_path())
                     base_msg = str(ex) if isinstance(ex, AssertionError) else "Uploaded video does not support a quick way of task creating."
-                    job.meta['status'] = "{} The task will be created using the old method".format(base_msg)
+                    job.meta['status'] = gettext("{} The task will be created using the old method").format(base_msg)
                     job.save_meta()
             else:#images,archive
                 db_data.size = len(extractor)

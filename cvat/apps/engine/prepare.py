@@ -6,11 +6,12 @@ import av
 from collections import OrderedDict
 import hashlib
 import os
+from django.utils.translation import gettext
 
 class WorkWithVideo:
     def __init__(self, **kwargs):
         if not kwargs.get('source_path'):
-            raise Exception('No sourse path')
+            raise Exception(gettext('No sourse path'))
         self.source_path = kwargs.get('source_path')
 
     def _open_video_container(self, sourse_path, mode, options=None):
@@ -47,11 +48,11 @@ class AnalyzeVideo(WorkWithVideo):
 
                 if None not in [frame.pts, frame_pts] and frame.pts <= frame_pts:
                     self._close_video_container(container)
-                    raise Exception('Invalid pts sequences')
+                    raise Exception(gettext('Invalid pts sequences'))
 
                 if None not in [frame.dts, frame_dts] and frame.dts <= frame_dts:
                     self._close_video_container(container)
-                    raise Exception('Invalid dts sequences')
+                    raise Exception(gettext('Invalid dts sequences'))
 
                 frame_pts, frame_dts = frame.pts, frame.dts
         self._close_video_container(container)
@@ -65,7 +66,7 @@ class PrepareInfo(WorkWithVideo):
         super().__init__(**kwargs)
 
         if not kwargs.get('meta_path'):
-            raise Exception('No meta path')
+            raise Exception(gettext('No meta path'))
 
         self.meta_path = kwargs.get('meta_path')
         self.key_frames = {}

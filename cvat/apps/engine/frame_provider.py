@@ -119,7 +119,7 @@ class FrameProvider:
     def _validate_frame_number(self, frame_number):
         frame_number_ = int(frame_number)
         if frame_number_ < 0 or frame_number_ >= self._db_data.size:
-            raise Exception('Incorrect requested frame number: {}'.format(frame_number_))
+            raise Exception(gettext('Incorrect requested frame number: {}').format(frame_number_))
 
         chunk_number = frame_number_ // self._db_data.chunk_size
         frame_offset = frame_number_ % self._db_data.chunk_size
@@ -129,7 +129,7 @@ class FrameProvider:
     def _validate_chunk_number(self, chunk_number):
         chunk_number_ = int(chunk_number)
         if chunk_number_ < 0 or chunk_number_ >= math.ceil(self._db_data.size / self._db_data.chunk_size):
-            raise Exception('requested chunk does not exist')
+            raise Exception(gettext('requested chunk does not exist'))
 
         return chunk_number_
 
@@ -139,7 +139,7 @@ class FrameProvider:
         image = av_frame.to_ndarray(format='bgr24')
         success, result = cv2.imencode(ext, image)
         if not success:
-            raise Exception("Failed to encode image to '%s' format" % (ext))
+            raise Exception(gettext("Failed to encode image to '%s' format") % (ext))
         return BytesIO(result.tobytes())
 
     def _convert_frame(self, frame, reader_class, out_type):
@@ -156,7 +156,7 @@ class FrameProvider:
                     image[:, :, :3] = image[:, :, 2::-1] # RGB to BGR
             return image
         else:
-            raise Exception('unsupported output type')
+            raise Exception(gettext('unsupported output type'))
 
     def get_preview(self):
         return self._db_data.get_preview_path()

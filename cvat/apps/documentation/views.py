@@ -8,15 +8,13 @@ import os
 
 def UserGuideView(request):
     module_dir = os.path.dirname(__file__)
-    language = request.GET.get('language',"en-US")
-    if language == "zh-CN":
+    language = request.GET.get('language') or request.COOKIES.get('language') or "en-US"
+    if language == "zh-CN" or language.startswith("zh"):
         doc_path = os.path.join(module_dir, 'user_guide_zh.md')
-        title = "依瞳数据标注平台-用户帮助手册"
     else:
         doc_path = os.path.join(module_dir, 'user_guide.md')
-        title = "ADAP User Guide"
     return render(request, 'documentation/user_guide.html',
-        context={"user_guide": open(doc_path, "r",encoding="utf-8").read(),"title":title})
+        context={"user_guide": open(doc_path, "r",encoding="utf-8").read()})
 
 def XmlFormatView(request):
     module_dir = os.path.dirname(__file__)

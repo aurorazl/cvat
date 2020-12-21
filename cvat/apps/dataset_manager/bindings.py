@@ -14,6 +14,7 @@ from cvat.apps.engine.frame_provider import FrameProvider
 from cvat.apps.engine.models import AttributeType, ShapeType
 from datumaro.util import cast
 from datumaro.util.image import ByteImage, Image
+from django.utils.translation import gettext
 
 from .annotation import AnnotationManager, TrackManager
 
@@ -344,7 +345,7 @@ class TaskData:
                     else:
                         raise ValueError("Unexpected attribute value")
             except Exception as e:
-                raise Exception("Failed to convert attribute '%s'='%s': %s" %
+                raise Exception(gettext("Failed to convert attribute '%s'='%s': %s") %
                     (self._get_label_name(label_id), value, e))
 
         return { 'spec_id': spec_id, 'value': value }
@@ -546,7 +547,7 @@ class CvatTaskDataExtractor(datumaro.SourceExtractor):
                     dm_attr[a_name] = a_value
                 except Exception as e:
                     raise Exception(
-                        "Failed to convert attribute '%s'='%s': %s" %
+                        gettext("Failed to convert attribute '%s'='%s': %s") %
                         (a_name, a_value, e))
             return dm_attr
 
@@ -590,7 +591,7 @@ class CvatTaskDataExtractor(datumaro.SourceExtractor):
             elif shape_obj.type == ShapeType.CUBOID:
                 continue # Datumaro does not support cuboids
             else:
-                raise Exception("Unknown shape type '%s'" % shape_obj.type)
+                raise Exception(gettext("Unknown shape type '%s'") % shape_obj.type)
 
             item_anno.append(anno)
 
@@ -610,7 +611,7 @@ def match_dm_item(item, task_data, root_hint=None):
         frame_number = cast(osp.basename(item.id)[len('frame_'):], int)
 
     if not frame_number in task_data.frame_info:
-        raise Exception("Could not match item id: '%s' with any task frame" %
+        raise Exception(gettext("Could not match item id: '%s' with any task frame") %
             item.id)
     return frame_number
 

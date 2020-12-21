@@ -21,10 +21,11 @@ import shutil
 import subprocess
 import mimetypes
 import datetime
+
 mimetypes.add_type("application/wasm", ".wasm", True)
 
 from pathlib import Path
-
+from django.utils.translation import gettext_lazy as _
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = str(Path(__file__).parents[2])
 
@@ -189,6 +190,7 @@ if os.getenv('DJANGO_LOG_VIEWER_HOST'):
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -199,6 +201,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'dj_pagination.middleware.PaginationMiddleware',
 ]
+
+LANGUAGES = [
+    ('zh-CN', _('简体中文')),
+    ('en-US', _('English')),
+]
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR,"locale"),
+)
+LANGUAGE_COOKIE_NAME = "language"
 
 UI_URL = ''
 
