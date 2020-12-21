@@ -3,19 +3,19 @@
 # SPDX-License-Identifier: MIT
 
 from functools import update_wrapper
-
+from django.utils.translation import gettext
 __plugins = {}
 
 
 def add_plugin(name, function, order, exc_ok = False):
     if order not in ["before", "after"]:
-        raise Exception("Order may be 'before' or 'after' only. Got {}.".format(order))
+        raise Exception(gettext("Order may be 'before' or 'after' only. Got {}.").format(order))
 
     if not callable(function):
-        raise Exception("'function' argument should be a callable element")
+        raise Exception(gettext("'function' argument should be a callable element"))
 
     if not isinstance(name, str):
-        raise Exception("'name' argument should be a string. Got {}.".format(type(name)))
+        raise Exception(gettext("'name' argument should be a string. Got {}.").format(type(name)))
 
     if name not in __plugins:
         __plugins[name] = {
@@ -24,7 +24,7 @@ def add_plugin(name, function, order, exc_ok = False):
         }
 
     if function in __plugins[name][order]:
-        raise Exception("plugin has been attached already")
+        raise Exception(gettext("plugin has been attached already"))
 
     __plugins[name][order].append(function)
 

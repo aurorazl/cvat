@@ -19,7 +19,8 @@ from datumaro.util import to_snake_case
 from .formats.registry import EXPORT_FORMATS, IMPORT_FORMATS
 from .util import current_function_name
 from cvat.apps.dataset_manager.util import unzip_archive
-
+from django.utils.translation import gettext
+from cvat.apps.engine.utils import setup_language
 
 _MODULE_NAME = __package__ + '.' + osp.splitext(osp.basename(__file__))[0]
 def log_exception(logger=None, exc_info=True):
@@ -35,13 +36,15 @@ def get_export_cache_dir(db_task):
     if osp.isdir(task_dir):
         return osp.join(task_dir, 'export_cache')
     else:
-        raise Exception('Task dir {} does not exist'.format(task_dir))
+        raise Exception(gettext('Task dir {} does not exist').format(task_dir))
 
 DEFAULT_CACHE_TTL = timedelta(hours=10)
 CACHE_TTL = DEFAULT_CACHE_TTL
 
 
-def export_task(task_id, dst_format, server_url=None, save_images=False):
+def export_task(task_id, dst_format, server_url=None, save_images=False,language=None):
+    if language:
+        setup_language(language)
     try:
         db_task = Task.objects.get(pk=task_id)
 
@@ -81,13 +84,15 @@ def export_task(task_id, dst_format, server_url=None, save_images=False):
         log_exception(slogger.task[task_id])
         raise
 
-def export_task_as_dataset(task_id, dst_format=None, server_url=None):
-    return export_task(task_id, dst_format, server_url=server_url, save_images=True)
+def export_task_as_dataset(task_id, dst_format=None, server_url=None,language=None):
+    return export_task(task_id, dst_format, server_url=server_url, save_images=True,language=language)
 
-def export_task_annotations(task_id, dst_format=None, server_url=None):
-    return export_task(task_id, dst_format, server_url=server_url, save_images=False)
+def export_task_annotations(task_id, dst_format=None, server_url=None,language=None):
+    return export_task(task_id, dst_format, server_url=server_url, save_images=False,language=language)
 
-def export_task_annotations_to_platform(task_id, dst_format=None, server_url=None):
+def export_task_annotations_to_platform(task_id, dst_format=None, server_url=None,language=None):
+    if language:
+        setup_language(language)
     path = export_task(task_id, dst_format, server_url=server_url, save_images=False)
     db_task = Task.objects.get(pk=task_id)
     save_path = os.path.join(db_task.data.get_export_to_platform_dirname(),"format_{}".format(dst_format.lower().split(" ")[0]))

@@ -6,6 +6,7 @@ import os
 import logging
 from cvat.settings.base import LOGGING
 from .models import Job, Task
+from django.utils.translation import gettext
 
 def _get_task(tid):
     try:

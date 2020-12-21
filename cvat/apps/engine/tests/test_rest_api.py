@@ -3356,7 +3356,7 @@ class TaskAnnotationAPITestCase(JobAnnotationAPITestCase):
                 annotations["tags"] = tags_with_attrs + tags_wo_attrs
 
             else:
-                raise Exception("Unknown format {}".format(annotation_format))
+                raise Exception(gettext("Unknown format {}").format(annotation_format))
 
             return annotations
 

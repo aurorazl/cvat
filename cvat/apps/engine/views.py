@@ -410,7 +410,7 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
             # the value specified by the user or it's default value from the database
             if 'stop_frame' not in serializer.validated_data:
                 data['stop_frame'] = None
-            task.create(db_task.id, data)
+            task.create(db_task.id, data,request.LANGUAGE_CODE)
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         else:
             data_type = request.query_params.get('type', None)
@@ -854,7 +854,7 @@ def _import_annotations(request, rq_id, rq_func, pk, format_name):
         serializer = AnnotationFileSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             anno_file = serializer.validated_data['annotation_file']
-            fd, filename = mkstemp(prefix='cvat_{}'.format(pk))
+            fd, filename = mkstemp(prefix='cvat_{}'.format(pk),dir="./tmp/")
             with open(filename, 'wb+') as f:
                 for chunk in anno_file.chunks():
                     f.write(chunk)
@@ -862,7 +862,7 @@ def _import_annotations(request, rq_id, rq_func, pk, format_name):
             av_scan_paths(filename)
             rq_job = queue.enqueue_call(
                 func=rq_func,
-                args=(pk, filename, format_name),
+                args=(pk, filename, format_name,request.LANGUAGE_CODE),
                 job_id=rq_id
             )
             rq_job.meta['tmp_file'] = filename
@@ -874,12 +874,17 @@ def _import_annotations(request, rq_id, rq_func, pk, format_name):
             os.remove(rq_job.meta['tmp_file'])
             rq_job.delete()
             return Response(status=status.HTTP_201_CREATED)
+
         elif rq_job.is_failed:
             os.close(rq_job.meta['tmp_file_descriptor'])
             os.remove(rq_job.meta['tmp_file'])
             exc_info = str(rq_job.exc_info)
             rq_job.delete()
-            return Response(data=exc_info, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            if "format error" in exc_info:
+                response_status = status.HTTP_400_BAD_REQUEST
+            else:
+                response_status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            return Response(data=exc_info, status=response_status)
 
     return Response(status=status.HTTP_202_ACCEPTED)
 
@@ -939,7 +944,7 @@ def _export_annotations(db_task, rq_id, request, format_name, action, callback, 
 
     ttl = dm.views.CACHE_TTL.total_seconds()
     queue.enqueue_call(func=callback,
-        args=(db_task.id, format_name, server_address), job_id=rq_id,
+        args=(db_task.id, format_name, server_address,request.LANGUAGE_CODE), job_id=rq_id,
         meta={ 'request_time': timezone.localtime() },
         result_ttl=ttl, failure_ttl=ttl)
     return Response(status=status.HTTP_202_ACCEPTED)
@@ -1000,7 +1005,7 @@ def _export_annotations_return_file_path(db_task, rq_id, request, format_name, a
 
     ttl = dm.views.CACHE_TTL.total_seconds()
     queue.enqueue_call(func=callback,
-        args=(db_task.id, format_name, server_address), job_id=rq_id,
+        args=(db_task.id, format_name, server_address,request.LANGUAGE_CODE), job_id=rq_id,
         meta={ 'request_time': timezone.localtime() },
         result_ttl=ttl, failure_ttl=ttl)
     return Response(status=status.HTTP_202_ACCEPTED)

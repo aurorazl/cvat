@@ -44,7 +44,9 @@ def parse_permission(roleList):
 
 def get_group_from_user_manager_center(token):
     user_manager_center_url = settings.USER_MANAGER_CENTER
-    response = requests.get(url="{}/auth/currentUser".format(user_manager_center_url,),headers={"Authorization": "Bearer " + token.decode()},timeout=5)
+    if isinstance(token,bytes):
+        token = token.decode()
+    response = requests.get(url="{}/auth/currentUser".format(user_manager_center_url,),headers={"Authorization": "Bearer " + token},timeout=5)
     response.raise_for_status()
     roleList = response.json()["permissionList"]
     return parse_permission(roleList)
@@ -63,7 +65,7 @@ class JSONWebTokenAuthentication(_JSONWebTokenAuthentication):
         """
         User = get_user_model()
         username = payload.get("userName")
-        uid = payload.get("uid",1)
+        uid = payload.get("uid")
 
         try:
             group_list = get_group_from_user_manager_center(self.token)

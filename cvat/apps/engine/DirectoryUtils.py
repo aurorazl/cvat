@@ -7,7 +7,8 @@ class cd:
         self.newPath = os.path.expanduser(newPath)
 
     def __exit__(self, etype, value, traceback):
-        shutil.rmtree(self.newPath)
+        os.chdir(self.newPath)
 
     def __enter__(self):
-        pass
+        self.savedPath = os.getcwd()
+        os.chdir(self.newPath)
