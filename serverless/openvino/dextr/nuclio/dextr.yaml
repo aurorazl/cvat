@@ -18,12 +18,15 @@ spec:
   default:
     predictor:
       minReplicas: 1
+      maxReplicas: 1
       custom:
-        resource:
+        resources:
           limits:
             memory: 5G
+            nvidia.com/gpu: 0
           requests:
             cpu: 100m
+            nvidia.com/gpu: 0
         container:
           name: kfserving-container
           image: harbor.sigsus.cn:8443/sz_gongdianju/apulistech/openvino.dextr

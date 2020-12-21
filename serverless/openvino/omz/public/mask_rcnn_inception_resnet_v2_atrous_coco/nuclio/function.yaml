@@ -1,12 +1,13 @@
-apiVersion: 'serving.kubeflow.org/v1alpha2'
-kind: 'InferenceService'
+# To build the function you need to adjust docker settings. Be sure that you
+# have enough memory (more than 4GB). Look here how to do that
+# https://stackoverflow.com/questions/44417159/docker-process-killed-with-cryptic-killed-message
 metadata:
-  name: faster-rcnn-inception-v2-coco
-  namespace: kfserving-system
+  name: openvino.omz.public.mask_rcnn_inception_resnet_v2_atrous_coco
+  namespace: cvat
   annotations:
-    name: Faster-Rcnn-inception-v2-coco
+    name: Mask RCNN
     type: detector
-    id: faster-rcnn-inception-v2-coco
+    framework: openvino
     spec: |
       [
         { "id": 1, "name": "person" },
@@ -90,25 +91,51 @@ metadata:
         { "id":89, "name": "hair_drier" },
         { "id":90, "name": "toothbrush" }
       ]
-    framework: openvino
-    description: 'Faster RCNN inception v2 COCO via Intel OpenVINO toolkit'
-  labels:
-    inference: system
 
 spec:
-  default:
-    predictor:
-      minReplicas: 1
-      maxReplicas: 1
-      custom:
-        resources:
-          limits:
-            memory: 5G
-            nvidia.com/gpu: 0
-          requests:
-            cpu: 100m
-            nvidia.com/gpu: 0
-        container:
-          name: kfserving-container
-          image: harbor.sigsus.cn:8443/sz_gongdianju/apulistech/openvino.omz.public.faster_rcnn_inception_v2_coco
-          args: ['--model_name=faster-rcnn-inception-v2-coco']
+  description: Mask RCNN inception resnet v2 COCO via Intel OpenVINO
+  runtime: 'python:3.6'
+  handler: main:handler
+  eventTimeout: 60s
+  nodeSelector:
+    archType: amd64
+  env:
+    - name: NUCLIO_PYTHON_EXE_PATH
+      value: /opt/nuclio/common/python3
+
+  build:
+    image: cvat/openvino.omz.public.mask_rcnn_inception_resnet_v2_atrous_coco
+    baseImage: openvino/ubuntu18_dev:2020.2
+
+    directives:
+      preCopy:
+        - kind: USER
+          value: root
+        - kind: WORKDIR
+          value: /opt/nuclio
+        - kind: RUN
+          value: ln -s /usr/bin/pip3 /usr/bin/pip
+        - kind: RUN
+          value: /opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/downloader.py --name mask_rcnn_inception_resnet_v2_atrous_coco -o /opt/nuclio/open_model_zoo
+        - kind: RUN
+          value: /opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/converter.py --name mask_rcnn_inception_resnet_v2_atrous_coco --precisions FP32 -d /opt/nuclio/open_model_zoo -o /opt/nuclio/open_model_zoo
+
+      postCopy:
+        - kind: RUN
+          value: apt update && DEBIAN_FRONTEND=noninteractive apt install --no-install-recommends -y python3-skimage
+        - kind: RUN
+          value: pip3 install "numpy<1.16.0" # workaround for skimage
+
+  triggers:
+    myHttpTrigger:
+      maxWorkers: 2
+      kind: 'http'
+      workerAvailabilityTimeoutMilliseconds: 10000
+      attributes:
+        maxRequestBodySize: 33554432 # 32MB
+
+  platform:
+    attributes:
+      restartPolicy:
+        name: always
+        maximumRetryCount: 3

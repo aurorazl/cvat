@@ -1,12 +1,10 @@
-apiVersion: 'serving.kubeflow.org/v1alpha2'
-kind: 'InferenceService'
 metadata:
-  name: faster-rcnn-inception-v2-coco
-  namespace: kfserving-system
+  name: tf.faster_rcnn_inception_v2_coco
+  namespace: cvat
   annotations:
-    name: Faster-Rcnn-inception-v2-coco
+    name: Faster RCNN via Tensorflow
     type: detector
-    id: faster-rcnn-inception-v2-coco
+    framework: tensorflow
     spec: |
       [
         { "id": 1, "name": "person" },
@@ -90,25 +88,45 @@ metadata:
         { "id":89, "name": "hair_drier" },
         { "id":90, "name": "toothbrush" }
       ]
-    framework: openvino
-    description: 'Faster RCNN inception v2 COCO via Intel OpenVINO toolkit'
-  labels:
-    inference: system
 
 spec:
-  default:
-    predictor:
-      minReplicas: 1
-      maxReplicas: 1
-      custom:
-        resources:
-          limits:
-            memory: 5G
-            nvidia.com/gpu: 0
-          requests:
-            cpu: 100m
-            nvidia.com/gpu: 0
-        container:
-          name: kfserving-container
-          image: harbor.sigsus.cn:8443/sz_gongdianju/apulistech/openvino.omz.public.faster_rcnn_inception_v2_coco
-          args: ['--model_name=faster-rcnn-inception-v2-coco']
+  description: Faster RCNN from Tensorflow Object Detection API
+  runtime: 'python:3.6'
+  handler: main:handler
+  eventTimeout: 30s
+  nodeSelector:
+    archType: amd64
+  build:
+    image: cvat/tf.faster_rcnn_inception_v2_coco
+    baseImage: tensorflow/tensorflow:2.1.1
+
+    directives:
+      preCopy:
+        - kind: RUN
+          value: apt install curl
+        - kind: WORKDIR
+          value: /opt/nuclio
+
+      postCopy:
+        - kind: RUN
+          value: curl -O http://download.tensorflow.org/models/object_detection/faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
+        - kind: RUN
+          value: tar -xzf faster_rcnn_inception_v2_coco_2018_01_28.tar.gz && rm faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
+        - kind: RUN
+          value: ln -s faster_rcnn_inception_v2_coco_2018_01_28 faster_rcnn
+        - kind: RUN
+          value: pip install pillow pyyaml
+
+  triggers:
+    myHttpTrigger:
+      maxWorkers: 2
+      kind: 'http'
+      workerAvailabilityTimeoutMilliseconds: 10000
+      attributes:
+        maxRequestBodySize: 33554432 # 32MB
+
+  platform:
+    attributes:
+      restartPolicy:
+        name: always
+        maximumRetryCount: 3
