@@ -310,7 +310,7 @@ function HeaderContainer(props: Props): JSX.Element {
                     <Icon type='github' />
                     <Text className='cvat-text-color'>GitHub</Text>
                 </Button> */}
-                <Button
+                {/* <Button
                     className='cvat-header-button'
                     size='small'
                     onClick={
@@ -326,9 +326,8 @@ function HeaderContainer(props: Props): JSX.Element {
                         }
                     }
                 >
-                    {/* <Text className='cvat-text-color'>{lang === 'en-US' ? '中文' : 'English'}</Text> */}
                     <Text className='cvat-text-color'>{(localStorage.getItem('language') || navigator.language) === 'en-US' ? '中文' : 'English'}</Text>
-                </Button>
+                </Button> */}
                 <Button
                     className='cvat-header-button'
                     type='link'
