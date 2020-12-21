@@ -7,6 +7,7 @@ import { Col } from 'antd/lib/grid';
 import Icon from 'antd/lib/icon';
 import Select from 'antd/lib/select';
 import Button from 'antd/lib/button';
+import Tooltip from 'antd/lib/tooltip';
 
 import { Workspace } from 'reducers/interfaces';
 import { InfoIcon, FullscreenIcon } from 'icons';
@@ -49,7 +50,9 @@ function RightGroup(props: Props): JSX.Element {
                 <Select className='cvat-workspace-selector' onChange={changeWorkspace} value={workspace}>
                     {Object.values(Workspace).map((ws) => (
                         <Select.Option key={ws} value={ws}>
-                            {t(ws)}
+                            <Tooltip key={`${ws}-tip`} title={t(ws)} placement='left' mouseLeaveDelay={0.2}>
+                                {t(ws)}
+                            </Tooltip>
                         </Select.Option>
                     ))}
                 </Select>
