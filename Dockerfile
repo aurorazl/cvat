@@ -101,6 +101,7 @@ COPY cvat-core/ ${HOME}/cvat-core
 COPY cvat-data/ ${HOME}/cvat-data
 COPY tests ${HOME}/tests
 COPY cvat/ ${HOME}/cvat
+COPY locale/ ${HOME}/locale
 
 RUN chown -R ${USER}:${USER} .
 
