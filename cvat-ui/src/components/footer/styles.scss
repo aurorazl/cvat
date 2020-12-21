@@ -1,0 +1,33 @@
+// Copyright (C) 2020 Intel Corporation
+//
+// SPDX-License-Identifier: MIT
+
+@import '../../base.scss';
+
+.cvat-footer.ant-layout-footer {
+    display: flex;
+    padding-left: 0;
+    padding-right: 0;
+    line-height: 0;
+    height: 132px;
+    background: #000a28;
+    // color: hsla(0,0%,100%,.65);
+}
+
+.cvat-left-footer {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cvat-serverius-footer {
+    > svg {
+        transform: scale(0.9);
+        g {
+            text {
+                font-family: 'montserrat', sans-serif;
+            }
+        }
+    }
+}

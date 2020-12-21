@@ -11,6 +11,7 @@ import Spin from 'antd/lib/spin';
 import Text from 'antd/lib/typography/Text';
 import GlobalErrorBoundary from 'components/global-error-boundary/global-error-boundary';
 import Header from 'components/header/header';
+import Footer from 'components/footer/footer';
 import ResetPasswordPageConfirmComponent from 'components/reset-password-confirm-page/reset-password-confirm-page';
 import ResetPasswordPageComponent from 'components/reset-password-page/reset-password-page';
 import ShorcutsDialog from 'components/shortcuts-dialog/shortcuts-dialog';
@@ -342,6 +343,7 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
                                     {/* eslint-disable-next-line */}
                                     <a id='downloadAnchor' style={{ display: 'none' }} download />
                                 </Layout.Content>
+                                <Footer />
                             </Layout>
                         </GlobalErrorBoundary>
                     </ConfigProvider>

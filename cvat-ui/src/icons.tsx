@@ -48,8 +48,10 @@ import SVGResetPerspectiveIcon from './assets/reset-perspective.svg';
 import SVGColorizeIcon from './assets/colorize-icon.svg';
 import SVGAITools from './assets/ai-tools-icon.svg';
 import SVGApulisLogo from './assets/logo.svg';
+import SVGServerius from './assets/serverius.svg';
 
 export const ApulisLogo = React.memo((): JSX.Element => <SVGApulisLogo />);
+export const SVGServeriusFooter = React.memo((): JSX.Element => <SVGServerius />);
 export const CVATLogo = React.memo((): JSX.Element => <SVGCVATLogo />);
 export const AccountIcon = React.memo((): JSX.Element => <SVGAccountIcon />);
 export const EmptyTasksIcon = React.memo((): JSX.Element => <SVGEmptyTasksIcon />);
