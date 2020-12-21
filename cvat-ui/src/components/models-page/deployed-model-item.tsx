@@ -7,6 +7,7 @@ import { Row, Col } from 'antd/lib/grid';
 import Tag from 'antd/lib/tag';
 import Select from 'antd/lib/select';
 import Text from 'antd/lib/typography/Text';
+import Tooltip from 'antd/lib/tooltip';
 import { Model } from 'reducers/interfaces';
 import { useTranslation } from 'react-i18next';
 
@@ -24,7 +25,9 @@ export default function DeployedModelItem(props: Props): JSX.Element {
                 <Tag color='purple'>{model.framework}</Tag>
             </Col>
             <Col span={3}>
-                <Text className='cvat-text-color'>{model.name}</Text>
+                <Tooltip title={model.name} placement='top' mouseLeaveDelay={0.2}>
+                    <Text className='cvat-text-color'>{model.name}</Text>
+                </Tooltip>
             </Col>
             <Col span={3}>
                 <Tag color='orange'>{model.type}</Tag>
