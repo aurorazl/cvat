@@ -22,7 +22,7 @@ from cvat.apps.engine.log import slogger
 from cvat.apps.engine.models import Job, Task, User
 from cvat.apps.engine.plugins import add_plugin
 from cvat.apps.dataset_repo.models import GitData, GitStatusChoice
-
+from django.utils.translation import gettext
 
 def _have_no_access_exception(ex):
     if 'Permission denied' in ex.stderr or 'Could not read from remote repository' in ex.stderr:

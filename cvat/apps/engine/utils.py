@@ -13,6 +13,7 @@ import os
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.utils import translation
+from .log import clogger, slogger
 
 Import = namedtuple("Import", ["module", "name", "alias"])
 
@@ -83,5 +84,7 @@ def setup_language_for_uid_on_thread(uid):
         translation.activate(user_language)
 
 def setup_language(user_language):
+    slogger.glob.info("set current thread to language: {}".format(user_language))
     if user_language:
+        slogger.glob.info("set current thread to language: {}".format(user_language))
         translation.activate(user_language)

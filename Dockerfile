@@ -52,7 +52,8 @@ RUN apt-get update && \
         ssh \
         poppler-utils \
         curl \
-        unrar
+        unrar \
+        vim
 
 RUN python3 -m pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/ && \
     python3 -m pip install --no-cache-dir -U pip==20.0.1 setuptools==49.6.0 wheel==0.35.1 && \
@@ -100,13 +101,14 @@ COPY cvat-core/ ${HOME}/cvat-core
 COPY cvat-data/ ${HOME}/cvat-data
 COPY tests ${HOME}/tests
 COPY cvat/ ${HOME}/cvat
+COPY locale/ ${HOME}/locale
 
 RUN chown -R ${USER}:${USER} .
 
 # RUN all commands below as 'django' user
 USER ${USER}
 
-RUN mkdir data share media keys logs /tmp/supervisord
+RUN mkdir data share media keys logs /tmp/supervisord tmp
 RUN python3 manage.py collectstatic
 
 EXPOSE 8080 8443

@@ -870,20 +870,29 @@ def _import_annotations(request, rq_id, rq_func, pk, format_name):
             rq_job.save_meta()
     else:
         if rq_job.is_finished:
-            os.close(rq_job.meta['tmp_file_descriptor'])
-            os.remove(rq_job.meta['tmp_file'])
+            if rq_job.meta:
+                try:
+                    os.close(rq_job.meta['tmp_file_descriptor'])
+                    os.remove(rq_job.meta['tmp_file'])
+                except OSError or FileNotFoundError as e:
+                    slogger.glob.exception(e)
             rq_job.delete()
             return Response(status=status.HTTP_201_CREATED)
 
         elif rq_job.is_failed:
-            os.close(rq_job.meta['tmp_file_descriptor'])
-            os.remove(rq_job.meta['tmp_file'])
+            if rq_job.meta:
+                try:
+                    os.close(rq_job.meta['tmp_file_descriptor'])
+                    os.remove(rq_job.meta['tmp_file'])
+                except OSError or FileNotFoundError as e :
+                    slogger.glob.exception(e)
+
             exc_info = str(rq_job.exc_info)
-            rq_job.delete()
             if "format error" in exc_info:
                 response_status = status.HTTP_400_BAD_REQUEST
             else:
                 response_status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            rq_job.delete()
             return Response(data=exc_info, status=response_status)
 
     return Response(status=status.HTTP_202_ACCEPTED)
