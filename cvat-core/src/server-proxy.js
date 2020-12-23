@@ -226,8 +226,8 @@
                 Axios.defaults.headers.common.Authorization = `Bearer ${token}`;
                 store.set('token', token);
                 const language = store.get('language') || 'zh-CN';
-                const cookies = `token=${token};language=${language}`;
-                Axios.defaults.headers.common.Cookie = cookies;
+                // const cookies = `token=${token};language=${language}`;
+                // Axios.defaults.headers.common.Cookie = cookies;
 
                 //写入Cookies
                 Cookies.set('token', token);
@@ -245,7 +245,7 @@
 
                 store.remove('token');
                 Axios.defaults.headers.common.Authorization = '';
-                Axios.defaults.headers.common.Cookie.remove('csrftoken');
+                // Axios.defaults.headers.common.Cookie.remove('csrftoken');
             }
 
             async function changePassword(oldPassword, newPassword1, newPassword2) {
