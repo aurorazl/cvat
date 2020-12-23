@@ -38,6 +38,7 @@ export enum TasksActionTypes {
     EXPORT_TO_PLATFORM = 'EXPORT_TO_PLATFORM',
     EXPORT_TO_PLATFORM_SUCCESS = 'EXPORT_TO_PLATFORM_SUCCESS',
     EXPORT_TO_PLATFORM_FAILED = 'EXPORT_TO_PLATFORM_FAILED',
+    RESET_PUSH_ACTIVITY = 'RESET_PUSH_ACTIVITY',
 }
 
 function getTasks(): AnyAction {
@@ -563,16 +564,30 @@ function exportToPlatformFailed(taskId: number, error: any): AnyAction {
     return action;
 }
 
+function resetPushActivity(taskId: number): AnyAction {
+    const action = {
+        type: TasksActionTypes.RESET_PUSH_ACTIVITY,
+        payload: {
+            taskId,
+        },
+    };
+
+    return action;
+}
+
 export function exportToPlatformAsync(taskInstance: any): ThunkAction<Promise<void>, {}, {}, AnyAction> {
     return async (dispatch: ActionCreator<Dispatch>): Promise<void> => {
         try {
             dispatch(exportToPlatform(taskInstance.id));
             await taskInstance.exportToPlatform();
+            dispatch(exportToPlatformSuccess(taskInstance.id));
         } catch (error) {
             dispatch(exportToPlatformFailed(taskInstance.id, error));
-            return;
         }
-
-        dispatch(exportToPlatformSuccess(taskInstance.id));
+        // finally {
+        //     setTimeout(() => {
+        //         dispatch(resetPushActivity(taskInstance.id));
+        //     }, 1000);
+        // }
     };
 }

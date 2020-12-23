@@ -392,6 +392,21 @@ export default (state: TasksState = defaultState, action: AnyAction): TasksState
                 },
             };
         }
+        case TasksActionTypes.RESET_PUSH_ACTIVITY: {
+            const { taskId } = action.payload;
+
+            return {
+                ...state,
+                activities: {
+                    ...state.activities,
+                    pushes: {
+                        taskId: null,
+                        status: '',
+                        error: '',
+                    },
+                },
+            };
+        }
         case BoundariesActionTypes.RESET_AFTER_ERROR:
         case AuthActionTypes.LOGOUT_SUCCESS: {
             return { ...defaultState };

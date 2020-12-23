@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import './styles.scss';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Menu, { ClickParam } from 'antd/lib/menu';
 import Tooltip from 'antd/lib/tooltip';
 import Modal from 'antd/lib/modal';
@@ -63,6 +63,18 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
         loadActivity,
         lang,
     } = props;
+
+    useEffect(() => {
+        if (pushActivity && pushActivity['status'] === 'PUSHED') {
+            notification.success({
+                message: t('Push succeeded!'),
+            })
+        } else if (pushActivity && pushActivity['status'] === 'FAILED') {
+            notification.error({
+                message: t('Push failed!'),
+            })
+        }
+    }, [pushActivity]);
 
     let latestParams: ClickParam | null = null;
     function onClickMenuWrapper(params: ClickParam | null, file?: File): void {
@@ -146,16 +158,6 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
             <hr />
             <Menu.Item key={Actions.DELETE_TASK}>{t('Delete')}</Menu.Item>
         </Menu>
-            {pushActivity && pushActivity['status'] === 'PUSHED' ? (
-                notification.success({
-                    message: t('Push succeeded!'),
-                })
-            ) : null}
-            {pushActivity && pushActivity['status'] === 'FAILED' ? (
-                notification.error({
-                    message: t('Push failed!'),
-                })
-            ) : null}
         </>
     );
 }
