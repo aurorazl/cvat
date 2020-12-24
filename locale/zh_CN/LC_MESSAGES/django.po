@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-18 14:54+0800\n"
+"POT-Creation-Date: 2020-12-22 16:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,19 +28,19 @@ msgstr ""
 msgid "Important dates"
 msgstr ""
 
-#: .\cvat\apps\authentication\auth.py:71
+#: .\cvat\apps\authentication\auth.py:73
 msgid "Failed to request user role from usermanager center!{}"
 msgstr "连接用户管理服务异常！{}"
 
-#: .\cvat\apps\authentication\auth.py:75
+#: .\cvat\apps\authentication\auth.py:77
 msgid "Invalid payload."
 msgstr "无效的载荷"
 
-#: .\cvat\apps\authentication\auth.py:86
+#: .\cvat\apps\authentication\auth.py:88
 msgid "Invalid signature."
 msgstr "无效的签名"
 
-#: .\cvat\apps\authentication\auth.py:90
+#: .\cvat\apps\authentication\auth.py:92
 msgid "User account is disabled."
 msgstr "用户账号已过期"
 
@@ -67,23 +67,37 @@ msgstr ""
 msgid "The %(site_name)s team"
 msgstr ""
 
-#: .\cvat\apps\dataset_manager\bindings.py:347
-#: .\cvat\apps\dataset_manager\bindings.py:549
+#: .\cvat\apps\dataset_manager\bindings.py:348
+#: .\cvat\apps\dataset_manager\bindings.py:550
 #, python-format
 msgid "Failed to convert attribute '%s'='%s': %s"
 msgstr "转换属性失败 '%s'='%s': %s"
 
-#: .\cvat\apps\dataset_manager\bindings.py:593
+#: .\cvat\apps\dataset_manager\bindings.py:594
 #, python-format
 msgid "Unknown shape type '%s'"
 msgstr "未知的形状类型 '%s'"
 
-#: .\cvat\apps\dataset_manager\bindings.py:613
+#: .\cvat\apps\dataset_manager\bindings.py:614
 #, python-format
 msgid "Could not match item id: '%s' with any task frame"
 msgstr "不能匹配任何的任务帧：'%s'"
 
-#: .\cvat\apps\dataset_manager\views.py:38
+#: .\cvat\apps\dataset_manager\formats\cvat.py:571
+#: .\cvat\apps\dataset_manager\formats\cvat.py:577
+#| msgid "Failed to find 'cvat' annotation at '%s'"
+msgid "Failed to find 'cvat' annotation"
+msgstr "没有找到cvat格式的标注文件"
+
+#: .\cvat\apps\dataset_manager\formats\pascal_voc.py:50
+msgid "Failed to find 'voc' format annotation"
+msgstr "没有找到voc格式的标注文件"
+
+#: .\cvat\apps\dataset_manager\formats\yolo.py:40
+msgid "Failed to find 'yolo' annotation"
+msgstr "没有找到yolo格式的标注文件"
+
+#: .\cvat\apps\dataset_manager\views.py:39
 msgid "Task dir {} does not exist"
 msgstr "任务目录{}不存在"
 
@@ -134,14 +148,6 @@ msgstr "将图片编码到'%s'格式失败了"
 msgid "unsupported output type"
 msgstr "不支持的输出类型"
 
-#: .\cvat\apps\engine\log.py:14
-msgid "{} key must be a task identifier"
-msgstr "{}键必须是一个任务的唯一标识"
-
-#: .\cvat\apps\engine\log.py:20
-msgid "{} key must be a job identifier"
-msgstr "{}键必须是一个job的标识"
-
 #: .\cvat\apps\engine\media_extractors.py:87
 msgid "No image found"
 msgstr "没有找到图片"
@@ -150,8 +156,8 @@ msgstr "没有找到图片"
 msgid "No PDF found"
 msgstr "没有找到PDF"
 
-#: .\cvat\apps\engine\media_extractors.py:346
-#: .\cvat\apps\engine\media_extractors.py:389
+#: .\cvat\apps\engine\media_extractors.py:345
+#: .\cvat\apps\engine\media_extractors.py:388
 msgid "no images to save"
 msgstr "没有图片可保存"
 
@@ -171,19 +177,19 @@ msgstr "'name'应该是一个字符串，当前是{}"
 msgid "plugin has been attached already"
 msgstr "插件已经附加"
 
-#: .\cvat\apps\engine\prepare.py:13
+#: .\cvat\apps\engine\prepare.py:14
 msgid "No sourse path"
 msgstr "没有该源路径"
 
-#: .\cvat\apps\engine\prepare.py:50
+#: .\cvat\apps\engine\prepare.py:51
 msgid "Invalid pts sequences"
 msgstr "无效的pts序列"
 
-#: .\cvat\apps\engine\prepare.py:54
+#: .\cvat\apps\engine\prepare.py:55
 msgid "Invalid dts sequences"
 msgstr "无效的dts序列"
 
-#: .\cvat\apps\engine\prepare.py:68
+#: .\cvat\apps\engine\prepare.py:69
 msgid "No meta path"
 msgstr "没有元路径"
 
@@ -219,26 +225,43 @@ msgstr "下载失败"
 msgid "Invalid URL: "
 msgstr "无效的URL："
 
-#: .\cvat\apps\engine\task.py:280
+#: .\cvat\apps\engine\task.py:279
 msgid "Media files are being extracted..."
 msgstr "正在解压媒体文件..."
 
-#: .\cvat\apps\engine\task.py:289
+#: .\cvat\apps\engine\task.py:288
 msgid "Combined data types are not supported"
 msgstr "组合的数据类型尚未支持"
 
-#: .\cvat\apps\engine\task.py:307
+#: .\cvat\apps\engine\task.py:306
 msgid "Images are being compressed {}"
 msgstr "图片正在压缩中 {}"
 
-#: .\cvat\apps\engine\task.py:359
+#: .\cvat\apps\engine\task.py:358
 msgid "{} Start prepare valid meta information."
 msgstr "{} 开始准备有效的元信息"
 
-#: .\cvat\apps\engine\task.py:385
+#: .\cvat\apps\engine\task.py:384
 msgid "{} The task will be created using the old method"
 msgstr "{} 任务将以旧方式被创建"
 
 #: .\cvat\apps\engine\tests\test_rest_api.py:3359
 msgid "Unknown format {}"
 msgstr "未知格式{}"
+
+#: .\cvat\settings\base.py:206
+msgid "简体中文"
+msgstr ""
+
+#: .\cvat\settings\base.py:207
+msgid "English"
+msgstr ""
+
+#~ msgid "Failed to find 'cvat' annotation at '%s'"
+#~ msgstr "没有在'%s'找到cvat标注文件"
+
+#~ msgid "{} key must be a task identifier"
+#~ msgstr "{}键必须是一个任务的唯一标识"
+
+#~ msgid "{} key must be a job identifier"
+#~ msgstr "{}键必须是一个job的标识"

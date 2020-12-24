@@ -16,7 +16,7 @@ from datumaro.components.extractor import DatasetItem
 from datumaro.util.image import save_image
 
 from .registry import exporter, importer
-
+from django.utils.translation import gettext
 
 def pairwise(iterable):
     a = iter(iterable)
@@ -470,7 +470,8 @@ def load(file_object, annotations):
                     shape['outside'] = el.attrib['outside'] == "1"
                     shape['keyframe'] = el.attrib['keyframe'] == "1"
                 else:
-                    shape['frame'] = frame_id
+                    if image_is_opened:
+                        shape['frame'] = frame_id
                     shape['label'] = el.attrib['label']
                     shape['group'] = int(el.attrib.get('group_id', 0))
                     shape['source'] = str(el.attrib.get('source', 'manual'))
@@ -525,7 +526,7 @@ def load(file_object, annotations):
 
 def _export(dst_file, task_data, anno_callback, save_images=False):
     with TemporaryDirectory() as temp_dir:
-        with open(osp.join(temp_dir, 'annotations.xml'), 'wb',encoding="utf-8") as f:
+        with open(osp.join(temp_dir, 'annotations.xml'), 'wb') as f:
             anno_callback(f, task_data)
 
         if save_images:
@@ -566,7 +567,12 @@ def _import(src_file, task_data):
             zipfile.ZipFile(src_file).extractall(tmp_dir)
 
             anno_paths = glob(osp.join(tmp_dir, '**', '*.xml'), recursive=True)
+            if len(anno_paths)==0:
+                raise Exception(gettext("Failed to find 'cvat' annotation"))
+
             for p in anno_paths:
                 load(p, task_data)
     else:
+        if not src_file.endswith(".xml"):
+            raise Exception(gettext("Failed to find 'cvat' annotation"))
         load(src_file, task_data)

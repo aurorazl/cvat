@@ -84,7 +84,6 @@ def setup_language_for_uid_on_thread(uid):
         translation.activate(user_language)
 
 def setup_language(user_language):
-    slogger.glob.info("set current thread to language: {}".format(user_language))
     if user_language:
         slogger.glob.info("set current thread to language: {}".format(user_language))
         translation.activate(user_language)
