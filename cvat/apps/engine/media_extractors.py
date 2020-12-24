@@ -417,9 +417,10 @@ class Mpeg4CompressedChunkWriter(Mpeg4ChunkWriter):
 
 def judge_file_mime(path):
     ### replace:       mimetypes.guess_type
-    mime = filetype.guess(path)
-    if mime:
-        return (mime.mime,None)
+    if not os.path.isdir(path):
+        mime = filetype.guess(path)
+        if mime:
+            return (mime.mime,None)
     return (None,None)
 
 def _is_archive(path):

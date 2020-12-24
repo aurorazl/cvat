@@ -154,6 +154,7 @@ def is_group_member(*groups):
             return False  # swapped user model, doesn't support groups
         if not hasattr(user, '_permissions_cache'):  # pragma: no cover
             user._group_names_cache = set(user.permissions)
+
         return set(groups).issubset(user._group_names_cache)
     return fn
 
@@ -168,11 +169,11 @@ has_observer_role = is_group_member(str(AUTH_ROLE.OBSERVER))
 def is_project_owner(db_user, db_project):
     # If owner is None (null) the task can be accessed/changed/deleted
     # only by admin. At the moment each task has an owner.
-    return db_project is not None and db_project.owner == db_user
+    return db_project is not None and db_project.owner == db_user.username
 
 @rules.predicate
 def is_project_assignee(db_user, db_project):
-    return db_project is not None and db_project.assignee == db_user
+    return db_project is not None and db_project.assignee == db_user.username
 
 @rules.predicate
 def is_project_annotator(db_user, db_project):
@@ -183,11 +184,11 @@ def is_project_annotator(db_user, db_project):
 def is_task_owner(db_user, db_task):
     # If owner is None (null) the task can be accessed/changed/deleted
     # only by admin. At the moment each task has an owner.
-    return db_task.owner == db_user or is_project_owner(db_user, db_task.project)
+    return db_task.owner == db_user.username or is_project_owner(db_user, db_task.project)
 
 @rules.predicate
 def is_task_assignee(db_user, db_task):
-    return db_task.assignee == db_user or is_project_assignee(db_user, db_task.project)
+    return db_task.assignee == db_user.username or is_project_assignee(db_user, db_task.project)
 
 @rules.predicate
 def is_task_annotator(db_user, db_task):
@@ -205,7 +206,7 @@ def is_job_annotator(db_user, db_job):
     # A job can be annotated by any user if the task's assignee is None.
     has_rights = (db_task.assignee is None and not settings.RESTRICTIONS['reduce_task_visibility']) or is_task_assignee(db_user, db_task)
     if db_job.assignee is not None:
-        has_rights |= (db_user == db_job.assignee)
+        has_rights |= (db_user.username == db_job.assignee)
 
     return has_rights
 
