@@ -205,7 +205,7 @@ function renderList(parameters: ListParameters): JSX.Element | null {
         });
 
         return (
-            <div className='attribute-annotation-sidebar-attr-list-wrapper'>
+            <div className={`attribute-annotation-sidebar-attr-list-wrapper ${filteredValues.length > 30 ? 'attribute-annotation-sidebar-long-attr-list' : ''}`}>
                 <GlobalHotKeys keyMap={keyMap as KeyMap} handlers={handlers} allowChanges />
                 {filteredValues.map(
                     (value: string, index: number): JSX.Element => (
