@@ -370,7 +370,6 @@
             }
 
             async function exportDataset(id, format) {
-                console.log(666, id, format)
                 const { backendAPI } = config;
                 let url = `${backendAPI}/tasks/${id}/dataset?format=${format}`;
 
