@@ -17,6 +17,7 @@ import numpy as np
 from pyunpack import Archive
 from PIL import Image, ImageFile
 import filetype
+from pathlib import Path
 
 from cvat.apps.engine import DirectoryUtils
 from django.utils.translation import gettext
@@ -42,7 +43,7 @@ def delete_tmp_dir(tmp_dir):
 
 class IMediaReader(ABC):
     def __init__(self, source_path, step, start, stop):
-        self._source_path = sorted(source_path)
+        self._source_path = [i.encode('cp437').decode('gbk') for i in sorted(source_path)]
         self._step = step
         self._start = start
         self._stop = stop
@@ -184,23 +185,29 @@ class ZipReader(ImageListReader):
     def __init__(self, source_path, step=1, start=0, stop=None):
         self._zip_source = zipfile.ZipFile(source_path[0], mode='r')
         exctract_path = "./{}-{}".format(str(time.time()),random.randint(1,1111))
-        self._zip_source.extractall(path=exctract_path)
-        file_list = [f for f in self._zip_source.namelist() if get_mime(os.path.join(exctract_path,f)) == 'image']
+        # self._zip_source.extractall(path=exctract_path)
+        file_list = []
+        for fn in self._zip_source.namelist():
+            ex_path = os.path.join(exctract_path,fn.encode('cp437').decode('gbk'))
+            extracted_path = Path(self._zip_source.extract(fn,path=exctract_path))
+            extracted_path.rename(ex_path)
+            if get_mime(ex_path) == 'image':
+                file_list.append(fn)
         super().__init__(file_list, step, start, stop)
 
     def __del__(self):
         self._zip_source.close()
 
     def get_preview(self):
-        io_image = io.BytesIO(self._zip_source.read(self._source_path[0]))
+        io_image = io.BytesIO(self._zip_source.read(self._source_path[0].encode('gbk').decode('cp437')))
         return self._get_preview(io_image)
 
     def get_image_size(self, i):
-        img = Image.open(io.BytesIO(self._zip_source.read(self._source_path[i])))
+        img = Image.open(io.BytesIO(self._zip_source.read(self._source_path[i].encode('gbk').decode('cp437'))))
         return img.width, img.height
 
     def get_image(self, i):
-        return io.BytesIO(self._zip_source.read(self._source_path[i]))
+        return io.BytesIO(self._zip_source.read(self._source_path[i].encode('gbk').decode('cp437')))
 
     def get_path(self, i):
         if  self._zip_source.filename:
@@ -209,7 +216,12 @@ class ZipReader(ImageListReader):
             return self._source_path[i]
 
     def extract(self):
-        self._zip_source.extractall(os.path.dirname(self._zip_source.filename))
+        # self._zip_source.extractall(os.path.dirname(self._zip_source.filename))
+        exctract_path = os.path.dirname(self._zip_source.filename)
+        for fn in self._zip_source.namelist():
+            ex_path = os.path.join(exctract_path, fn.encode('cp437').decode('gbk'))
+            extracted_path = Path(self._zip_source.extract(fn, path=exctract_path))
+            extracted_path.rename(ex_path)
         os.remove(self._zip_source.filename)
 
 class VideoReader(IMediaReader):
