@@ -468,11 +468,11 @@ RESTRICTIONS = {
 # http://www.grantjenks.com/docs/diskcache/tutorial.html#djangocache
 CACHES = {
    'default' : {
-       'BACKEND' : 'diskcache.DjangoCache',
+       'BACKEND' : 'django.core.cache.backends.filebased.FileBasedCache',
        'LOCATION' : CACHE_ROOT,
        'TIMEOUT' : None,
        'OPTIONS' : {
-            'size_limit' : 2 ** 40, # 1 Tb
+            'MAX_ENTRIES' : 300
        }
    }
 }

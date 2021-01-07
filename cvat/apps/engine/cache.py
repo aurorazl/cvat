@@ -5,26 +5,27 @@
 import os
 from io import BytesIO
 
-from diskcache import Cache
-from django.conf import settings
-
 from cvat.apps.engine.media_extractors import (Mpeg4ChunkWriter,
     Mpeg4CompressedChunkWriter, ZipChunkWriter, ZipCompressedChunkWriter)
 from cvat.apps.engine.models import DataChoice
 from cvat.apps.engine.prepare import PrepareInfo
 
+from django.core.cache import cache
+from .log import slogger
 
 class CacheInteraction:
     def __init__(self):
-        self._cache = Cache(settings.CACHE_ROOT)
+        self._cache = cache
 
     def __del__(self):
         self._cache.close()
 
     def get_buff_mime(self, chunk_number, quality, db_data):
-        chunk, tag = self._cache.get('{}_{}_{}'.format(db_data.id, chunk_number, quality), tag=True)
+        chunk = self._cache.get('{}_{}_{}'.format(db_data.id, chunk_number, quality))
+        tag = self._cache.get('{}_{}_{}_tag'.format(db_data.id, chunk_number, quality))
 
         if not chunk:
+            slogger.glob.info("start get chunk")
             chunk, tag = self.prepare_chunk_buff(db_data, quality, chunk_number)
             self.save_chunk(db_data.id, chunk_number, quality, chunk, tag)
         return chunk, tag
@@ -57,4 +58,5 @@ class CacheInteraction:
         return buff, mime_type
 
     def save_chunk(self, db_data_id, chunk_number, quality, buff, mime_type):
-        self._cache.set('{}_{}_{}'.format(db_data_id, chunk_number, quality), buff, tag=mime_type)
+        self._cache.set('{}_{}_{}'.format(db_data_id, chunk_number, quality), buff)
+        self._cache.set('{}_{}_{}_tag'.format(db_data_id, chunk_number, quality), mime_type)

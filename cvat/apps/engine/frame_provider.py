@@ -14,7 +14,7 @@ from cvat.apps.engine.cache import CacheInteraction
 from cvat.apps.engine.media_extractors import VideoReader, ZipReader
 from cvat.apps.engine.mime_types import mimetypes
 from cvat.apps.engine.models import DataChoice, StorageMethodChoice
-
+from django.utils.translation import gettext
 
 class RandomAccessIterator:
     def __init__(self, iterable):
