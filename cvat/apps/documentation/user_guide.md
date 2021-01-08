@@ -42,10 +42,10 @@
 
 # User's guide
 
-Computer Vision Annotation Tool (CVAT) is a web-based tool which helps to
+Computer Vision Annotation Tool (ADAP) is a web-based tool which helps to
 annotate videos and images for Computer Vision algorithms. It was inspired
 by [Vatic](http://carlvondrick.com/vatic/) free, online, interactive video
-annotation tool. CVAT has many powerful features: _interpolation of bounding
+annotation tool. ADAP has many powerful features: _interpolation of bounding
 boxes between key frames, automatic annotation using deep learning models,
 shortcuts for most of critical actions, dashboard with a list of annotation
 tasks, LDAP and basic authorization, etc..._ It was created for and used by
@@ -56,7 +56,7 @@ computer vision tasks developed by our team.
 
 ### Authorization
 
-- First of all, you have to log in to CVAT tool.
+- First of all, you have to log in to ADAP tool.
 
   ![](static/documentation/images/image001.jpg)
 

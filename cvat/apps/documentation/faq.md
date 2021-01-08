@@ -1,23 +1,23 @@
 # Frequently asked questions
 
-- [How to update CVAT](#how-to-update-cvat)
+- [How to update ADAP](#how-to-update-cvat)
 - [Kibana app works, but no logs are displayed](#kibana-app-works-but-no-logs-are-displayed)
-- [How to change default CVAT hostname or port](#how-to-change-default-cvat-hostname-or-port)
+- [How to change default ADAP hostname or port](#how-to-change-default-cvat-hostname-or-port)
 - [How to configure connected share folder on Windows](#how-to-configure-connected-share-folder-on-windows)
 - [How to make unassigned tasks not visible to all users](#how-to-make-unassigned-tasks-not-visible-to-all-users)
 - [Where are uploaded images/videos stored](#where-are-uploaded-imagesvideos-stored)
 - [Where are annotations stored](#where-are-annotations-stored)
 - [How to mark job/task as completed](#how-to-mark-jobtask-as-completed)
-- [How to install CVAT on Windows 10 Home](#how-to-install-cvat-on-windows-10-home)
+- [How to install ADAP on Windows 10 Home](#how-to-install-cvat-on-windows-10-home)
 - [I do not have the Analytics tab on the header section. How can I add analytics](#i-do-not-have-the-analytics-tab-on-the-header-section-how-can-i-add-analytics)
 - [How to upload annotations to an entire task from UI when there are multiple jobs in the task](#how-to-upload-annotations-to-an-entire-task-from-ui-when-there-are-multiple-jobs-in-the-task)
 
-## How to update CVAT
+## How to update ADAP
 
 Before upgrading, please follow the official docker
-[manual](https://docs.docker.com/storage/volumes/#backup-restore-or-migrate-data-volumes) and backup all CVAT volumes.
+[manual](https://docs.docker.com/storage/volumes/#backup-restore-or-migrate-data-volumes) and backup all ADAP volumes.
 
-To update CVAT, you should clone or download the new version of CVAT and rebuild the CVAT docker images as usual.
+To update ADAP, you should clone or download the new version of ADAP and rebuild the ADAP docker images as usual.
 
 ```sh
 docker-compose build
@@ -30,7 +30,7 @@ docker-compose up -d
 ```
 
 Sometimes the update process takes a lot of time due to changes in the database schema and data.
-You can check the current status with `docker logs cvat`.
+You can check the current status with `docker logs ADAP`.
 Please do not terminate the migration and wait till the process is complete.
 
 ## Kibana app works, but no logs are displayed
@@ -49,7 +49,7 @@ lood stage disk watermark [95%] exceeded on [uMg9WI30QIOJxxJNDiIPgQ][uMg9WI3][/u
 
 You should free up disk space or change the threshold, to do so check: [Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/disk-allocator.html).
 
-## How to change default CVAT hostname or port
+## How to change default ADAP hostname or port
 
 The best way to do that is to create docker-compose.override.yml and override the host and port settings here.
 
@@ -74,7 +74,7 @@ Follow the Docker manual and configure the directory that you want to use as a s
 - [Docker toolbox manual](https://docs.docker.com/toolbox/toolbox_install_windows/#optional-add-shared-directories)
 - [Docker for windows (see FILE SHARING section)](https://docs.docker.com/docker-for-windows/#resources)
 
-After that, it should be possible to use this directory as a CVAT share:
+After that, it should be possible to use this directory as a ADAP share:
 
 ```yaml
 version: '2.3'
@@ -120,13 +120,13 @@ The status is set by the user in the [Info window](user_guide.md#info) of the jo
 There are three types of status: annotation, validation or completed.
 The status of the job changes the progress bar of the task.
 
-## How to install CVAT on Windows 10 Home
+## How to install ADAP on Windows 10 Home
 
 Follow this [guide](installation.md#windows-10).
 
 ## I do not have the Analytics tab on the header section. How can I add analytics
 
-You should build CVAT images with ['Analytics' component](../../../components/analytics).
+You should build ADAP images with ['Analytics' component](../../../components/analytics).
 
 ## How to upload annotations to an entire task from UI when there are multiple jobs in the task
 

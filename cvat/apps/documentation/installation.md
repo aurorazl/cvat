@@ -3,7 +3,7 @@
   - [Windows 10](#windows-10)
   - [Mac OS Mojave](#mac-os-mojave)
   - [Advanced Topics](#advanced-topics)
-    - [Deploying CVAT behind a proxy](#deploying-cvat-behind-a-proxy)
+    - [Deploying ADAP behind a proxy](#deploying-cvat-behind-a-proxy)
     - [Additional components](#additional-components)
     - [Semi-automatic and automatic annotation](#semi-automatic-and-automatic-annotation)
     - [Stop all containers](#stop-all-containers)
@@ -20,7 +20,7 @@
 
 # Quick installation guide
 
-Before you can use CVAT, you’ll need to get it installed. The document below
+Before you can use ADAP, you’ll need to get it installed. The document below
 contains instructions for the most popular operating systems. If your system is
 not covered by the document it should be relatively straight forward to adapt
 the instructions below for other systems.
@@ -74,17 +74,17 @@ server. Proxy is an advanced topic and it is not covered by the guide.
   ```
 
 - Clone _CVAT_ source code from the
-  [GitHub repository](https://github.com/opencv/cvat).
+  [GitHub repository](https://github.com/opencv/ADAP).
 
   ```bash
   sudo apt-get --no-install-recommends install -y git
-  git clone https://github.com/opencv/cvat
+  git clone https://github.com/opencv/ADAP
   cd cvat
   ```
 
 - Build docker images by default. It will take some time to download public
   docker image ubuntu:16.04 and install all necessary ubuntu packages to run
-  CVAT server.
+  ADAP server.
 
   ```bash
   docker-compose build
@@ -109,7 +109,7 @@ server. Proxy is an advanced topic and it is not covered by the guide.
   Choose a username and a password for your admin account. For more information
   please read [Django documentation](https://docs.djangoproject.com/en/2.2/ref/django-admin/#createsuperuser).
 
-- Google Chrome is the only browser which is supported by CVAT. You need to
+- Google Chrome is the only browser which is supported by ADAP. You need to
   install it as well. Type commands below in a terminal window:
 
   ```sh
@@ -122,7 +122,7 @@ server. Proxy is an advanced topic and it is not covered by the guide.
 - Open the installed Google Chrome browser and go to [localhost:8080](http://localhost:8080).
   Type your login/password for the superuser on the login page and press the _Login_
   button. Now you should be able to create a new annotation task. Please read the
-  [CVAT user's guide](/cvat/apps/documentation/user_guide.md) for more details.
+  [ADAP user's guide](/cvat/apps/documentation/user_guide.md) for more details.
 
 ## Windows 10
 
@@ -143,21 +143,21 @@ server. Proxy is an advanced topic and it is not covered by the guide.
   More information about the package can be found [here](https://gitforwindows.org).
 
 - Download and install [Google Chrome](https://www.google.com/chrome/). It is the only browser
-  which is supported by CVAT.
+  which is supported by ADAP.
 
 - Go to windows menu, find `Git Bash` application and run it. You should see a terminal window.
 
-- Clone _CVAT_ source code from the
-  [GitHub repository](https://github.com/opencv/cvat).
+- Clone _ADAP_ source code from the
+  [GitHub repository](https://github.com/opencv/ADAP).
 
   ```bash
-  git clone https://github.com/opencv/cvat
+  git clone https://github.com/opencv/ADAP
   cd cvat
   ```
 
 - Build docker images by default. It will take some time to download public
   docker image ubuntu:16.04 and install all necessary ubuntu packages to run
-  CVAT server.
+  ADAP server.
 
   ```bash
   docker-compose build
@@ -185,7 +185,7 @@ server. Proxy is an advanced topic and it is not covered by the guide.
 - Open the installed Google Chrome browser and go to [localhost:8080](http://localhost:8080).
   Type your login/password for the superuser on the login page and press the _Login_
   button. Now you should be able to create a new annotation task. Please read the
-  [CVAT user's guide](/cvat/apps/documentation/user_guide.md) for more details.
+  [ADAP user's guide](/cvat/apps/documentation/user_guide.md) for more details.
 
 ## Mac OS Mojave
 
@@ -207,15 +207,15 @@ server. Proxy is an advanced topic and it is not covered by the guide.
   More instructions can be found [here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
 
 - Download and install [Google Chrome](https://www.google.com/chrome/). It
-  is the only browser which is supported by CVAT.
+  is the only browser which is supported by ADAP.
 
 - Open a terminal window. The terminal app is in the Utilities folder in
   Applications. To open it, either open your Applications folder, then open
   Utilities and double-click on Terminal, or press Command - spacebar to
   launch Spotlight and type "Terminal," then double-click the search result.
 
-- Clone _CVAT_ source code from the
-  [GitHub repository](https://github.com/opencv/cvat).
+- Clone _ADAP_ source code from the
+  [GitHub repository](https://github.com/opencv/ADAP).
 
   ```bash
   git clone https://github.com/opencv/cvat
@@ -252,13 +252,13 @@ server. Proxy is an advanced topic and it is not covered by the guide.
 - Open the installed Google Chrome browser and go to [localhost:8080](http://localhost:8080).
   Type your login/password for the superuser on the login page and press the _Login_
   button. Now you should be able to create a new annotation task. Please read the
-  [CVAT user's guide](/cvat/apps/documentation/user_guide.md) for more details.
+  [ADAP user's guide](/cvat/apps/documentation/user_guide.md) for more details.
 
 ## Advanced Topics
 
-### Deploying CVAT behind a proxy
+### Deploying ADAP behind a proxy
 
-If you deploy CVAT behind a proxy and do not plan to use any of [serverless functions](#semi-automatic-and-automatic-annotation)
+If you deploy ADAP behind a proxy and do not plan to use any of [serverless functions](#semi-automatic-and-automatic-annotation)
 for automatic annotation, the exported environment variables
 `http_proxy`, `https_proxy` and `no_proxy` should be enough to build images.
 Otherwise please create or edit the file `~/.docker/config.json` in the home directory of the user
@@ -292,9 +292,9 @@ docker-compose -f docker-compose.yml -f components/analytics/docker-compose.anal
 
 - You have to install `nuctl` command line tool to build and deploy serverless
   functions. Download [the latest release](https://github.com/nuclio/nuclio/releases).
-- Create `cvat` project inside nuclio dashboard where you will deploy new
+- Create `ADAP` project inside nuclio dashboard where you will deploy new
   serverless functions and deploy a couple of DL models. Commands below should
-  be run only after CVAT has been installed using docker-compose because it
+  be run only after ADAP has been installed using docker-compose because it
   runs nuclio dashboard which manages all serverless functions.
 
 ```bash
@@ -328,7 +328,7 @@ docker-compose down
 
 ### Advanced settings
 
-If you want to access your instance of CVAT outside of your localhost you should
+If you want to access your instance of ADAP outside of your localhost you should
 specify the `CVAT_HOST` environment variable. The best way to do that is to create
 [docker-compose.override.yml](https://docs.docker.com/compose/extends/) and put
 all your extra settings here.
@@ -348,7 +348,7 @@ option (in some cases it can be omitted).
 ### Share path
 
 You can use a share storage for data uploading during you are creating a task.
-To do that you can mount it to CVAT docker container. Example of
+To do that you can mount it to ADAP docker container. Example of
 docker-compose.override.yml for this purpose:
 
 ```yml
@@ -406,28 +406,28 @@ We assume that
 
 - you have sudo access on your server machine,
 - you have an IP address to use for remote access, and
-- that the local CVAT installation works on your server.
+- that the local ADAP installation works on your server.
 
 If this is not the case, please complete the steps in the installation manual first.
 
 #### Roadmap
 
-We will go through the following sequence of steps to get CVAT over HTTPS:
+We will go through the following sequence of steps to get ADAP over HTTPS:
 
 - Setup containers on default 80/tcp port. Checkin and then down the containers.
 - Configure Nginx to pass one of the [ACME challenges](https://letsencrypt.org/docs/challenge-types/) - webroot.
 - Create the certificate files using [acme.sh](https://github.com/acmesh-official/acme.sh).
-- Reconfigure Nginx to serve over HTTPS and map CVAT to Docker Compose port 443.
+- Reconfigure Nginx to serve over HTTPS and map ADAP to Docker Compose port 443.
 
 #### Step-by-step instructions
 
 ##### 1. Make the proxy listen on standard port 80 and prepare nginx for the ACME challenge via webroot method
 
-> The configuration assumes that on the docker host there will be only one instance of the CVAT site listens for incoming connections on 80 and 443 port. Also redirecting everything that does not concern renewal of certificates to the site via secure HTTPS protocol.
+> The configuration assumes that on the docker host there will be only one instance of the ADAP site listens for incoming connections on 80 and 443 port. Also redirecting everything that does not concern renewal of certificates to the site via secure HTTPS protocol.
 
 Let's assume the server will be at `my-cvat-server.org`.
 
-Point you shell in cvat repository directory, usually `cd $HOME/cvat`:
+Point you shell in ADAP repository directory, usually `cd $HOME/cvat`:
 
 Add the following into your `docker-compose.override.yml`, replacing `my-cvat-server.org` with your own IP address. This file lives in the same directory as `docker-compose.yml`.
 

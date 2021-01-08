@@ -238,9 +238,9 @@ def _download_data(urls, upload_dir):
                         break
                     tfp.write(block)
         except urlerror.HTTPError as err:
-            raise Exception(gettext("Failed to download ") + url + ". " + str(err.code) + ' - ' + err.reason)
+            raise Exception(gettext("Failed to download ") + url + ". " + str(err.code) + ' - ' + str(err.reason))
         except urlerror.URLError as err:
-            raise Exception(gettext("Invalid URL: ") + url + ". " + err.reason)
+            raise Exception(gettext("Invalid URL: ") + url + ". " + str(err.reason))
 
         local_files[name] = True
     return list(local_files.keys())
