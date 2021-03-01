@@ -15,6 +15,7 @@ import StatisticsModalContainer from 'containers/annotation-page/top-bar/statist
 import StandardWorkspaceComponent from './standard-workspace/standard-workspace';
 import AttributeAnnotationWorkspace from './attribute-annotation-workspace/attribute-annotation-workspace';
 import TagAnnotationWorkspace from './tag-annotation-workspace/tag-annotation-workspace';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     job: any | null | undefined;
@@ -26,14 +27,8 @@ interface Props {
 }
 
 export default function AnnotationPageComponent(props: Props): JSX.Element {
-    const {
-        job,
-        fetching,
-        getJob,
-        closeJob,
-        saveLogs,
-        workspace,
-    } = props;
+    const { t } = useTranslation();
+    const { job, fetching, getJob, closeJob, saveLogs, workspace } = props;
 
     const history = useHistory();
     useEffect(() => {
@@ -63,13 +58,13 @@ export default function AnnotationPageComponent(props: Props): JSX.Element {
         return <Spin size='large' className='cvat-spinner' />;
     }
 
-    if (typeof (job) === 'undefined') {
+    if (typeof job === 'undefined') {
         return (
             <Result
                 className='cvat-not-found'
                 status='404'
-                title='Sorry, but this job was not found'
-                subTitle='Please, be sure information you tried to get exist and you have access'
+                title={t('Sorry, but this job was not found')}
+                subTitle={t('Please, be sure information you tried to get exist and you have access')}
             />
         );
     }
@@ -79,17 +74,17 @@ export default function AnnotationPageComponent(props: Props): JSX.Element {
             <Layout.Header className='cvat-annotation-header'>
                 <AnnotationTopBarContainer />
             </Layout.Header>
-            { workspace === Workspace.STANDARD && (
+            {workspace === Workspace.STANDARD && (
                 <Layout.Content style={{ height: '100%' }}>
                     <StandardWorkspaceComponent />
                 </Layout.Content>
             )}
-            { workspace === Workspace.ATTRIBUTE_ANNOTATION && (
+            {workspace === Workspace.ATTRIBUTE_ANNOTATION && (
                 <Layout.Content style={{ height: '100%' }}>
                     <AttributeAnnotationWorkspace />
                 </Layout.Content>
             )}
-            { workspace === Workspace.TAG_ANNOTATION && (
+            {workspace === Workspace.TAG_ANNOTATION && (
                 <Layout.Content style={{ height: '100%' }}>
                     <TagAnnotationWorkspace />
                 </Layout.Content>

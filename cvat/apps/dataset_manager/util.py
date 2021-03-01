@@ -18,3 +18,7 @@ def make_zip_archive(src_path, dst_path):
             for name in filenames:
                 path = osp.join(dirpath, name)
                 archive.write(path, osp.relpath(path, src_path))
+
+def unzip_archive(src_path, dst_path):
+    if zipfile.is_zipfile(src_path):
+        zipfile.ZipFile(src_path).extractall(dst_path)

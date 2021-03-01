@@ -9,8 +9,28 @@ import Icon from 'antd/lib/icon';
 
 import consts from 'consts';
 import { EmptyTasksIcon as EmptyModelsIcon } from 'icons';
+import { useTranslation } from 'react-i18next';
+import { CombinedState } from 'reducers/interfaces';
+import { connect } from 'react-redux';
 
-export default function EmptyListComponent(): JSX.Element {
+interface StateToProps {
+    lang: string;
+}
+
+function mapStateToProps(state: CombinedState): StateToProps {
+    const {
+        lang: {lang}
+    } = state;
+
+    return {
+        lang
+    };
+}
+
+ function EmptyListComponent(props: StateToProps): JSX.Element {
+    const { t } = useTranslation();
+    const { lang } = props;
+
     return (
         <div className='cvat-empty-models-list'>
             <Row type='flex' justify='center' align='middle'>
@@ -20,20 +40,21 @@ export default function EmptyListComponent(): JSX.Element {
             </Row>
             <Row type='flex' justify='center' align='middle'>
                 <Col>
-                    <Text strong>No models deployed yet...</Text>
+                    <Text strong>{t('No models deployed yet...')}</Text>
                 </Col>
             </Row>
             <Row type='flex' justify='center' align='middle'>
                 <Col>
-                    <Text type='secondary'>To annotate your tasks automatically</Text>
+                    <Text type='secondary'>{t('To annotate your tasks automatically')}</Text>
                 </Col>
             </Row>
             <Row type='flex' justify='center' align='middle'>
                 <Col>
-                    <Text type='secondary'>deploy a model with </Text>
-                    <a href={`${consts.NUCLIO_GUIDE}`}>nuclio</a>
+                    <Text type='secondary'>{t('deploy a model with kfserving')}</Text>
                 </Col>
             </Row>
         </div>
     );
 }
+
+export default connect(mapStateToProps)(EmptyListComponent);

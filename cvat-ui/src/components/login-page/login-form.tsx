@@ -7,6 +7,7 @@ import Form, { FormComponentProps } from 'antd/lib/form/Form';
 import Button from 'antd/lib/button';
 import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
+import { withTranslation, WithTranslation  } from 'react-i18next';
 
 export interface LoginData {
     username: string;
@@ -16,15 +17,12 @@ export interface LoginData {
 type LoginFormProps = {
     fetching: boolean;
     onSubmit(loginData: LoginData): void;
-} & FormComponentProps;
+} & FormComponentProps & WithTranslation;
 
 class LoginFormComponent extends React.PureComponent<LoginFormProps> {
     private handleSubmit = (e: React.FormEvent): void => {
         e.preventDefault();
-        const {
-            form,
-            onSubmit,
-        } = this.props;
+        const { form, onSubmit } = this.props;
 
         form.validateFields((error, values): void => {
             if (!error) {
@@ -34,21 +32,23 @@ class LoginFormComponent extends React.PureComponent<LoginFormProps> {
     };
 
     private renderUsernameField(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
         const { getFieldDecorator } = form;
 
         return (
             <Form.Item hasFeedback>
                 {getFieldDecorator('username', {
-                    rules: [{
-                        required: true,
-                        message: 'Please specify a username',
-                    }],
+                    rules: [
+                        {
+                            required: true,
+                            message: t('Please specify a username'),
+                        },
+                    ],
                 })(
                     <Input
                         autoComplete='username'
                         prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
-                        placeholder='Username'
+                        placeholder={t('Username')}
                     />,
                 )}
             </Form.Item>
@@ -56,21 +56,23 @@ class LoginFormComponent extends React.PureComponent<LoginFormProps> {
     }
 
     private renderPasswordField(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
         const { getFieldDecorator } = form;
 
         return (
             <Form.Item hasFeedback>
                 {getFieldDecorator('password', {
-                    rules: [{
-                        required: true,
-                        message: 'Please specify a password',
-                    }],
+                    rules: [
+                        {
+                            required: true,
+                            message: t('Please specify a password'),
+                        },
+                ],
                 })(
                     <Input
                         autoComplete='current-password'
                         prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
-                        placeholder='Password'
+                        placeholder={t('Password')}
                         type='password'
                     />,
                 )}
@@ -79,7 +81,7 @@ class LoginFormComponent extends React.PureComponent<LoginFormProps> {
     }
 
     public render(): JSX.Element {
-        const { fetching } = this.props;
+        const { fetching, t } = this.props;
         return (
             <Form onSubmit={this.handleSubmit} className='login-form'>
                 {this.renderUsernameField()}
@@ -93,7 +95,7 @@ class LoginFormComponent extends React.PureComponent<LoginFormProps> {
                         htmlType='submit'
                         className='login-form-button'
                     >
-                        Sign in
+                        {t('Sign in')}
                     </Button>
                 </Form.Item>
             </Form>
@@ -101,4 +103,4 @@ class LoginFormComponent extends React.PureComponent<LoginFormProps> {
     }
 }
 
-export default Form.create<LoginFormProps>()(LoginFormComponent);
+export default Form.create<LoginFormProps>()(withTranslation()(LoginFormComponent));

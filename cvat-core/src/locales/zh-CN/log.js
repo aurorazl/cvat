@@ -1,0 +1,17 @@
+module.exports = {
+    'Payload must be an object': 'Payload必须是一个对象。',
+    'Log payload must be JSON serializable. ${error.toString()}': '日志payload必须可以JSON序列化。{{errortoString}}',
+    'The field "count" is required for "${this.type}" log. ': '"{{thistype}}"日志需要"count"字段。',
+    'It must be a positive integer': '它必须是一个正整数。',
+    'The field "${name}" is required for "${this.type}" log. ${range}': '"{{thistype}}"日志需要"{{name}}"字段。{{{range}}}',
+    'The field "working_time" is required for ${this.type} log. ': '"{{thistype}}"日志需要"working_time"字段。',
+    'It must be a number not less than 0': '它必须大于等于0',
+    'The field "message" is required for ${this.type} log. ': '"{{thistype}}"日志需要"message"字段。',
+    'It must be a string': '它必须是一个字符串',
+    'The field "filename" is required for ${this.type} log. ': '"{{thistype}}"日志需要"filename"字段。',
+    'The field "line" is required for ${this.type} log. ': '"{{thistype}}"日志需要"line"字段。',
+    'It must be a number': '它必须是一个数字',
+    'The field "column" is required for ${this.type} log. ': '"{{thistype}}"日志需要"column"字段。',
+    'The field "stack" is required for ${this.type} log. ': '"{{thistype}}"日志需要"stack"字段。',
+    'It must be an integer not less than 0': '必须是非负整数',
+}

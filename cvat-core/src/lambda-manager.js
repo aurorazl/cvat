@@ -1,17 +1,13 @@
-/*
-* Copyright (C) 2020 Intel Corporation
-* SPDX-License-Identifier: MIT
-*/
-
-/* global
-    require:false
-*/
+// Copyright (C) 2019-2020 Intel Corporation
+//
+// SPDX-License-Identifier: MIT
 
 const serverProxy = require('./server-proxy');
 const { ArgumentError } = require('./exceptions');
 const { Task } = require('./session');
 const MLModel = require('./ml-model');
 const { RQStatus } = require('./enums');
+const i18next = require('i18next').default;
 
 class LambdaManager {
     constructor() {
@@ -28,14 +24,12 @@ class LambdaManager {
         const models = [];
 
         for (const model of result) {
-            models.push(new MLModel({
-                id: model.id,
-                name: model.name,
-                description: model.description,
-                framework: model.framework,
-                labels: [...model.labels],
-                type: model.kind,
-            }));
+            models.push(
+                new MLModel({
+                    ...model,
+                    type: model.kind,
+                }),
+            );
         }
 
         this.cachedList = models;
@@ -45,19 +39,19 @@ class LambdaManager {
     async run(task, model, args) {
         if (!(task instanceof Task)) {
             throw new ArgumentError(
-                `Argument task is expected to be an instance of Task class, but got ${typeof (task)}`,
+                i18next.t('Argument task is expected to be an instance of Task class, but got ${typeof (task)}', {typeoftask: `${typeof (task)}`}),
             );
         }
 
         if (!(model instanceof MLModel)) {
             throw new ArgumentError(
-                `Argument model is expected to be an instance of MLModel class, but got ${typeof (model)}`,
+                i18next.t('Argument model is expected to be an instance of MLModel class, but got ${typeof (model)}', {typeofmodel: `${typeof (model)}`}),
             );
         }
 
         if (args && typeof (args) !== 'object') {
             throw new ArgumentError(
-                `Argument args is expected to be an object, but got ${typeof (model)}`,
+                i18next.t('Argument args is expected to be an object, but got ${typeof (model)}', {typeofmodel: `${typeof (model)}`}),
             );
         }
 
@@ -83,7 +77,7 @@ class LambdaManager {
 
     async cancel(requestID) {
         if (typeof (requestID) !== 'string') {
-            throw new ArgumentError(`Request id argument is required to be a string. But got ${requestID}`);
+            throw new ArgumentError(i18next.t('Request id argument is required to be a string. But got ${requestID}', {requestID: `${requestID}`}));
         }
 
         if (this.listening[requestID]) {
@@ -112,7 +106,11 @@ class LambdaManager {
                     delete this.listening[requestID];
                 }
             } catch (error) {
-                onUpdate(RQStatus.UNKNOWN, 0, `Could not get a status of the request ${requestID}. ${error.toString()}`);
+                onUpdate(
+                    RQStatus.UNKNOWN,
+                    0,
+                    i18next.t('Could not get a status of the request ${requestID}. ${error.toString()}', {requestID: `${requestID}`, errortoString: `${error.toString()}`}),
+                );
             }
         };
 

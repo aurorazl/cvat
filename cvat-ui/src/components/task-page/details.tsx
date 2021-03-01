@@ -12,20 +12,27 @@ import notification from 'antd/lib/notification';
 import Text from 'antd/lib/typography/Text';
 import Title from 'antd/lib/typography/Title';
 import moment from 'moment';
+import { message } from 'antd';
 
 import getCore from 'cvat-core-wrapper';
 import patterns from 'utils/validation-patterns';
 import { getReposData, syncRepos } from 'utils/git-utils';
+import { ActiveInference } from 'reducers/interfaces';
+import AutomaticAnnotationProgress from 'components/tasks-page/automatic-annotation-progress';
 import UserSelector from './user-selector';
 import LabelsEditorComponent from '../labels-editor/labels-editor';
+import { withTranslation, WithTranslation  } from 'react-i18next';
+import { transMoment } from 'utils/lang-utils';
 
 const core = getCore();
 
-interface Props {
+interface Props extends WithTranslation {
     previewImage: string;
     taskInstance: any;
     installedGit: boolean; // change to git repos url
     registeredUsers: any[];
+    activeInference: ActiveInference | null;
+    cancelAutoAnnotation(): void;
     onTaskUpdate: (taskInstance: any) => void;
 }
 
@@ -37,9 +44,11 @@ interface State {
     repositoryStatus: string;
 }
 
-export default class DetailsComponent extends React.PureComponent<Props, State> {
+class DetailsComponent extends React.PureComponent<Props, State> {
     private mounted: boolean;
+
     private previewImageElement: HTMLImageElement;
+
     private previewWrapperRef: React.RefObject<HTMLDivElement>;
 
     constructor(props: Props) {
@@ -60,7 +69,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
     }
 
     public componentDidMount(): void {
-        const { taskInstance, previewImage } = this.props;
+        const { taskInstance, previewImage, t } = this.props;
         const { previewImageElement, previewWrapperRef } = this;
         this.mounted = true;
 
@@ -74,7 +83,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
         };
 
         previewImageElement.src = previewImage;
-        previewImageElement.alt = 'Preview';
+        previewImageElement.alt = t('Preview');
         if (previewWrapperRef.current) {
             previewWrapperRef.current.appendChild(previewImageElement);
         }
@@ -84,7 +93,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
                 if (data !== null && this.mounted) {
                     if (data.status.error) {
                         notification.error({
-                            message: 'Could not receive repository status',
+                            message: t('Could not receive repository status'),
                             description: data.status.error,
                         });
                     } else {
@@ -97,16 +106,16 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
                         repository: data.url,
                     });
                 }
-            }).catch((error): void => {
+            })
+            .catch((error): void => {
                 if (this.mounted) {
                     notification.error({
-                        message: 'Could not receive repository status',
+                        message: t('Could not receive repository status'),
                         description: error.toString(),
                     });
                 }
             });
     }
-
 
     public componentDidUpdate(prevProps: Props): void {
         const { taskInstance } = this.props;
@@ -125,22 +134,23 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
 
     private renderTaskName(): JSX.Element {
         const { name } = this.state;
-        const {
-            taskInstance,
-            onTaskUpdate,
-        } = this.props;
+        const { taskInstance, onTaskUpdate, t } = this.props;
 
         return (
             <Title
                 level={4}
                 editable={{
                     onChange: (value: string): void => {
-                        this.setState({
-                            name: value,
-                        });
+                        if(!value){
+                            message.error(t('Value must not be empty'));
+                        }else{
+                            this.setState({
+                                name: value,
+                            });
 
-                        taskInstance.name = value;
-                        onTaskUpdate(taskInstance);
+                            taskInstance.name = value;
+                            onTaskUpdate(taskInstance);
+                        }
                     },
                 }}
                 className='cvat-text-color'
@@ -154,42 +164,38 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
         const { previewWrapperRef } = this;
 
         // Add image on mount after get its width and height to fit it into wrapper
-        return (
-            <div ref={previewWrapperRef} className='cvat-task-preview-wrapper' />
-        );
+        return <div ref={previewWrapperRef} className='cvat-task-preview-wrapper' />;
     }
 
     private renderParameters(): JSX.Element {
-        const { taskInstance } = this.props;
-        const { overlap } = taskInstance;
-        const { segmentSize } = taskInstance;
-        const { imageQuality } = taskInstance;
-        const zOrder = taskInstance.zOrder.toString();
+        const { taskInstance, t } = this.props;
+        const { overlap, segmentSize, imageQuality } = taskInstance;
 
         return (
             <>
                 <Row type='flex' justify='start' align='middle'>
                     <Col span={12}>
-                        <Text strong className='cvat-text-color'>Overlap size</Text>
+                        <Text strong className='cvat-text-color'>
+                            {t('Overlap size')}
+                        </Text>
                         <br />
                         <Text className='cvat-text-color'>{overlap}</Text>
                     </Col>
                     <Col span={12}>
-                        <Text strong className='cvat-text-color'>Segment size</Text>
+                        <Text strong className='cvat-text-color'>
+                            {t('Segment size')}
+                        </Text>
                         <br />
                         <Text className='cvat-text-color'>{segmentSize}</Text>
                     </Col>
                 </Row>
                 <Row type='flex' justify='space-between' align='middle'>
                     <Col span={12}>
-                        <Text strong className='cvat-text-color'>Image quality</Text>
+                        <Text strong className='cvat-text-color'>
+                            {t('Image quality')}
+                        </Text>
                         <br />
                         <Text className='cvat-text-color'>{imageQuality}</Text>
-                    </Col>
-                    <Col span={12}>
-                        <Text strong className='cvat-text-color'>Z-order</Text>
-                        <br />
-                        <Text className='cvat-text-color'>{zOrder}</Text>
                     </Col>
                 </Row>
             </>
@@ -197,46 +203,33 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
     }
 
     private renderUsers(): JSX.Element {
-        const {
-            taskInstance,
-            registeredUsers,
-            onTaskUpdate,
-        } = this.props;
+        const { taskInstance, registeredUsers, onTaskUpdate, t } = this.props;
         const owner = taskInstance.owner ? taskInstance.owner.username : null;
         const assignee = taskInstance.assignee ? taskInstance.assignee.username : null;
-        const created = moment(taskInstance.createdDate).format('MMMM Do YYYY');
+        const created = moment(taskInstance.createdDate);
         const assigneeSelect = (
             <UserSelector
                 users={registeredUsers}
                 value={assignee}
-                onChange={
-                    (value: string): void => {
-                        let [userInstance] = registeredUsers
-                            .filter((user: any) => user.username === value);
+                onChange={(value: string): void => {
+                    let [userInstance] = registeredUsers.filter((user: any) => user.username === value);
 
-                        if (userInstance === undefined) {
-                            userInstance = null;
-                        }
-
-                        taskInstance.assignee = userInstance;
-                        onTaskUpdate(taskInstance);
+                    if (userInstance === undefined) {
+                        userInstance = null;
                     }
-                }
+
+                    taskInstance.assignee = userInstance;
+                    onTaskUpdate(taskInstance);
+                }}
             />
         );
 
         return (
             <Row type='flex' justify='space-between' align='middle'>
-                <Col span={12}>
-                    { owner && (
-                        <Text type='secondary'>
-                            {`Created by ${owner} on ${created}`}
-                        </Text>
-                    )}
-                </Col>
+                <Col span={12}>{ owner && (<Text type='secondary'>{t('Created by ${owner} on ${created}', { owner: owner, created: transMoment(created) })}</Text>)}</Col>
                 <Col span={10}>
                     <Text type='secondary'>
-                        Assigned to
+                        {t('Assigned to')}
                         { assigneeSelect }
                     </Text>
                 </Col>
@@ -245,86 +238,81 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
     }
 
     private renderDatasetRepository(): JSX.Element | boolean {
-        const { taskInstance } = this.props;
-        const {
-            repository,
-            repositoryStatus,
-        } = this.state;
+        const { taskInstance, t } = this.props;
+        const { repository, repositoryStatus } = this.state;
 
         return (
-            !!repository
-                && (
-                    <Row>
-                        <Col className='cvat-dataset-repository-url'>
-                            <Text strong className='cvat-text-color'>Dataset Repository</Text>
-                            <br />
-                            <a href={repository} rel='noopener noreferrer' target='_blank'>{repository}</a>
-                            {repositoryStatus === 'sync'
-                                && (
-                                    <Tag color='blue'>
-                                        <Icon type='check-circle' />
-                                        Synchronized
-                                    </Tag>
-                                )}
-                            {repositoryStatus === 'merged'
-                                && (
-                                    <Tag color='green'>
-                                        <Icon type='check-circle' />
-                                        Merged
-                                    </Tag>
-                                )}
-                            {repositoryStatus === 'syncing'
-                                && (
-                                    <Tag color='purple'>
-                                        <Icon type='loading' />
-                                        Syncing
-                                    </Tag>
-                                )}
-                            {repositoryStatus === '!sync'
-                                && (
-                                    <Tag
-                                        color='red'
-                                        onClick={(): void => {
-                                            this.setState({
-                                                repositoryStatus: 'syncing',
-                                            });
+            !!repository && (
+                <Row>
+                    <Col className='cvat-dataset-repository-url'>
+                        <Text strong className='cvat-text-color'>
+                            {t('Dataset Repository')}
+                        </Text>
+                        <br />
+                        <a href={repository} rel='noopener noreferrer' target='_blank'>
+                            {repository}
+                        </a>
+                        {repositoryStatus === 'sync' && (
+                            <Tag color='blue'>
+                                <Icon type='check-circle' />
+                                {t('Synchronized')}
+                            </Tag>
+                        )}
+                        {repositoryStatus === 'merged' && (
+                            <Tag color='green'>
+                                <Icon type='check-circle' />
+                                {t('Merged')}
+                            </Tag>
+                        )}
+                        {repositoryStatus === 'syncing' && (
+                            <Tag color='purple'>
+                                <Icon type='loading' />
+                                {t('Syncing')}
+                            </Tag>
+                        )}
+                        {repositoryStatus === '!sync' && (
+                            <Tag
+                                color='red'
+                                onClick={(): void => {
+                                    this.setState({
+                                        repositoryStatus: 'syncing',
+                                    });
 
-                                            syncRepos(taskInstance.id).then((): void => {
-                                                if (this.mounted) {
-                                                    this.setState({
-                                                        repositoryStatus: 'sync',
-                                                    });
-                                                }
-                                            }).catch((error): void => {
-                                                if (this.mounted) {
-                                                    Modal.error({
-                                                        width: 800,
-                                                        title: 'Could not synchronize the repository',
-                                                        content: error.toString(),
-                                                    });
+                                    syncRepos(taskInstance.id)
+                                        .then((): void => {
+                                            if (this.mounted) {
+                                                this.setState({
+                                                    repositoryStatus: 'sync',
+                                                });
+                                            }
+                                        })
+                                        .catch((error): void => {
+                                            if (this.mounted) {
+                                                Modal.error({
+                                                    width: 800,
+                                                    title: t('Could not synchronize the repository'),
+                                                    content: error.toString(),
+                                                });
 
-                                                    this.setState({
-                                                        repositoryStatus: '!sync',
-                                                    });
-                                                }
-                                            });
-                                        }}
-                                    >
-                                        <Icon type='warning' />
-                                        Synchronize
-                                    </Tag>
-                                )}
-                        </Col>
-                    </Row>
-                )
+                                                this.setState({
+                                                    repositoryStatus: '!sync',
+                                                });
+                                            }
+                                        });
+                                }}
+                            >
+                                <Icon type='warning' />
+                                {t('Synchronize')}
+                            </Tag>
+                        )}
+                    </Col>
+                </Row>
+            )
         );
     }
 
     private renderBugTracker(): JSX.Element {
-        const {
-            taskInstance,
-            onTaskUpdate,
-        } = this.props;
+        const { taskInstance, onTaskUpdate, t } = this.props;
         const { bugTracker, bugTrackerEditing } = this.state;
 
         let shown = false;
@@ -337,11 +325,11 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
             if (value && !patterns.validateURL.pattern.test(value)) {
                 if (!shown) {
                     Modal.error({
-                        title: `Could not update the task ${taskInstance.id}`,
-                        content: 'Issue tracker is expected to be URL',
-                        onOk: (() => {
+                        title: t('Could not update the task ${taskInstance.id}').replace('${taskInstance.id}', `${taskInstance.id}`),
+                        content: t('Issue tracker is expected to be URL'),
+                        onOk: () => {
                             shown = false;
-                        }),
+                        },
                     });
                     shown = true;
                 }
@@ -360,21 +348,28 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
             return (
                 <Row>
                     <Col>
-                        <Text strong className='cvat-text-color'>Issue Tracker</Text>
+                        <Text strong className='cvat-issue-text'>
+                            {t('Issue Tracker')}
+                        </Text>
                         <br />
-                        <Text editable={{ onChange: onChangeValue }}>{bugTracker}</Text>
-                        <Button
-                            type='ghost'
-                            size='small'
-                            onClick={(): void => {
-                                // false positive
-                                // eslint-disable-next-line
-                                window.open(bugTracker, '_blank');
-                            }}
-                            className='cvat-open-bug-tracker-button'
-                        >
-                                Open the issue
-                        </Button>
+                        <Text editable={{ onChange: onChangeValue, onStart }}>{bugTracker}</Text>
+                        {
+                            !bugTrackerEditing ?
+                            (
+                                <Button
+                                    type='ghost'
+                                    size='small'
+                                    onClick={(): void => {
+                                        // false positive
+                                        // eslint-disable-next-line
+                                        window.open(bugTracker, '_blank');
+                                    }}
+                                    className='cvat-open-bug-tracker-button'
+                                >
+                                    {t('Open the issue')}
+                                </Button>
+                            ) : null
+                        }
                     </Col>
                 </Row>
             );
@@ -383,7 +378,9 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
         return (
             <Row>
                 <Col>
-                    <Text strong className='cvat-text-color'>Issue Tracker</Text>
+                    <Text strong className='cvat-issue-text'>
+                        {t('Issue Tracker')}
+                    </Text>
                     <br />
                     <Text
                         editable={{
@@ -392,7 +389,7 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
                             onChange: onChangeValue,
                         }}
                     >
-                        {bugTrackerEditing ? '' : 'Not specified'}
+                        {bugTrackerEditing ? '' : t('Not specified')}
                     </Text>
                 </Col>
             </Row>
@@ -400,21 +397,15 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
     }
 
     private renderLabelsEditor(): JSX.Element {
-        const {
-            taskInstance,
-            onTaskUpdate,
-        } = this.props;
+        const { taskInstance, onTaskUpdate } = this.props;
 
         return (
             <Row>
                 <Col>
                     <LabelsEditorComponent
-                        labels={taskInstance.labels.map(
-                            (label: any): string => label.toJSON(),
-                        )}
+                        labels={taskInstance.labels.map((label: any): string => label.toJSON())}
                         onSubmit={(labels: any[]): void => {
-                            taskInstance.labels = labels
-                                .map((labelData): any => new core.classes.Label(labelData));
+                            taskInstance.labels = labels.map((labelData): any => new core.classes.Label(labelData));
                             onTaskUpdate(taskInstance);
                         }}
                     />
@@ -424,34 +415,39 @@ export default class DetailsComponent extends React.PureComponent<Props, State> 
     }
 
     public render(): JSX.Element {
+        const { activeInference, cancelAutoAnnotation } = this.props;
         return (
             <div className='cvat-task-details'>
                 <Row type='flex' justify='start' align='middle'>
-                    <Col>
-                        { this.renderTaskName() }
-                    </Col>
+                    <Col>{ this.renderTaskName() }</Col>
                 </Row>
                 <Row type='flex' justify='space-between' align='top'>
                     <Col md={8} lg={7} xl={7} xxl={6}>
                         <Row type='flex' justify='start' align='middle'>
-                            <Col span={24}>
-                                { this.renderPreview() }
-                            </Col>
+                            <Col span={24}>{this.renderPreview()}</Col>
                         </Row>
                         <Row>
-                            <Col>
-                                { this.renderParameters() }
-                            </Col>
+                            <Col>{this.renderParameters()}</Col>
                         </Row>
                     </Col>
                     <Col md={16} lg={17} xl={17} xxl={18}>
-                        { this.renderUsers() }
-                        { this.renderBugTracker() }
-                        { this.renderDatasetRepository() }
-                        { this.renderLabelsEditor() }
+                        {this.renderUsers()}
+                        <Row type='flex' justify='space-between' align='middle'>
+                            <Col span={12}>{this.renderBugTracker()}</Col>
+                            <Col span={10}>
+                                <AutomaticAnnotationProgress
+                                    activeInference={activeInference}
+                                    cancelAutoAnnotation={cancelAutoAnnotation}
+                                />
+                            </Col>
+                        </Row>
+                        {this.renderDatasetRepository()}
+                        {this.renderLabelsEditor()}
                     </Col>
                 </Row>
             </div>
         );
     }
 }
+
+export default withTranslation()(DetailsComponent);

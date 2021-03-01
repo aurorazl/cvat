@@ -2,17 +2,12 @@
 //
 // SPDX-License-Identifier: MIT
 
-import React from 'react';
+import React, { MutableRefObject } from 'react';
 import copy from 'copy-to-clipboard';
 import { connect } from 'react-redux';
 
 import { LogType } from 'cvat-logger';
-import {
-    ActiveControl,
-    CombinedState,
-    ColorBy,
-    ShapeType,
-} from 'reducers/interfaces';
+import { ActiveControl, CombinedState, ColorBy, ShapeType } from 'reducers/interfaces';
 import {
     collapseObjectItems,
     updateAnnotationsAsync,
@@ -26,10 +21,13 @@ import {
 } from 'actions/annotation-actions';
 
 import ObjectStateItemComponent from 'components/annotation-page/standard-workspace/objects-side-bar/object-item';
+import { ToolsControlComponent } from 'components/annotation-page/standard-workspace/controls-side-bar/tools-control';
 import { shift } from 'utils/math';
 
 interface OwnProps {
     clientID: number;
+    objectStates: any[];
+    initialCollapsed: boolean;
 }
 
 interface StateToProps {
@@ -46,6 +44,7 @@ interface StateToProps {
     minZLayer: number;
     maxZLayer: number;
     normalizedKeyMap: Record<string, string>;
+    aiToolsRef: MutableRefObject<ToolsControlComponent>;
 }
 
 interface DispatchToProps {
@@ -63,61 +62,61 @@ function mapStateToProps(state: CombinedState, own: OwnProps): StateToProps {
     const {
         annotation: {
             annotations: {
-                states,
                 collapsed: statesCollapsed,
                 activatedStateID,
-                zLayer: {
-                    min: minZLayer,
-                    max: maxZLayer,
-                },
+                zLayer: { min: minZLayer, max: maxZLayer },
             },
-            job: {
-                attributes: jobAttributes,
-                instance: jobInstance,
-                labels,
-            },
+            job: { attributes: jobAttributes, instance: jobInstance, labels },
             player: {
-                frame: {
-                    number: frameNumber,
-                },
+                frame: { number: frameNumber },
             },
-            canvas: {
-                ready,
-                activeControl,
-            },
+            canvas: { ready, activeControl },
+            aiToolsRef,
         },
         settings: {
-            shapes: {
-                colorBy,
-            },
+            shapes: { colorBy },
         },
-        shortcuts: {
-            normalizedKeyMap,
-        },
+        shortcuts: { normalizedKeyMap },
     } = state;
 
-    const index = states
-        .map((_state: any): number => _state.clientID)
-        .indexOf(own.clientID);
+    const { objectStates: states, initialCollapsed, clientID } = own;
+    const stateIDs = states.map((_state: any): number => _state.clientID);
+    const index = stateIDs.indexOf(clientID);
 
-    const collapsedState = typeof (statesCollapsed[own.clientID]) === 'undefined'
-        ? true : statesCollapsed[own.clientID];
+    try {
+        const collapsedState =
+            typeof statesCollapsed[clientID] === 'undefined' ? initialCollapsed : statesCollapsed[clientID];
 
-    return {
-        objectState: states[index],
-        collapsed: collapsedState,
-        attributes: jobAttributes[states[index].label.id],
-        labels,
-        ready,
-        activeControl,
-        colorBy,
-        jobInstance,
-        frameNumber,
-        activated: activatedStateID === own.clientID,
-        minZLayer,
-        maxZLayer,
-        normalizedKeyMap,
-    };
+        return {
+            objectState: states[index],
+            collapsed: collapsedState,
+            attributes: jobAttributes[states[index].label.id],
+            labels,
+            ready,
+            activeControl,
+            colorBy,
+            jobInstance,
+            frameNumber,
+            activated: activatedStateID === clientID,
+            minZLayer,
+            maxZLayer,
+            normalizedKeyMap,
+            aiToolsRef,
+        };
+    } catch (exception) {
+        // we have an exception here sometimes
+        // but I cannot understand when it happens and what is the root reason
+        // maybe this temporary hack helps us
+        const dataObject = {
+            index,
+            frameNumber,
+            clientID: own.clientID,
+            stateIDs,
+        };
+        throw new Error(
+            `${exception.toString()} in mapStateToProps of ObjectItemContainer. Data are ${JSON.stringify(dataObject)}`,
+        );
+    }
 }
 
 function mapDispatchToProps(dispatch: any): DispatchToProps {
@@ -163,25 +162,15 @@ class ObjectItemContainer extends React.PureComponent<Props> {
     };
 
     private remove = (): void => {
-        const {
-            objectState,
-            removeObject,
-            jobInstance,
-        } = this.props;
+        const { objectState, removeObject, jobInstance } = this.props;
 
         removeObject(jobInstance, objectState);
     };
 
     private createURL = (): void => {
-        const {
-            objectState,
-            frameNumber,
-        } = this.props;
+        const { objectState, frameNumber } = this.props;
 
-        const {
-            origin,
-            pathname,
-        } = window.location;
+        const { origin, pathname } = window.location;
 
         const search = `frame=${frameNumber}&type=${objectState.objectType}&serverID=${objectState.serverID}`;
         const url = `${origin}${pathname}?${search}`;
@@ -202,12 +191,12 @@ class ObjectItemContainer extends React.PureComponent<Props> {
                 }
 
                 return acc;
-            }, [],
+            },
+            [],
         );
 
         if (objectState.shapeType === ShapeType.POLYGON) {
-            objectState.points = reducedPoints.slice(0, 1)
-                .concat(reducedPoints.reverse().slice(0, -1)).flat();
+            objectState.points = reducedPoints.slice(0, 1).concat(reducedPoints.reverse().slice(0, -1)).flat();
             updateState(objectState);
         } else if (objectState.shapeType === ShapeType.POLYLINE) {
             objectState.points = reducedPoints.reverse().flat();
@@ -216,32 +205,21 @@ class ObjectItemContainer extends React.PureComponent<Props> {
     };
 
     private toBackground = (): void => {
-        const {
-            objectState,
-            minZLayer,
-        } = this.props;
+        const { objectState, minZLayer } = this.props;
 
         objectState.zOrder = minZLayer - 1;
         this.commit();
     };
 
     private toForeground = (): void => {
-        const {
-            objectState,
-            maxZLayer,
-        } = this.props;
+        const { objectState, maxZLayer } = this.props;
 
         objectState.zOrder = maxZLayer + 1;
         this.commit();
     };
 
     private activate = (): void => {
-        const {
-            activateObject,
-            objectState,
-            ready,
-            activeControl,
-        } = this.props;
+        const { activateObject, objectState, ready, activeControl } = this.props;
 
         if (ready && activeControl === ActiveControl.CURSOR) {
             activateObject(objectState.clientID);
@@ -249,21 +227,20 @@ class ObjectItemContainer extends React.PureComponent<Props> {
     };
 
     private collapse = (): void => {
-        const {
-            collapseOrExpand,
-            objectState,
-            collapsed,
-        } = this.props;
+        const { collapseOrExpand, objectState, collapsed } = this.props;
 
         collapseOrExpand([objectState], !collapsed);
     };
 
+    private activateTracking = (): void => {
+        const { objectState, aiToolsRef } = this.props;
+        if (aiToolsRef.current && aiToolsRef.current.trackingAvailable()) {
+            aiToolsRef.current.trackState(objectState);
+        }
+    };
+
     private changeColor = (color: string): void => {
-        const {
-            objectState,
-            colorBy,
-            changeGroupColor,
-        } = this.props;
+        const { objectState, colorBy, changeGroupColor } = this.props;
 
         if (colorBy === ColorBy.INSTANCE) {
             objectState.color = color;
@@ -274,10 +251,7 @@ class ObjectItemContainer extends React.PureComponent<Props> {
     };
 
     private changeLabel = (labelID: string): void => {
-        const {
-            objectState,
-            labels,
-        } = this.props;
+        const { objectState, labels } = this.props;
 
         const [label] = labels.filter((_label: any): boolean => _label.id === +labelID);
         objectState.label = label;
@@ -306,8 +280,7 @@ class ObjectItemContainer extends React.PureComponent<Props> {
 
         this.resetCuboidPerspective(false);
 
-        objectState.points = shift(objectState.points,
-            cuboidOrientationIsLeft(objectState.points) ? 4 : -4);
+        objectState.points = shift(objectState.points, cuboidOrientationIsLeft(objectState.points) ? 4 : -4);
 
         this.commit();
     };
@@ -345,24 +318,13 @@ class ObjectItemContainer extends React.PureComponent<Props> {
     };
 
     private commit(): void {
-        const {
-            objectState,
-            updateState,
-        } = this.props;
+        const { objectState, updateState } = this.props;
 
         updateState(objectState);
     }
 
     public render(): JSX.Element {
-        const {
-            objectState,
-            collapsed,
-            labels,
-            attributes,
-            activated,
-            colorBy,
-            normalizedKeyMap,
-        } = this.props;
+        const { objectState, collapsed, labels, attributes, activated, colorBy, normalizedKeyMap } = this.props;
 
         let stateColor = '';
         if (colorBy === ColorBy.INSTANCE) {
@@ -401,6 +363,7 @@ class ObjectItemContainer extends React.PureComponent<Props> {
                 changeLabel={this.changeLabel}
                 changeAttribute={this.changeAttribute}
                 collapse={this.collapse}
+                activateTracking={this.activateTracking}
                 resetCuboidPerspective={() => this.resetCuboidPerspective()}
             />
         );

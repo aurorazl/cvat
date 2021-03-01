@@ -3,35 +3,45 @@
 // SPDX-License-Identifier: MIT
 
 import 'antd/dist/antd.css';
-import '../styles.scss';
-import React from 'react';
-import { Switch, Route, Redirect } from 'react-router';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { GlobalHotKeys, ExtendedKeyMapOptions, configure } from 'react-hotkeys';
-import Spin from 'antd/lib/spin';
+import { Col, Row } from 'antd/lib/grid';
 import Layout from 'antd/lib/layout';
-import { Row, Col } from 'antd/lib/grid';
-import Text from 'antd/lib/typography/Text';
-import notification from 'antd/lib/notification';
-
-import GlobalErrorBoundary from 'components/global-error-boundary/global-error-boundary';
-import ShorcutsDialog from 'components/shortcuts-dialog/shortcuts-dialog';
-import TasksPageContainer from 'containers/tasks-page/tasks-page';
-import CreateTaskPageContainer from 'containers/create-task-page/create-task-page';
-import TaskPageContainer from 'containers/task-page/task-page';
-import ModelsPageContainer from 'containers/models-page/models-page';
-import AnnotationPageContainer from 'containers/annotation-page/annotation-page';
-import LoginPageContainer from 'containers/login-page/login-page';
-import RegisterPageContainer from 'containers/register-page/register-page';
-import Header from 'components/header/header';
-import { customWaViewHit } from 'utils/enviroment';
-import showPlatformNotification, { stopNotifications, platformInfo } from 'utils/platform-checker';
-
-import getCore from 'cvat-core-wrapper';
-import { NotificationsState } from 'reducers/interfaces';
 import Modal from 'antd/lib/modal';
+import notification from 'antd/lib/notification';
+import Spin from 'antd/lib/spin';
+import Text from 'antd/lib/typography/Text';
+import GlobalErrorBoundary from 'components/global-error-boundary/global-error-boundary';
+import Header from 'components/header/header';
+import ResetPasswordPageConfirmComponent from 'components/reset-password-confirm-page/reset-password-confirm-page';
+import ResetPasswordPageComponent from 'components/reset-password-page/reset-password-page';
+import ShorcutsDialog from 'components/shortcuts-dialog/shortcuts-dialog';
+import LoginWithTokenComponent from 'components/login-with-token/login-with-token';
+import AnnotationPageContainer from 'containers/annotation-page/annotation-page';
+import CreateTaskPageContainer from 'containers/create-task-page/create-task-page';
+import LoginPageContainer from 'containers/login-page/login-page';
+import ModelsPageContainer from 'containers/models-page/models-page';
+import RegisterPageContainer from 'containers/register-page/register-page';
+import TaskPageContainer from 'containers/task-page/task-page';
+import TasksPageContainer from 'containers/tasks-page/tasks-page';
+import getCore from 'cvat-core-wrapper';
+import React from 'react';
+import { configure, ExtendedKeyMapOptions, GlobalHotKeys } from 'react-hotkeys';
+import { Redirect, Route, Switch } from 'react-router';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { NotificationsState } from 'reducers/interfaces';
+import { customWaViewHit } from 'utils/enviroment';
+import showPlatformNotification, { platformInfo, stopNotifications } from 'utils/platform-checker';
+import '../styles.scss';
+import SecurityLayout from 'layouts/SecurityLayout'
 
-interface CVATAppProps {
+import { withTranslation, WithTranslation  } from 'react-i18next';
+
+import { connect } from 'react-redux';
+import { ConfigProvider } from 'antd';
+import enUS from 'antd/es/locale/en_US';
+import zhCN from 'antd/es/locale/zh_CN';
+import { CombinedState } from 'reducers/interfaces';
+
+interface CVATAppProps extends WithTranslation {
     loadFormats: () => void;
     loadUsers: () => void;
     loadAbout: () => void;
@@ -61,9 +71,20 @@ interface CVATAppProps {
     userAgreementsInitialized: boolean;
     authActionsFetching: boolean;
     authActionsInitialized: boolean;
-    allowChangePassword: boolean;
     notifications: NotificationsState;
     user: any;
+    isModelPluginActive: boolean;
+    lang: string;
+}
+
+interface StateToProps {
+    lang: string;
+}
+
+function mapStateToProps(state: CombinedState): StateToProps {
+    return {
+        lang: state.lang.lang,
+    };
 }
 
 class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentProps> {
@@ -114,6 +135,7 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
             userAgreementsInitialized,
             authActionsFetching,
             authActionsInitialized,
+            isModelPluginActive,
         } = this.props;
 
         this.showErrors();
@@ -149,7 +171,7 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
             loadAbout();
         }
 
-        if (!modelsInitialized && !modelsFetching) {
+        if (isModelPluginActive && !modelsInitialized && !modelsFetching) {
             initModels();
         }
 
@@ -173,10 +195,7 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
             });
         }
 
-        const {
-            notifications,
-            resetMessages,
-        } = this.props;
+        const { notifications, resetMessages } = this.props;
 
         let shown = false;
         for (const where of Object.keys(notifications.messages)) {
@@ -195,6 +214,7 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
     }
 
     private showErrors(): void {
+        const { t } = this.props;
         function showError(title: string, _error: any): void {
             const error = _error.toString();
             notification.error({
@@ -207,17 +227,14 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
                     />
                 ),
                 duration: null,
-                description: error.length > 200 ? 'Open the Browser Console to get details' : error,
+                description: error.length > 200 ? t('Open the Browser Console to get details') : error,
             });
 
             // eslint-disable-next-line no-console
             console.error(error);
         }
 
-        const {
-            notifications,
-            resetErrors,
-        } = this.props;
+        const { notifications, resetErrors } = this.props;
 
         let shown = false;
         for (const where of Object.keys(notifications.errors)) {
@@ -247,11 +264,14 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
             switchSettingsDialog,
             user,
             keyMap,
+            isModelPluginActive,
+            t,
+            lang,
         } = this.props;
 
-        const readyForRender = (userInitialized && (user == null || !user.isVerified))
-            || (userInitialized && formatsInitialized
-                && pluginsInitialized && usersInitialized && aboutInitialized);
+        const readyForRender =
+            (userInitialized && (user == null || !user.isVerified)) ||
+            (userInitialized && formatsInitialized && pluginsInitialized && usersInitialized && aboutInitialized);
 
         const subKeyMap = {
             SWITCH_SHORTCUTS: keyMap.SWITCH_SHORTCUTS,
@@ -275,23 +295,21 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
             stopNotifications(false);
             const info = platformInfo();
             Modal.warning({
-                title: 'Unsupported platform detected',
+                title: t('Unsupported platform detected'),
                 content: (
                     <>
                         <Row>
                             <Col>
                                 <Text>
-                                    {`The browser you are using is ${info.name} ${info.version} based on ${info.engine} .`
-                                        + ' CVAT was tested in the latest versions of Chrome and Firefox.'
-                                        + ' We recommend to use Chrome (or another Chromium based browser)'}
+                                    {t('The browser you are using is ${info.name} ${info.version} based on ${info.engine} .').replace('${info.name}', `${info.name}`).replace('${info.version}', `${info.version}`).replace('${info.engine}', `${info.engine}`) +
+                                        t(' ADAP was tested in the latest versions of Chrome and Firefox.') +
+                                        t(' We recommend to use Chrome (or another Chromium based browser)')}
                                 </Text>
                             </Col>
                         </Row>
                         <Row>
                             <Col>
-                                <Text type='secondary'>
-                                    {`The operating system is ${info.os}`}
-                                </Text>
+                                <Text type='secondary'>{t('The operating system is ${info.os}').replace('${info.os}', `${info.os}`)}</Text>
                             </Col>
                         </Row>
                     </>
@@ -300,48 +318,63 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
             });
         }
 
-
         if (readyForRender) {
             if (user && user.isVerified) {
                 return (
-                    <GlobalErrorBoundary>
-                        <Layout>
-                            <Header />
-                            <Layout.Content style={{ height: '100%' }}>
-                                <ShorcutsDialog />
-                                <GlobalHotKeys keyMap={subKeyMap} handlers={handlers}>
-                                    <Switch>
-                                        <Route exact path='/tasks' component={TasksPageContainer} />
-                                        <Route exact path='/tasks/create' component={CreateTaskPageContainer} />
-                                        <Route exact path='/tasks/:id' component={TaskPageContainer} />
-                                        <Route exact path='/tasks/:tid/jobs/:jid' component={AnnotationPageContainer} />
-                                        <Route exact path='/models' component={ModelsPageContainer} />
-                                        <Redirect push to='/tasks' />
-                                    </Switch>
-                                </GlobalHotKeys>
-                                {/* eslint-disable-next-line */}
-                                <a id='downloadAnchor' style={{ display: 'none' }} download />
-                            </Layout.Content>
-                        </Layout>
-                    </GlobalErrorBoundary>
+                    <ConfigProvider locale={lang === 'zh-CN' ? zhCN : enUS}>
+                        <GlobalErrorBoundary>
+                            <Layout>
+                                <Header />
+                                <Layout.Content style={{ height: '100%' }}>
+                                    <ShorcutsDialog />
+                                    <GlobalHotKeys keyMap={subKeyMap} handlers={handlers}>
+                                        <Switch>
+                                            <Route exact path='/tasks' component={TasksPageContainer} />
+                                            <Route exact path='/tasks/create' component={CreateTaskPageContainer} />
+                                            <Route exact path='/tasks/:id' component={TaskPageContainer} />
+                                            <Route exact path='/tasks/:tid/jobs/:jid' component={AnnotationPageContainer} />
+                                            {isModelPluginActive && (
+                                                <Route exact path='/models' component={ModelsPageContainer} />
+                                            )}
+                                            <Redirect push to='/tasks' />
+                                        </Switch>
+                                    </GlobalHotKeys>
+                                    {/* eslint-disable-next-line */}
+                                    <a id='downloadAnchor' style={{ display: 'none' }} download />
+                                </Layout.Content>
+                            </Layout>
+                        </GlobalErrorBoundary>
+                    </ConfigProvider>
                 );
             }
 
             return (
-                <GlobalErrorBoundary>
-                    <Switch>
-                        <Route exact path='/auth/register' component={RegisterPageContainer} />
-                        <Route exact path='/auth/login' component={LoginPageContainer} />
-                        <Redirect to='/auth/login' />
-                    </Switch>
-                </GlobalErrorBoundary>
+                <ConfigProvider locale={lang === 'zh-CN' ? zhCN : enUS}>
+                    <GlobalErrorBoundary>
+                        <Switch>
+                            <Route exact path='/auth/register' component={RegisterPageContainer} />
+                            {/* <Route exact path='/auth/login' component={LoginPageContainer} /> */}
+                            <Route exact path='/auth/login' component={SecurityLayout} />
+                            <Route
+                                exact
+                                path='/auth/login-with-token/:sessionId/:token'
+                                component={LoginWithTokenComponent}
+                            />
+                            <Route exact path='/auth/password/reset' component={ResetPasswordPageComponent} />
+                            <Route
+                                exact
+                                path='/auth/password/reset/confirm'
+                                component={ResetPasswordPageConfirmComponent}
+                            />
+                            <Redirect to='/auth/login' />
+                        </Switch>
+                    </GlobalErrorBoundary>
+                </ConfigProvider>
             );
         }
 
-        return (
-            <Spin size='large' className='cvat-spinner' />
-        );
+        return <Spin size='large' className='cvat-spinner' />;
     }
 }
 
-export default withRouter(CVATApplication);
+export default withRouter(connect(mapStateToProps)(withTranslation()(CVATApplication)));

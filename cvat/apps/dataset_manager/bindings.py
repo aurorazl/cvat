@@ -13,7 +13,8 @@ import datumaro.components.extractor as datumaro
 from cvat.apps.engine.frame_provider import FrameProvider
 from cvat.apps.engine.models import AttributeType, ShapeType
 from datumaro.util import cast
-from datumaro.util.image import Image
+from datumaro.util.image import ByteImage, Image
+from django.utils.translation import gettext
 
 from .annotation import AnnotationManager, TrackManager
 
@@ -147,7 +148,6 @@ class TaskData:
                 ("start_frame", str(self._db_task.data.start_frame)),
                 ("stop_frame", str(self._db_task.data.stop_frame)),
                 ("frame_filter", self._db_task.data.frame_filter),
-                ("z_order", str(self._db_task.z_order)),
 
                 ("labels", [
                     ("label", OrderedDict([
@@ -175,13 +175,13 @@ class TaskData:
                 ]),
 
                 ("owner", OrderedDict([
-                    ("username", self._db_task.owner.username),
-                    ("email", self._db_task.owner.email)
+                    ("username", self._db_task.owner),
+                    ("email", self._db_task.owner)
                 ]) if self._db_task.owner else ""),
 
                 ("assignee", OrderedDict([
-                    ("username", self._db_task.assignee.username),
-                    ("email", self._db_task.assignee.email)
+                    ("username", self._db_task.assignee),
+                    ("email", self._db_task.assignee)
                 ]) if self._db_task.assignee else ""),
             ])),
             ("dumped", str(timezone.localtime(timezone.now())))
@@ -269,6 +269,8 @@ class TaskData:
         for shape in sorted(anno_manager.to_shapes(self._db_task.data.size),
                 key=lambda shape: shape.get("z_order", 0)):
             if 'track_id' in shape:
+                if shape['outside']:
+                    continue
                 exported_shape = self._export_tracked_shape(shape)
             else:
                 exported_shape = self._export_labeled_shape(shape)
@@ -343,7 +345,7 @@ class TaskData:
                     else:
                         raise ValueError("Unexpected attribute value")
             except Exception as e:
-                raise Exception("Failed to convert attribute '%s'='%s': %s" %
+                raise Exception(gettext("Failed to convert attribute '%s'='%s': %s") %
                     (self._get_label_name(label_id), value, e))
 
         return { 'spec_id': spec_id, 'value': value }
@@ -450,25 +452,43 @@ class TaskData:
         return None
 
 class CvatTaskDataExtractor(datumaro.SourceExtractor):
-    def __init__(self, task_data, include_images=False, include_outside=False):
+    def __init__(self, task_data, include_images=False):
         super().__init__()
         self._categories = self._load_categories(task_data)
-        self._include_outside = include_outside
 
         dm_items = []
 
+        is_video = task_data.meta['task']['mode'] == 'interpolation'
+        ext = ''
+        if is_video:
+            ext = FrameProvider.VIDEO_FRAME_EXT
         if include_images:
             frame_provider = FrameProvider(task_data.db_task.data)
+            if is_video:
+                # optimization for videos: use numpy arrays instead of bytes
+                # some formats or transforms can require image data
+                def _make_image(i, **kwargs):
+                    loader = lambda _: frame_provider.get_frame(i,
+                        quality=frame_provider.Quality.ORIGINAL,
+                        out_type=frame_provider.Type.NUMPY_ARRAY)[0]
+                    return Image(loader=loader, **kwargs)
+            else:
+                # for images use encoded data to avoid recoding
+                def _make_image(i, **kwargs):
+                    loader = lambda _: frame_provider.get_frame(i,
+                        quality=frame_provider.Quality.ORIGINAL,
+                        out_type=frame_provider.Type.BUFFER)[0].getvalue()
+                    return ByteImage(data=loader, **kwargs)
 
         for frame_data in task_data.group_by_frame(include_empty=True):
-            loader = None
+            image_args = {
+                'path': frame_data.name + ext,
+                'size': (frame_data.height, frame_data.width),
+            }
             if include_images:
-                loader = lambda p, i=frame_data.idx: frame_provider.get_frame(i,
-                    quality=frame_provider.Quality.ORIGINAL,
-                    out_type=frame_provider.Type.NUMPY_ARRAY)[0]
-            dm_image = Image(path=frame_data.name, loader=loader,
-                size=(frame_data.height, frame_data.width)
-            )
+                dm_image = _make_image(frame_data.idx, **image_args)
+            else:
+                dm_image = Image(**image_args)
             dm_anno = self._read_cvat_anno(frame_data, task_data)
             dm_item = datumaro.DatasetItem(id=osp.splitext(frame_data.name)[0],
                 annotations=dm_anno, image=dm_image,
@@ -527,7 +547,7 @@ class CvatTaskDataExtractor(datumaro.SourceExtractor):
                     dm_attr[a_name] = a_value
                 except Exception as e:
                     raise Exception(
-                        "Failed to convert attribute '%s'='%s': %s" %
+                        gettext("Failed to convert attribute '%s'='%s': %s") %
                         (a_name, a_value, e))
             return dm_attr
 
@@ -550,9 +570,6 @@ class CvatTaskDataExtractor(datumaro.SourceExtractor):
                 anno_attr['track_id'] = shape_obj.track_id
                 anno_attr['keyframe'] = shape_obj.keyframe
 
-                if not self._include_outside and shape_obj.outside:
-                    continue
-
             anno_points = shape_obj.points
             if shape_obj.type == ShapeType.POINTS:
                 anno = datumaro.Points(anno_points,
@@ -574,7 +591,7 @@ class CvatTaskDataExtractor(datumaro.SourceExtractor):
             elif shape_obj.type == ShapeType.CUBOID:
                 continue # Datumaro does not support cuboids
             else:
-                raise Exception("Unknown shape type '%s'" % shape_obj.type)
+                raise Exception(gettext("Unknown shape type '%s'") % shape_obj.type)
 
             item_anno.append(anno)
 
@@ -594,7 +611,7 @@ def match_dm_item(item, task_data, root_hint=None):
         frame_number = cast(osp.basename(item.id)[len('frame_'):], int)
 
     if not frame_number in task_data.frame_info:
-        raise Exception("Could not match item id: '%s' with any task frame" %
+        raise Exception(gettext("Could not match item id: '%s' with any task frame") %
             item.id)
     return frame_number
 

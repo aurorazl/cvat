@@ -1,0 +1,17 @@
+module.exports = {
+    'Payload must be an object': 'Payload must be an object',
+    'Log payload must be JSON serializable. ${error.toString()}': 'Log payload must be JSON serializable. {{errortoString}}',
+    'The field "count" is required for "${this.type}" log. ': 'The field "count" is required for "{{thistype}}" log. ',
+    'It must be a positive integer': 'It must be a positive integer',
+    'The field "${name}" is required for "${this.type}" log. ${range}': 'The field "{{name}}" is required for "{{thistype}}" log. {{range}}',
+    'The field "working_time" is required for ${this.type} log. ': 'The field "working_time" is required for {{thistype}} log. ',
+    'It must be a number not less than 0': 'It must be a number not less than 0',
+    'The field "message" is required for ${this.type} log. ': 'The field "message" is required for {{thistype}} log. ',
+    'It must be a string': 'It must be a string',
+    'The field "filename" is required for ${this.type} log. ': 'The field "filename" is required for {{thistype}} log. ',
+    'The field "line" is required for ${this.type} log. ': 'The field "line" is required for {{thistype}} log. ',
+    'It must be a number': 'It must be a number',
+    'The field "column" is required for ${this.type} log. ': 'The field "column" is required for {{thistype}} log. ',
+    'The field "stack" is required for ${this.type} log. ': 'The field "stack" is required for {{thistype}} log. ',
+    'It must be an integer not less than 0': 'It must be an integer not less than 0',
+}

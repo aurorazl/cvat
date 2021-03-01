@@ -10,6 +10,7 @@ import InputNumber from 'antd/lib/input-number';
 import Text from 'antd/lib/typography/Text';
 
 import { clamp } from 'utils/math';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     autoSave: boolean;
@@ -27,6 +28,7 @@ interface Props {
 }
 
 export default function WorkspaceSettingsComponent(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         autoSave,
         autoSaveInterval,
@@ -58,31 +60,27 @@ export default function WorkspaceSettingsComponent(props: Props): JSX.Element {
                             onSwitchAutoSave(event.target.checked);
                         }}
                     >
-                        Enable auto save
+                        {t('Enable auto save')}
                     </Checkbox>
                 </Col>
             </Row>
             <Row type='flex'>
                 <Col className='cvat-workspace-settings-auto-save-interval'>
-                    <Text type='secondary'> Auto save every </Text>
+                    <Text type='secondary'> {t('Auto save every')} </Text>
                     <InputNumber
                         min={minAutoSaveInterval}
                         max={maxAutoSaveInterval}
                         step={1}
                         value={Math.round(autoSaveInterval / (60 * 1000))}
                         onChange={(value: number | undefined): void => {
-                            if (typeof (value) === 'number') {
-                                onChangeAutoSaveInterval(Math.floor(
-                                    clamp(
-                                        value,
-                                        minAutoSaveInterval,
-                                        maxAutoSaveInterval,
-                                    ),
-                                ) * 60 * 1000);
+                            if (typeof value === 'number') {
+                                onChangeAutoSaveInterval(
+                                    Math.floor(clamp(value, minAutoSaveInterval, maxAutoSaveInterval)) * 60 * 1000,
+                                );
                             }
                         }}
                     />
-                    <Text type='secondary'> minutes </Text>
+                    <Text type='secondary'> {t('minutes')} </Text>
                 </Col>
             </Row>
             <Row className='cvat-workspace-settings-show-interpolated'>
@@ -94,11 +92,11 @@ export default function WorkspaceSettingsComponent(props: Props): JSX.Element {
                             onSwitchShowingInterpolatedTracks(event.target.checked);
                         }}
                     >
-                        Show all interpolation tracks
+                        {t('Show all interpolation tracks')}
                     </Checkbox>
                 </Col>
                 <Col>
-                    <Text type='secondary'> Show hidden interpolated objects in the side panel </Text>
+                    <Text type='secondary'> {t('Show hidden interpolated objects in the side panel')} </Text>
                 </Col>
             </Row>
             <Row className='cvat-workspace-settings-show-text-always'>
@@ -110,11 +108,14 @@ export default function WorkspaceSettingsComponent(props: Props): JSX.Element {
                             onSwitchShowingObjectsTextAlways(event.target.checked);
                         }}
                     >
-                        Always show object details
+                        {t('Always show object details')}
                     </Checkbox>
                 </Col>
                 <Col>
-                    <Text type='secondary'> Show text for an object on the canvas not only when the object is activated  </Text>
+                    <Text type='secondary'>
+                        {' '}
+                        {t('Show text for an object on the canvas not only when the object is activated')}{' '}
+                    </Text>
                 </Col>
             </Row>
             <Row className='cvat-workspace-settings-autoborders'>
@@ -126,25 +127,26 @@ export default function WorkspaceSettingsComponent(props: Props): JSX.Element {
                             onSwitchAutomaticBordering(event.target.checked);
                         }}
                     >
-                        Automatic bordering
+                        {t('Automatic bordering')}
                     </Checkbox>
                 </Col>
                 <Col>
-                    <Text type='secondary'> Enable automatic bordering for polygons and polylines during drawing/editing </Text>
+                    <Text type='secondary'>
+                        {' '}
+                        {t('Enable automatic bordering for polygons and polylines during drawing/editing')}{' '}
+                    </Text>
                 </Col>
             </Row>
             <Row className='cvat-workspace-settings-aam-zoom-margin'>
                 <Col>
-                    <Text className='cvat-text-color'> Attribute annotation mode (AAM) zoom margin </Text>
+                    <Text className='cvat-text-color'> {t('Attribute annotation mode (AAM) zoom margin')} </Text>
                     <InputNumber
                         min={minAAMMargin}
                         max={maxAAMMargin}
                         value={aamZoomMargin}
                         onChange={(value: number | undefined): void => {
-                            if (typeof (value) === 'number') {
-                                onChangeAAMZoomMargin(Math.floor(
-                                    clamp(value, minAAMMargin, maxAAMMargin),
-                                ));
+                            if (typeof value === 'number') {
+                                onChangeAAMZoomMargin(Math.floor(clamp(value, minAAMMargin, maxAAMMargin)));
                             }
                         }}
                     />

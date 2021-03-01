@@ -16,9 +16,11 @@ import FeedbackComponent from 'components/feedback/feedback';
 import TaskListContainer from 'containers/tasks-page/tasks-list';
 import TopBar from './top-bar';
 import EmptyListComponent from './empty-list';
+import NoTaskFoundComponent from './no-task-found';
 
+import { withTranslation, WithTranslation  } from 'react-i18next';
 
-interface TasksPageProps {
+interface TasksPageProps extends WithTranslation {
     tasksFetching: boolean;
     gettingQuery: TasksQuery;
     numberOfTasks: number;
@@ -26,6 +28,7 @@ interface TasksPageProps {
     numberOfHiddenTasks: number;
     onGetTasks: (gettingQuery: TasksQuery) => void;
     hideEmptyTasks: (hideEmpty: boolean) => void;
+    lang: string;
 }
 
 function getSearchField(gettingQuery: TasksQuery): string {
@@ -75,25 +78,16 @@ function updateQuery(previousQuery: TasksQuery, searchString: string): TasksQuer
 }
 
 class TasksPageComponent extends React.PureComponent<TasksPageProps & RouteComponentProps> {
-    public componentDidMount(): void {
-        const {
-            gettingQuery,
-            location,
-            onGetTasks,
-        } = this.props;
+    private fromSearch: boolean = false;
 
+    public componentDidMount(): void {
+        const { gettingQuery, location, onGetTasks } = this.props;
         const query = updateQuery(gettingQuery, location.search);
         onGetTasks(query);
     }
 
     public componentDidUpdate(prevProps: TasksPageProps & RouteComponentProps): void {
-        const {
-            location,
-            gettingQuery,
-            onGetTasks,
-            numberOfHiddenTasks,
-            hideEmptyTasks,
-        } = this.props;
+        const { location, gettingQuery, tasksFetching, numberOfHiddenTasks, onGetTasks, hideEmptyTasks, t } = this.props;
 
         if (prevProps.location.search !== location.search) {
             // get new tasks if any query changes
@@ -103,34 +97,37 @@ class TasksPageComponent extends React.PureComponent<TasksPageProps & RouteCompo
             return;
         }
 
-        if (numberOfHiddenTasks) {
-            message.destroy();
-            message.info(
-                <>
-                    <Text>
-                        Some tasks have not been showed because they do not have any data.
-                    </Text>
-                    <Button
-                        type='link'
-                        onClick={(): void => {
-                            hideEmptyTasks(false);
-                            message.destroy();
-                        }}
-                    >
-                        Show all
-                    </Button>
-                </>, 7,
-            );
+        if (prevProps.tasksFetching && !tasksFetching) {
+            if (numberOfHiddenTasks) {
+                message.destroy();
+                message.info(
+                    <>
+                        <Text>{t('Some tasks are temporary hidden since they are without any data')}</Text>
+                        <Button
+                            type='link'
+                            onClick={(): void => {
+                                hideEmptyTasks(false);
+                                message.destroy();
+                            }}
+                        >
+                            {t('Show all')}
+                        </Button>
+                    </>,
+                    5,
+                );
+            }
         }
     }
 
     private handleSearch = (value: string): void => {
-        const {
-            gettingQuery,
-        } = this.props;
+        this.fromSearch = true;
+        const { gettingQuery } = this.props;
 
         const query = { ...gettingQuery };
-        const search = value.replace(/\s+/g, ' ').replace(/\s*:+\s*/g, ':').trim();
+        const search = value
+            .replace(/\s+/g, ' ')
+            .replace(/\s*:+\s*/g, ':')
+            .trim();
 
         const fields = ['name', 'mode', 'owner', 'assignee', 'status', 'id'];
         for (const field of fields) {
@@ -156,7 +153,8 @@ class TasksPageComponent extends React.PureComponent<TasksPageProps & RouteCompo
         }
 
         query.page = 1;
-        if (!specificRequest && value) { // only id
+        if (!specificRequest && value) {
+            // only id
             query.search = value;
         }
 
@@ -164,9 +162,7 @@ class TasksPageComponent extends React.PureComponent<TasksPageProps & RouteCompo
     };
 
     private handlePagination = (page: number): void => {
-        const {
-            gettingQuery,
-        } = this.props;
+        const { gettingQuery } = this.props;
 
         // modify query object
         const query = { ...gettingQuery };
@@ -197,34 +193,24 @@ class TasksPageComponent extends React.PureComponent<TasksPageProps & RouteCompo
     }
 
     public render(): JSX.Element {
-        const {
-            tasksFetching,
-            gettingQuery,
-            numberOfVisibleTasks,
-        } = this.props;
+        const { tasksFetching, gettingQuery, numberOfVisibleTasks,lang } = this.props;
 
         if (tasksFetching) {
-            return (
-                <Spin size='large' className='cvat-spinner' />
-            );
+            return <Spin size='large' className='cvat-spinner' />;
         }
 
         return (
             <div className='cvat-tasks-page'>
-                <TopBar
-                    onSearch={this.handleSearch}
-                    searchValue={getSearchField(gettingQuery)}
-                />
-                {numberOfVisibleTasks
-                    ? (
+                <TopBar onSearch={this.handleSearch} searchValue={getSearchField(gettingQuery)} lang={lang}/>
+                {numberOfVisibleTasks ? (
                         <TaskListContainer
                             onSwitchPage={this.handlePagination}
                         />
-                    ) : <EmptyListComponent />}
-                <FeedbackComponent />
+                    ) : (this.fromSearch ? <NoTaskFoundComponent /> : <EmptyListComponent />)}
+                {/* <FeedbackComponent /> */}
             </div>
         );
     }
 }
 
-export default withRouter(TasksPageComponent);
+export default withRouter(withTranslation()(TasksPageComponent));

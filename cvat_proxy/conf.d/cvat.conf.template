@@ -1,22 +1,17 @@
 server {
     listen       80;
-    server_name  _ default;
-    return       404;
-}
-
-server {
-    listen       80;
     server_name  ${CVAT_HOST};
 
     proxy_pass_header       X-CSRFToken;
     proxy_set_header        Host $http_host;
     proxy_pass_header       Set-Cookie;
 
-    location ~* /api/.*|git/.*|analytics/.*|static/.*|admin(?:/(.*))?.*|documentation/.*|django-rq(?:/(.*))? {
-        proxy_pass              http://cvat:8080;
+    location ~* /cvat/api/.*|cvat/git/.*|cvat/analytics/.*|cvat/static/.*|cvat/admin(?:/(.*))?.*|cvat/documentation/.*|cvat/django-rq(?:/(.*))? {
+        rewrite ^/cvat/(.*) /$1 break;
+        proxy_pass              http://127.0.0.1:8082;
     }
 
-    location / {
-        proxy_pass              http://cvat_ui;
+    location /cvat/ {
+        proxy_pass              http://127.0.0.1:8081/;
     }
 }

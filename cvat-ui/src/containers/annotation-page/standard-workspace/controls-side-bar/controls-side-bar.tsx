@@ -25,6 +25,7 @@ interface StateToProps {
     activeControl: ActiveControl;
     keyMap: Record<string, ExtendedKeyMapOptions>;
     normalizedKeyMap: Record<string, string>;
+    lang: string;
 }
 
 interface DispatchToProps {
@@ -41,20 +42,13 @@ interface DispatchToProps {
 function mapStateToProps(state: CombinedState): StateToProps {
     const {
         annotation: {
-            canvas: {
-                instance: canvasInstance,
-                activeControl,
-            },
+            canvas: { instance: canvasInstance, activeControl },
         },
         settings: {
-            player: {
-                rotateAll,
-            },
+            player: { rotateAll },
         },
-        shortcuts: {
-            keyMap,
-            normalizedKeyMap,
-        },
+        shortcuts: { keyMap, normalizedKeyMap },
+        lang: { lang },
     } = state;
 
     return {
@@ -63,6 +57,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
         activeControl,
         normalizedKeyMap,
         keyMap,
+        lang,
     };
 }
 
@@ -95,7 +90,4 @@ function dispatchToProps(dispatch: any): DispatchToProps {
     };
 }
 
-export default connect(
-    mapStateToProps,
-    dispatchToProps,
-)(ControlsSideBarComponent);
+export default connect(mapStateToProps, dispatchToProps)(ControlsSideBarComponent);

@@ -1,0 +1,15 @@
+version: '3.3'
+
+services:
+  cvat:
+    environment:
+      CVAT_SHARE_URL: '/mnt/share'
+    volumes:
+      - cvat_share:/home/django/share:ro
+
+volumes:
+  cvat_share:
+    driver_opts:
+      type: none
+      device: /mnt/share
+      o: bind

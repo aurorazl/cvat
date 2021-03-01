@@ -14,7 +14,14 @@ import Text from 'antd/lib/typography/Text';
 import { RectDrawingMethod, CuboidDrawingMethod } from 'cvat-canvas-wrapper';
 import { ShapeType } from 'reducers/interfaces';
 import { clamp } from 'utils/math';
-import DEXTRPlugin from './dextr-plugin';
+
+import { useTranslation } from 'react-i18next';
+import { transShapeType } from 'utils/lang-utils';
+
+import HelpLink from 'components/help-link';
+import getCore from 'cvat-core-wrapper';
+import linkConsts from 'help-link-consts';
+import { getShapeLinkUrl } from 'utils/link-utils';
 
 interface Props {
     shapeType: ShapeType;
@@ -31,9 +38,14 @@ interface Props {
     onChangeCuboidDrawingMethod(event: RadioChangeEvent): void;
     onDrawTrack(): void;
     onDrawShape(): void;
+    lang: string;
 }
 
 function DrawShapePopoverComponent(props: Props): JSX.Element {
+    const { t } = useTranslation();
+    const core = getCore();
+    const baseURL = core.config.backendAPI.slice(0, -7);
+
     const {
         labels,
         shapeType,
@@ -49,18 +61,22 @@ function DrawShapePopoverComponent(props: Props): JSX.Element {
         onChangePoints,
         onChangeRectDrawingMethod,
         onChangeCuboidDrawingMethod,
+        lang,
     } = props;
 
     return (
         <div className='cvat-draw-shape-popover-content'>
-            <Row type='flex' justify='start'>
+            <Row type='flex' justify='space-between'>
                 <Col>
-                    <Text className='cvat-text-color' strong>{`Draw new ${shapeType}`}</Text>
+                    <Text className='cvat-text-color' strong>{t('Draw new ${shapeType}').replace('${shapeType}', transShapeType(`${shapeType}`))}</Text>
+                </Col>
+                <Col>
+                    <HelpLink helpLink={`${baseURL}/${getShapeLinkUrl(shapeType, lang)}`}/>
                 </Col>
             </Row>
             <Row type='flex' justify='start'>
                 <Col>
-                    <Text className='cvat-text-color'>Label</Text>
+                    <Text className='cvat-text-color'>{t('controlsSidebar::Label')}</Text>
                 </Col>
             </Row>
             <Row type='flex' justify='center'>
@@ -69,7 +85,7 @@ function DrawShapePopoverComponent(props: Props): JSX.Element {
                         showSearch
                         filterOption={(input: string, option: React.ReactElement<OptionProps>) => {
                             const { children } = option.props;
-                            if (typeof (children) === 'string') {
+                            if (typeof children === 'string') {
                                 return children.toLowerCase().includes(input.toLowerCase());
                             }
 
@@ -78,125 +94,95 @@ function DrawShapePopoverComponent(props: Props): JSX.Element {
                         value={`${selectedLabeID}`}
                         onChange={onChangeLabel}
                     >
-                        {
-                            labels.map((label: any) => (
-                                <Select.Option
-                                    key={label.id}
-                                    value={`${label.id}`}
-                                >
+                        {labels.map((label: any) => (
+                                <Select.Option key={label.id} value={`${label.id}`}>
                                     {label.name}
                                 </Select.Option>
-                            ))
-                        }
+                        ))}
                     </Select>
                 </Col>
             </Row>
-            { shapeType === ShapeType.POLYGON && <DEXTRPlugin /> }
-            {
-                shapeType === ShapeType.RECTANGLE && (
-                    <>
-                        <Row>
-                            <Col>
-                                <Text className='cvat-text-color'> Drawing method </Text>
-                            </Col>
-                        </Row>
-                        <Row type='flex' justify='space-around'>
-                            <Col>
-                                <Radio.Group
-                                    style={{ display: 'flex' }}
-                                    value={rectDrawingMethod}
-                                    onChange={onChangeRectDrawingMethod}
-                                >
-                                    <Radio
-                                        value={RectDrawingMethod.CLASSIC}
-                                        style={{ width: 'auto' }}
-                                    >
-                                        By 2 Points
-                                    </Radio>
-                                    <Radio
-                                        value={RectDrawingMethod.EXTREME_POINTS}
-                                        style={{ width: 'auto' }}
-                                    >
-                                        By 4 Points
-                                    </Radio>
-                                </Radio.Group>
-                            </Col>
-                        </Row>
-                    </>
-                )
-            }
-            {
-                shapeType === ShapeType.CUBOID && (
-                    <>
-                        <Row>
-                            <Col>
-                                <Text className='cvat-text-color'> Drawing method </Text>
-                            </Col>
-                        </Row>
-                        <Row type='flex' justify='space-around'>
-                            <Col>
-                                <Radio.Group
-                                    style={{ display: 'flex' }}
-                                    value={cuboidDrawingMethod}
-                                    onChange={onChangeCuboidDrawingMethod}
-                                >
-                                    <Radio
-                                        value={CuboidDrawingMethod.CLASSIC}
-                                        style={{ width: 'auto' }}
-                                    >
-                                        From rectangle
-                                    </Radio>
-                                    <Radio
-                                        value={CuboidDrawingMethod.CORNER_POINTS}
-                                        style={{ width: 'auto' }}
-                                    >
-                                        By 4 Points
-                                    </Radio>
-                                </Radio.Group>
-                            </Col>
-                        </Row>
-                    </>
-                )
-            }
-            {
-                shapeType !== ShapeType.RECTANGLE && shapeType !== ShapeType.CUBOID && (
-                    <Row type='flex' justify='space-around' align='middle'>
-                        <Col span={14}>
-                            <Text className='cvat-text-color'> Number of points: </Text>
-                        </Col>
-                        <Col span={10}>
-                            <InputNumber
-                                onChange={(value: number | undefined) => {
-                                    if (typeof (value) === 'number') {
-                                        onChangePoints(Math.floor(
-                                            clamp(value, minimumPoints, Number.MAX_SAFE_INTEGER),
-                                        ));
-                                    } else if (!value) {
-                                        onChangePoints(undefined);
-                                    }
-                                }}
-                                className='cvat-draw-shape-popover-points-selector'
-                                min={minimumPoints}
-                                value={numberOfPoints}
-                                step={1}
-                            />
+            {shapeType === ShapeType.RECTANGLE && (
+                <>
+                    <Row>
+                        <Col>
+                            <Text className='cvat-text-color'> {t('Drawing method')} </Text>
                         </Col>
                     </Row>
-                )
-            }
+                    <Row type='flex' justify='space-around'>
+                        <Col>
+                            <Radio.Group
+                                style={{ display: 'flex' }}
+                                value={rectDrawingMethod}
+                                onChange={onChangeRectDrawingMethod}
+                            >
+                                <Radio value={RectDrawingMethod.CLASSIC} style={{ width: 'auto' }}>
+                                    {t('By 2 Points')}
+                                </Radio>
+                                <Radio value={RectDrawingMethod.EXTREME_POINTS} style={{ width: 'auto' }}>
+                                    {t('By 4 Points')}
+                                </Radio>
+                            </Radio.Group>
+                        </Col>
+                    </Row>
+                </>
+            )}
+            {shapeType === ShapeType.CUBOID && (
+                <>
+                    <Row>
+                        <Col>
+                            <Text className='cvat-text-color'> {t('Drawing method')} </Text>
+                        </Col>
+                    </Row>
+                    <Row type='flex' justify='space-around'>
+                        <Col>
+                            <Radio.Group
+                                style={{ display: 'flex' }}
+                                value={cuboidDrawingMethod}
+                                onChange={onChangeCuboidDrawingMethod}
+                            >
+                                <Radio value={CuboidDrawingMethod.CLASSIC} style={{ width: 'auto' }}>
+                                    {t('From rectangle')}
+                                </Radio>
+                                <Radio value={CuboidDrawingMethod.CORNER_POINTS} style={{ width: 'auto' }}>
+                                    {t('By 4 Points')}
+                                </Radio>
+                            </Radio.Group>
+                        </Col>
+                    </Row>
+                </>
+            )}
+            {shapeType !== ShapeType.RECTANGLE && shapeType !== ShapeType.CUBOID && (
+                <Row type='flex' justify='space-around' align='middle'>
+                    <Col span={14}>
+                        <Text className='cvat-text-color'> {t('Number of points:')} </Text>
+                    </Col>
+                    <Col span={10}>
+                        <InputNumber
+                            onChange={(value: number | undefined) => {
+                                if (typeof value === 'number') {
+                                    onChangePoints(Math.floor(clamp(value, minimumPoints, Number.MAX_SAFE_INTEGER)));
+                                } else if (!value) {
+                                    onChangePoints(undefined);
+                                }
+                            }}
+                            className='cvat-draw-shape-popover-points-selector'
+                            min={minimumPoints}
+                            value={numberOfPoints}
+                            step={1}
+                        />
+                    </Col>
+                </Row>
+            )}
             <Row type='flex' justify='space-around'>
                 <Col span={12}>
-                    <Tooltip title={`Press ${repeatShapeShortcut} to draw again`} mouseLeaveDelay={0}>
-                        <Button onClick={onDrawShape}>
-                            Shape
-                        </Button>
+                    <Tooltip title={<a href={`${baseURL}/${linkConsts[lang].SHAPE_MODE_BASICS_URL}`} target="blank">{t('Press ${repeatShapeShortcut} to draw again', {repeatShapeShortcut: `${repeatShapeShortcut}`})}</a>} mouseLeaveDelay={0.2}>
+                        <Button onClick={onDrawShape}>{t('Shape')}</Button>
                     </Tooltip>
                 </Col>
                 <Col span={12}>
-                    <Tooltip title={`Press ${repeatShapeShortcut} to draw again`} mouseLeaveDelay={0}>
-                        <Button onClick={onDrawTrack}>
-                            Track
-                        </Button>
+                    <Tooltip title={<a href={`${baseURL}/${linkConsts[lang].TRACK_MODE_BASICS_URL}`} target="blank">{t('Press ${repeatShapeShortcut} to draw again', {repeatShapeShortcut: `${repeatShapeShortcut}`})}</a>} mouseLeaveDelay={0.2}>
+                        <Button onClick={onDrawTrack}>{t('Track')}</Button>
                     </Tooltip>
                 </Col>
             </Row>

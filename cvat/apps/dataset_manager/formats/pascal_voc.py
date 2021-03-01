@@ -17,7 +17,7 @@ from cvat.apps.dataset_manager.util import make_zip_archive
 from datumaro.components.project import Dataset
 
 from .registry import dm_env, exporter, importer
-
+from django.utils.translation import gettext
 
 @exporter(name='PASCAL VOC', ext='ZIP', version='1.1')
 def _export(dst_file, task_data, save_images=False):
@@ -46,6 +46,8 @@ def _import(src_file, task_data):
         anno_dir = osp.join(tmp_dir, 'Annotations')
         if not osp.isdir(anno_dir):
             anno_files = glob(osp.join(tmp_dir, '**', '*.xml'), recursive=True)
+            if len(anno_files)==0:
+                raise Exception(gettext("Failed to find 'voc' format annotation"))
             subsets_dir = osp.join(tmp_dir, 'ImageSets', 'Main')
             os.makedirs(subsets_dir, exist_ok=True)
             with open(osp.join(subsets_dir, 'train.txt'), 'w') as subset_file:
@@ -55,6 +57,8 @@ def _import(src_file, task_data):
             os.makedirs(anno_dir, exist_ok=True)
             for f in anno_files:
                 shutil.move(f, anno_dir)
+
+
 
         dataset = dm_env.make_importer('voc')(tmp_dir).make_dataset()
         masks_to_polygons = dm_env.transforms.get('masks_to_polygons')

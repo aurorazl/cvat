@@ -19,6 +19,7 @@ import { resetAfterErrorAsync } from 'actions/boundaries-actions';
 import { CombinedState } from 'reducers/interfaces';
 import logger, { LogType } from 'cvat-logger';
 import consts from 'consts';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 interface StateToProps {
     job: any | null;
@@ -40,14 +41,9 @@ interface State {
 function mapStateToProps(state: CombinedState): StateToProps {
     const {
         annotation: {
-            job: {
-                instance: job,
-            },
+            job: { instance: job },
         },
-        about: {
-            server,
-            packageVersion,
-        },
+        about: { server, packageVersion },
     } = state;
 
     return {
@@ -68,7 +64,7 @@ function mapDispatchToProps(dispatch: ThunkDispatch): DispatchToProps {
 }
 
 
-type Props = StateToProps & DispatchToProps;
+type Props = StateToProps & DispatchToProps & WithTranslation;
 class GlobalErrorBoundary extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -106,14 +102,7 @@ class GlobalErrorBoundary extends React.PureComponent<Props, State> {
     }
 
     public render(): React.ReactNode {
-        const {
-            restore,
-            job,
-            serverVersion,
-            coreVersion,
-            canvasVersion,
-            uiVersion,
-        } = this.props;
+        const { restore, job, serverVersion, coreVersion, canvasVersion, uiVersion, t } = this.props;
 
         const { hasError, error } = this.state;
 
@@ -132,41 +121,52 @@ class GlobalErrorBoundary extends React.PureComponent<Props, State> {
                 <div className='cvat-global-boundary'>
                     <Result
                         status='error'
-                        title='Oops, something went wrong'
-                        subTitle='More likely there are some issues with the tool'
+                        title={t('Oops, something went wrong')}
+                        subTitle={t('More likely there are some issues with the tool')}
                     >
                         <div>
                             <Paragraph>
-                                <Paragraph strong>What has happened?</Paragraph>
-                                <Paragraph>Program error has just occured</Paragraph>
+                                <Paragraph strong>{t('What has happened?')}</Paragraph>
+                                <Paragraph>{t('Program error has just occured')}</Paragraph>
                                 <Collapse accordion>
-                                    <Collapse.Panel header='Error message' key='errorMessage'>
+                                    <Collapse.Panel header={t('Error message')} key='errorMessage'>
                                         <Text type='danger'>
-                                            <TextArea className='cvat-global-boundary-error-field' autoSize value={message} />
+                                            <TextArea
+                                                className='cvat-global-boundary-error-field'
+                                                autoSize
+                                                value={message}
+                                            />
                                         </Text>
                                     </Collapse.Panel>
                                 </Collapse>
                             </Paragraph>
 
                             <Paragraph>
-                                <Text strong>What should I do?</Text>
+                                <Text strong>{t('What should I do?')}</Text>
                             </Paragraph>
                             <ul>
                                 <li>
                                     <Tooltip title='Copied!' trigger='click' mouseLeaveDelay={0}>
                                         {/* eslint-disable-next-line */}
-                                        <a onClick={() => {copy(message)}}> Copy </a>
+                                        <a 
+                                            onClick={() => {
+                                                copy(message)
+                                            }}
+                                        > 
+                                            {' '}
+                                            {t('Copy')}{' '} 
+                                        </a>
                                     </Tooltip>
-                                    the error message to clipboard
+                                    {t('the error message to clipboard')}
                                 </li>
                                 <li>
-                                    Notify an administrator or submit the issue directly on
+                                {t('Notify an administrator or submit the issue directly on')}
                                     <a href={consts.GITHUB_URL}> GitHub. </a>
-                                    Please, provide also:
+                                    {t('Please, provide also:')}
                                     <ul>
-                                        <li>Steps to reproduce the issue</li>
-                                        <li>Your operating system and browser version</li>
-                                        <li>CVAT version</li>
+                                        <li>{t('Steps to reproduce the issue')}</li>
+                                        <li>{t('Your operating system and browser version')}</li>
+                                        <li>{t('ADAP version')}</li>
                                         <ul>
                                             <li>
                                                 <Text strong>Server: </Text>
@@ -189,20 +189,19 @@ class GlobalErrorBoundary extends React.PureComponent<Props, State> {
                                 </li>
                                 {job ? (
                                     <li>
-                                        Press
+                                        {t('Press')}
                                         {/* eslint-disable-next-line */}
-                                        <a onClick={restoreGlobalState}> here </a>
-                                        if you wish CVAT tried to restore your
-                                        annotation progress or
+                                        <a onClick={restoreGlobalState}> {t('here')} </a>
+                                        {t('if you wish ADAP tried to restore your annotation progress or')}
                                         {/* eslint-disable-next-line */}
-                                        <a onClick={() => window.location.reload()}> update </a>
-                                        the page
+                                        <a onClick={() => window.location.reload()}> {t('update')} </a>
+                                        {t('the page')}
                                     </li>
                                 ) : (
                                     <li>
                                         {/* eslint-disable-next-line */}
-                                        <a onClick={() => window.location.reload()}>Update </a>
-                                        the page
+                                        <a onClick={() => window.location.reload()}>{t('Update')} </a>
+                                        {t('the page')}
                                     </li>
                                 )}
                             </ul>
@@ -217,7 +216,4 @@ class GlobalErrorBoundary extends React.PureComponent<Props, State> {
     }
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(GlobalErrorBoundary);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation()(GlobalErrorBoundary));

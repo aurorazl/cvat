@@ -48,6 +48,14 @@
 .attribute-annotation-sidebar-attr-list-wrapper {
     margin: 10px 0 10px 10px;
 }
+.attribute-annotation-sidebar-attr-list-wrapper.attribute-annotation-sidebar-long-attr-list {
+    margin: 10px 0 10px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    > div {
+        width: 50%;
+    }
+}
 
 .attribute-annotation-sidebar-attr-elem-wrapper {
     width: 60%;

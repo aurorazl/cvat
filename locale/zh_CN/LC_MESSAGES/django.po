@@ -1,0 +1,267 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-22 16:04+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\cvat\apps\authentication\admin.py:14
+msgid "Personal info"
+msgstr ""
+
+#: .\cvat\apps\authentication\admin.py:15
+msgid "Permissions"
+msgstr ""
+
+#: .\cvat\apps\authentication\admin.py:17
+msgid "Important dates"
+msgstr ""
+
+#: .\cvat\apps\authentication\auth.py:73
+msgid "Failed to request user role from usermanager center!{}"
+msgstr "连接用户管理服务异常！{}"
+
+#: .\cvat\apps\authentication\auth.py:77
+msgid "Invalid payload."
+msgstr "无效的载荷"
+
+#: .\cvat\apps\authentication\auth.py:88
+msgid "Invalid signature."
+msgstr "无效的签名"
+
+#: .\cvat\apps\authentication\auth.py:92
+msgid "User account is disabled."
+msgstr "用户账号已过期"
+
+#: .\cvat\apps\authentication\templates\account\email\email_confirmation_signup_message.html:10
+#, python-format
+msgid ""
+"\n"
+"<strong>%(site_domain)s</strong>\n"
+msgstr ""
+
+#: .\cvat\apps\authentication\templates\authentication\password_reset_email.html:1
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset\n"
+"for your user account at %(site_name)s."
+msgstr ""
+
+#: .\cvat\apps\authentication\templates\authentication\password_reset_email.html:4
+msgid "Your username, in case you've forgotten:"
+msgstr ""
+
+#: .\cvat\apps\authentication\templates\authentication\password_reset_email.html:5
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""
+
+#: .\cvat\apps\dataset_manager\bindings.py:348
+#: .\cvat\apps\dataset_manager\bindings.py:550
+#, python-format
+msgid "Failed to convert attribute '%s'='%s': %s"
+msgstr "转换属性失败 '%s'='%s': %s"
+
+#: .\cvat\apps\dataset_manager\bindings.py:594
+#, python-format
+msgid "Unknown shape type '%s'"
+msgstr "未知的形状类型 '%s'"
+
+#: .\cvat\apps\dataset_manager\bindings.py:614
+#, python-format
+msgid "Could not match item id: '%s' with any task frame"
+msgstr "不能匹配任何的任务帧：'%s'"
+
+#: .\cvat\apps\dataset_manager\formats\cvat.py:571
+#: .\cvat\apps\dataset_manager\formats\cvat.py:577
+#| msgid "Failed to find 'cvat' annotation at '%s'"
+msgid "Failed to find 'cvat' annotation"
+msgstr "没有找到cvat格式的标注文件"
+
+#: .\cvat\apps\dataset_manager\formats\pascal_voc.py:50
+msgid "Failed to find 'voc' format annotation"
+msgstr "没有找到voc格式的标注文件"
+
+#: .\cvat\apps\dataset_manager\formats\yolo.py:40
+msgid "Failed to find 'yolo' annotation"
+msgstr "没有找到yolo格式的标注文件"
+
+#: .\cvat\apps\dataset_manager\views.py:39
+msgid "Task dir {} does not exist"
+msgstr "任务目录{}不存在"
+
+#: .\cvat\apps\dataset_repo\dataset_repo.py:33
+msgid ""
+"Could not connect to the remote repository. Please make sure you have the "
+"correct access rights and the repository exists. Available public keys are: "
+msgstr "不能连接到远程的仓库，请确保你有正确的权限以及仓库存在，可用的公钥有："
+
+#: .\cvat\apps\dataset_repo\dataset_repo.py:98
+msgid "Git repository URL does not satisfy pattern"
+msgstr "Git仓库链接不满足规则"
+
+#: .\cvat\apps\dataset_repo\dataset_repo.py:112
+msgid "Some heads already exists"
+msgstr "一些请求头已经存在"
+
+#: .\cvat\apps\dataset_repo\dataset_repo.py:226
+msgid "Local repository is failed"
+msgstr "本地仓库已失败"
+
+#: .\cvat\apps\dataset_repo\dataset_repo.py:292
+msgid "Got unknown annotation file type"
+msgstr "获取到了未知的标注文件类型"
+
+#: .\cvat\apps\dataset_repo\dataset_repo.py:372
+msgid "Only .xml and .zip formats are supported"
+msgstr "只支持.xml和.zip格式"
+
+#: .\cvat\apps\documentation\templates\documentation\user_guide.html:10
+msgid "ADAP User Guide."
+msgstr "依瞳数据标注平台-用户帮助手册"
+
+#: .\cvat\apps\engine\frame_provider.py:122
+msgid "Incorrect requested frame number: {}"
+msgstr "请求的帧数目不正确"
+
+#: .\cvat\apps\engine\frame_provider.py:132
+msgid "requested chunk does not exist"
+msgstr "请求的块不存在"
+
+#: .\cvat\apps\engine\frame_provider.py:142
+#, python-format
+msgid "Failed to encode image to '%s' format"
+msgstr "将图片编码到'%s'格式失败了"
+
+#: .\cvat\apps\engine\frame_provider.py:159
+msgid "unsupported output type"
+msgstr "不支持的输出类型"
+
+#: .\cvat\apps\engine\media_extractors.py:87
+msgid "No image found"
+msgstr "没有找到图片"
+
+#: .\cvat\apps\engine\media_extractors.py:154
+msgid "No PDF found"
+msgstr "没有找到PDF"
+
+#: .\cvat\apps\engine\media_extractors.py:345
+#: .\cvat\apps\engine\media_extractors.py:388
+msgid "no images to save"
+msgstr "没有图片可保存"
+
+#: .\cvat\apps\engine\plugins.py:12
+msgid "Order may be 'before' or 'after' only. Got {}."
+msgstr "排序只能是'before'或'after'，当前是{}"
+
+#: .\cvat\apps\engine\plugins.py:15
+msgid "'function' argument should be a callable element"
+msgstr "'function'参数应该是可调用的"
+
+#: .\cvat\apps\engine\plugins.py:18
+msgid "'name' argument should be a string. Got {}."
+msgstr "'name'应该是一个字符串，当前是{}"
+
+#: .\cvat\apps\engine\plugins.py:27
+msgid "plugin has been attached already"
+msgstr "插件已经附加"
+
+#: .\cvat\apps\engine\prepare.py:14
+msgid "No sourse path"
+msgstr "没有该源路径"
+
+#: .\cvat\apps\engine\prepare.py:51
+msgid "Invalid pts sequences"
+msgstr "无效的pts序列"
+
+#: .\cvat\apps\engine\prepare.py:55
+msgid "Invalid dts sequences"
+msgstr "无效的dts序列"
+
+#: .\cvat\apps\engine\prepare.py:69
+msgid "No meta path"
+msgstr "没有元路径"
+
+#: .\cvat\apps\engine\task.py:57 .\cvat\apps\engine\task.py:73
+msgid "Data are being copied from share.."
+msgstr "正在复制共享目录的数据.."
+
+#: .\cvat\apps\engine\task.py:88
+msgid "Task is being saved in database"
+msgstr "任务正在保存到数据库中"
+
+#: .\cvat\apps\engine\task.py:202
+msgid "File with meta information can only be uploaded with video file"
+msgstr "带有元信息的文件上传只能是视频文件"
+
+#: .\cvat\apps\engine\task.py:217
+msgid "Could not combine different task modes for data"
+msgstr "对于数据来说，不能组合不同的任务模型"
+
+#: .\cvat\apps\engine\task.py:227
+msgid "filename collision: {}"
+msgstr "文件名冲突：{}"
+
+#: .\cvat\apps\engine\task.py:229
+msgid "{} is being downloaded.."
+msgstr "{} 正在下载中.."
+
+#: .\cvat\apps\engine\task.py:241
+msgid "Failed to download "
+msgstr "下载失败"
+
+#: .\cvat\apps\engine\task.py:243
+msgid "Invalid URL: "
+msgstr "无效的URL："
+
+#: .\cvat\apps\engine\task.py:279
+msgid "Media files are being extracted..."
+msgstr "正在解压媒体文件..."
+
+#: .\cvat\apps\engine\task.py:288
+msgid "Combined data types are not supported"
+msgstr "组合的数据类型尚未支持"
+
+#: .\cvat\apps\engine\task.py:306
+msgid "Images are being compressed {}"
+msgstr "图片正在压缩中 {}"
+
+#: .\cvat\apps\engine\task.py:358
+msgid "{} Start prepare valid meta information."
+msgstr "{} 开始准备有效的元信息"
+
+#: .\cvat\apps\engine\task.py:384
+msgid "{} The task will be created using the old method"
+msgstr "{} 任务将以旧方式被创建"
+
+#: .\cvat\apps\engine\tests\test_rest_api.py:3359
+msgid "Unknown format {}"
+msgstr "未知格式{}"
+
+#: .\cvat\settings\base.py:206
+msgid "简体中文"
+msgstr ""
+
+#: .\cvat\settings\base.py:207
+msgid "English"
+msgstr ""
+
+#~ msgid "Failed to find 'cvat' annotation at '%s'"
+#~ msgstr "没有在'%s'找到cvat标注文件"
+
+#~ msgid "{} key must be a task identifier"
+#~ msgstr "{}键必须是一个任务的唯一标识"
+
+#~ msgid "{} key must be a job identifier"
+#~ msgstr "{}键必须是一个job的标识"

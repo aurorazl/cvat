@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 
 import { CombinedState, ContextMenuType } from 'reducers/interfaces';
 import { updateAnnotationsAsync, updateCanvasContextMenu } from 'actions/annotation-actions';
+import { useTranslation } from 'react-i18next';
 
 interface StateToProps {
     activatedState: any | null;
@@ -23,25 +24,18 @@ interface StateToProps {
 function mapStateToProps(state: CombinedState): StateToProps {
     const {
         annotation: {
-            annotations: {
-                states,
-                activatedStateID,
-            },
+            annotations: { states, activatedStateID },
             canvas: {
-                contextMenu: {
-                    visible,
-                    top,
-                    left,
-                    type,
-                    pointID: selectedPoint,
-                },
+                contextMenu: { visible, top, left, type, pointID: selectedPoint },
             },
         },
     } = state;
 
     return {
-        activatedState: activatedStateID === null
-            ? null : states.filter((_state) => _state.clientID === activatedStateID)[0] || null,
+        activatedState:
+            activatedStateID === null
+                ? null
+                : states.filter((_state) => _state.clientID === activatedStateID)[0] || null,
         selectedPoint,
         visible,
         left,
@@ -69,15 +63,8 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
 type Props = StateToProps & DispatchToProps;
 
 function CanvasPointContextMenu(props: Props): React.ReactPortal | null {
-    const {
-        onCloseContextMenu,
-        onUpdateAnnotations,
-        activatedState,
-        visible,
-        type,
-        top,
-        left,
-    } = props;
+    const { t } = useTranslation();
+    const { onCloseContextMenu, onUpdateAnnotations, activatedState, visible, type, top, left } = props;
 
     const [contextMenuFor, setContextMenuFor] = useState(activatedState);
 
@@ -91,7 +78,8 @@ function CanvasPointContextMenu(props: Props): React.ReactPortal | null {
     const onPointDelete = (): void => {
         const { selectedPoint } = props;
         if (contextMenuFor && selectedPoint !== null) {
-            contextMenuFor.points = contextMenuFor.points.slice(0, selectedPoint * 2)
+            contextMenuFor.points = contextMenuFor.points
+                .slice(0, selectedPoint * 2)
                 .concat(contextMenuFor.points.slice(selectedPoint * 2 + 2));
             onUpdateAnnotations([contextMenuFor]);
             onCloseContextMenu();
@@ -101,7 +89,8 @@ function CanvasPointContextMenu(props: Props): React.ReactPortal | null {
     const onSetStartPoint = (): void => {
         const { selectedPoint } = props;
         if (contextMenuFor && selectedPoint !== null && contextMenuFor.shapeType === 'polygon') {
-            contextMenuFor.points = contextMenuFor.points.slice(selectedPoint * 2)
+            contextMenuFor.points = contextMenuFor.points
+                .slice(selectedPoint * 2)
                 .concat(contextMenuFor.points.slice(0, selectedPoint * 2));
             onUpdateAnnotations([contextMenuFor]);
             onCloseContextMenu();
@@ -109,24 +98,22 @@ function CanvasPointContextMenu(props: Props): React.ReactPortal | null {
     };
 
     return visible && contextMenuFor && type === ContextMenuType.CANVAS_SHAPE_POINT
-        ? (ReactDOM.createPortal(
+        ? ReactDOM.createPortal(
             <div className='cvat-canvas-point-context-menu' style={{ top, left }}>
-                <Tooltip title='Delete point [Ctrl + dblclick]' mouseLeaveDelay={0}>
+                <Tooltip title={t('Delete point [Alt + click]')} mouseLeaveDelay={0}>
                     <Button type='link' icon='delete' onClick={onPointDelete}>
-                        Delete point
+                    {t('Delete point')}
                     </Button>
                 </Tooltip>
                 {contextMenuFor && contextMenuFor.shapeType === 'polygon' && (
                     <Button type='link' icon='environment' onClick={onSetStartPoint}>
-                        Set start point
+                        {t('Set start point')}
                     </Button>
                 )}
             </div>,
             window.document.body,
-        )) : null;
+        ) 
+        : null;
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(CanvasPointContextMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(CanvasPointContextMenu);

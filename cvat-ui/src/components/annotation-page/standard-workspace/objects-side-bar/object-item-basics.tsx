@@ -13,6 +13,8 @@ import Tooltip from 'antd/lib/tooltip';
 import { ObjectType, ShapeType, ColorBy } from 'reducers/interfaces';
 import ItemMenu from './object-item-menu';
 
+import { useTranslation } from 'react-i18next';
+
 interface Props {
     clientID: number;
     serverID: number | undefined;
@@ -41,9 +43,11 @@ interface Props {
     toBackground(): void;
     toForeground(): void;
     resetCuboidPerspective(): void;
+    activateTracking(): void;
 }
 
 function ItemTopComponent(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         clientID,
         serverID,
@@ -72,6 +76,7 @@ function ItemTopComponent(props: Props): JSX.Element {
         toBackground,
         toForeground,
         resetCuboidPerspective,
+        activateTracking,
     } = props;
 
     const [menuVisible, setMenuVisible] = useState(false);
@@ -94,10 +99,12 @@ function ItemTopComponent(props: Props): JSX.Element {
             <Col span={10}>
                 <Text style={{ fontSize: 12 }}>{clientID}</Text>
                 <br />
-                <Text type='secondary' style={{ fontSize: 10 }}>{type}</Text>
+                <Text type='secondary' style={{ fontSize: 10 }}>
+                    {type}
+                </Text>
             </Col>
             <Col span={12}>
-                <Tooltip title='Change current label' mouseLeaveDelay={0}>
+                <Tooltip title={t('Change current label')} mouseLeaveDelay={0}>
                     <Select
                         size='small'
                         value={`${labelID}`}
@@ -105,18 +112,20 @@ function ItemTopComponent(props: Props): JSX.Element {
                         showSearch
                         filterOption={(input: string, option: React.ReactElement<OptionProps>) => {
                             const { children } = option.props;
-                            if (typeof (children) === 'string') {
+                            if (typeof children === 'string') {
                                 return children.toLowerCase().includes(input.toLowerCase());
                             }
 
                             return false;
                         }}
                     >
-                        { labels.map((label: any): JSX.Element => (
-                            <Select.Option key={label.id} value={`${label.id}`}>
-                                {label.name}
-                            </Select.Option>
-                        ))}
+                        {labels.map(
+                            (label: any): JSX.Element => (
+                                <Select.Option key={label.id} value={`${label.id}`}>
+                                    {label.name}
+                                </Select.Option>
+                            ),
+                        )}
                     </Select>
                 </Tooltip>
             </Col>
@@ -150,6 +159,7 @@ function ItemTopComponent(props: Props): JSX.Element {
                         toForeground,
                         resetCuboidPerspective,
                         changeColorPickerVisible,
+                        activateTracking,
                     })}
                 >
                     <Icon type='more' />

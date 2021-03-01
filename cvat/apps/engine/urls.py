@@ -46,6 +46,8 @@ def wrap_swagger(view):
 router = routers.DefaultRouter(trailing_slash=False)
 router.register('projects', views.ProjectViewSet)
 router.register('tasks', views.TaskViewSet)
+router.register('datas', views.DataViewSet,basename="datas")
+router.register('datasets', views.DataSetViewSet,basename="datasets")
 router.register('jobs', views.JobViewSet)
 router.register('users', views.UserViewSet)
 router.register('server', views.ServerViewSet, basename='server')

@@ -7,22 +7,29 @@ import tempfile
 import shutil
 import zipfile
 import io
+import time
+import itertools
+import random
 from abc import ABC, abstractmethod
 
 import av
 import numpy as np
 from pyunpack import Archive
 from PIL import Image, ImageFile
+import filetype
+from pathlib import Path
+
+from cvat.apps.engine import DirectoryUtils
+from django.utils.translation import gettext
 
 # fixes: "OSError:broken data stream" when executing line 72 while loading images downloaded from the web
 # see: https://stackoverflow.com/questions/42462431/oserror-broken-data-stream-when-reading-image-file
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-from cvat.apps.engine.mime_types import mimetypes
 
-def get_mime(name):
+def get_mime(path):
     for type_name, type_def in MEDIA_TYPES.items():
-        if type_def['has_mime_type'](name):
+        if type_def['has_mime_type'](path):
             return type_name
 
     return 'unknown'
@@ -36,7 +43,7 @@ def delete_tmp_dir(tmp_dir):
 
 class IMediaReader(ABC):
     def __init__(self, source_path, step, start, stop):
-        self._source_path = sorted(source_path)
+        self._source_path = [i.encode('cp437').decode('gbk') for i in sorted(source_path)]
         self._step = step
         self._start = start
         self._stop = stop
@@ -65,13 +72,20 @@ class IMediaReader(ABC):
         return preview.convert('RGB')
 
     @abstractmethod
-    def get_image_size(self):
+    def get_image_size(self, i):
         pass
+
+    def __len__(self):
+        return len(self.frame_range)
+
+    @property
+    def frame_range(self):
+        return range(self._start, self._stop, self._step)
 
 class ImageListReader(IMediaReader):
     def __init__(self, source_path, step=1, start=0, stop=None):
         if not source_path:
-            raise Exception('No image found')
+            raise Exception(gettext('No image found'))
 
         if stop is None:
             stop = len(source_path)
@@ -104,8 +118,8 @@ class ImageListReader(IMediaReader):
         fp = open(self._source_path[0], "rb")
         return self._get_preview(fp)
 
-    def get_image_size(self):
-        img = Image.open(self._source_path[0])
+    def get_image_size(self, i):
+        img = Image.open(self._source_path[i])
         return img.width, img.height
 
 class DirectoryReader(ImageListReader):
@@ -125,73 +139,90 @@ class DirectoryReader(ImageListReader):
 
 class ArchiveReader(DirectoryReader):
     def __init__(self, source_path, step=1, start=0, stop=None):
-        self._tmp_dir = create_tmp_dir()
         self._archive_source = source_path[0]
-        Archive(self._archive_source).extractall(self._tmp_dir)
+        Archive(self._archive_source).extractall(os.path.dirname(source_path[0]))
+        os.remove(self._archive_source)
         super().__init__(
-            source_path=[self._tmp_dir],
+            source_path=[os.path.dirname(source_path[0])],
             step=step,
             start=start,
             stop=stop,
         )
 
-    def __del__(self):
-        delete_tmp_dir(self._tmp_dir)
-
-    def get_path(self, i):
-        base_dir = os.path.dirname(self._archive_source)
-        return os.path.join(base_dir, os.path.relpath(self._source_path[i], self._tmp_dir))
-
-class PdfReader(DirectoryReader):
+class PdfReader(ImageListReader):
     def __init__(self, source_path, step=1, start=0, stop=None):
         if not source_path:
-            raise Exception('No PDF found')
+            raise Exception(gettext('No PDF found'))
+
+        self._pdf_source = source_path[0]
+
+        _basename = os.path.splitext(os.path.basename(self._pdf_source))[0]
+        _counter = itertools.count()
+        def _make_name():
+            for page_num in _counter:
+                yield '{}{:09d}.jpeg'.format(_basename, page_num)
 
         from pdf2image import convert_from_path
-        self._pdf_source = source_path[0]
-        self._tmp_dir = create_tmp_dir()
-        file_ = convert_from_path(self._pdf_source)
-        basename = os.path.splitext(os.path.basename(self._pdf_source))[0]
-        for page_num, page in enumerate(file_):
-            output = os.path.join(self._tmp_dir, '{}{:09d}.jpeg'.format(basename, page_num))
-            page.save(output, 'JPEG')
+        self._tmp_dir = os.path.dirname(source_path[0])
+        os.makedirs(self._tmp_dir, exist_ok=True)
+
+        # Avoid OOM: https://github.com/openvinotoolkit/cvat/issues/940
+        paths = convert_from_path(self._pdf_source,
+            last_page=stop, paths_only=True,
+            output_folder=self._tmp_dir, fmt="jpeg", output_file=_make_name())
+
+        os.remove(source_path[0])
 
         super().__init__(
-            source_path=[self._tmp_dir],
+            source_path=paths,
             step=step,
             start=start,
             stop=stop,
         )
 
-    def __del__(self):
-        delete_tmp_dir(self._tmp_dir)
-
-    def get_path(self, i):
-        base_dir = os.path.dirname(self._pdf_source)
-        return os.path.join(base_dir, os.path.relpath(self._source_path[i], self._tmp_dir))
-
 class ZipReader(ImageListReader):
+    ## source_path may be buff(eg,byteio) or realpath
     def __init__(self, source_path, step=1, start=0, stop=None):
         self._zip_source = zipfile.ZipFile(source_path[0], mode='r')
-        file_list = [f for f in self._zip_source.namelist() if get_mime(f) == 'image']
+        exctract_path = "./{}-{}".format(str(time.time()),random.randint(1,1111))
+        # self._zip_source.extractall(path=exctract_path)
+        file_list = []
+        for fn in self._zip_source.namelist():
+            ex_path = os.path.join(exctract_path,fn.encode('cp437').decode('gbk'))
+            extracted_path = Path(self._zip_source.extract(fn,path=exctract_path))
+            extracted_path.rename(ex_path)
+            if get_mime(ex_path) == 'image':
+                file_list.append(fn)
         super().__init__(file_list, step, start, stop)
 
     def __del__(self):
         self._zip_source.close()
 
     def get_preview(self):
-        io_image = io.BytesIO(self._zip_source.read(self._source_path[0]))
+        io_image = io.BytesIO(self._zip_source.read(self._source_path[0].encode('gbk').decode('cp437')))
         return self._get_preview(io_image)
 
-    def get_image_size(self):
-        img = Image.open(io.BytesIO(self._zip_source.read(self._source_path[0])))
+    def get_image_size(self, i):
+        img = Image.open(io.BytesIO(self._zip_source.read(self._source_path[i].encode('gbk').decode('cp437'))))
         return img.width, img.height
 
     def get_image(self, i):
-        return io.BytesIO(self._zip_source.read(self._source_path[i]))
+        return io.BytesIO(self._zip_source.read(self._source_path[i].encode('gbk').decode('cp437')))
 
     def get_path(self, i):
-        return os.path.join(os.path.dirname(self._zip_source.filename), self._source_path[i])
+        if  self._zip_source.filename:
+            return os.path.join(os.path.dirname(self._zip_source.filename), self._source_path[i])
+        else: # necessary for mime_type definition
+            return self._source_path[i]
+
+    def extract(self):
+        # self._zip_source.extractall(os.path.dirname(self._zip_source.filename))
+        exctract_path = os.path.dirname(self._zip_source.filename)
+        for fn in self._zip_source.namelist():
+            ex_path = os.path.join(exctract_path, fn.encode('cp437').decode('gbk'))
+            extracted_path = Path(self._zip_source.extract(fn, path=exctract_path))
+            extracted_path.rename(ex_path)
+        os.remove(self._zip_source.filename)
 
 class VideoReader(IMediaReader):
     def __init__(self, source_path, step=1, start=0, stop=None):
@@ -233,6 +264,8 @@ class VideoReader(IMediaReader):
         return pos / stream.duration if stream.duration else None
 
     def _get_av_container(self):
+        if isinstance(self._source_path[0], io.BytesIO):
+            self._source_path[0].seek(0) # required for re-reading
         return av.open(self._source_path[0])
 
     def get_preview(self):
@@ -241,7 +274,7 @@ class VideoReader(IMediaReader):
         preview = next(container.decode(stream))
         return self._get_preview(preview.to_image())
 
-    def get_image_size(self):
+    def get_image_size(self, i):
         image = (next(iter(self)))[0]
         return image.width, image.height
 
@@ -303,14 +336,14 @@ class Mpeg4ChunkWriter(IChunkWriter):
         self._output_fps = 25
 
     @staticmethod
-    def _create_av_container(path, w, h, rate, options):
+    def _create_av_container(path, w, h, rate, options, f='mp4'):
             # x264 requires width and height must be divisible by 2 for yuv420p
             if h % 2:
                 h += 1
             if w % 2:
                 w += 1
 
-            container = av.open(path, 'w')
+            container = av.open(path, 'w',format=f)
             video_stream = container.add_stream('libx264', rate=rate)
             video_stream.pix_fmt = "yuv420p"
             video_stream.width = w
@@ -321,7 +354,7 @@ class Mpeg4ChunkWriter(IChunkWriter):
 
     def save_as_chunk(self, images, chunk_path):
         if not images:
-            raise Exception('no images to save')
+            raise Exception(gettext('no images to save'))
 
         input_w = images[0][0].width
         input_h = images[0][0].height
@@ -364,7 +397,7 @@ class Mpeg4CompressedChunkWriter(Mpeg4ChunkWriter):
 
     def save_as_chunk(self, images, chunk_path):
         if not images:
-            raise Exception('no images to save')
+            raise Exception(gettext('no images to save'))
 
         input_w = images[0][0].width
         input_h = images[0][0].height
@@ -394,8 +427,16 @@ class Mpeg4CompressedChunkWriter(Mpeg4ChunkWriter):
         output_container.close()
         return [(input_w, input_h)]
 
+def judge_file_mime(path):
+    ### replace:       mimetypes.guess_type
+    if not os.path.isdir(path):
+        mime = filetype.guess(path)
+        if mime:
+            return (mime.mime,None)
+    return (None,None)
+
 def _is_archive(path):
-    mime = mimetypes.guess_type(path)
+    mime = judge_file_mime(path)
     mime_type = mime[0]
     encoding = mime[1]
     supportedArchives = ['application/x-rar-compressed',
@@ -404,11 +445,11 @@ def _is_archive(path):
     return mime_type in supportedArchives or encoding in supportedArchives
 
 def _is_video(path):
-    mime = mimetypes.guess_type(path)
+    mime = judge_file_mime(path)
     return mime[0] is not None and mime[0].startswith('video')
 
 def _is_image(path):
-    mime = mimetypes.guess_type(path)
+    mime = judge_file_mime(path)
     # Exclude vector graphic images because Pillow cannot work with them
     return mime[0] is not None and mime[0].startswith('image') and \
         not mime[0].startswith('image/svg')
@@ -417,11 +458,11 @@ def _is_dir(path):
     return os.path.isdir(path)
 
 def _is_pdf(path):
-    mime = mimetypes.guess_type(path)
+    mime = judge_file_mime(path)
     return mime[0] == 'application/pdf'
 
 def _is_zip(path):
-    mime = mimetypes.guess_type(path)
+    mime = judge_file_mime(path)
     mime_type = mime[0]
     encoding = mime[1]
     supportedArchives = ['application/zip']

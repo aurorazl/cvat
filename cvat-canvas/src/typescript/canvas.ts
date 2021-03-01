@@ -8,26 +8,17 @@ import {
     MergeData,
     SplitData,
     GroupData,
+    InteractionData,
+    InteractionResult,
     CanvasModel,
     CanvasModelImpl,
     RectDrawingMethod,
     CuboidDrawingMethod,
     Configuration,
 } from './canvasModel';
-
-import {
-    Master,
-} from './master';
-
-import {
-    CanvasController,
-    CanvasControllerImpl,
-} from './canvasController';
-
-import {
-    CanvasView,
-    CanvasViewImpl,
-} from './canvasView';
+import { Master } from './master';
+import { CanvasController, CanvasControllerImpl } from './canvasController';
+import { CanvasView, CanvasViewImpl } from './canvasView';
 
 import '../scss/canvas.scss';
 import pjson from '../../package.json';
@@ -43,6 +34,7 @@ interface Canvas {
     fit(): void;
     grid(stepX: number, stepY: number): void;
 
+    interact(interactionData: InteractionData): void;
     draw(drawData: DrawData): void;
     group(groupData: GroupData): void;
     split(splitData: SplitData): void;
@@ -80,10 +72,7 @@ class CanvasImpl implements Canvas {
     }
 
     public fitCanvas(): void {
-        this.model.fitCanvas(
-            this.view.html().clientWidth,
-            this.view.html().clientHeight,
-        );
+        this.model.fitCanvas(this.view.html().clientWidth, this.view.html().clientHeight);
     }
 
     public bitmap(enable: boolean): void {
@@ -116,6 +105,10 @@ class CanvasImpl implements Canvas {
 
     public grid(stepX: number, stepY: number): void {
         this.model.grid(stepX, stepY);
+    }
+
+    public interact(interactionData: InteractionData): void {
+        this.model.interact(interactionData);
     }
 
     public draw(drawData: DrawData): void {
@@ -162,4 +155,6 @@ export {
     RectDrawingMethod,
     CuboidDrawingMethod,
     Mode as CanvasMode,
+    InteractionData,
+    InteractionResult,
 };

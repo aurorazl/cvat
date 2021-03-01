@@ -16,7 +16,7 @@ from datumaro.components.project import Dataset
 from datumaro.plugins.yolo_format.extractor import YoloExtractor
 
 from .registry import dm_env, exporter, importer
-
+from django.utils.translation import gettext
 
 @exporter(name='YOLO', ext='ZIP', version='1.1')
 def _export(dst_file, task_data, save_images=False):
@@ -36,6 +36,8 @@ def _import(src_file, task_data):
         image_info = {}
         frames = [YoloExtractor.name_from_path(osp.relpath(p, tmp_dir))
             for p in glob(osp.join(tmp_dir, '**', '*.txt'), recursive=True)]
+        if len(frames)==0:
+            raise Exception(gettext("Failed to find 'yolo' annotation"))
         root_hint = find_dataset_root(
             [DatasetItem(id=frame) for frame in frames], task_data)
         for frame in frames:

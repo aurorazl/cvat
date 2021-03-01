@@ -17,8 +17,8 @@
 
 .cvat-annotation-header-left-group {
     > button:first-child {
-        filter: invert(0.9);
-        background: $background-color-1;
+        // filter: invert(0.9);
+        // background: $background-color-1;
         border-radius: 0;
         width: 70px;
     }
@@ -298,5 +298,22 @@
         ul {
             display: flex;
         }
+    }
+}
+
+.cvat-player-previous-inlined-button,
+.cvat-player-next-inlined-button,
+.cvat-player-previous-filtered-inlined-button,
+.cvat-player-next-filtered-inlined-button,
+.cvat-player-previous-empty-inlined-button,
+.cvat-player-next-empty-inlined-button {
+    color: $player-buttons-color;
+
+    &:not(:first-child) {
+        margin-left: 12px;
+    }
+
+    > svg {
+        transform: scale(1.8);
     }
 }

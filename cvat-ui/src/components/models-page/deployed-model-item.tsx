@@ -7,13 +7,16 @@ import { Row, Col } from 'antd/lib/grid';
 import Tag from 'antd/lib/tag';
 import Select from 'antd/lib/select';
 import Text from 'antd/lib/typography/Text';
+import Tooltip from 'antd/lib/tooltip';
 import { Model } from 'reducers/interfaces';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     model: Model;
 }
 
 export default function DeployedModelItem(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const { model } = props;
 
     return (
@@ -22,30 +25,21 @@ export default function DeployedModelItem(props: Props): JSX.Element {
                 <Tag color='purple'>{model.framework}</Tag>
             </Col>
             <Col span={3}>
-                <Text className='cvat-text-color'>
-                    {model.name}
-                </Text>
+                <Tooltip title={model.name} placement='top' mouseLeaveDelay={0.2}>
+                    <Text className='cvat-text-color'>{model.name}</Text>
+                </Tooltip>
             </Col>
             <Col span={3}>
-                <Tag color='orange'>
-                    {model.type}
-                </Tag>
+                <Tag color='orange'>{model.type}</Tag>
             </Col>
             <Col span={10}>
                 <Text style={{ whiteSpace: 'normal', height: 'auto' }}>{model.description}</Text>
             </Col>
             <Col span={5}>
-                <Select
-                    showSearch
-                    placeholder='Supported labels'
-                    style={{ width: '90%' }}
-                    value='Supported labels'
-                >
+                <Select showSearch placeholder={t('Supported labels')} style={{ width: '90%' }} value={t('Supported labels')}>
                     {model.labels.map(
                         (label): JSX.Element => (
-                            <Select.Option key={label}>
-                                {label}
-                            </Select.Option>
+                            <Select.Option key={label}>{label}</Select.Option>
                         ),
                     )}
                 </Select>

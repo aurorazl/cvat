@@ -13,6 +13,10 @@ import Text from 'antd/lib/typography/Text';
 
 import { clamp } from 'utils/math';
 
+import { useTranslation } from 'react-i18next';
+import getCore from 'cvat-core-wrapper';
+import linkConsts from 'help-link-consts';
+
 interface Props {
     startFrame: number;
     stopFrame: number;
@@ -23,9 +27,14 @@ interface Props {
     onSliderChange(value: SliderValue): void;
     onInputChange(value: number): void;
     onURLIconClick(): void;
+    lang: string;
 }
 
 function PlayerNavigation(props: Props): JSX.Element {
+    const { t } = useTranslation();
+    const core = getCore();
+    const baseURL = core.config.backendAPI.slice(0, -7);
+
     const {
         startFrame,
         stopFrame,
@@ -36,6 +45,7 @@ function PlayerNavigation(props: Props): JSX.Element {
         onSliderChange,
         onInputChange,
         onURLIconClick,
+        lang,
     } = props;
 
     const [frameInputValue, setFrameInputValue] = useState<number>(frameNumber);
@@ -67,23 +77,21 @@ function PlayerNavigation(props: Props): JSX.Element {
                         </Tooltip>
                     </Col>
                     <Col offset={1}>
-                        <Tooltip title='Create frame URL' mouseLeaveDelay={0}>
+                        <Tooltip title={t('Create frame URL')} mouseLeaveDelay={0}>
                             <Icon className='cvat-player-frame-url-icon' type='link' onClick={onURLIconClick} />
                         </Tooltip>
                     </Col>
                 </Row>
             </Col>
             <Col>
-                <Tooltip title={`Press ${focusFrameInputShortcut} to focus here`} mouseLeaveDelay={0}>
+                <Tooltip title={<a href={`${baseURL}/${linkConsts[lang].PLAYER}`} target="blank">{t('Press ${focusFrameInputShortcut} to focus here', {focusFrameInputShortcut: `${focusFrameInputShortcut}`})}</a>} mouseLeaveDelay={0.2}>
                     <InputNumber
                         className='cvat-player-frame-selector'
                         type='number'
                         value={frameInputValue}
                         onChange={(value: number | undefined) => {
-                            if (typeof (value) === 'number') {
-                                setFrameInputValue(Math.floor(
-                                    clamp(value, startFrame, stopFrame),
-                                ));
+                            if (typeof value === 'number') {
+                                setFrameInputValue(Math.floor(clamp(value, startFrame, stopFrame)));
                             }
                         }}
                         onBlur={() => {
@@ -91,6 +99,7 @@ function PlayerNavigation(props: Props): JSX.Element {
                         }}
                         onPressEnter={() => {
                             onInputChange(frameInputValue);
+                            inputFrameRef.current?.blur();
                         }}
                         ref={inputFrameRef}
                     />

@@ -10,6 +10,8 @@ import Input from 'antd/lib/input';
 
 import patterns from 'utils/validation-patterns';
 
+import { withTranslation, WithTranslation  } from 'react-i18next';
+
 export interface ChangePasswordData {
     oldPassword: string;
     newPassword1: string;
@@ -19,13 +21,13 @@ export interface ChangePasswordData {
 type ChangePasswordFormProps = {
     fetching: boolean;
     onSubmit(loginData: ChangePasswordData): void;
-} & FormComponentProps;
+} & FormComponentProps & WithTranslation;
 
 class ChangePasswordFormComponent extends React.PureComponent<ChangePasswordFormProps> {
     private validateConfirmation = (_: any, value: string, callback: Function): void => {
-        const { form } = this.props;
+        const { form, t } = this.props;
         if (value && value !== form.getFieldValue('newPassword1')) {
-            callback('Two passwords that you enter is inconsistent!');
+            callback(t('Two passwords that you enter is inconsistent!'));
         } else {
             callback();
         }
@@ -57,10 +59,7 @@ class ChangePasswordFormComponent extends React.PureComponent<ChangePasswordForm
 
     private handleSubmit = (e: React.FormEvent): void => {
         e.preventDefault();
-        const {
-            form,
-            onSubmit,
-        } = this.props;
+        const { form, onSubmit } = this.props;
 
         form.validateFields((error, values): void => {
             if (!error) {
@@ -75,74 +74,85 @@ class ChangePasswordFormComponent extends React.PureComponent<ChangePasswordForm
     };
 
     private renderOldPasswordField(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
             <Form.Item hasFeedback>
                 {form.getFieldDecorator('oldPassword', {
-                    rules: [{
-                        required: true,
-                        message: 'Please input your current password!',
-                    }],
-                })(<Input.Password
-                    autoComplete='new-password'
-                    prefix={<Icon type='lock' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
-                    placeholder='Current password'
-                />)}
+                    rules: [
+                        {
+                            required: true,
+                            message: t('Please input your current password!'),
+                        }
+                    ],
+                })(
+                    <Input.Password
+                        autoComplete='new-password'
+                        prefix={<Icon type='lock' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
+                        placeholder={t('Current password')}
+                    />,
+                )}
             </Form.Item>
         );
     }
 
     private renderNewPasswordField(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
             <Form.Item hasFeedback>
                 {form.getFieldDecorator('newPassword1', {
-                    rules: [{
-                        required: true,
-                        message: 'Please input new password!',
-                    }, {
-                        validator: this.validatePassword,
-                    }],
-                })(<Input.Password
-                    autoComplete='new-password'
-                    prefix={<Icon type='lock' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
-                    placeholder='New password'
-                />)}
+                    rules: [
+                        {
+                            required: true,
+                            message: t('Please input new password!'),
+                        }, 
+                        {
+                            validator: this.validatePassword,
+                        },
+                    ],
+                })(
+                    <Input.Password
+                        autoComplete='new-password'
+                        prefix={<Icon type='lock' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
+                        placeholder={t('New password')}
+                    />,
+                )}
             </Form.Item>
         );
     }
 
     private renderNewPasswordConfirmationField(): JSX.Element {
-        const { form } = this.props;
+        const { form, t } = this.props;
 
         return (
             <Form.Item hasFeedback>
                 {form.getFieldDecorator('newPassword2', {
-                    rules: [{
-                        required: true,
-                        message: 'Please confirm your new password!',
-                    }, {
-                        validator: this.validateConfirmation,
-                    }],
-                })(<Input.Password
-                    autoComplete='new-password'
-                    prefix={<Icon type='lock' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
-                    placeholder='Confirm new password'
-                />)}
+                    rules: [
+                        {
+                            required: true,
+                            message: t('Please confirm your new password!'),
+                        }, 
+                        {
+                            validator: this.validateConfirmation,
+                        },
+                    ],
+                })(
+                    <Input.Password
+                        autoComplete='new-password'
+                        prefix={<Icon type='lock' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />}
+                        placeholder={t('Confirm new password')}
+                    />,
+                )}
             </Form.Item>
         );
     }
 
     public render(): JSX.Element {
-        const { fetching } = this.props;
+        const { fetching, t } = this.props;
 
         return (
-            <Form
-                onSubmit={this.handleSubmit}
-                className='change-password-form'
-            >
+            <Form onSubmit={this.handleSubmit} className='change-password-form'>
                 {this.renderOldPasswordField()}
                 {this.renderNewPasswordField()}
                 {this.renderNewPasswordConfirmationField()}
@@ -155,7 +165,7 @@ class ChangePasswordFormComponent extends React.PureComponent<ChangePasswordForm
                         loading={fetching}
                         disabled={fetching}
                     >
-                        Submit
+                        {t('Submit')}
                     </Button>
                 </Form.Item>
             </Form>
@@ -163,4 +173,4 @@ class ChangePasswordFormComponent extends React.PureComponent<ChangePasswordForm
     }
 }
 
-export default Form.create<ChangePasswordFormProps>()(ChangePasswordFormComponent);
+export default Form.create<ChangePasswordFormProps>()(withTranslation()(ChangePasswordFormComponent));

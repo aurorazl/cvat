@@ -7,6 +7,8 @@ import Menu from 'antd/lib/menu';
 import Icon from 'antd/lib/icon';
 import Text from 'antd/lib/typography/Text';
 
+import { useTranslation } from 'react-i18next';
+
 interface Props {
     menuKey: string;
     exporters: any[];
@@ -14,18 +16,15 @@ interface Props {
 }
 
 export default function ExportSubmenu(props: Props): JSX.Element {
-    const {
-        menuKey,
-        exporters,
-        exportActivities,
-    } = props;
+    const { t } = useTranslation();
+    const { menuKey, exporters, exportActivities } = props;
 
     return (
-        <Menu.SubMenu key={menuKey} title='Export as a dataset'>
-            {
-                exporters
-                    .sort((a: any, b: any) => a.name.localeCompare(b.name))
-                    .map((exporter: any): JSX.Element => {
+        <Menu.SubMenu key={menuKey} title={t('Export as a dataset')}>
+            {exporters
+                .sort((a: any, b: any) => a.name.localeCompare(b.name))
+                .map(
+                    (exporter: any): JSX.Element => {
                         const pending = (exportActivities || []).includes(exporter.name);
                         const disabled = !exporter.enabled || pending;
                         return (
@@ -39,8 +38,8 @@ export default function ExportSubmenu(props: Props): JSX.Element {
                                 {pending && <Icon style={{ marginLeft: 10 }} type='loading' />}
                             </Menu.Item>
                         );
-                    })
-            }
+                    },
+            )}
         </Menu.SubMenu>
     );
 }

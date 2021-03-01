@@ -8,7 +8,7 @@ import Button from 'antd/lib/button';
 
 import ConstructorViewerItem from './constructor-viewer-item';
 import { Label } from './common';
-
+import { useTranslation } from 'react-i18next';
 interface ConstructorViewerProps {
     labels: Label[];
     onUpdate: (label: Label) => void;
@@ -17,12 +17,14 @@ interface ConstructorViewerProps {
 }
 
 export default function ConstructorViewer(props: ConstructorViewerProps): JSX.Element {
+    const { t } = useTranslation();
     const { onCreate } = props;
     const list = [
         <Button key='create' type='ghost' onClick={onCreate} className='cvat-constructor-viewer-new-item'>
-            Add label
+            {t('Add label')}
             <Icon type='plus-circle' />
-        </Button>];
+        </Button>,
+    ];
     for (const label of props.labels) {
         list.push(
             <ConstructorViewerItem
@@ -35,9 +37,5 @@ export default function ConstructorViewer(props: ConstructorViewerProps): JSX.El
         );
     }
 
-    return (
-        <div className='cvat-constructor-viewer'>
-            { list }
-        </div>
-    );
+    return <div className='cvat-constructor-viewer'>{list}</div>;
 }

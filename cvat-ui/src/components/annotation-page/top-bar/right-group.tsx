@@ -7,9 +7,12 @@ import { Col } from 'antd/lib/grid';
 import Icon from 'antd/lib/icon';
 import Select from 'antd/lib/select';
 import Button from 'antd/lib/button';
+import Tooltip from 'antd/lib/tooltip';
 
 import { Workspace } from 'reducers/interfaces';
 import { InfoIcon, FullscreenIcon } from 'icons';
+
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     workspace: Workspace;
@@ -18,6 +21,7 @@ interface Props {
 }
 
 function RightGroup(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const { showStatistics, changeWorkspace, workspace } = props;
 
     return (
@@ -36,21 +40,19 @@ function RightGroup(props: Props): JSX.Element {
                 }}
             >
                 <Icon component={FullscreenIcon} />
-                Fullscreen
+                {t('Fullscreen')}
             </Button>
             <Button type='link' className='cvat-annotation-header-button' onClick={showStatistics}>
                 <Icon component={InfoIcon} />
-                Info
+                {t('Info')}
             </Button>
             <div>
-                <Select
-                    className='cvat-workspace-selector'
-                    onChange={changeWorkspace}
-                    value={workspace}
-                >
+                <Select className='cvat-workspace-selector' onChange={changeWorkspace} value={workspace}>
                     {Object.values(Workspace).map((ws) => (
                         <Select.Option key={ws} value={ws}>
-                            {ws}
+                            <Tooltip key={`${ws}-tip`} title={t(ws)} placement='left' mouseLeaveDelay={0.2}>
+                                {t(ws)}
+                            </Tooltip>
                         </Select.Option>
                     ))}
                 </Select>

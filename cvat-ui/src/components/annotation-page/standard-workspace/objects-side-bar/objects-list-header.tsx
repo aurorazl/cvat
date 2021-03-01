@@ -11,7 +11,9 @@ import Tooltip from 'antd/lib/tooltip';
 
 import AnnotationsFiltersInput from 'components/annotation-page/annotations-filters-input';
 import { StatesOrdering } from 'reducers/interfaces';
-
+import { useTranslation } from 'react-i18next';
+import getCore from 'cvat-core-wrapper';
+import linkConsts from 'help-link-consts';
 
 interface StatesOrderingSelectorComponentProps {
     statesOrdering: StatesOrdering;
@@ -19,32 +21,21 @@ interface StatesOrderingSelectorComponentProps {
 }
 
 function StatesOrderingSelectorComponent(props: StatesOrderingSelectorComponentProps): JSX.Element {
-    const {
-        statesOrdering,
-        changeStatesOrdering,
-    } = props;
+    const { t } = useTranslation();
+    const { statesOrdering, changeStatesOrdering } = props;
 
     return (
         <Col span={16}>
-            <Text strong>Sort by</Text>
+            <Text strong>{t('Sort by')}</Text>
             <Select value={statesOrdering} onChange={changeStatesOrdering}>
-                <Select.Option
-                    key={StatesOrdering.ID_DESCENT}
-                    value={StatesOrdering.ID_DESCENT}
-                >
-                    {StatesOrdering.ID_DESCENT}
+                <Select.Option key={StatesOrdering.ID_DESCENT} value={StatesOrdering.ID_DESCENT}>
+                    {t(StatesOrdering.ID_DESCENT)}
                 </Select.Option>
-                <Select.Option
-                    key={StatesOrdering.ID_ASCENT}
-                    value={StatesOrdering.ID_ASCENT}
-                >
-                    {StatesOrdering.ID_ASCENT}
+                <Select.Option key={StatesOrdering.ID_ASCENT} value={StatesOrdering.ID_ASCENT}>
+                    {t(StatesOrdering.ID_ASCENT)}
                 </Select.Option>
-                <Select.Option
-                    key={StatesOrdering.UPDATED}
-                    value={StatesOrdering.UPDATED}
-                >
-                    {StatesOrdering.UPDATED}
+                <Select.Option key={StatesOrdering.UPDATED} value={StatesOrdering.UPDATED}>
+                    {t(StatesOrdering.UPDATED)}
                 </Select.Option>
             </Select>
         </Col>
@@ -52,6 +43,8 @@ function StatesOrderingSelectorComponent(props: StatesOrderingSelectorComponentP
 }
 
 const StatesOrderingSelector = React.memo(StatesOrderingSelectorComponent);
+const core = getCore();
+const baseURL = core.config.backendAPI.slice(0, -7);
 
 interface Props {
     statesHidden: boolean;
@@ -67,9 +60,11 @@ interface Props {
     expandAllStates(): void;
     hideAllStates(): void;
     showAllStates(): void;
+    lang: string;
 }
 
 function ObjectListHeader(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         statesHidden,
         statesLocked,
@@ -84,6 +79,7 @@ function ObjectListHeader(props: Props): JSX.Element {
         expandAllStates,
         hideAllStates,
         showAllStates,
+        lang,
     } = props;
 
     return (
@@ -95,30 +91,33 @@ function ObjectListHeader(props: Props): JSX.Element {
             </Row>
             <Row type='flex' justify='space-between' align='middle'>
                 <Col span={2}>
-                    <Tooltip title={`Switch lock property for all ${switchLockAllShortcut}`} mouseLeaveDelay={0}>
-                        { statesLocked
-                            ? <Icon type='lock' onClick={unlockAllStates} theme='filled' />
-                            : <Icon type='unlock' onClick={lockAllStates} />}
+                    <Tooltip title={<a href={`${baseURL}/${linkConsts[lang].OBJECTS}`} target="blank">{t('Switch lock property for all ${switchLockAllShortcut}', {switchLockAllShortcut: `${switchLockAllShortcut}`})}</a>} mouseLeaveDelay={0.2}>
+                        { statesLocked ? (
+                                <Icon type='lock' onClick={unlockAllStates} theme='filled' />
+                            ) : (
+                                <Icon type='unlock' onClick={lockAllStates} />
+                        )}
                     </Tooltip>
                 </Col>
                 <Col span={2}>
-                    <Tooltip title={`Switch hidden property for all ${switchHiddenAllShortcut}`} mouseLeaveDelay={0}>
-                        { statesHidden
-                            ? <Icon type='eye-invisible' onClick={showAllStates} />
-                            : <Icon type='eye' onClick={hideAllStates} />}
+                    <Tooltip title={<a href={`${baseURL}/${linkConsts[lang].OBJECTS}`} target="blank">{t('Switch hidden property for all ${switchHiddenAllShortcut}', {switchHiddenAllShortcut: `${switchHiddenAllShortcut}`})}</a>} mouseLeaveDelay={0.2}>
+                        { statesHidden ? (
+                                <Icon type='eye-invisible' onClick={showAllStates} />
+                            ) : (
+                                <Icon type='eye' onClick={hideAllStates} />
+                            )}
                     </Tooltip>
                 </Col>
                 <Col span={2}>
-                    <Tooltip title='Expand/collapse all' mouseLeaveDelay={0}>
-                        { statesCollapsed
-                            ? <Icon type='caret-down' onClick={expandAllStates} />
-                            : <Icon type='caret-up' onClick={collapseAllStates} />}
+                            <Tooltip title={<a href={`${baseURL}/${linkConsts[lang].OBJECTS}`} target="blank">{t('Expand/collapse all')}</a>} mouseLeaveDelay={0.2}>
+                        { statesCollapsed ? (
+                                <Icon type='caret-down' onClick={expandAllStates} />
+                            ) : (
+                                <Icon type='caret-up' onClick={collapseAllStates} />
+                            )}
                     </Tooltip>
                 </Col>
-                <StatesOrderingSelector
-                    statesOrdering={statesOrdering}
-                    changeStatesOrdering={changeStatesOrdering}
-                />
+                <StatesOrderingSelector statesOrdering={statesOrdering} changeStatesOrdering={changeStatesOrdering} />
             </Row>
         </div>
     );

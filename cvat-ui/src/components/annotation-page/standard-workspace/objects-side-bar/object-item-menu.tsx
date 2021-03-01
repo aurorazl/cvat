@@ -9,14 +9,10 @@ import Button from 'antd/lib/button';
 import Modal from 'antd/lib/modal';
 import Tooltip from 'antd/lib/tooltip';
 
-import {
-    BackgroundIcon,
-    ForegroundIcon,
-    ResetPerspectiveIcon,
-    ColorizeIcon,
-} from 'icons';
+import { BackgroundIcon, ForegroundIcon, ResetPerspectiveIcon, ColorizeIcon } from 'icons';
 import { ObjectType, ShapeType, ColorBy } from 'reducers/interfaces';
 import ColorPicker from './color-picker';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     serverID: number | undefined;
@@ -33,19 +29,21 @@ interface Props {
     toBackgroundShortcut: string;
     toForegroundShortcut: string;
     removeShortcut: string;
-    changeColor: (value: string) => void;
-    copy: (() => void);
-    remove: (() => void);
-    propagate: (() => void);
-    createURL: (() => void);
-    switchOrientation: (() => void);
-    toBackground: (() => void);
-    toForeground: (() => void);
-    resetCuboidPerspective: (() => void);
-    changeColorPickerVisible: (visible: boolean) => void;
+    changeColor(value: string): void;
+    copy(): void;
+    remove(): void;
+    propagate(): void;
+    createURL(): void;
+    switchOrientation(): void;
+    toBackground(): void;
+    toForeground(): void;
+    resetCuboidPerspective(): void;
+    changeColorPickerVisible(visible: boolean): void;
+    activateTracking(): void;
 }
 
 export default function ItemMenu(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         serverID,
         locked,
@@ -71,33 +69,44 @@ export default function ItemMenu(props: Props): JSX.Element {
         toForeground,
         resetCuboidPerspective,
         changeColorPickerVisible,
+        activateTracking,
     } = props;
 
     return (
         <Menu className='cvat-object-item-menu'>
             <Menu.Item>
                 <Button disabled={serverID === undefined} type='link' icon='link' onClick={createURL}>
-                    Create object URL
+                {t('Create object URL')}
                 </Button>
             </Menu.Item>
             <Menu.Item>
-                <Tooltip title={`${copyShortcut} and ${pasteShortcut}`} mouseLeaveDelay={0}>
+                <Tooltip title={t('${copyShortcut} and ${pasteShortcut}', {copyShortcut: `${copyShortcut}`, pasteShortcut: `${pasteShortcut}`})} mouseLeaveDelay={0}>
                     <Button type='link' icon='copy' onClick={copy}>
-                        Make a copy
+                    {t('Make a copy')}
                     </Button>
                 </Tooltip>
             </Menu.Item>
             <Menu.Item>
                 <Tooltip title={`${propagateShortcut}`} mouseLeaveDelay={0}>
                     <Button type='link' icon='block' onClick={propagate}>
-                        Propagate
+                    {t('Propagate')}
                     </Button>
                 </Tooltip>
             </Menu.Item>
-            { [ShapeType.POLYGON, ShapeType.POLYLINE, ShapeType.CUBOID].includes(shapeType) && (
+            {objectType === ObjectType.TRACK && shapeType === ShapeType.RECTANGLE && (
+                <Menu.Item>
+                    <Tooltip title={t('Run tracking with the active tracker')} mouseLeaveDelay={0}>
+                        <Button type='link' onClick={activateTracking}>
+                            <Icon type='gateway' />
+                            {t('Track')}
+                        </Button>
+                    </Tooltip>
+                </Menu.Item>
+            )}
+            {[ShapeType.POLYGON, ShapeType.POLYLINE, ShapeType.CUBOID].includes(shapeType) && (
                 <Menu.Item>
                     <Button type='link' icon='retweet' onClick={switchOrientation}>
-                        Switch orientation
+                    {t('Switch orientation')}
                     </Button>
                 </Menu.Item>
             )}
@@ -105,7 +114,7 @@ export default function ItemMenu(props: Props): JSX.Element {
                 <Menu.Item>
                     <Button type='link' onClick={resetCuboidPerspective}>
                         <Icon component={ResetPerspectiveIcon} />
-                        Reset perspective
+                        {t('Reset perspective')}
                     </Button>
                 </Menu.Item>
             )}
@@ -114,7 +123,7 @@ export default function ItemMenu(props: Props): JSX.Element {
                     <Tooltip title={`${toBackgroundShortcut}`} mouseLeaveDelay={0}>
                         <Button type='link' onClick={toBackground}>
                             <Icon component={BackgroundIcon} />
-                            To background
+                            {t('To background')}
                         </Button>
                     </Tooltip>
                 </Menu.Item>
@@ -124,7 +133,7 @@ export default function ItemMenu(props: Props): JSX.Element {
                     <Tooltip title={`${toForegroundShortcut}`} mouseLeaveDelay={0}>
                         <Button type='link' onClick={toForeground}>
                             <Icon component={ForegroundIcon} />
-                            To foreground
+                            {t('To foreground')}
                         </Button>
                     </Tooltip>
                 </Menu.Item>
@@ -141,7 +150,7 @@ export default function ItemMenu(props: Props): JSX.Element {
                         <Tooltip title={`${changeColorShortcut}`} mouseLeaveDelay={0}>
                             <Button type='link'>
                                 <Icon component={ColorizeIcon} />
-                                {`Change ${colorBy.toLowerCase()} color`}
+                                {t('Change ${colorBy.toLowerCase()} color').replace('${colorBy.toLowerCase()}', `${colorBy.toLowerCase()}`)}
                             </Button>
                         </Tooltip>
                     </ColorPicker>
@@ -155,8 +164,8 @@ export default function ItemMenu(props: Props): JSX.Element {
                         onClick={(): void => {
                             if (locked) {
                                 Modal.confirm({
-                                    title: 'Object is locked',
-                                    content: 'Are you sure you want to remove it?',
+                                    title: t('Object is locked'),
+                                    content: t('Are you sure you want to remove it?'),
                                     onOk() {
                                         remove();
                                     },
@@ -166,7 +175,7 @@ export default function ItemMenu(props: Props): JSX.Element {
                             }
                         }}
                     >
-                        Remove
+                        {t('Remove')}
                     </Button>
                 </Tooltip>
             </Menu.Item>

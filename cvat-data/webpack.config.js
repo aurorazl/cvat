@@ -1,6 +1,9 @@
+// Copyright (C) 2020 Intel Corporation
+//
+// SPDX-License-Identifier: MIT
+
 /* global
-    require:true,
-    __dirname:true,
+    __dirname:true
 */
 
 const path = require('path');
@@ -17,6 +20,7 @@ const cvatData = {
         filename: '[name].[contenthash].min.js',
         library: 'cvatData',
         libraryTarget: 'window',
+        publicPath: '/annotations/',
     },
     module: {
         rules: [
@@ -27,40 +31,41 @@ const cvatData = {
                     loader: 'babel-loader',
                     options: {
                         presets: [
-                            ['@babel/preset-env', {
-                                targets: '> 2.5%', // https://github.com/browserslist/browserslist
-                            }],
+                            [
+                                '@babel/preset-env',
+                                {
+                                    targets: '> 2.5%', // https://github.com/browserslist/browserslist
+                                },
+                            ],
                         ],
                         sourceType: 'unambiguous',
                     },
                 },
-            }, {
+            },
+            {
                 test: /\.worker\.js$/,
                 exclude: /3rdparty/,
                 use: {
                     loader: 'worker-loader',
                     options: {
-                        publicPath: '/',
+                        publicPath: '/annotations/',
                         name: '[name].[contenthash].js',
                     },
                 },
-            }, {
+            },
+            {
                 test: /3rdparty\/.*\.worker\.js$/,
                 use: {
                     loader: 'worker-loader',
                     options: {
-                        publicPath: '/3rdparty/',
+                        publicPath: '/annotations/3rdparty/',
                         name: '3rdparty/[name].[contenthash].js',
                     },
                 },
             },
         ],
     },
-    plugins: [
-        new CopyPlugin([
-            './src/js/3rdparty/avc.wasm',
-        ]),
-    ],
+    plugins: [new CopyPlugin(['./src/js/3rdparty/avc.wasm'])],
 };
 
 module.exports = cvatData;

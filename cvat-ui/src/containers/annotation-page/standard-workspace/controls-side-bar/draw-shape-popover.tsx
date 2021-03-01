@@ -30,6 +30,7 @@ interface StateToProps {
     canvasInstance: Canvas;
     shapeType: ShapeType;
     labels: any[];
+    lang: string;
 }
 
 function mapDispatchToProps(dispatch: any): DispatchToProps {
@@ -49,16 +50,11 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
 function mapStateToProps(state: CombinedState, own: OwnProps): StateToProps {
     const {
         annotation: {
-            canvas: {
-                instance: canvasInstance,
-            },
-            job: {
-                labels,
-            },
+            canvas: { instance: canvasInstance },
+            job: { labels },
         },
-        shortcuts: {
-            normalizedKeyMap,
-        },
+        shortcuts: { normalizedKeyMap },
+        lang: { lang },
     } = state;
 
     return {
@@ -66,6 +62,7 @@ function mapStateToProps(state: CombinedState, own: OwnProps): StateToProps {
         canvasInstance,
         labels,
         normalizedKeyMap,
+        lang,
     };
 }
 
@@ -80,6 +77,7 @@ interface State {
 
 class DrawShapePopoverContainer extends React.PureComponent<Props, State> {
     private minimumPoints = 3;
+
     constructor(props: Props) {
         super(props);
 
@@ -89,10 +87,8 @@ class DrawShapePopoverContainer extends React.PureComponent<Props, State> {
         const defaultCuboidDrawingMethod = CuboidDrawingMethod.CLASSIC;
         this.state = {
             selectedLabelID: defaultLabelID,
-            rectDrawingMethod: shapeType === ShapeType.RECTANGLE
-                ? defaultRectDrawingMethod : undefined,
-            cuboidDrawingMethod: shapeType === ShapeType.CUBOID
-                ? defaultCuboidDrawingMethod : undefined,
+            rectDrawingMethod: shapeType === ShapeType.RECTANGLE ? defaultRectDrawingMethod : undefined,
+            cuboidDrawingMethod: shapeType === ShapeType.CUBOID ? defaultCuboidDrawingMethod : undefined,
         };
 
         if (shapeType === ShapeType.POLYGON) {
@@ -109,12 +105,7 @@ class DrawShapePopoverContainer extends React.PureComponent<Props, State> {
     private onDraw(objectType: ObjectType): void {
         const { canvasInstance, shapeType, onDrawStart } = this.props;
 
-        const {
-            rectDrawingMethod,
-            cuboidDrawingMethod,
-            numberOfPoints,
-            selectedLabelID,
-        } = this.state;
+        const { rectDrawingMethod, cuboidDrawingMethod, numberOfPoints, selectedLabelID } = this.state;
 
         canvasInstance.cancel();
         canvasInstance.draw({
@@ -126,8 +117,7 @@ class DrawShapePopoverContainer extends React.PureComponent<Props, State> {
             crosshair: [ShapeType.RECTANGLE, ShapeType.CUBOID].includes(shapeType),
         });
 
-        onDrawStart(shapeType, selectedLabelID,
-            objectType, numberOfPoints, rectDrawingMethod);
+        onDrawStart(shapeType, selectedLabelID, objectType, numberOfPoints, rectDrawingMethod);
     }
 
     private onChangeRectDrawingMethod = (event: RadioChangeEvent): void => {
@@ -163,18 +153,9 @@ class DrawShapePopoverContainer extends React.PureComponent<Props, State> {
     };
 
     public render(): JSX.Element {
-        const {
-            rectDrawingMethod,
-            cuboidDrawingMethod,
-            selectedLabelID,
-            numberOfPoints,
-        } = this.state;
+        const { rectDrawingMethod, cuboidDrawingMethod, selectedLabelID, numberOfPoints } = this.state;
 
-        const {
-            normalizedKeyMap,
-            labels,
-            shapeType,
-        } = this.props;
+        const { normalizedKeyMap, labels, shapeType, lang } = this.props;
 
         return (
             <DrawShapePopoverComponent
@@ -192,12 +173,10 @@ class DrawShapePopoverContainer extends React.PureComponent<Props, State> {
                 onChangeCuboidDrawingMethod={this.onChangeCuboidDrawingMethod}
                 onDrawTrack={this.onDrawTrack}
                 onDrawShape={this.onDrawShape}
+                lang={lang}
             />
         );
     }
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(DrawShapePopoverContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(DrawShapePopoverContainer);

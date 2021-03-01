@@ -8,18 +8,17 @@ import Text from 'antd/lib/typography/Text';
 
 import { Model } from 'reducers/interfaces';
 import DeployedModelItem from './deployed-model-item';
-
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     models: Model[];
 }
 
 export default function DeployedModelsListComponent(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const { models } = props;
 
-    const items = models.map((model): JSX.Element => (
-        <DeployedModelItem key={model.id} model={model} />
-    ));
+    const items = models.map((model): JSX.Element => <DeployedModelItem key={model.id} model={model} />);
 
     return (
         <>
@@ -27,22 +26,22 @@ export default function DeployedModelsListComponent(props: Props): JSX.Element {
                 <Col md={22} lg={18} xl={16} xxl={14} className='cvat-models-list'>
                     <Row type='flex' align='middle' style={{ padding: '10px' }}>
                         <Col span={3}>
-                            <Text strong>Framework</Text>
+                            <Text strong>{t('Framework')}</Text>
                         </Col>
                         <Col span={3}>
-                            <Text strong>Name</Text>
+                            <Text strong>{t('Name')}</Text>
                         </Col>
                         <Col span={3}>
-                            <Text strong>Type</Text>
+                            <Text strong>{t('Type')}</Text>
                         </Col>
                         <Col span={10}>
-                            <Text strong>Description</Text>
+                            <Text strong>{t('Description')}</Text>
                         </Col>
                         <Col span={5}>
-                            <Text strong>Labels</Text>
+                            <Text strong>{t('Labels')}</Text>
                         </Col>
                     </Row>
-                    { items }
+                    {items}
                 </Col>
             </Row>
         </>

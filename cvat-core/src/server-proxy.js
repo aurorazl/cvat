@@ -1,20 +1,16 @@
-/*
-* Copyright (C) 2019 Intel Corporation
-* SPDX-License-Identifier: MIT
-*/
-
-/* global
-    require:false
-*/
+// Copyright (C) 2019-2020 Intel Corporation
+//
+// SPDX-License-Identifier: MIT
 
 (() => {
     const FormData = require('form-data');
-    const {
-        ServerError,
-    } = require('./exceptions');
+    const { ServerError } = require('./exceptions');
     const store = require('store');
     const config = require('./config');
     const DownloadWorker = require('./download.worker');
+    const i18next = require('i18next').default;
+    const userTrans = require('./utils/userTrans');
+    const Cookies = require('js-cookie');
 
     function generateError(errorData) {
         if (errorData.response) {
@@ -71,12 +67,15 @@
                 });
             }
 
-            Object.defineProperties(this, Object.freeze({
-                get: {
-                    value: get,
-                    writable: false,
-                },
-            }));
+            Object.defineProperties(
+                this,
+                Object.freeze({
+                    get: {
+                        value: get,
+                        writable: false,
+                    },
+                }),
+            );
         }
     }
 
@@ -90,7 +89,7 @@
 
             let token = store.get('token');
             if (token) {
-                Axios.defaults.headers.common.Authorization = `Token ${token}`;
+                Axios.defaults.headers.common.Authorization = `Bearer ${token}`;
             }
 
             async function about() {
@@ -154,7 +153,6 @@
                 return response.data;
             }
 
-
             async function userAgreements() {
                 const { backendAPI } = config;
                 let response = null;
@@ -169,15 +167,7 @@
                 return response.data;
             }
 
-            async function register(
-                username,
-                firstName,
-                lastName,
-                email,
-                password1,
-                password2,
-                confirmations,
-            ) {
+            async function register(username, firstName, lastName, email, password1, password2, confirmations) {
                 let response = null;
                 try {
                     const data = JSON.stringify({
@@ -203,20 +193,19 @@
             }
 
             async function login(username, password) {
-                const authenticationData = ([
+                const authenticationData = [
                     `${encodeURIComponent('username')}=${encodeURIComponent(username)}`,
                     `${encodeURIComponent('password')}=${encodeURIComponent(password)}`,
-                ]).join('&').replace(/%20/g, '+');
+                ]
+                    .join('&')
+                    .replace(/%20/g, '+');
 
                 Axios.defaults.headers.common.Authorization = '';
                 let authenticationResponse = null;
                 try {
-                    authenticationResponse = await Axios.post(
-                        `${config.backendAPI}/auth/login`,
-                        authenticationData, {
-                            proxy: config.proxy,
-                        },
-                    );
+                    authenticationResponse = await Axios.post(`${config.backendAPI}/auth/login`, authenticationData, {
+                        proxy: config.proxy,
+                    });
                 } catch (errorData) {
                     throw generateError(errorData);
                 }
@@ -230,7 +219,19 @@
 
                 token = authenticationResponse.data.key;
                 store.set('token', token);
-                Axios.defaults.headers.common.Authorization = `Token ${token}`;
+                Axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+            }
+
+            function loginWithToken(token) {
+                Axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+                store.set('token', token);
+                const language = store.get('language') || 'zh-CN';
+                // const cookies = `token=${token};language=${language}`;
+                // Axios.defaults.headers.common.Cookie = cookies;
+
+                //写入Cookies
+                Cookies.set('token', token);
+                Cookies.set('language', language);
             }
 
             async function logout() {
@@ -244,6 +245,7 @@
 
                 store.remove('token');
                 Axios.defaults.headers.common.Authorization = '';
+                // Axios.defaults.headers.common.Cookie.remove('csrftoken');
             }
 
             async function changePassword(oldPassword, newPassword1, newPassword2) {
@@ -251,9 +253,44 @@
                     const data = JSON.stringify({
                         old_password: oldPassword,
                         new_password1: newPassword1,
-                        new_password2:newPassword2,
+                        new_password2: newPassword2,
                     });
                     await Axios.post(`${config.backendAPI}/auth/password/change`, data, {
+                        proxy: config.proxy,
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+                } catch (errorData) {
+                    throw generateError(errorData);
+                }
+            }
+
+            async function requestPasswordReset(email) {
+                try {
+                    const data = JSON.stringify({
+                        email,
+                    });
+                    await Axios.post(`${config.backendAPI}/auth/password/reset`, data, {
+                        proxy: config.proxy,
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+                } catch (errorData) {
+                    throw generateError(errorData);
+                }
+            }
+
+            async function resetPassword(newPassword1, newPassword2, uid, _token) {
+                try {
+                    const data = JSON.stringify({
+                        new_password1: newPassword1,
+                        new_password2: newPassword2,
+                        uid,
+                        token: _token,
+                    });
+                    await Axios.post(`${config.backendAPI}/auth/password/reset/confirm`, data, {
                         proxy: config.proxy,
                         headers: {
                             'Content-Type': 'application/json',
@@ -280,10 +317,12 @@
 
             async function serverRequest(url, data) {
                 try {
-                    return (await Axios({
-                        url,
-                        ...data,
-                    })).data;
+                    return (
+                        await Axios({
+                            url,
+                            ...data,
+                        })
+                    ).data;
                 } catch (errorData) {
                     throw generateError(errorData);
                 }
@@ -335,12 +374,14 @@
                 let url = `${backendAPI}/tasks/${id}/dataset?format=${format}`;
 
                 return new Promise((resolve, reject) => {
+
                     async function request() {
+
                         try {
-                            const response = await Axios
-                                .get(`${url}`, {
-                                    proxy: config.proxy,
-                                });
+                            const response = await Axios.get(`${url}`, {
+                                proxy: config.proxy,
+                                headers:{ 'Authorization': 'Bearer ' + token }
+                            });
                             if (response.status === 202) {
                                 setTimeout(request, 3000);
                             } else {
@@ -374,21 +415,21 @@
                                 } else if (response.data.state === 'Failed') {
                                     // If request has been successful, but task hasn't been created
                                     // Then passed data is wrong and we can pass code 400
-                                    const message = 'Could not create the task on the server. '
-                                        + `${response.data.message}.`;
+                                    const message =
+                                        i18next.t('Could not create the task on the server. ') + `${response.data.message}.`;
                                     reject(new ServerError(message, 400));
                                 } else {
                                     // If server has another status, it is unexpected
                                     // Therefore it is server error and we can pass code 500
-                                    reject(new ServerError(
-                                        `Unknown task state has been received: ${response.data.state}`,
-                                        500,
-                                    ));
+                                    reject(
+                                        new ServerError(
+                                            i18next.t('Unknown task state has been received: ${response.data.state}').replace('${response.data.state}', `${response.data.state}`),
+                                            500,
+                                        ),
+                                    );
                                 }
                             } catch (errorData) {
-                                reject(
-                                    generateError(errorData),
-                                );
+                                reject(generateError(errorData));
                             }
                         }
 
@@ -409,7 +450,7 @@
 
                 let response = null;
 
-                onUpdate('The task is being created on the server..');
+                onUpdate(i18next.t('The task is being created on the server..'));
                 try {
                     response = await Axios.post(`${backendAPI}/tasks`, JSON.stringify(taskSpec), {
                         proxy: config.proxy,
@@ -421,7 +462,7 @@
                     throw generateError(errorData);
                 }
 
-                onUpdate('The data is being uploaded to the server..');
+                onUpdate(i18next.t('The data are being uploaded to the server..'));
                 try {
                     await Axios.post(`${backendAPI}/tasks/${response.data.id}/data`, taskData, {
                         proxy: config.proxy,
@@ -477,19 +518,42 @@
                 }
             }
 
+            // async function getUsers(id = null) {
+            //     const { backendAPI } = config;
+
+            //     let response = null;
+            //     try {
+            //         if (id === null) {
+            //             response = await Axios.get(`${backendAPI}/users?page_size=all`, {
+            //                 proxy: config.proxy,
+            //             });
+            //         } else {
+            //             response = await Axios.get(`${backendAPI}/users/${id}`, {
+            //                 proxy: config.proxy,
+            //             });
+            //         }
+            //     } catch (errorData) {
+            //         throw generateError(errorData);
+            //     }
+
+            //     return response.data.results;
+            // }
+
             async function getUsers(id = null) {
-                const { backendAPI } = config;
+                const { userBackendAPI } = config;
 
                 let response = null;
                 try {
                     if (id === null) {
-                        response = await Axios.get(`${backendAPI}/users?page_size=all`, {
+                        response = await Axios.get(`${userBackendAPI}/users/cvat/users?pageNo=1&pageSize=all`, {
                             proxy: config.proxy,
                         });
+                        return userTrans.usersListTrans(response);
                     } else {
-                        response = await Axios.get(`${backendAPI}/users/${id}`, {
+                        response = await Axios.get(`${userBackendAPI}/users/${id}`, {
                             proxy: config.proxy,
                         });
+                        return userTrans.userTrans(response);
                     }
                 } catch (errorData) {
                     throw generateError(errorData);
@@ -498,12 +562,27 @@
                 return response.data.results;
             }
 
+            // async function getSelf() {
+            //     const { backendAPI } = config;
+
+            //     let response = null;
+            //     try {
+            //         response = await Axios.get(`${backendAPI}/users/self`, {
+            //             proxy: config.proxy,
+            //         });
+            //     } catch (errorData) {
+            //         throw generateError(errorData);
+            //     }
+
+            //     return response.data;
+            // }
+
             async function getSelf() {
-                const { backendAPI } = config;
+                const { userBackendAPI } = config;
 
                 let response = null;
                 try {
-                    response = await Axios.get(`${backendAPI}/users/self`, {
+                    response = await Axios.get(`${userBackendAPI}/auth/currentUser`, {
                         proxy: config.proxy,
                     });
                 } catch (errorData) {
@@ -524,10 +603,7 @@
                     });
                 } catch (errorData) {
                     const code = errorData.response ? errorData.response.status : errorData.code;
-                    throw new ServerError(
-                        `Could not get preview frame for the task ${tid} from the server`,
-                        code,
-                    );
+                    throw new ServerError(i18next.t('Could not get preview frame for the task ${tid} from the server', {tid: `${tid}`}), code);
                 }
 
                 return response.data;
@@ -543,6 +619,7 @@
                         {
                             proxy: config.proxy,
                             responseType: 'arraybuffer',
+                            headers:{ 'Authorization': 'Bearer ' + token }
                         },
                     );
                 } catch (errorData) {
@@ -621,10 +698,13 @@
                 return new Promise((resolve, reject) => {
                     async function request() {
                         try {
-                            const response = await Axios
-                                .put(`${backendAPI}/${session}s/${id}/annotations?format=${format}`, annotationData, {
+                            const response = await Axios.put(
+                                `${backendAPI}/${session}s/${id}/annotations?format=${format}`,
+                                annotationData,
+                                {
                                     proxy: config.proxy,
-                                });
+                                },
+                            );
                             if (response.status === 202) {
                                 annotationData = new FormData();
                                 setTimeout(request, 3000);
@@ -655,17 +735,20 @@
                     async function request() {
                         Axios.get(`${url}`, {
                             proxy: config.proxy,
-                        }).then((response) => {
-                            if (response.status === 202) {
-                                setTimeout(request, 3000);
-                            } else {
-                                query = `${query}&action=download`;
-                                url = `${baseURL}?${query}`;
-                                resolve(url);
-                            }
-                        }).catch((errorData) => {
-                            reject(generateError(errorData));
-                        });
+                            headers:{ 'Authorization': 'Bearer ' + token }
+                        })
+                            .then((response) => {
+                                if (response.status === 202) {
+                                    setTimeout(request, 3000);
+                                } else {
+                                    query = `${query}&action=download`;
+                                    url = `${baseURL}?${query}`;
+                                    resolve(url);
+                                }
+                            })
+                            .catch((errorData) => {
+                                reject(generateError(errorData));
+                            });
                     }
 
                     setTimeout(request);
@@ -704,13 +787,12 @@
                 const { backendAPI } = config;
 
                 try {
-                    const response = await Axios.post(`${backendAPI}/lambda/requests`,
-                        JSON.stringify(body), {
-                            proxy: config.proxy,
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                        });
+                    const response = await Axios.post(`${backendAPI}/lambda/requests`, JSON.stringify(body), {
+                        proxy: config.proxy,
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
 
                     return response.data;
                 } catch (errorData) {
@@ -722,13 +804,12 @@
                 const { backendAPI } = config;
 
                 try {
-                    const response = await Axios.post(`${backendAPI}/lambda/functions/${funId}`,
-                        JSON.stringify(body), {
-                            proxy: config.proxy,
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                        });
+                    const response = await Axios.post(`${backendAPI}/lambda/functions/${funId}`, JSON.stringify(body), {
+                        proxy: config.proxy,
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
 
                     return response.data;
                 } catch (errorData) {
@@ -767,99 +848,151 @@
                 const { backendAPI } = config;
 
                 try {
-                    await Axios.delete(
-                        `${backendAPI}/lambda/requests/${requestId}`, {
-                            method: 'DELETE',
-                        },
-                    );
+                    await Axios.delete(`${backendAPI}/lambda/requests/${requestId}`, {
+                        method: 'DELETE',
+                    });
                 } catch (errorData) {
                     throw generateError(errorData);
                 }
             }
 
-            Object.defineProperties(this, Object.freeze({
-                server: {
-                    value: Object.freeze({
-                        about,
-                        share,
-                        formats,
-                        exception,
-                        login,
-                        logout,
-                        changePassword,
-                        authorized,
-                        register,
-                        request: serverRequest,
-                        userAgreements,
-                    }),
-                    writable: false,
-                },
+            async function installedApps() {
+                const { backendAPI } = config;
+                try {
+                    const response = await Axios.get(`${backendAPI}/server/plugins`, {
+                        proxy: config.proxy,
+                    });
+                    return response.data;
+                } catch (errorData) {
+                    throw generateError(errorData);
+                }
+            }
 
-                tasks: {
-                    value: Object.freeze({
-                        getTasks,
-                        saveTask,
-                        createTask,
-                        deleteTask,
-                        exportDataset,
-                    }),
-                    writable: false,
-                },
+            // 获取ai平台数据集
+            async function getDatasetsFromPlat() {
+                const { backendAPI } = config;
 
-                jobs: {
-                    value: Object.freeze({
-                        getJob,
-                        saveJob,
-                    }),
-                    writable: false,
-                },
+                let response = null;
+                try {
+                    response = await Axios.get(`${backendAPI}/datasets`, {
+                        proxy: config.proxy,
+                    });
+                } catch (errorData) {
+                    throw generateError(errorData);
+                }
 
-                users: {
-                    value: Object.freeze({
-                        getUsers,
-                        getSelf,
-                    }),
-                    writable: false,
-                },
+                return response.data.data.datasets;
+            }
 
-                frames: {
-                    value: Object.freeze({
-                        getData,
-                        getMeta,
-                        getPreview,
-                    }),
-                    writable: false,
-                },
+            async function exportToPlatform(id) {
+                const { backendAPI } = config;
 
-                annotations: {
-                    value: Object.freeze({
-                        updateAnnotations,
-                        getAnnotations,
-                        dumpAnnotations,
-                        uploadAnnotations,
-                    }),
-                    writable: false,
-                },
+                let response = null;
+                try {
+                    response = await Axios.get(`${backendAPI}/tasks/${id}/save_to_platform?format=COCO 1.0`, {
+                        proxy: config.proxy,
+                        headers:{ 'Authorization': 'Bearer ' + token },
+                    });
+                } catch (errorData) {
+                    throw generateError(errorData);
+                }
 
-                logs: {
-                    value: Object.freeze({
-                        save: saveLogs,
-                    }),
-                    writable: false,
-                },
+                let { data, status, statusText } = response;
+                return { data, status, statusText };
+            }
 
-                lambda: {
-                    value: Object.freeze({
-                        list: getLambdaFunctions,
-                        status: getRequestStatus,
-                        requests: getLambdaRequests,
-                        run: runLambdaRequest,
-                        call: callLambdaFunction,
-                        cancel: cancelLambdaRequest,
-                    }),
-                    writable: false,
-                },
-            }));
+            Object.defineProperties(
+                this,
+                Object.freeze({
+                    server: {
+                        value: Object.freeze({
+                            about,
+                            share,
+                            formats,
+                            exception,
+                            login,
+                            loginWithToken,
+                            logout,
+                            changePassword,
+                            requestPasswordReset,
+                            resetPassword,
+                            authorized,
+                            register,
+                            request: serverRequest,
+                            userAgreements,
+                            installedApps,
+                        }),
+                        writable: false,
+                    },
+
+                    tasks: {
+                        value: Object.freeze({
+                            getTasks,
+                            saveTask,
+                            createTask,
+                            deleteTask,
+                            exportDataset,
+                            getDatasets: getDatasetsFromPlat,
+                            exportToPlatform,
+                        }),
+                        writable: false,
+                    },
+
+                    jobs: {
+                        value: Object.freeze({
+                            getJob,
+                            saveJob,
+                        }),
+                        writable: false,
+                    },
+
+                    users: {
+                        value: Object.freeze({
+                            getUsers,
+                            getSelf,
+                        }),
+                        writable: false,
+                    },
+
+                    frames: {
+                        value: Object.freeze({
+                            getData,
+                            getMeta,
+                            getPreview,
+                        }),
+                        writable: false,
+                    },
+
+                    annotations: {
+                        value: Object.freeze({
+                            updateAnnotations,
+                            getAnnotations,
+                            dumpAnnotations,
+                            uploadAnnotations,
+                        }),
+                        writable: false,
+                    },
+
+                    logs: {
+                        value: Object.freeze({
+                            save: saveLogs,
+                        }),
+                        writable: false,
+                    },
+
+                    lambda: {
+                        value: Object.freeze({
+                            list: getLambdaFunctions,
+                            status: getRequestStatus,
+                            requests: getLambdaRequests,
+                            run: runLambdaRequest,
+                            call: callLambdaFunction,
+                            cancel: cancelLambdaRequest,
+                        }),
+                        writable: false,
+                    },
+                }),
+            );
         }
     }
 

@@ -1,5 +1,5 @@
 server.host: 0.0.0.0
-elasticsearch.url: http://elasticsearch:9200
-elasticsearch.requestHeadersWhitelist: [ "cookie", "authorization", "x-forwarded-user" ]
-kibana.defaultAppId: "discover"
-server.basePath: /analytics
+elasticsearch.url: http://127.0.0.1:9211
+elasticsearch.requestHeadersWhitelist: ['cookie', 'authorization', 'x-forwarded-user']
+kibana.defaultAppId: 'discover'
+server.basePath: /annotations/analytics

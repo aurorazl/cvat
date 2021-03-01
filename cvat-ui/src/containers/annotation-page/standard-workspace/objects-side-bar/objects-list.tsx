@@ -17,12 +17,7 @@ import {
     changeGroupColorAsync,
 } from 'actions/annotation-actions';
 import { Canvas } from 'cvat-canvas-wrapper';
-import {
-    CombinedState,
-    StatesOrdering,
-    ObjectType,
-    ColorBy,
-} from 'reducers/interfaces';
+import { CombinedState, StatesOrdering, ObjectType, ColorBy } from 'reducers/interfaces';
 
 interface StateToProps {
     jobInstance: any;
@@ -30,7 +25,8 @@ interface StateToProps {
     listHeight: number;
     statesHidden: boolean;
     statesLocked: boolean;
-    statesCollapsed: boolean;
+    statesCollapsedAll: boolean;
+    collapsedStates: Record<number, boolean>;
     objectStates: any[];
     annotationsFilters: string[];
     colors: string[];
@@ -42,6 +38,7 @@ interface StateToProps {
     keyMap: Record<string, ExtendedKeyMapOptions>;
     normalizedKeyMap: Record<string, string>;
     canvasInstance: Canvas;
+    lang: string;
 }
 
 interface DispatchToProps {
@@ -62,58 +59,44 @@ function mapStateToProps(state: CombinedState): StateToProps {
                 filters: annotationsFilters,
                 filtersHistory: annotationsFiltersHistory,
                 collapsed,
+                collapsedAll,
                 activatedStateID,
-                zLayer: {
-                    min: minZLayer,
-                    max: maxZLayer,
-                },
+                zLayer: { min: minZLayer, max: maxZLayer },
             },
-            job: {
-                instance: jobInstance,
-            },
+            job: { instance: jobInstance },
             player: {
-                frame: {
-                    number: frameNumber,
-                },
+                frame: { number: frameNumber },
             },
-            canvas: {
-                instance: canvasInstance,
-            },
+            canvas: { instance: canvasInstance },
             tabContentHeight: listHeight,
             colors,
         },
         settings: {
-            shapes: {
-                colorBy,
-            },
+            shapes: { colorBy },
         },
-        shortcuts: {
-            keyMap,
-            normalizedKeyMap,
-        },
+        shortcuts: { keyMap, normalizedKeyMap },
+        lang: { lang },
     } = state;
 
     let statesHidden = true;
     let statesLocked = true;
-    let statesCollapsed = true;
 
     objectStates.forEach((objectState: any) => {
-        const { clientID, lock } = objectState;
+        const { lock } = objectState;
         if (!lock) {
             if (objectState.objectType !== ObjectType.TAG) {
                 statesHidden = statesHidden && objectState.hidden;
             }
             statesLocked = statesLocked && objectState.lock;
         }
-        const stateCollapsed = clientID in collapsed ? collapsed[clientID] : true;
-        statesCollapsed = statesCollapsed && stateCollapsed;
     });
 
     return {
         listHeight,
         statesHidden,
         statesLocked,
-        statesCollapsed,
+        statesCollapsedAll: collapsedAll,
+        collapsedStates: collapsed,
         objectStates,
         frameNumber,
         jobInstance,
@@ -127,6 +110,7 @@ function mapStateToProps(state: CombinedState): StateToProps {
         keyMap,
         normalizedKeyMap,
         canvasInstance,
+        lang,
     };
 }
 
@@ -232,10 +216,7 @@ class ObjectsListContainer extends React.PureComponent<Props, State> {
     };
 
     private lockAllStates(locked: boolean): void {
-        const {
-            objectStates,
-            updateAnnotations,
-        } = this.props;
+        const { objectStates, updateAnnotations } = this.props;
         for (const objectState of objectStates) {
             objectState.lock = locked;
         }
@@ -244,10 +225,7 @@ class ObjectsListContainer extends React.PureComponent<Props, State> {
     }
 
     private hideAllStates(hidden: boolean): void {
-        const {
-            objectStates,
-            updateAnnotations,
-        } = this.props;
+        const { objectStates, updateAnnotations } = this.props;
         for (const objectState of objectStates) {
             objectState.hidden = hidden;
         }
@@ -256,10 +234,7 @@ class ObjectsListContainer extends React.PureComponent<Props, State> {
     }
 
     private collapseAllStates(collapsed: boolean): void {
-        const {
-            objectStates,
-            collapseStates,
-        } = this.props;
+        const { objectStates, collapseStates } = this.props;
 
         collapseStates(objectStates, collapsed);
     }
@@ -269,7 +244,6 @@ class ObjectsListContainer extends React.PureComponent<Props, State> {
             statesHidden,
             statesLocked,
             activatedStateID,
-            objectStates,
             jobInstance,
             updateAnnotations,
             changeGroupColor,
@@ -284,11 +258,9 @@ class ObjectsListContainer extends React.PureComponent<Props, State> {
             canvasInstance,
             colors,
             colorBy,
+            lang
         } = this.props;
-        const {
-            sortedStatesID,
-            statesOrdering,
-        } = this.state;
+        const { objectStates, sortedStatesID, statesOrdering } = this.state;
 
         const subKeyMap = {
             SWITCH_ALL_LOCK: keyMap.SWITCH_ALL_LOCK,
@@ -316,10 +288,9 @@ class ObjectsListContainer extends React.PureComponent<Props, State> {
 
         const activatedStated = (): any | null => {
             if (activatedStateID !== null) {
-                const [state] = objectStates
-                    .filter((objectState: any): boolean => (
-                        objectState.clientID === activatedStateID
-                    ));
+                const [state] = objectStates.filter(
+                    (objectState: any): boolean => objectState.clientID === activatedStateID,
+                );
 
                 return state || null;
             }
@@ -434,8 +405,7 @@ class ObjectsListContainer extends React.PureComponent<Props, State> {
                 preventDefault(event);
                 const state = activatedStated();
                 if (state && state.objectType === ObjectType.TRACK) {
-                    const frame = typeof (state.keyframes.next) === 'number'
-                        ? state.keyframes.next : null;
+                    const frame = typeof state.keyframes.next === 'number' ? state.keyframes.next : null;
                     if (frame !== null && canvasInstance.isAbleToChangeFrame()) {
                         changeFrame(frame);
                     }
@@ -445,8 +415,7 @@ class ObjectsListContainer extends React.PureComponent<Props, State> {
                 preventDefault(event);
                 const state = activatedStated();
                 if (state && state.objectType === ObjectType.TRACK) {
-                    const frame = typeof (state.keyframes.prev) === 'number'
-                        ? state.keyframes.prev : null;
+                    const frame = typeof state.keyframes.prev === 'number' ? state.keyframes.prev : null;
                     if (frame !== null && canvasInstance.isAbleToChangeFrame()) {
                         changeFrame(frame);
                     }
@@ -461,6 +430,7 @@ class ObjectsListContainer extends React.PureComponent<Props, State> {
                     {...this.props}
                     statesOrdering={statesOrdering}
                     sortedStatesID={sortedStatesID}
+                    objectStates={objectStates}
                     switchHiddenAllShortcut={normalizedKeyMap.SWITCH_ALL_HIDDEN}
                     switchLockAllShortcut={normalizedKeyMap.SWITCH_ALL_LOCK}
                     changeStatesOrdering={this.onChangeStatesOrdering}
@@ -470,13 +440,11 @@ class ObjectsListContainer extends React.PureComponent<Props, State> {
                     expandAllStates={this.onExpandAllStates}
                     hideAllStates={this.onHideAllStates}
                     showAllStates={this.onShowAllStates}
+                    lang={lang}
                 />
             </>
         );
     }
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(ObjectsListContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ObjectsListContainer);

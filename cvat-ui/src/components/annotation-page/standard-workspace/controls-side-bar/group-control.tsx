@@ -10,42 +10,47 @@ import { GroupIcon } from 'icons';
 import { Canvas } from 'cvat-canvas-wrapper';
 import { ActiveControl } from 'reducers/interfaces';
 
+import { useTranslation } from 'react-i18next';
+import getCore from 'cvat-core-wrapper';
+import linkConsts from 'help-link-consts';
+
 interface Props {
     canvasInstance: Canvas;
     activeControl: ActiveControl;
     switchGroupShortcut: string;
     resetGroupShortcut: string;
     groupObjects(enabled: boolean): void;
+    lang: string;
 }
 
 function GroupControl(props: Props): JSX.Element {
-    const {
-        switchGroupShortcut,
-        resetGroupShortcut,
-        activeControl,
-        canvasInstance,
-        groupObjects,
-    } = props;
+    const { t } = useTranslation();
+    const core = getCore();
+    const baseURL = core.config.backendAPI.slice(0, -7);
+    const { switchGroupShortcut, resetGroupShortcut, activeControl, canvasInstance, groupObjects, lang } = props;
 
-    const dynamicIconProps = activeControl === ActiveControl.GROUP
-        ? {
-            className: 'cvat-active-canvas-control',
-            onClick: (): void => {
-                canvasInstance.group({ enabled: false });
-                groupObjects(false);
-            },
-        } : {
-            onClick: (): void => {
-                canvasInstance.cancel();
-                canvasInstance.group({ enabled: true });
-                groupObjects(true);
-            },
-        };
+    const dynamicIconProps =
+        activeControl === ActiveControl.GROUP
+            ? {
+                  className: 'cvat-group-control cvat-active-canvas-control',
+                  onClick: (): void => {
+                      canvasInstance.group({ enabled: false });
+                      groupObjects(false);
+                  },
+              }
+            : {
+                  className: 'cvat-group-control',
+                  onClick: (): void => {
+                      canvasInstance.cancel();
+                      canvasInstance.group({ enabled: true });
+                      groupObjects(true);
+                  },
+              };
 
-    const title = `Group shapes/tracks ${switchGroupShortcut}.`
-        + ` Select and press ${resetGroupShortcut} to reset a group`;
+    const title = <a href={`${baseURL}/${linkConsts[lang].SHAPE_GROUPING_URL}`} target="blank">
+    {t('Group shapes/tracks ${switchGroupShortcut}.').replace('${switchGroupShortcut}', `${switchGroupShortcut}`) + t(' Select and press ${resetGroupShortcut} to reset a group').replace('${resetGroupShortcut}', `${resetGroupShortcut}`)}</a>;
     return (
-        <Tooltip title={title} placement='right' mouseLeaveDelay={0}>
+        <Tooltip title={title} placement='right' mouseLeaveDelay={0.2}>
             <Icon {...dynamicIconProps} component={GroupIcon} />
         </Tooltip>
     );

@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2019 Intel Corporation
+# Copyright (C) 2018-2020 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 
@@ -20,10 +20,12 @@ import fcntl
 import shutil
 import subprocess
 import mimetypes
+import datetime
+
 mimetypes.add_type("application/wasm", ".wasm", True)
 
 from pathlib import Path
-
+from django.utils.translation import gettext_lazy as _
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = str(Path(__file__).parents[2])
 
@@ -50,10 +52,22 @@ def generate_ssh_keys():
     ssh_dir = '{}/.ssh'.format(os.getenv('HOME'))
     pidfile = os.path.join(ssh_dir, 'ssh.pid')
 
+    def add_ssh_keys():
+        IGNORE_FILES = ('README.md', 'ssh.pid')
+        keys_to_add = [entry.name for entry in os.scandir(ssh_dir) if entry.name not in IGNORE_FILES]
+        keys_to_add = ' '.join(os.path.join(ssh_dir, f) for f in keys_to_add)
+        subprocess.run(['ssh-add {}'.format(keys_to_add)],
+            shell = True,
+            stderr = subprocess.PIPE,
+            # lets set the timeout if ssh-add requires a input passphrase for key
+            # otherwise the process will be freezed
+            timeout=30,
+            )
+
     with open(pidfile, "w") as pid:
         fcntl.flock(pid, fcntl.LOCK_EX)
         try:
-            subprocess.run(['ssh-add {}/*'.format(ssh_dir)], shell = True, stderr = subprocess.PIPE)
+            add_ssh_keys()
             keys = subprocess.run(['ssh-add -l'], shell = True,
                 stdout = subprocess.PIPE).stdout.decode('utf-8').split('\n')
             if 'has no identities' in keys[0]:
@@ -82,6 +96,13 @@ try:
 except Exception:
     pass
 
+JWT_AUTH = {
+    'JWT_SECRET_KEY': 'Sign key for JWT',
+    'JWT_ALGORITHM': 'HS256',
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+    'JWT_AUTH_COOKIE': "token"
+}
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -93,7 +114,7 @@ INSTALLED_APPS = [
     'cvat.apps.documentation',
     'cvat.apps.dataset_manager',
     'cvat.apps.engine',
-    'cvat.apps.git',
+    'cvat.apps.dataset_repo',
     'cvat.apps.restrictions',
     'cvat.apps.lambda_manager',
     'django_rq',
@@ -123,10 +144,12 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'cvat.apps.authentication.auth.TokenAuthentication',
-        'cvat.apps.authentication.auth.SignatureAuthentication',
+        'cvat.apps.authentication.auth.JSONWebTokenAuthentication',
+        # 'cvat.apps.authentication.auth.TokenAuthentication',
+        # 'cvat.apps.authentication.auth.SignatureAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication'
+        'rest_framework.authentication.BasicAuthentication',
+
     ],
     'DEFAULT_VERSIONING_CLASS':
         # Don't try to use URLPathVersioning. It will give you /api/{version}
@@ -154,7 +177,11 @@ REST_FRAMEWORK = {
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'cvat.apps.restrictions.serializers.RestrictedRegisterSerializer'
+    'REGISTER_SERIALIZER': 'cvat.apps.restrictions.serializers.RestrictedRegisterSerializer',
+}
+
+REST_AUTH_SERIALIZERS = {
+    'PASSWORD_RESET_SERIALIZER': 'cvat.apps.authentication.serializers.PasswordResetSerializerEx',
 }
 
 if os.getenv('DJANGO_LOG_VIEWER_HOST'):
@@ -163,6 +190,7 @@ if os.getenv('DJANGO_LOG_VIEWER_HOST'):
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -173,6 +201,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'dj_pagination.middleware.PaginationMiddleware',
 ]
+
+LANGUAGES = [
+    ('zh-CN', _('简体中文')),
+    ('en-US', _('English')),
+]
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR,"locale"),
+)
+LANGUAGE_COOKIE_NAME = "language"
 
 UI_URL = ''
 
@@ -302,6 +339,8 @@ CACHEOPS_DEGRADE_ON_FAILURE = True
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = os.getenv('TZ', 'Etc/UTC')
+VIP_MASTER = os.getenv('VIP_MASTER', '127.0.0.1')
+AIART_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjMwMDAwLCJleHAiOjE5MTU2NzExODEsInVzZXJuYW1lIjoiYWRtaW4ifQ.JnyxZ5xOTyQeWFeRMH1badCzxpJ1rc3MF5Wk_eaLgAs"
 
 USE_I18N = True
 
@@ -314,7 +353,7 @@ CSRF_COOKIE_NAME = "csrftoken"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/annotations/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 os.makedirs(STATIC_ROOT, exist_ok=True)
 
@@ -323,6 +362,9 @@ os.makedirs(DATA_ROOT, exist_ok=True)
 
 MEDIA_DATA_ROOT = os.path.join(DATA_ROOT, 'data')
 os.makedirs(MEDIA_DATA_ROOT, exist_ok=True)
+
+CACHE_ROOT = os.path.join(DATA_ROOT, 'cache')
+os.makedirs(CACHE_ROOT, exist_ok=True)
 
 TASKS_ROOT = os.path.join(DATA_ROOT, 'tasks')
 os.makedirs(TASKS_ROOT, exist_ok=True)
@@ -334,7 +376,7 @@ MODELS_ROOT = os.path.join(DATA_ROOT, 'models')
 os.makedirs(MODELS_ROOT, exist_ok=True)
 
 LOGS_ROOT = os.path.join(BASE_DIR, 'logs')
-os.makedirs(MODELS_ROOT, exist_ok=True)
+os.makedirs(LOGS_ROOT, exist_ok=True)
 
 MIGRATIONS_LOGS_ROOT = os.path.join(LOGS_ROOT, 'migrations')
 os.makedirs(MIGRATIONS_LOGS_ROOT, exist_ok=True)
@@ -389,6 +431,9 @@ LOGGING = {
             'handlers': ['console', 'server_file'],
             'level': 'INFO',
             'propagate': True
+        },
+        "":{
+          "handlers":[],
         }
     },
 }
@@ -401,9 +446,6 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 100 * 1024 * 1024  # 100 MB
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None   # this django check disabled
 LOCAL_LOAD_MAX_FILES_COUNT = 500
 LOCAL_LOAD_MAX_FILES_SIZE = 512 * 1024 * 1024  # 512 MB
-
-DATUMARO_PATH = os.path.join(BASE_DIR, 'datumaro')
-sys.path.append(DATUMARO_PATH)
 
 RESTRICTIONS = {
     'user_agreements': [],
@@ -422,3 +464,23 @@ RESTRICTIONS = {
         'engine.role.admin',
         ),
 }
+
+# http://www.grantjenks.com/docs/diskcache/tutorial.html#djangocache
+CACHES = {
+   'default' : {
+       'BACKEND' : 'django.core.cache.backends.filebased.FileBasedCache',
+       'LOCATION' : CACHE_ROOT,
+       'TIMEOUT' : None,
+       'OPTIONS' : {
+            'MAX_ENTRIES' : 300
+       }
+   }
+}
+
+USE_CACHE = True
+
+USER_MANAGER_CENTER = os.getenv('USER_MANAGER_CENTER', 'http://localhost/custom-user-dashboard-backend')
+
+KFSERVING_GATEWAY = os.getenv('KFSERVING_GATEWAY', "http://localhost")
+
+COMPRESS_OFFLINE = True

@@ -17,9 +17,13 @@ import copy from 'copy-to-clipboard';
 import getCore from 'cvat-core-wrapper';
 import UserSelector from './user-selector';
 
+import { useTranslation } from 'react-i18next';
+import { transMoment } from 'utils/lang-utils';
+
 const core = getCore();
 
 const baseURL = core.config.backendAPI.slice(0, -7);
+
 
 interface Props {
     taskInstance: any;
@@ -28,18 +32,18 @@ interface Props {
 }
 
 function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
+    const { t } = useTranslation();
     const {
         taskInstance,
         registeredUsers,
         onJobUpdate,
-        history: {
-            push,
-        },
+        history: { push },
     } = props;
 
     const { jobs, id: taskId } = taskInstance;
-    const columns = [{
-        title: 'Job',
+    const columns = [
+        {
+        title: t('Job'),
         dataIndex: 'job',
         key: 'job',
         render: (id: number): JSX.Element => (
@@ -56,13 +60,15 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
                 </Button>
             </div>
         ),
-    }, {
-        title: 'Frames',
+    }, 
+    {
+        title: t('Frames'),
         dataIndex: 'frames',
         key: 'frames',
         className: 'cvat-text-color',
-    }, {
-        title: 'Status',
+    }, 
+    {
+        title: t('Status'),
         dataIndex: 'status',
         key: 'status',
         render: (status: string): JSX.Element => {
@@ -76,21 +82,26 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
             }
 
             return (
-                <Text strong className={progressColor}>{ status }</Text>
+                <Text strong className={progressColor}>
+                    { t(status) }
+                </Text>
             );
         },
-    }, {
-        title: 'Started on',
+    }, 
+    {
+        title: t('Started on'),
         dataIndex: 'started',
         key: 'started',
         className: 'cvat-text-color',
-    }, {
-        title: 'Duration',
+    }, 
+    {
+        title: t('Duration'),
         dataIndex: 'duration',
         key: 'duration',
         className: 'cvat-text-color',
-    }, {
-        title: 'Assignee',
+    }, 
+    {
+        title: t('Assignee'),
         dataIndex: 'assignee',
         key: 'assignee',
         render: (jobInstance: any): JSX.Element => {
@@ -101,8 +112,7 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
                     users={registeredUsers}
                     value={assignee}
                     onChange={(value: string): void => {
-                        let [userInstance] = [...registeredUsers]
-                            .filter((user: any) => user.username === value);
+                        let [userInstance] = [...registeredUsers].filter((user: any) => user.username === value);
 
                         if (userInstance === undefined) {
                             userInstance = null;
@@ -115,7 +125,8 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
                 />
             );
         },
-    }];
+    },
+    ];
 
     let completed = 0;
     const data = jobs.reduce((acc: any[], job: any) => {
@@ -130,7 +141,7 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
             job: job.id,
             frames: `${job.startFrame}-${job.stopFrame}`,
             status: `${job.status}`,
-            started: `${created.format('MMMM Do YYYY HH:MM')}`,
+            started: transMoment(created),
             duration: `${moment.duration(moment(moment.now()).diff(created)).humanize()}`,
             assignee: job,
         });
@@ -142,8 +153,8 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
         <div className='cvat-task-job-list'>
             <Row type='flex' justify='space-between' align='middle'>
                 <Col>
-                    <Text className='cvat-text-color cvat-jobs-header'> Jobs </Text>
-                    <Tooltip trigger='click' title='Copied to clipboard!' mouseLeaveDelay={0}>
+                    <Text className='cvat-text-color cvat-jobs-header'> {t('Jobs')} </Text>
+                    <Tooltip trigger='click' title={t('Copied to clipboard!')} mouseLeaveDelay={0}>
                         <Button
                             type='link'
                             onClick={(): void => {
@@ -151,10 +162,14 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
                                 const [latestJob] = [...taskInstance.jobs].reverse();
                                 for (const job of taskInstance.jobs) {
                                     serialized += `Job #${job.id}`.padEnd(`${latestJob.id}`.length + 6, ' ');
-                                    serialized += `: ${baseURL}/?id=${job.id}`
-                                        .padEnd(`${latestJob.id}`.length + baseURL.length + 8, ' ');
-                                    serialized += `: [${job.startFrame}-${job.stopFrame}]`
-                                        .padEnd(`${latestJob.startFrame}${latestJob.stopFrame}`.length + 5, ' ');
+                                    serialized += `: ${baseURL}/?id=${job.id}`.padEnd(
+                                        `${latestJob.id}`.length + baseURL.length + 8,
+                                        ' ',
+                                    );
+                                    serialized += `: [${job.startFrame}-${job.stopFrame}]`.padEnd(
+                                        `${latestJob.startFrame}${latestJob.stopFrame}`.length + 5,
+                                        ' ',
+                                    );
 
                                     if (job.assignee) {
                                         serialized += `\t assigned to: ${job.assignee.username}`;
@@ -165,22 +180,15 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
                             }}
                         >
                             <Icon type='copy' theme='twoTone' />
-                            Copy
+                            {t('Copy')}
                         </Button>
                     </Tooltip>
                 </Col>
                 <Col>
-                    <Text className='cvat-text-color'>
-                        {`${completed} of ${data.length} jobs`}
-                    </Text>
+                    <Text className='cvat-text-color'>{t('${completed} of ${data.length} jobs', { completed: `${completed}`, dataLength: `${data.length}`})}</Text>
                 </Col>
             </Row>
-            <Table
-                className='cvat-task-jobs-table'
-                columns={columns}
-                dataSource={data}
-                size='small'
-            />
+            <Table className='cvat-task-jobs-table' columns={columns} dataSource={data} size='small' />
         </div>
     );
 }

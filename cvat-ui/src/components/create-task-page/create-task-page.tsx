@@ -12,22 +12,26 @@ import TextArea from 'antd/lib/input/TextArea';
 
 import CreateTaskContent, { CreateTaskData } from './create-task-content';
 
+import { useTranslation } from 'react-i18next';
+
+import HelpLink from 'components/help-link';
+import getCore from 'cvat-core-wrapper';
+import linkConsts from 'help-link-consts'
+
 interface Props {
     onCreate: (data: CreateTaskData) => void;
     status: string;
     error: string;
     taskId: number | null;
     installedGit: boolean;
+    lang: string;
 }
 
 export default function CreateTaskPage(props: Props): JSX.Element {
-    const {
-        error,
-        status,
-        taskId,
-        onCreate,
-        installedGit,
-    } = props;
+    const { t } = useTranslation();
+    const core = getCore();
+    const baseURL = core.config.backendAPI.slice(0, -7);
+    const { error, status, taskId, onCreate, installedGit, lang } = props;
 
     useEffect(() => {
         if (error) {
@@ -46,14 +50,14 @@ export default function CreateTaskPage(props: Props): JSX.Element {
             if (sshKeys.length) {
                 Modal.error({
                     width: 800,
-                    title: 'Could not clone the repository',
+                    title: t('Could not clone the repository'),
                     content: (
                         <>
                             <Paragraph>
-                                <Text>Please make sure it exists and you have access</Text>
+                                <Text>{t('Please make sure it exists and you have access')}</Text>
                             </Paragraph>
                             <Paragraph>
-                                <Text>Consider adding the following public ssh keys to git: </Text>
+                                <Text>{t('Consider adding the following public ssh keys to git:')}</Text>
                             </Paragraph>
                             <TextArea rows={10} value={sshKeys.join('\n\n')} />
                         </>
@@ -66,13 +70,9 @@ export default function CreateTaskPage(props: Props): JSX.Element {
     return (
         <Row type='flex' justify='center' align='top' className='cvat-create-task-form-wrapper'>
             <Col md={20} lg={16} xl={14} xxl={9}>
-                <Text className='cvat-title'>Create a new task</Text>
-                <CreateTaskContent
-                    taskId={taskId}
-                    status={status}
-                    onCreate={onCreate}
-                    installedGit={installedGit}
-                />
+                <Text className='cvat-title'>{t('Create a new task')}</Text>
+                <HelpLink helpLink={`${baseURL}/${linkConsts[lang].CREATING_AN_ANNOTATION_TASK_URL}`} styles={{position: 'absolute', top: 10, right: 10}}/>
+                <CreateTaskContent taskId={taskId} status={status} onCreate={onCreate} installedGit={installedGit}/>
             </Col>
         </Row>
     );

@@ -17,6 +17,7 @@ import BasicConfigurationForm, { BaseConfiguration } from './basic-configuration
 import AdvancedConfigurationForm, { AdvancedConfiguration } from './advanced-configuration-form';
 import LabelsEditor from '../labels-editor/labels-editor';
 import { Files } from '../file-manager/file-manager';
+import { withTranslation, WithTranslation  } from 'react-i18next';
 
 export interface CreateTaskData {
     basic: BaseConfiguration;
@@ -25,7 +26,7 @@ export interface CreateTaskData {
     files: Files;
 }
 
-interface Props {
+interface Props extends WithTranslation {
     onCreate: (data: CreateTaskData) => void;
     status: string;
     taskId: number | null;
@@ -39,21 +40,24 @@ const defaultState = {
         name: '',
     },
     advanced: {
-        zOrder: false,
         lfs: false,
         useZipChunks: true,
+        useCache: true,
     },
     labels: [],
     files: {
         local: [],
         share: [],
         remote: [],
+        platform: [],
     },
 };
 
 class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps, State> {
     private basicConfigurationComponent: any;
+
     private advancedConfigurationComponent: any;
+
     private fileManagerContainer: any;
 
     public constructor(props: Props & RouteComponentProps) {
@@ -62,19 +66,13 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
     }
 
     public componentDidUpdate(prevProps: Props): void {
-        const { status, history, taskId } = this.props;
+        const { status, history, taskId, t } = this.props;
 
         if (status === 'CREATED' && prevProps.status !== 'CREATED') {
-            const btn = (
-                <Button
-                    onClick={() => history.push(`/tasks/${taskId}`)}
-                >
-                    Open task
-                </Button>
-            );
+            const btn = <Button onClick={() => history.push(`/tasks/${taskId}`)}>{t('Open task')}</Button>;
 
             notification.info({
-                message: 'The task has been created',
+                message: t('The task has been created'),
                 btn,
             });
 
@@ -101,9 +99,7 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
         this.setState({
             files,
         });
-        const totalLen = Object.keys(files).reduce(
-            (acc, key) => acc + files[key].length, 0,
-        );
+        const totalLen = Object.keys(files).reduce((acc, key) => acc + files[key].length, 0);
 
         return !!totalLen;
     };
@@ -121,23 +117,25 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
     };
 
     private handleSubmitClick = (): void => {
+        const { t } = this.props;
         if (!this.validateLabels()) {
             notification.error({
-                message: 'Could not create a task',
-                description: 'A task must contain at least one label',
+                message: t('Could not create a task'),
+                description: t('A task must contain at least one label'),
             });
             return;
         }
 
         if (!this.validateFiles()) {
             notification.error({
-                message: 'Could not create a task',
-                description: 'A task must contain at least one file',
+                message: t('Could not create a task'),
+                description: t('A task must contain at least one file'),
             });
             return;
         }
 
-        this.basicConfigurationComponent.submit()
+        this.basicConfigurationComponent
+            .submit()
             .then(() => {
                 if (this.advancedConfigurationComponent) {
                     return this.advancedConfigurationComponent.submit();
@@ -146,12 +144,14 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
                 return new Promise((resolve): void => {
                     resolve();
                 });
-            }).then((): void => {
+            })
+            .then((): void => {
                 const { onCreate } = this.props;
                 onCreate(this.state);
-            }).catch((error: Error): void => {
+            })
+            .catch((error: Error): void => {
                 notification.error({
-                    message: 'Could not create a task',
+                    message: t('Could not create a task'),
                     description: error.toString(),
                 });
             });
@@ -161,9 +161,9 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
         return (
             <Col span={24}>
                 <BasicConfigurationForm
-                    wrappedComponentRef={
-                        (component: any): void => { this.basicConfigurationComponent = component; }
-                    }
+                    wrappedComponentRef={(component: any): void => {
+                        this.basicConfigurationComponent = component;
+                    }}
                     onSubmit={this.handleSubmitBasicConfiguration}
                 />
             </Col>
@@ -172,34 +172,34 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
 
     private renderLabelsBlock(): JSX.Element {
         const { labels } = this.state;
+        const { t } = this.props;
 
         return (
             <Col span={24}>
                 <Text type='danger'>* </Text>
-                <Text className='cvat-text-color'>Labels:</Text>
+                <Text className='cvat-text-color'>{t('Labels:')}</Text>
                 <LabelsEditor
                     labels={labels}
-                    onSubmit={
-                        (newLabels): void => {
-                            this.setState({
-                                labels: newLabels,
-                            });
-                        }
-                    }
+                    onSubmit={(newLabels): void => {
+                        this.setState({
+                            labels: newLabels,
+                        });
+                    }}
                 />
             </Col>
         );
     }
 
     private renderFilesBlock(): JSX.Element {
+        const { t } = this.props;
         return (
             <Col span={24}>
                 <Text type='danger'>* </Text>
-                <Text className='cvat-text-color'>Select files:</Text>
+                <Text className='cvat-text-color'>{t('Select files:')}</Text>
                 <ConnectedFileManager
-                    ref={
-                        (container: any): void => { this.fileManagerContainer = container; }
-                    }
+                    ref={(container: any): void => {
+                        this.fileManagerContainer = container;
+                    }}
                     withRemote
                 />
             </Col>
@@ -207,23 +207,16 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
     }
 
     private renderAdvancedBlock(): JSX.Element {
-        const { installedGit } = this.props;
+        const { installedGit, t } = this.props;
         return (
             <Col span={24}>
                 <Collapse>
-                    <Collapse.Panel
-                        key='1'
-                        header={
-                            <Text className='cvat-title'>Advanced configuration</Text>
-                        }
-                    >
+                    <Collapse.Panel key='1'header={<Text className='cvat-title'>{t('Advanced configuration')}</Text>}>
                         <AdvancedConfigurationForm
                             installedGit={installedGit}
-                            wrappedComponentRef={
-                                (component: any): void => {
-                                    this.advancedConfigurationComponent = component;
-                                }
-                            }
+                            wrappedComponentRef={(component: any): void => {
+                                this.advancedConfigurationComponent = component;
+                            }}
                             onSubmit={this.handleSubmitAdvancedConfiguration}
                         />
                     </Collapse.Panel>
@@ -233,31 +226,24 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
     }
 
     public render(): JSX.Element {
-        const { status } = this.props;
+        const { status, t } = this.props;
         const loading = !!status && status !== 'CREATED' && status !== 'FAILED';
 
         return (
             <Row type='flex' justify='start' align='middle' className='cvat-create-task-content'>
                 <Col span={24}>
-                    <Text className='cvat-title'>Basic configuration</Text>
+                    <Text className='cvat-title'>{t('Basic configuration')}</Text>
                 </Col>
 
-                { this.renderBasicBlock() }
-                { this.renderLabelsBlock() }
-                { this.renderFilesBlock() }
-                { this.renderAdvancedBlock() }
+                {this.renderBasicBlock()}
+                {this.renderLabelsBlock()}
+                {this.renderFilesBlock()}
+                {this.renderAdvancedBlock()}
 
-                <Col span={18}>
-                    {loading ? <Alert message={status} /> : null}
-                </Col>
+                <Col span={18}>{loading ? <Alert message={status} /> : null}</Col>
                 <Col span={6}>
-                    <Button
-                        loading={loading}
-                        disabled={loading}
-                        type='primary'
-                        onClick={this.handleSubmitClick}
-                    >
-                        Submit
+                    <Button loading={loading} disabled={loading} type='primary'onClick={this.handleSubmitClick}>
+                        {t('Submit')}
                     </Button>
                 </Col>
             </Row>
@@ -265,4 +251,4 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
     }
 }
 
-export default withRouter(CreateTaskContent);
+export default withRouter(withTranslation()(CreateTaskContent));

@@ -11,6 +11,7 @@ import { changePasswordAsync } from 'actions/auth-actions';
 import { CombinedState } from 'reducers/interfaces';
 import ChangePasswordForm, { ChangePasswordData } from './change-password-form';
 
+import { useTranslation } from 'react-i18next';
 
 interface StateToProps {
     fetching: boolean;
@@ -18,10 +19,7 @@ interface StateToProps {
 }
 
 interface DispatchToProps {
-    onChangePassword(
-        oldPassword: string,
-        newPassword1: string,
-        newPassword2: string): void;
+    onChangePassword(oldPassword: string, newPassword1: string, newPassword2: string): void;
 }
 
 interface ChangePasswordPageComponentProps {
@@ -39,26 +37,22 @@ function mapStateToProps(state: CombinedState): StateToProps {
 }
 
 function mapDispatchToProps(dispatch: any): DispatchToProps {
-    return ({
+    return {
         onChangePassword(oldPassword: string, newPassword1: string, newPassword2: string): void {
             dispatch(changePasswordAsync(oldPassword, newPassword1, newPassword2));
         },
-    });
+    };
 }
 
 function ChangePasswordComponent(props: ChangePasswordPageComponentProps): JSX.Element {
-    const {
-        fetching,
-        onChangePassword,
-        visible,
-        onClose,
-    } = props;
+    const { t } = useTranslation();
+    const { fetching, onChangePassword, visible, onClose } = props;
 
     return (
         <Modal
-            title={<Title level={3}>Change password</Title>}
+            title={<Title level={3}>{t('Change password')}</Title>}
             okType='primary'
-            okText='Submit'
+            okText={t('Submit')}
             footer={null}
             visible={visible}
             destroyOnClose
@@ -78,7 +72,4 @@ function ChangePasswordComponent(props: ChangePasswordPageComponentProps): JSX.E
     );
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(ChangePasswordComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ChangePasswordComponent);

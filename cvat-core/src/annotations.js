@@ -1,11 +1,6 @@
-/*
-* Copyright (C) 2019-2020 Intel Corporation
-* SPDX-License-Identifier: MIT
-*/
-
-/* global
-    require:false
-*/
+// Copyright (C) 2019-2020 Intel Corporation
+//
+// SPDX-License-Identifier: MIT
 
 (() => {
     const serverProxy = require('./server-proxy');
@@ -14,15 +9,9 @@
     const AnnotationsHistory = require('./annotations-history');
     const { checkObjectType } = require('./common');
     const { Task } = require('./session');
-    const {
-        Loader,
-        Dumper,
-    } = require('./annotation-formats.js');
-    const {
-        ScriptingError,
-        DataError,
-        ArgumentError,
-    } = require('./exceptions');
+    const { Loader, Dumper } = require('./annotation-formats');
+    const { ScriptingError, DataError, ArgumentError } = require('./exceptions');
+    const i18next = require('i18next').default;
 
     const jobCache = new WeakMap();
     const taskCache = new WeakMap();
@@ -36,9 +25,7 @@
             return jobCache;
         }
 
-        throw new ScriptingError(
-            `Unknown session type was received ${sessionType}`,
-        );
+        throw new ScriptingError(i18next.t('Unknown session type was received ${sessionType}',{sessionType: `${sessionType}`}));
     }
 
     async function getAnnotationsFromServer(session) {
@@ -46,8 +33,7 @@
         const cache = getCache(sessionType);
 
         if (!cache.has(session)) {
-            const rawAnnotations = await serverProxy.annotations
-                .getAnnotations(sessionType, session.id);
+            const rawAnnotations = await serverProxy.annotations.getAnnotations(sessionType, session.id);
 
             // Get meta information about frames
             const startFrame = sessionType === 'job' ? session.startFrame : 0;
@@ -118,7 +104,20 @@
         }
 
         throw new DataError(
-            'Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before',
+            i18next.t('Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before'),
+        );
+    }
+
+    function searchEmptyFrame(session, frameFrom, frameTo) {
+        const sessionType = session instanceof Task ? 'task' : 'job';
+        const cache = getCache(sessionType);
+
+        if (cache.has(session)) {
+            return cache.get(session).collection.searchEmpty(frameFrom, frameTo);
+        }
+
+        throw new DataError(
+            i18next.t('Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before'),
         );
     }
 
@@ -131,7 +130,7 @@
         }
 
         throw new DataError(
-            'Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before',
+            i18next.t('Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before'),
         );
     }
 
@@ -144,7 +143,7 @@
         }
 
         throw new DataError(
-            'Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before',
+            i18next.t('Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before'),
         );
     }
 
@@ -157,7 +156,7 @@
         }
 
         throw new DataError(
-            'Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before',
+            i18next.t('Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before'),
         );
     }
 
@@ -196,7 +195,7 @@
         }
 
         throw new DataError(
-            'Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before',
+            i18next.t('Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before'),
         );
     }
 
@@ -209,7 +208,7 @@
         }
 
         throw new DataError(
-            'Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before',
+            i18next.t('Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before'),
         );
     }
 
@@ -222,35 +221,29 @@
         }
 
         throw new DataError(
-            'Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before',
+            i18next.t('Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before'),
         );
     }
 
     async function uploadAnnotations(session, file, loader) {
         const sessionType = session instanceof Task ? 'task' : 'job';
         if (!(loader instanceof Loader)) {
-            throw new ArgumentError(
-                'A loader must be instance of Loader class',
-            );
+            throw new ArgumentError(i18next.t('A loader must be instance of Loader class'));
         }
         await serverProxy.annotations.uploadAnnotations(sessionType, session.id, file, loader.name);
     }
 
     async function dumpAnnotations(session, name, dumper) {
         if (!(dumper instanceof Dumper)) {
-            throw new ArgumentError(
-                'A dumper must be instance of Dumper class',
-            );
+            throw new ArgumentError(i18next.t('A dumper must be instance of Dumper class'));
         }
 
         let result = null;
         const sessionType = session instanceof Task ? 'task' : 'job';
         if (sessionType === 'job') {
-            result = await serverProxy.annotations
-                .dumpAnnotations(session.task.id, name, dumper.name);
+            result = await serverProxy.annotations.dumpAnnotations(session.task.id, name, dumper.name);
         } else {
-            result = await serverProxy.annotations
-                .dumpAnnotations(session.id, name, dumper.name);
+            result = await serverProxy.annotations.dumpAnnotations(session.id, name, dumper.name);
         }
 
         return result;
@@ -265,7 +258,7 @@
         }
 
         throw new DataError(
-            'Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before',
+            i18next.t('Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before'),
         );
     }
 
@@ -278,25 +271,20 @@
         }
 
         throw new DataError(
-            'Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before',
+            i18next.t('Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before'),
         );
     }
 
     async function exportDataset(session, format) {
         if (!(format instanceof String || typeof format === 'string')) {
-            throw new ArgumentError(
-                'Format must be a string',
-            );
+            throw new ArgumentError(i18next.t('Format must be a string'));
         }
         if (!(session instanceof Task)) {
-            throw new ArgumentError(
-                'A dataset can only be created from a task',
-            );
+            throw new ArgumentError(i18next.t('A dataset can only be created from a task'));
         }
 
         let result = null;
-        result = await serverProxy.tasks
-            .exportDataset(session.id, format);
+        result = await serverProxy.tasks.exportDataset(session.id, format);
 
         return result;
     }
@@ -310,7 +298,7 @@
         }
 
         throw new DataError(
-            'Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before',
+            i18next.t('Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before'),
         );
     }
 
@@ -323,7 +311,20 @@
         }
 
         throw new DataError(
-            'Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before',
+            i18next.t('Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before'),
+        );
+    }
+
+    function freezeHistory(session, frozen) {
+        const sessionType = session instanceof Task ? 'task' : 'job';
+        const cache = getCache(sessionType);
+
+        if (cache.has(session)) {
+            return cache.get(session).history.freeze(frozen);
+        }
+
+        throw new DataError(
+            i18next.t('Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before'),
         );
     }
 
@@ -336,7 +337,7 @@
         }
 
         throw new DataError(
-            'Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before',
+            i18next.t('Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before'),
         );
     }
 
@@ -349,7 +350,7 @@
         }
 
         throw new DataError(
-            'Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before',
+            i18next.t('Collection has not been initialized yet. Call annotations.get() or annotations.clear(true) before'),
         );
     }
 
@@ -360,6 +361,7 @@
         hasUnsavedChanges,
         mergeAnnotations,
         searchAnnotations,
+        searchEmptyFrame,
         splitAnnotations,
         groupAnnotations,
         clearAnnotations,
@@ -372,6 +374,7 @@
         exportDataset,
         undoActions,
         redoActions,
+        freezeHistory,
         clearActions,
         getActions,
         closeSession,

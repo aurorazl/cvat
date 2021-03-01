@@ -114,6 +114,19 @@ class RemoteFileSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return instance.file if instance else instance
 
+class PlatformFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.PlatformFile
+        fields = ('file', )
+
+    # pylint: disable=no-self-use
+    def to_internal_value(self, data):
+        return {'file': data}
+
+    # pylint: disable=no-self-use
+    def to_representation(self, instance):
+        return instance.file if instance else instance
+
 class RqStatusSerializer(serializers.Serializer):
     state = serializers.ChoiceField(choices=[
         "Queued", "Started", "Finished", "Failed"])
@@ -170,11 +183,14 @@ class DataSerializer(serializers.ModelSerializer):
     client_files = ClientFileSerializer(many=True, default=[])
     server_files = ServerFileSerializer(many=True, default=[])
     remote_files = RemoteFileSerializer(many=True, default=[])
+    platform_files = PlatformFileSerializer(many=True, default=[])
+    use_cache = serializers.BooleanField(default=False)
 
     class Meta:
         model = models.Data
         fields = ('chunk_size', 'size', 'image_quality', 'start_frame', 'stop_frame', 'frame_filter',
-            'compressed_chunk_type', 'original_chunk_type', 'client_files', 'server_files', 'remote_files', 'use_zip_chunks')
+            'compressed_chunk_type', 'original_chunk_type', 'client_files', 'server_files', 'remote_files','platform_files', 'use_zip_chunks',
+            'use_cache')
 
     # pylint: disable=no-self-use
     def validate_frame_filter(self, value):
@@ -201,7 +217,9 @@ class DataSerializer(serializers.ModelSerializer):
         client_files = validated_data.pop('client_files')
         server_files = validated_data.pop('server_files')
         remote_files = validated_data.pop('remote_files')
+        platform_files = validated_data.pop('platform_files')
         validated_data.pop('use_zip_chunks')
+        validated_data.pop('use_cache')
         db_data = models.Data.objects.create(**validated_data)
 
         data_path = db_data.get_data_dirname()
@@ -224,6 +242,10 @@ class DataSerializer(serializers.ModelSerializer):
             remote_file = models.RemoteFile(data=db_data, **f)
             remote_file.save()
 
+        for f in platform_files:
+            platform_file = models.PlatformFile(data=db_data, **f)
+            platform_file.save()
+
         db_data.save()
         return db_data
 
@@ -241,7 +263,7 @@ class TaskSerializer(WriteOnceMixin, serializers.ModelSerializer):
         model = models.Task
         fields = ('url', 'id', 'name', 'mode', 'owner', 'assignee',
             'bug_tracker', 'created_date', 'updated_date', 'overlap',
-            'segment_size', 'z_order', 'status', 'labels', 'segments',
+            'segment_size', 'status', 'labels', 'segments',
             'project', 'data_chunk_size', 'data_compressed_chunk_type', 'data_original_chunk_type', 'size', 'image_quality', 'data')
         read_only_fields = ('mode', 'created_date', 'updated_date', 'status', 'data_chunk_size',
             'data_compressed_chunk_type', 'data_original_chunk_type', 'size', 'image_quality', 'data')
@@ -279,7 +301,6 @@ class TaskSerializer(WriteOnceMixin, serializers.ModelSerializer):
         instance.assignee = validated_data.get('assignee', instance.assignee)
         instance.bug_tracker = validated_data.get('bug_tracker',
             instance.bug_tracker)
-        instance.z_order = validated_data.get('z_order', instance.z_order)
         instance.project = validated_data.get('project', instance.project)
         labels = validated_data.get('label_set', [])
         for label in labels:
@@ -294,7 +315,7 @@ class TaskSerializer(WriteOnceMixin, serializers.ModelSerializer):
                     .format(db_label.name))
             if not label.get('color', None):
                 label_names = [l.name for l in
-                    models.Label.objects.filter(task_id=instance.id).exclude(id=db_label.id).order_by('id')
+                    instance.label_set.all().exclude(id=db_label.id).order_by('id')
                 ]
                 db_label.color = get_label_color(db_label.name, label_names)
             else:
@@ -356,8 +377,8 @@ class BasicUserSerializer(serializers.ModelSerializer):
         ordering = ['-id']
 
 class UserSerializer(serializers.ModelSerializer):
-    groups = serializers.SlugRelatedField(many=True,
-        slug_field='name', queryset=Group.objects.all())
+    # groups = serializers.SlugRelatedField(many=True,slug_field='name', queryset=Group.objects.all())
+    groups = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -367,6 +388,9 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ('last_login', 'date_joined')
         write_only_fields = ('password', )
         ordering = ['-id']
+
+    def get_groups(self,obj):
+        return getattr(obj,"permissions",[])
 
 class ExceptionSerializer(serializers.Serializer):
     system = serializers.CharField(max_length=255)
@@ -394,6 +418,11 @@ class FrameMetaSerializer(serializers.Serializer):
     width = serializers.IntegerField()
     height = serializers.IntegerField()
     name = serializers.CharField(max_length=1024)
+
+class PluginsSerializer(serializers.Serializer):
+    GIT_INTEGRATION = serializers.BooleanField()
+    ANALYTICS = serializers.BooleanField()
+    MODELS = serializers.BooleanField()
 
 class DataMetaSerializer(serializers.ModelSerializer):
     frames = FrameMetaSerializer(many=True, allow_null=True)

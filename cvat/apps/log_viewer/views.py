@@ -28,4 +28,5 @@ class LogViewerProxy(PermissionRequiredMixin, ProxyView):
     # Returns True if the user has any of the specified permissions
     def has_permission(self):
         perms = self.get_permission_required()
+        print(self.request.user,perms)
         return any(self.request.user.has_perm(perm) for perm in perms)
