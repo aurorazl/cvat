@@ -3355,8 +3355,15 @@ class TaskAnnotationAPITestCase(JobAnnotationAPITestCase):
                                       + polygon_shapes_with_attrs
                 annotations["tags"] = tags_with_attrs + tags_wo_attrs
 
+            elif annotation_format == "ImageNet 1.0":
+                annotations["tags"] = tags_wo_attrs
+
+            elif annotation_format == "CamVid 1.0":
+                annotations["shapes"] = rectangle_shapes_wo_attrs \
+                                      + polygon_shapes_wo_attrs
+
             else:
-                raise Exception(gettext("Unknown format {}").format(annotation_format))
+                raise Exception("Unknown format {}".format(annotation_format))
 
             return annotations
 
@@ -3451,7 +3458,7 @@ class TaskAnnotationAPITestCase(JobAnnotationAPITestCase):
                 self.assertEqual(response.status_code, HTTP_201_CREATED)
 
                 # 7. check annotation
-                if import_format in {"Segmentation mask 1.1", "MOTS PNG 1.0"}:
+                if import_format in {"Segmentation mask 1.1", "MOTS PNG 1.0", "CamVid 1.0"}:
                     continue # can't really predict the result to check
                 response = self._get_api_v1_tasks_id_annotations(task["id"], annotator)
                 self.assertEqual(response.status_code, HTTP_200_OK)
