@@ -428,6 +428,7 @@ export enum Workspace {
     STANDARD = 'Standard',
     ATTRIBUTE_ANNOTATION = 'Attribute annotation',
     TAG_ANNOTATION = 'Tag annotation',
+    TEXT_ANNOTATION = 'Text annotation',
 }
 
 export enum GridColor {

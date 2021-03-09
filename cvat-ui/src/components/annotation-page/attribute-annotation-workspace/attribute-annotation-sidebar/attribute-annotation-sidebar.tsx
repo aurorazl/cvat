@@ -145,7 +145,6 @@ function AttributeAnnotationSidebar(props: StateToProps & DispatchToProps): JSX.
     const activatedIndex = indexes.indexOf(activatedStateID);
     const activeObjectState =
         activatedStateID === null || activatedIndex === -1 ? null : filteredStates[activatedIndex];
-
     const activeAttribute = activeObjectState ? labelAttrMap[activeObjectState.label.id] : null;
 
     if (canvasIsReady) {

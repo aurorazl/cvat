@@ -130,6 +130,10 @@ export default {
 
     'Shortcuts for labels:': 'Shortcuts for labels:',
     'None': 'None',
+    // cvat-ui\src\components\annotation-page\text-annotation-workspace\text-annotation-sidebar\text-annotation-sidebar.tsx
+    'Text Label': 'Text Label',
+    'Text Value': 'Text Value',
+    'Add text': 'Add text',
     // cvat-ui\src\components\annotation-page\tag-annotation-workspace\tag-annotation-sidebar\tag-annotation-sidebar.tsx
     'Tag label': 'Tag label',
     'Add tag': 'Add tag',
