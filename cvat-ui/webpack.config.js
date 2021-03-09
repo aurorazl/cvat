@@ -35,12 +35,12 @@ module.exports = {
         historyApiFallback: true,
         proxy: {
             '/annotations/api/v1': {
-              target: 'http://192.168.1.83',
+              target: 'http://192.168.1.18',
               changeOrigin: true,
               secure: false,
             },
             '/custom-user-dashboard-backend': {
-                target: 'http://192.168.1.83',
+                target: 'http://192.168.1.18',
                 changeOrigin: true,
                 secure: false,
             },
