@@ -15,7 +15,6 @@ import StatisticsModalContainer from 'containers/annotation-page/top-bar/statist
 import StandardWorkspaceComponent from './standard-workspace/standard-workspace';
 import AttributeAnnotationWorkspace from './attribute-annotation-workspace/attribute-annotation-workspace';
 import TagAnnotationWorkspace from './tag-annotation-workspace/tag-annotation-workspace';
-import TextAnnotationWorkspace from './text-annotation-workspace/text-annotation-workspace';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
@@ -88,11 +87,6 @@ export default function AnnotationPageComponent(props: Props): JSX.Element {
             {workspace === Workspace.TAG_ANNOTATION && (
                 <Layout.Content style={{ height: '100%' }}>
                     <TagAnnotationWorkspace />
-                </Layout.Content>
-            )}
-            {workspace === Workspace.TEXT_ANNOTATION && (
-                <Layout.Content style={{ height: '100%' }}>
-                    <TextAnnotationWorkspace />
                 </Layout.Content>
             )}
             <StatisticsModalContainer />

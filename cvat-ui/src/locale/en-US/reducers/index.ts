@@ -21,5 +21,4 @@ export default {
     'Standard': 'Standard',
     'Attribute annotation': 'Attribute annotation',
     'Tag annotation': 'Tag annotation',
-    'Text annotation': 'Text annotation',
   }

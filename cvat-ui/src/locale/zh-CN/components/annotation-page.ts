@@ -130,10 +130,6 @@ export default {
 
     'Shortcuts for labels:': '标签快捷键:',
     'None': '空',
-    // cvat-ui\src\components\annotation-page\text-annotation-workspace\text-annotation-sidebar\text-annotation-sidebar.tsx
-    'Text Label': '文字标签',
-    'Text Value': '文字内容',
-    'Add text': '添加文字',
     // cvat-ui\src\components\annotation-page\tag-annotation-workspace\tag-annotation-sidebar\tag-annotation-sidebar.tsx
     'Tag label': '标记标签',
     'Add tag': '添加标记',

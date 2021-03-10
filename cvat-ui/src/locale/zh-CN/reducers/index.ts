@@ -21,5 +21,4 @@ export default {
     'Standard': '标准',
     'Attribute annotation': '属性标注',
     'Tag annotation': '标记标注',
-    'Text annotation': '文字标注',
   }
