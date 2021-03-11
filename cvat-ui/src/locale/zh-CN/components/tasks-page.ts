@@ -15,7 +15,7 @@ export default {
     // automatic-annotation-progress.tsx
     'Automatic annotation': '自动标注',
     'Cancel automatic annotation': '取消自动标注',
-    'You are going to cancel automatic annotation?': '你要取消自动注释吗？',
+    'You are going to cancel automatic annotation?': '你要取消自动标注吗？',
     'Reached progress will be lost. Continue?': '已有的进度将丢失。继续？',
     'Open': '打开',
     'Actions': '操作',
