@@ -6,13 +6,13 @@ export default {
     // ShapeType
     'rectangle': 'rectangle',
     'polygon': 'polygon',
-    'polyline': 'polyline',    
+    'polyline': 'polyline',
     'points': 'points',
     'cuboid': 'cuboid',
     // ObjectType
     'shape': 'shape',
     'track': 'track',
-    'tag': 'tag',    
+    'tag': 'tag',
     // StatesOrdering
     'ID - descent': 'ID - descent',
     'ID - ascent': 'ID - ascent',
@@ -20,5 +20,5 @@ export default {
     // Workspace
     'Standard': 'Standard',
     'Attribute annotation': 'Attribute annotation',
-    'Tag annotation': 'Tag annotation',   
+    'Tag annotation': 'Tag annotation',
   }

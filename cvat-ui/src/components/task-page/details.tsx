@@ -16,7 +16,7 @@ import { message } from 'antd';
 
 import getCore from 'cvat-core-wrapper';
 import patterns from 'utils/validation-patterns';
-import { getReposData, syncRepos } from 'utils/git-utils';
+// import { getReposData, syncRepos } from 'utils/git-utils';
 import { ActiveInference } from 'reducers/interfaces';
 import AutomaticAnnotationProgress from 'components/tasks-page/automatic-annotation-progress';
 import UserSelector from './user-selector';
@@ -88,33 +88,33 @@ class DetailsComponent extends React.PureComponent<Props, State> {
             previewWrapperRef.current.appendChild(previewImageElement);
         }
 
-        getReposData(taskInstance.id)
-            .then((data): void => {
-                if (data !== null && this.mounted) {
-                    if (data.status.error) {
-                        notification.error({
-                            message: t('Could not receive repository status'),
-                            description: data.status.error,
-                        });
-                    } else {
-                        this.setState({
-                            repositoryStatus: data.status.value,
-                        });
-                    }
+        // getReposData(taskInstance.id)
+        //     .then((data): void => {
+        //         if (data !== null && this.mounted) {
+        //             if (data.status.error) {
+        //                 notification.error({
+        //                     message: t('Could not receive repository status'),
+        //                     description: data.status.error,
+        //                 });
+        //             } else {
+        //                 this.setState({
+        //                     repositoryStatus: data.status.value,
+        //                 });
+        //             }
 
-                    this.setState({
-                        repository: data.url,
-                    });
-                }
-            })
-            .catch((error): void => {
-                if (this.mounted) {
-                    notification.error({
-                        message: t('Could not receive repository status'),
-                        description: error.toString(),
-                    });
-                }
-            });
+        //             this.setState({
+        //                 repository: data.url,
+        //             });
+        //         }
+        //     })
+        //     .catch((error): void => {
+        //         if (this.mounted) {
+        //             notification.error({
+        //                 message: t('Could not receive repository status'),
+        //                 description: error.toString(),
+        //             });
+        //         }
+        //     });
     }
 
     public componentDidUpdate(prevProps: Props): void {
@@ -237,79 +237,79 @@ class DetailsComponent extends React.PureComponent<Props, State> {
         );
     }
 
-    private renderDatasetRepository(): JSX.Element | boolean {
-        const { taskInstance, t } = this.props;
-        const { repository, repositoryStatus } = this.state;
+    // private renderDatasetRepository(): JSX.Element | boolean {
+    //     const { taskInstance, t } = this.props;
+    //     const { repository, repositoryStatus } = this.state;
 
-        return (
-            !!repository && (
-                <Row>
-                    <Col className='cvat-dataset-repository-url'>
-                        <Text strong className='cvat-text-color'>
-                            {t('Dataset Repository')}
-                        </Text>
-                        <br />
-                        <a href={repository} rel='noopener noreferrer' target='_blank'>
-                            {repository}
-                        </a>
-                        {repositoryStatus === 'sync' && (
-                            <Tag color='blue'>
-                                <Icon type='check-circle' />
-                                {t('Synchronized')}
-                            </Tag>
-                        )}
-                        {repositoryStatus === 'merged' && (
-                            <Tag color='green'>
-                                <Icon type='check-circle' />
-                                {t('Merged')}
-                            </Tag>
-                        )}
-                        {repositoryStatus === 'syncing' && (
-                            <Tag color='purple'>
-                                <Icon type='loading' />
-                                {t('Syncing')}
-                            </Tag>
-                        )}
-                        {repositoryStatus === '!sync' && (
-                            <Tag
-                                color='red'
-                                onClick={(): void => {
-                                    this.setState({
-                                        repositoryStatus: 'syncing',
-                                    });
+    //     return (
+    //         !!repository && (
+    //             <Row>
+    //                 <Col className='cvat-dataset-repository-url'>
+    //                     <Text strong className='cvat-text-color'>
+    //                         {t('Dataset Repository')}
+    //                     </Text>
+    //                     <br />
+    //                     <a href={repository} rel='noopener noreferrer' target='_blank'>
+    //                         {repository}
+    //                     </a>
+    //                     {repositoryStatus === 'sync' && (
+    //                         <Tag color='blue'>
+    //                             <Icon type='check-circle' />
+    //                             {t('Synchronized')}
+    //                         </Tag>
+    //                     )}
+    //                     {repositoryStatus === 'merged' && (
+    //                         <Tag color='green'>
+    //                             <Icon type='check-circle' />
+    //                             {t('Merged')}
+    //                         </Tag>
+    //                     )}
+    //                     {repositoryStatus === 'syncing' && (
+    //                         <Tag color='purple'>
+    //                             <Icon type='loading' />
+    //                             {t('Syncing')}
+    //                         </Tag>
+    //                     )}
+    //                     {repositoryStatus === '!sync' && (
+    //                         <Tag
+    //                             color='red'
+    //                             onClick={(): void => {
+    //                                 this.setState({
+    //                                     repositoryStatus: 'syncing',
+    //                                 });
 
-                                    syncRepos(taskInstance.id)
-                                        .then((): void => {
-                                            if (this.mounted) {
-                                                this.setState({
-                                                    repositoryStatus: 'sync',
-                                                });
-                                            }
-                                        })
-                                        .catch((error): void => {
-                                            if (this.mounted) {
-                                                Modal.error({
-                                                    width: 800,
-                                                    title: t('Could not synchronize the repository'),
-                                                    content: error.toString(),
-                                                });
+    //                                 syncRepos(taskInstance.id)
+    //                                     .then((): void => {
+    //                                         if (this.mounted) {
+    //                                             this.setState({
+    //                                                 repositoryStatus: 'sync',
+    //                                             });
+    //                                         }
+    //                                     })
+    //                                     .catch((error): void => {
+    //                                         if (this.mounted) {
+    //                                             Modal.error({
+    //                                                 width: 800,
+    //                                                 title: t('Could not synchronize the repository'),
+    //                                                 content: error.toString(),
+    //                                             });
 
-                                                this.setState({
-                                                    repositoryStatus: '!sync',
-                                                });
-                                            }
-                                        });
-                                }}
-                            >
-                                <Icon type='warning' />
-                                {t('Synchronize')}
-                            </Tag>
-                        )}
-                    </Col>
-                </Row>
-            )
-        );
-    }
+    //                                             this.setState({
+    //                                                 repositoryStatus: '!sync',
+    //                                             });
+    //                                         }
+    //                                     });
+    //                             }}
+    //                         >
+    //                             <Icon type='warning' />
+    //                             {t('Synchronize')}
+    //                         </Tag>
+    //                     )}
+    //                 </Col>
+    //             </Row>
+    //         )
+    //     );
+    // }
 
     private renderBugTracker(): JSX.Element {
         const { taskInstance, onTaskUpdate, t } = this.props;
@@ -441,7 +441,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
                                 />
                             </Col>
                         </Row>
-                        {this.renderDatasetRepository()}
+                        {/* {this.renderDatasetRepository()} */}
                         {this.renderLabelsEditor()}
                     </Col>
                 </Row>
