@@ -6,3 +6,5 @@
 /yarn.lock
 .eslintcache
 
+/cvat-ui/src/cvat-core-wrapper.ts
+/cvat-ui/package.json
