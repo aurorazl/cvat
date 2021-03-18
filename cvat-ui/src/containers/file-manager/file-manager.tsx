@@ -11,6 +11,7 @@ import FileManagerComponent, { Files } from 'components/file-manager/file-manage
 import { loadShareDataAsync } from 'actions/share-actions';
 import { ShareItem, CombinedState, DatasetInfo } from 'reducers/interfaces';
 import { loadPlatformDataAsync } from 'actions/platform-actions';
+import { HwDatasetInfo } from 'reducers/interfaces';
 
 interface OwnProps {
     ref: any;
@@ -20,6 +21,8 @@ interface OwnProps {
 interface StateToProps {
     treeData: TreeNodeNormal[];
     platformData: DatasetInfo[];
+    datasetData: HwDatasetInfo[],
+    dsId: number | undefined;
 }
 
 interface DispatchToProps {
@@ -45,10 +48,14 @@ function mapStateToProps(state: CombinedState): StateToProps {
 
     const { root } = state.share;
     const { datasets } = state.platform;
+    const { datasets: hwDatasets } = state.dataset;
+    const dsId = hwDatasets.length > 0 ? hwDatasets[0].id : undefined;
 
     return {
         treeData: convert([root], ''),
         platformData: datasets || [],
+        datasetData: hwDatasets || [],
+        dsId,
     };
 }
 
@@ -77,7 +84,7 @@ export class FileManagerContainer extends React.PureComponent<Props> {
     }
 
     public render(): JSX.Element {
-        const { treeData, getTreeData, withRemote, getPlatformData, platformData } = this.props;
+        const { treeData, getTreeData, withRemote, getPlatformData, platformData, dsId, datasetData } = this.props;
         return (
             <FileManagerComponent
                 treeData={treeData}
@@ -88,6 +95,8 @@ export class FileManagerContainer extends React.PureComponent<Props> {
                 ref={(component: any): void => {
                     this.managerComponentRef = component;
                 }}
+                dsId={dsId}
+                datasetData={datasetData}
             />
         );
     }

@@ -250,6 +250,11 @@
             return result;
         };
 
+        cvat.tasks.getDataset.implementation = async (filter) => {
+            const result = await serverProxy.tasks.getDataset(filter);
+            return result;
+        };
+
         return cvat;
     }
 

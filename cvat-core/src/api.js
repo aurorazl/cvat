@@ -338,6 +338,15 @@ function build() {
                 const result = await PluginRegistry.apiWrapper(cvat.tasks.getDatasets, filter);
                 return result;
             },
+
+            /**
+             * Method returns dataset from DM
+             * @param {*} filter
+             */
+            async getDataset(filter = {}) {
+                const result = await PluginRegistry.apiWrapper(cvat.tasks.getDataset, filter);
+                return result;
+            },
         },
         /**
          * Namespace is used for getting jobs

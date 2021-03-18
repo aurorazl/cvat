@@ -884,6 +884,24 @@
                 return response.data.data.datasets;
             }
 
+            // 获取数据集管理系统中指定数据集
+            async function getDatasetFromDM(id) {
+                const { dsBackendAPI } = config;
+
+                let response = null;
+                try {
+                    response = await Axios.get(`${dsBackendAPI}/cv_datasets/${id}`, {
+                        proxy: config.proxy,
+                    });
+                } catch (errorData) {
+                    throw generateError(errorData);
+                }
+
+                return response.data.data.cvDataset;
+
+                // return [{ id: 1, itemCount: 100, name: 'ocr', annotType: 'object_detection', cvDatasetFormat: 'coco'}]
+            }
+
             async function exportToPlatform(id) {
                 const { backendAPI } = config;
 
@@ -933,6 +951,7 @@
                             deleteTask,
                             exportDataset,
                             getDatasets: getDatasetsFromPlat,
+                            getDataset: getDatasetFromDM,
                             exportToPlatform,
                         }),
                         writable: false,

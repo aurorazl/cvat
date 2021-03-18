@@ -13,6 +13,7 @@ export interface BaseConfiguration {
 
 type Props = FormComponentProps & {
     onSubmit(values: BaseConfiguration): void;
+    name: string | undefined;
 };
 
 class BasicConfigurationForm extends React.PureComponent<Props & WithTranslation> {
@@ -39,7 +40,7 @@ class BasicConfigurationForm extends React.PureComponent<Props & WithTranslation
     }
 
     public render(): JSX.Element {
-        const { form, t } = this.props;
+        const { form, t, name } = this.props;
         const { getFieldDecorator } = form;
 
         return (
@@ -52,7 +53,8 @@ class BasicConfigurationForm extends React.PureComponent<Props & WithTranslation
                                 message: t('Please, specify a name'),
                             },
                         ],
-                    })(<Input />) }
+                        initialValue: name ||'',
+                    })(<Input disabled={!!name}/>) }
                 </Form.Item>
             </Form>
         );

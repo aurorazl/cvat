@@ -18,6 +18,7 @@ import shortcutsReducer from './shortcuts-reducer';
 import userAgreementsReducer from './useragreements-reducer';
 import langReducer from './lang-reducer';
 import platformReducer from './platform-reducer';
+import datasetReducer from './dataset-reducer';
 
 export default function createRootReducer(): Reducer {
     return combineReducers({
@@ -36,5 +37,6 @@ export default function createRootReducer(): Reducer {
         userAgreements: userAgreementsReducer,
         lang: langReducer,
         platform: platformReducer,
+        dataset: datasetReducer,
     });
 }

@@ -330,6 +330,7 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
                                     <GlobalHotKeys keyMap={subKeyMap} handlers={handlers}>
                                         <Switch>
                                             <Route exact path='/tasks' component={TasksPageContainer} />
+                                            <Route exact path='/tasks/create/:dsId' component={CreateTaskPageContainer} />
                                             <Route exact path='/tasks/create' component={CreateTaskPageContainer} />
                                             <Route exact path='/tasks/:id' component={TaskPageContainer} />
                                             <Route exact path='/tasks/:tid/jobs/:jid' component={AnnotationPageContainer} />
