@@ -147,6 +147,7 @@ export interface HwDatasetInfo {
     itemCount: number | null;
     annotType: string;
     cvDatasetFormat: string;
+    tag: number;
 }
 
 export interface ShareItem {

@@ -31,7 +31,7 @@ export function getDatasetDataAsync(dsId: number | undefined, success: () => voi
         try {
             dispatch(datasetActions.getDatasetData());
             const values = await core.tasks.getDataset(dsId);
-            const datasets = values.map((d: any)=>({id: d.id, name: d.name, cvDatasetFormat: d.cvDatasetFormat, annotType: d.annotType, itemCount: d.itemCount}));
+            const datasets = values.map((d: any)=>({id: d.id, name: d.name, cvDatasetFormat: d.cvDatasetFormat, annotType: d.annotType, itemCount: d.itemCount, tag: d.tag}));
             success();
             dispatch(datasetActions.getDatasetDataSuccess(datasets as HwDatasetInfo[]));
         } catch (error) {
