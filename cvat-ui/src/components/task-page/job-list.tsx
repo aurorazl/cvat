@@ -46,20 +46,24 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
         title: t('Job'),
         dataIndex: 'job',
         key: 'job',
-        render: (id: number): JSX.Element => (
-            <div>
-                <Button
-                    type='link'
-                    onClick={(e: React.MouseEvent): void => {
-                        e.preventDefault();
-                        push(`/tasks/${taskId}/jobs/${id}`);
-                    }}
-                    href={`/tasks/${taskId}/jobs/${id}`}
-                >
-                    {`Job #${id}`}
-                </Button>
-            </div>
-        ),
+        render: (jobInstance: any): JSX.Element => {
+            const { id, frame } = jobInstance;
+
+            return (
+                <div>
+                    <Button
+                        type='link'
+                        onClick={(e: React.MouseEvent): void => {
+                            e.preventDefault();
+                            push(`/tasks/${taskId}/jobs/${id}?frame=${frame}`);
+                        }}
+                        href={`/tasks/${taskId}/jobs/${id}?frame=${frame}`}
+                    >
+                        {`Job #${id}`}
+                    </Button>
+                </div>
+            );
+        },
     },
     {
         title: t('Frames'),
@@ -150,7 +154,7 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
 
         acc.push({
             key: job.id,
-            job: job.id,
+            job: job,
             frames: `${job.startFrame}-${job.stopFrame}`,
             status: `${job.status}`,
             labeled: Number.isInteger(job.labeled) ? job.labeled : '',
