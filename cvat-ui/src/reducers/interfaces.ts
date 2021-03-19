@@ -138,7 +138,15 @@ export interface DatasetInfo {
     // get this data from cvat-core
     id: number;
     name: string;
-    path: string;
+    path: string | undefined;
+}
+export interface HwDatasetInfo {
+    // get this data from dataset
+    id: number;
+    name: string;
+    itemCount: number | null;
+    annotType: string;
+    cvDatasetFormat: string;
 }
 
 export interface ShareItem {
@@ -525,6 +533,7 @@ export interface CombinedState {
     meta: MetaState;
     lang: LangState;
     platform: PlatformState;
+    dataset: DatasetState;
 }
 
 export interface LangState {
@@ -533,4 +542,7 @@ export interface LangState {
 
 export interface PlatformState {
     datasets: DatasetInfo[];
+}
+export interface DatasetState {
+    datasets: HwDatasetInfo[];
 }

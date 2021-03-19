@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react';
+import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import { Row, Col } from 'antd/lib/grid';
@@ -18,7 +19,9 @@ import AdvancedConfigurationForm, { AdvancedConfiguration } from './advanced-con
 import LabelsEditor from '../labels-editor/labels-editor';
 import { Files } from '../file-manager/file-manager';
 import { withTranslation, WithTranslation  } from 'react-i18next';
-
+import { HwDatasetInfo } from 'reducers/interfaces';
+import { CombinedState } from 'reducers/interfaces';
+import { getDatasetDataAsync } from 'actions/dataset-actions';
 export interface CreateTaskData {
     basic: BaseConfiguration;
     advanced: AdvancedConfiguration;
@@ -28,9 +31,48 @@ export interface CreateTaskData {
 
 interface Props extends WithTranslation {
     onCreate: (data: CreateTaskData) => void;
+    // onFetchDsInfo: (dsId: number | undefined, success: () => void, failure: () => void) => HwDatasetInfo[];
     status: string;
     taskId: number | null;
     installedGit: boolean;
+    dsId: number | undefined;
+    // datasets: HwDatasetInfo[];
+}
+
+interface StateToProps {
+    // taskId: number | null;
+    // status: string;
+    // error: string;
+    // installedGit: boolean;
+    // lang: string;
+    // dsId: number | undefined;
+    datasets: HwDatasetInfo[];
+}
+
+interface DispatchToProps {
+    onFetchDsInfo: (dsId: number | undefined, success: () => void, failure: () => void) => HwDatasetInfo[];
+}
+
+function mapDispatchToProps(dispatch: any): DispatchToProps {
+    return {
+        onFetchDsInfo: (dsId: number | undefined, success: () => void, failure: () => void): HwDatasetInfo[] => dispatch(getDatasetDataAsync(dsId, success, failure)),
+    };
+}
+
+function mapStateToProps(state: CombinedState, own: Props): StateToProps {
+    // const { creates } = state.tasks.activities;
+    // const { lang } = state.lang;
+    const { datasets } = state.dataset;
+
+    // const { dsId } = own.match.params;
+
+    return {
+        // ...creates,
+        // installedGit: state.plugins.list.GIT_INTEGRATION,
+        // lang,
+        // dsId: !!dsId ? Number.parseInt(dsId) : undefined,
+        datasets,
+    };
 }
 
 type State = CreateTaskData;
@@ -50,21 +92,33 @@ const defaultState = {
         share: [],
         remote: [],
         platform: [],
+        dataset: [],
     },
 };
 
-class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps, State> {
+class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps & StateToProps & DispatchToProps, State> {
     private basicConfigurationComponent: any;
 
     private advancedConfigurationComponent: any;
 
     private fileManagerContainer: any;
 
-    public constructor(props: Props & RouteComponentProps) {
+    public constructor(props: Props & RouteComponentProps & StateToProps & DispatchToProps) {
         super(props);
         this.state = { ...defaultState };
     }
 
+    public componentDidMount(): void {
+        this.loadDatasetData()
+        .then(() => {
+            // this.setState({
+            //     files: {
+            //         dataset: datasets,
+            //     },
+            // });
+            console.log('load dataset success...')
+        });
+    }
     public componentDidUpdate(prevProps: Props): void {
         const { status, history, taskId, t } = this.props;
 
@@ -88,6 +142,15 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
             });
         }
     }
+
+    private loadDatasetData = (): Promise<void> =>
+        new Promise<void>((resolve, reject): void => {
+            const { dsId, onFetchDsInfo } = this.props;
+
+            const success = (): void => resolve();
+            const failure = (): void => reject();
+            onFetchDsInfo(dsId, success, failure);
+        });
 
     private validateLabels = (): boolean => {
         const { labels } = this.state;
@@ -158,6 +221,13 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
     };
 
     private renderBasicBlock(): JSX.Element {
+        const { datasets } = this.props;
+
+        const ds = datasets.length > 0 ? datasets[0] : null;
+
+        // 名称规则：需要将(多个)空格替换成_
+        const name = ds ? `${ds.name}_${ds.annotType}_${ds.cvDatasetFormat}`.replace(/\s+_*/g, '_') : '';
+
         return (
             <Col span={24}>
                 <BasicConfigurationForm
@@ -165,6 +235,7 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
                         this.basicConfigurationComponent = component;
                     }}
                     onSubmit={this.handleSubmitBasicConfiguration}
+                    name={name}
                 />
             </Col>
         );
@@ -211,7 +282,7 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
         return (
             <Col span={24}>
                 <Collapse>
-                    <Collapse.Panel key='1'header={<Text className='cvat-title'>{t('Advanced configuration')}</Text>}>
+                    <Collapse.Panel key='1' header={<Text className='cvat-title'>{t('Advanced configuration')}</Text>}>
                         <AdvancedConfigurationForm
                             installedGit={installedGit}
                             wrappedComponentRef={(component: any): void => {
@@ -251,4 +322,4 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps,
     }
 }
 
-export default withRouter(withTranslation()(CreateTaskContent));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(withTranslation()(CreateTaskContent)));

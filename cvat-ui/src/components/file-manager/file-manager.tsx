@@ -19,12 +19,13 @@ import consts from 'consts';
 import { withTranslation, WithTranslation  } from 'react-i18next';
 import { CombinedState, DatasetInfo } from 'reducers/interfaces';
 import { connect } from 'react-redux';
-
+import { HwDatasetInfo } from 'reducers/interfaces';
 export interface Files {
     local: File[];
     share: string[];
     remote: string[];
     platform: string[];
+    dataset: number[];
 }
 
 interface StateToProps {
@@ -44,16 +45,18 @@ function mapStateToProps(state: CombinedState): StateToProps {
 interface State {
     files: Files;
     expandedKeys: string[];
-    active: 'local' | 'share' | 'remote' | 'platform';
+    active: 'local' | 'share' | 'remote' | 'platform'| 'dataset';
 }
 
 interface Props {
     withRemote: boolean;
     treeData: TreeNodeNormal[];
     platformData: DatasetInfo[];
+    datasetData: HwDatasetInfo[];
     onLoadData: (key: string, success: () => void, failure: () => void) => void;
     onLoadPlatformData: (success: () => void, failure: () => void) => void;
     onChangeDataset(value: string): void;
+    dsId: number | undefined;
 }
 
 const { Option } = Select;
@@ -68,23 +71,26 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
                 share: [],
                 remote: [],
                 platform: [],
+                dataset: [],
             },
             expandedKeys: [],
-            active: 'local',
+            active: 'dataset',
             lang: 'zh-CN',
         };
 
-        this.loadData('/');
-        this.loadPlatformData();
+        // this.loadData('/');
+        // this.loadPlatformData();
     }
 
     public getFiles(): Files {
         const { active, files } = this.state;
+
         return {
             local: active === 'local' ? files.local : [],
             share: active === 'share' ? files.share : [],
             remote: active === 'remote' ? files.remote : [],
             platform: active === 'platform' ? files.platform : [],
+            dataset: active === 'dataset' ? files.dataset : [],
         };
     }
 
@@ -109,12 +115,13 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
     public reset(): void {
         this.setState({
             expandedKeys: [],
-            active: 'local',
+            active: 'dataset',
             files: {
                 local: [],
                 share: [],
                 remote: [],
                 platform: [],
+                dataset: [],
             },
             lang: 'zh-CN',
         });
@@ -274,6 +281,7 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
         return (
             <Tabs.TabPane key='platform' tab={t('AI Platform')}>
                 <Select
+                    disabled
                     showSearch
                     style={{ width: '100%' }}
                     placeholder={t('Select a dataset')}
@@ -304,6 +312,27 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
         );
     }
 
+    private renderDatasetSelector(): JSX.Element {
+        const { files } = this.state;
+        const { datasetData, t, dsId } = this.props;
+        const dsName = (datasetData && datasetData.length > 0) ? datasetData[0].name : '';
+
+        return (
+            <Tabs.TabPane key='dataset' tab={t('Dataset')}>
+                <Input
+                    value={dsName}
+                    disabled
+                />
+                {datasetData && datasetData.length > 0 && !!(datasetData[0].itemCount) && (
+                    <>
+                        <br />
+                        <Text className='cvat-text-color'>{t('${files.dataset.length} files selected').replace('${files.dataset.length}', `${datasetData[0].itemCount}`)}</Text>
+                    </>
+                )}
+            </Tabs.TabPane>
+        );
+    }
+
     public render(): JSX.Element {
         const { withRemote } = this.props;
         const { active } = this.state;
@@ -320,13 +349,29 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
                         })
                     }
                 >
-                    {this.renderLocalSelector()}
-                    {this.renderShareSelector()}
-                    {withRemote && this.renderRemoteSelector()}
-                    {this.renderPlatformSelector()}
+                    {/* {this.renderLocalSelector()} */}
+                    {/* {this.renderShareSelector()} */}
+                    {/* {withRemote && this.renderRemoteSelector()} */}
+                    {/* {this.renderPlatformSelector()} */}
+                    {this.renderDatasetSelector()}
                 </Tabs>
             </>
         );
+    }
+
+    public componentDidUpdate(prevProps, prevState) {
+        // if (this.state.files.dataset.length === 0) {
+        if (prevState.files.dataset.length === 0) {
+            const { files } = this.state;
+            const { datasetData } = this.props;
+
+            datasetData && datasetData[0] && this.setState({
+                files: {
+                    ...files,
+                    dataset: [datasetData[0].id],
+                },
+            });
+        }
     }
 }
 
