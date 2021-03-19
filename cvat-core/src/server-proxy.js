@@ -899,7 +899,7 @@
 
                 return response.data.data.cvDataset;
 
-                // return [{ id: 1, itemCount: 100, name: 'ocr', annotType: 'object_detection', cvDatasetFormat: 'coco'}]
+                // return [{ id: 1, itemCount: 100, name: 'ocr', annotType: 'object_detection', cvDatasetFormat: 'coco', tag: 0}]
             }
 
             async function exportToPlatform(id) {
@@ -907,9 +907,9 @@
 
                 let response = null;
                 try {
-                    response = await Axios.get(`${backendAPI}/tasks/${id}/save_to_platform?format=COCO 1.0`, {
+                    response = await Axios.get(`${backendAPI}/tasks/${id}/publish`, {
                         proxy: config.proxy,
-                        headers:{ 'Authorization': 'Bearer ' + token },
+                        // headers:{ 'Authorization': 'Bearer ' + token },
                     });
                 } catch (errorData) {
                     throw generateError(errorData);

@@ -31,21 +31,13 @@ export interface CreateTaskData {
 
 interface Props extends WithTranslation {
     onCreate: (data: CreateTaskData) => void;
-    // onFetchDsInfo: (dsId: number | undefined, success: () => void, failure: () => void) => HwDatasetInfo[];
     status: string;
     taskId: number | null;
     installedGit: boolean;
     dsId: number | undefined;
-    // datasets: HwDatasetInfo[];
 }
 
 interface StateToProps {
-    // taskId: number | null;
-    // status: string;
-    // error: string;
-    // installedGit: boolean;
-    // lang: string;
-    // dsId: number | undefined;
     datasets: HwDatasetInfo[];
 }
 
@@ -60,17 +52,9 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
 }
 
 function mapStateToProps(state: CombinedState, own: Props): StateToProps {
-    // const { creates } = state.tasks.activities;
-    // const { lang } = state.lang;
     const { datasets } = state.dataset;
 
-    // const { dsId } = own.match.params;
-
     return {
-        // ...creates,
-        // installedGit: state.plugins.list.GIT_INTEGRATION,
-        // lang,
-        // dsId: !!dsId ? Number.parseInt(dsId) : undefined,
         datasets,
     };
 }

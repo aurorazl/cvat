@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import HelpLink from 'components/help-link';
 import getCore from 'cvat-core-wrapper';
 import linkConsts from 'help-link-consts'
-import { HwDatasetInfo } from 'reducers/interfaces';
+// import { HwDatasetInfo } from 'reducers/interfaces';
 
 interface Props {
     onCreate: (data: CreateTaskData) => void;

@@ -46,27 +46,31 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
         title: t('Job'),
         dataIndex: 'job',
         key: 'job',
-        render: (id: number): JSX.Element => (
-            <div>
-                <Button
-                    type='link'
-                    onClick={(e: React.MouseEvent): void => {
-                        e.preventDefault();
-                        push(`/tasks/${taskId}/jobs/${id}`);
-                    }}
-                    href={`/tasks/${taskId}/jobs/${id}`}
-                >
-                    {`Job #${id}`}
-                </Button>
-            </div>
-        ),
-    }, 
+        render: (jobInstance: any): JSX.Element => {
+            const { id, frame } = jobInstance;
+
+            return (
+                <div>
+                    <Button
+                        type='link'
+                        onClick={(e: React.MouseEvent): void => {
+                            e.preventDefault();
+                            push(`/tasks/${taskId}/jobs/${id}?frame=${frame}`);
+                        }}
+                        href={`/tasks/${taskId}/jobs/${id}?frame=${frame}`}
+                    >
+                        {`Job #${id}`}
+                    </Button>
+                </div>
+            );
+        },
+    },
     {
         title: t('Frames'),
         dataIndex: 'frames',
         key: 'frames',
         className: 'cvat-text-color',
-    }, 
+    },
     {
         title: t('Status'),
         dataIndex: 'status',
@@ -87,19 +91,31 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
                 </Text>
             );
         },
-    }, 
+    },
+    {
+        title: t('Labeled'),
+        dataIndex: 'labeled',
+        key: 'labeled',
+        className: 'cvat-text-color',
+    },
+    {
+        title: t('Unlabeled'),
+        dataIndex: 'unlabeled',
+        key: 'unlabeled',
+        className: 'cvat-text-color',
+    },
     {
         title: t('Started on'),
         dataIndex: 'started',
         key: 'started',
         className: 'cvat-text-color',
-    }, 
+    },
     {
         title: t('Duration'),
         dataIndex: 'duration',
         key: 'duration',
         className: 'cvat-text-color',
-    }, 
+    },
     {
         title: t('Assignee'),
         dataIndex: 'assignee',
@@ -138,9 +154,11 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
 
         acc.push({
             key: job.id,
-            job: job.id,
+            job: job,
             frames: `${job.startFrame}-${job.stopFrame}`,
             status: `${job.status}`,
+            labeled: Number.isInteger(job.labeled) ? job.labeled : '',
+            unlabeled: Number.isInteger(job.unlabeled) ? job.unlabeled : '',
             started: transMoment(created),
             duration: `${moment.duration(moment(moment.now()).diff(created)).humanize()}`,
             assignee: job,
