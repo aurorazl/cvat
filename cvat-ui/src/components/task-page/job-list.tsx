@@ -60,13 +60,13 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
                 </Button>
             </div>
         ),
-    }, 
+    },
     {
         title: t('Frames'),
         dataIndex: 'frames',
         key: 'frames',
         className: 'cvat-text-color',
-    }, 
+    },
     {
         title: t('Status'),
         dataIndex: 'status',
@@ -87,19 +87,31 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
                 </Text>
             );
         },
-    }, 
+    },
+    {
+        title: t('Labeled'),
+        dataIndex: 'labeled',
+        key: 'labeled',
+        className: 'cvat-text-color',
+    },
+    {
+        title: t('Unlabeled'),
+        dataIndex: 'unlabeled',
+        key: 'unlabeled',
+        className: 'cvat-text-color',
+    },
     {
         title: t('Started on'),
         dataIndex: 'started',
         key: 'started',
         className: 'cvat-text-color',
-    }, 
+    },
     {
         title: t('Duration'),
         dataIndex: 'duration',
         key: 'duration',
         className: 'cvat-text-color',
-    }, 
+    },
     {
         title: t('Assignee'),
         dataIndex: 'assignee',
@@ -141,6 +153,8 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
             job: job.id,
             frames: `${job.startFrame}-${job.stopFrame}`,
             status: `${job.status}`,
+            labeled: job.labeled ? `${job.labeled}` : '',
+            unlabeled: job.unlabeled ? `${job.unlabeled}` : '',
             started: transMoment(created),
             duration: `${moment.duration(moment(moment.now()).diff(created)).humanize()}`,
             assignee: job,

@@ -23,6 +23,8 @@ export default {
     'Copy': 'Copy',
     'Frames': 'Frames',
     'Status': 'Status',
+    'Labeled': 'Labeled',
+    'Unlabeled': 'Unlabeled',
     'Started on': 'Started on',
     'Duration': 'Duration',
     'Assignee': 'Assignee',
