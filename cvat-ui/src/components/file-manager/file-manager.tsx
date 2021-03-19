@@ -359,7 +359,7 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
         );
     }
 
-    public componentDidUpdate(prevProps, prevState) {
+    public componentDidUpdate(prevProps, prevState): void {
         // if (this.state.files.dataset.length === 0) {
         if (prevState.files.dataset.length === 0) {
             const { files } = this.state;

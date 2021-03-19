@@ -18,7 +18,7 @@ import TopBarComponent from './top-bar';
 
 import { withTranslation, WithTranslation  } from 'react-i18next';
 
-interface TaskPageComponentProps extends WithTranslation {
+interface TaskPageComponentProps {
     task: Task | null | undefined;
     fetching: boolean;
     updating: boolean;
@@ -27,7 +27,7 @@ interface TaskPageComponentProps extends WithTranslation {
     getTask: () => void;
 }
 
-type Props = TaskPageComponentProps & RouteComponentProps<{ id: string }>;
+type Props = TaskPageComponentProps & RouteComponentProps<{ id: string }> & WithTranslation;
 
 class TaskPageComponent extends React.PureComponent<Props> {
     public componentDidUpdate(): void {
