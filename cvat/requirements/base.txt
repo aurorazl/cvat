@@ -28,7 +28,7 @@ coreapi==2.3.3
 django-filter==2.3.0
 Markdown==3.2.2
 djangorestframework==3.11.1
-djangorestframework-jwt
+djangorestframework-jwt==1.11.0
 Pygments==2.6.1
 drf-yasg==1.17.1
 Shapely==1.7.1
@@ -40,7 +40,7 @@ h5py==2.10.0
 django-cors-headers==3.5.0
 furl==2.1.0
 av==8.0.2 --no-binary=av
-tensorflow==2.2.1 # Optional requirement of Datumaro
+tensorflow # Optional requirement of Datumaro
 # The package is used by pyunpack as a command line tool to support multiple
 # archives. Don't use as a python module because it has GPL license.
 patool==1.12
