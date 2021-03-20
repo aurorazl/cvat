@@ -35,12 +35,12 @@ module.exports = {
         historyApiFallback: true,
         proxy: {
             '/annotations/api/v1': {
-              target: 'http://58.250.250.126:6688',
+              target: process.env.REACT_APP_API_URL,
               changeOrigin: true,
               secure: false,
             },
             '/custom-user-dashboard-backend': {
-                target: 'http://58.250.250.126:6688',
+                target: process.env.REACT_APP_API_URL,
                 changeOrigin: true,
                 secure: false,
             },
