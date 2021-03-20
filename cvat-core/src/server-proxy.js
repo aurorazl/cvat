@@ -899,7 +899,7 @@
 
                 return response.data.data.cvDataset;
 
-                // return [{ id: 1, itemCount: 100, name: 'ocr', annotType: 'object_detection', cvDatasetFormat: 'coco', tag: 0}]
+                // return [{ id: 1, itemCount: 100, name: 'ocr', annotType: 'ocr_detection', cvDatasetFormat: 'coco', tag: 0}]
             }
 
             async function exportToPlatform(id) {

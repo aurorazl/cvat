@@ -100,6 +100,28 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps 
             //         dataset: datasets,
             //     },
             // });
+            const { datasets } = this.props;
+            // OCR默认label
+            if (datasets && datasets.length > 0 && (datasets[0].annotType.startsWith('ocr'))) {
+                this.setState({
+                    labels: [
+                        {
+                            name: "text",
+                            color: "#20cc1c",
+                            attributes: [
+                                {
+                                    name: "value",
+                                    input_type: "text",
+                                    mutable: false,
+                                    values: [
+                                        ""
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                });
+            }
             console.log('load dataset success...')
         });
     }
