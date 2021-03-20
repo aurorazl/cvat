@@ -909,7 +909,7 @@
                 try {
                     response = await Axios.get(`${backendAPI}/tasks/${id}/publish`, {
                         proxy: config.proxy,
-                        // headers:{ 'Authorization': 'Bearer ' + token },
+                        headers:{ 'Authorization': 'Bearer ' + token },
                     });
                 } catch (errorData) {
                     throw generateError(errorData);
