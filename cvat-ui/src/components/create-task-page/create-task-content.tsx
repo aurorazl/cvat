@@ -34,7 +34,6 @@ interface Props extends WithTranslation {
     status: string;
     taskId: number | null;
     installedGit: boolean;
-    dsId: number | undefined;
 }
 
 interface StateToProps {
@@ -80,14 +79,14 @@ const defaultState = {
     },
 };
 
-class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps & StateToProps & DispatchToProps, State> {
+class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps<{dsId: string}> & StateToProps & DispatchToProps, State> {
     private basicConfigurationComponent: any;
 
     private advancedConfigurationComponent: any;
 
     private fileManagerContainer: any;
 
-    public constructor(props: Props & RouteComponentProps & StateToProps & DispatchToProps) {
+    public constructor(props: Props & RouteComponentProps<{dsId: string}> & StateToProps & DispatchToProps) {
         super(props);
         this.state = { ...defaultState };
     }
@@ -151,11 +150,14 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps 
 
     private loadDatasetData = (): Promise<void> =>
         new Promise<void>((resolve, reject): void => {
-            const { dsId, onFetchDsInfo } = this.props;
+            const { onFetchDsInfo, match } = this.props;
+            const dsId = +match.params.dsId;
 
-            const success = (): void => resolve();
-            const failure = (): void => reject();
-            onFetchDsInfo(dsId, success, failure);
+            if (Number.isInteger(dsId)) {
+                const success = (): void => resolve();
+                const failure = (): void => reject();
+                onFetchDsInfo(dsId, success, failure);
+            }
         });
 
     private validateLabels = (): boolean => {
