@@ -890,7 +890,7 @@
 
                 let response = null;
                 try {
-                    response = await Axios.get(`${dsBackendAPI}/cv_datasets/${id}`, {
+                    response = await Axios.get(`${dsBackendAPI}/cv_datasets/id/${id}`, {
                         proxy: config.proxy,
                     });
                 } catch (errorData) {
