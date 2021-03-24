@@ -125,7 +125,7 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
             <Form.Item label={<span>{t('Image quality')}</span>}>
                 <Tooltip title={t('Defines image quality level')} mouseLeaveDelay={0}>
                     {form.getFieldDecorator('imageQuality', {
-                        initialValue: 70,
+                        initialValue: 100,
                         rules: [
                             {
                                 required: true,
@@ -426,11 +426,11 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
                     <Col span={7}>{this.renderChunkSize()}</Col>
                 </Row>
 
-                {installedGit ? this.renderGit() : null}
+                {/* {installedGit ? this.renderGit() : null} */}
 
-                <Row>
+                {/* <Row>
                     <Col>{this.renderBugTracker()}</Col>
-                </Row>
+                </Row> */}
             </Form>
         );
     }

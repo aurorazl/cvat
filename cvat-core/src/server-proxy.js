@@ -890,7 +890,7 @@
 
                 let response = null;
                 try {
-                    response = await Axios.get(`${dsBackendAPI}/cv_datasets/${id}`, {
+                    response = await Axios.get(`${dsBackendAPI}/cv_datasets/id/${id}`, {
                         proxy: config.proxy,
                     });
                 } catch (errorData) {
@@ -899,7 +899,7 @@
 
                 return response.data.data.cvDataset;
 
-                // return [{ id: 1, itemCount: 100, name: 'ocr', annotType: 'object_detection', cvDatasetFormat: 'coco', tag: 0}]
+                // return [{ id: 1, itemCount: 100, name: 'ocr', annotType: 'ocr_detection', cvDatasetFormat: 'coco', tag: 0}]
             }
 
             async function exportToPlatform(id) {
@@ -909,7 +909,7 @@
                 try {
                     response = await Axios.get(`${backendAPI}/tasks/${id}/publish`, {
                         proxy: config.proxy,
-                        // headers:{ 'Authorization': 'Bearer ' + token },
+                        headers:{ 'Authorization': 'Bearer ' + token },
                     });
                 } catch (errorData) {
                     throw generateError(errorData);

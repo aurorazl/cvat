@@ -5,6 +5,6 @@
 module.exports = {
     backendAPI: 'http://localhost:7000/api/v1',
     userBackendAPI: '/custom-user-dashboard-backend',
-    dsBackendAPI: '/custom-user-dashboard-backend/api',
+    dsBackendAPI: '/ipc_data/api',
     proxy: false,
 };
