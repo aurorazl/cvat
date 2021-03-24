@@ -33,9 +33,9 @@ yarn-error.log*
 .idea
 
 #cvat-ui development modified files,no need to commit
-/cvat-ui/package.json
-/cvat-ui/webpack.config.js
-/cvat-ui/src/cvat-core-wrapper.ts
+cvat-ui/package.json
+cvat-ui/webpack.config.js
+cvat-ui/src/cvat-core-wrapper.ts
 
 db.sqlite3*
 /tmp/
