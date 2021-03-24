@@ -43,7 +43,7 @@ def delete_tmp_dir(tmp_dir):
 
 class IMediaReader(ABC):
     def __init__(self, source_path, step, start, stop):
-        self._source_path = [i.encode('cp437').decode('gbk') for i in sorted(source_path)]
+        self._source_path = [i for i in sorted(source_path)]
         self._step = step
         self._start = start
         self._stop = stop
@@ -128,7 +128,7 @@ class DirectoryReader(ImageListReader):
         for source in source_path:
             for root, _, files in os.walk(source):
                 paths = [os.path.join(root, f) for f in files]
-                paths = filter(lambda x: get_mime(x) == 'image', paths)
+                paths = filter(lambda x: get_mime(x) == 'image' and not os.path.islink(x), paths)
                 image_paths.extend(paths)
         super().__init__(
             source_path=image_paths,

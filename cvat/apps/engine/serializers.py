@@ -127,6 +127,19 @@ class PlatformFileSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return instance.file if instance else instance
 
+class DatasetIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.PlatformFile
+        fields = ('file', )
+
+    # pylint: disable=no-self-use
+    def to_internal_value(self, data):
+        return {'file': data}
+
+    # pylint: disable=no-self-use
+    def to_representation(self, instance):
+        return instance.file if instance else instance
+
 class RqStatusSerializer(serializers.Serializer):
     state = serializers.ChoiceField(choices=[
         "Queued", "Started", "Finished", "Failed"])
@@ -177,47 +190,26 @@ class WriteOnceMixin:
 
         return extra_kwargs
 
-class DataSerializer(serializers.ModelSerializer):
+class ReloadDataSerializer(serializers.ModelSerializer):
     image_quality = serializers.IntegerField(min_value=0, max_value=100)
     use_zip_chunks = serializers.BooleanField(default=False)
     client_files = ClientFileSerializer(many=True, default=[])
     server_files = ServerFileSerializer(many=True, default=[])
     remote_files = RemoteFileSerializer(many=True, default=[])
     platform_files = PlatformFileSerializer(many=True, default=[])
+    dataset_ids = PlatformFileSerializer(many=True, default=[])
     use_cache = serializers.BooleanField(default=False)
-
     class Meta:
         model = models.Data
-        fields = ('chunk_size', 'size', 'image_quality', 'start_frame', 'stop_frame', 'frame_filter',
-            'compressed_chunk_type', 'original_chunk_type', 'client_files', 'server_files', 'remote_files','platform_files', 'use_zip_chunks',
+        fields = ('image_quality', 'start_frame', 'stop_frame', 'frame_filter',
+            'client_files', 'server_files', 'remote_files','platform_files','dataset_ids', 'use_zip_chunks',
             'use_cache')
-
-    # pylint: disable=no-self-use
-    def validate_frame_filter(self, value):
-        match = re.search("step\s*=\s*([1-9]\d*)", value)
-        if not match:
-            raise serializers.ValidationError("Invalid frame filter expression")
-        return value
-
-    # pylint: disable=no-self-use
-    def validate_chunk_size(self, value):
-        if not value > 0:
-            raise serializers.ValidationError('Chunk size must be a positive integer')
-        return value
-
-    # pylint: disable=no-self-use
-    def validate(self, data):
-        if 'start_frame' in data and 'stop_frame' in data \
-            and data['start_frame'] > data['stop_frame']:
-            raise serializers.ValidationError('Stop frame must be more or equal start frame')
-        return data
-
-    # pylint: disable=no-self-use
     def create(self, validated_data):
         client_files = validated_data.pop('client_files')
         server_files = validated_data.pop('server_files')
         remote_files = validated_data.pop('remote_files')
         platform_files = validated_data.pop('platform_files')
+        dataset_ids = validated_data.pop('dataset_ids')
         validated_data.pop('use_zip_chunks')
         validated_data.pop('use_cache')
         db_data = models.Data.objects.create(**validated_data)
@@ -245,6 +237,90 @@ class DataSerializer(serializers.ModelSerializer):
         for f in platform_files:
             platform_file = models.PlatformFile(data=db_data, **f)
             platform_file.save()
+
+        for f in dataset_ids:
+            dataset_id = models.DatasetId(data=db_data, **f)
+            dataset_id.save()
+
+        db_data.save()
+        return db_data
+
+class DataSerializer(serializers.ModelSerializer):
+    image_quality = serializers.IntegerField(min_value=0, max_value=100)
+    use_zip_chunks = serializers.BooleanField(default=False)
+    client_files = ClientFileSerializer(many=True, default=[])
+    server_files = ServerFileSerializer(many=True, default=[])
+    remote_files = RemoteFileSerializer(many=True, default=[])
+    platform_files = PlatformFileSerializer(many=True, default=[])
+    dataset_ids = PlatformFileSerializer(many=True, default=[])
+    use_cache = serializers.BooleanField(default=False)
+
+    class Meta:
+        model = models.Data
+        fields = ('chunk_size', 'size', 'image_quality', 'start_frame', 'stop_frame', 'frame_filter',
+            'compressed_chunk_type', 'original_chunk_type', 'client_files', 'server_files', 'remote_files','platform_files','dataset_ids', 'use_zip_chunks',
+            'use_cache')
+
+    # pylint: disable=no-self-use
+    def validate_frame_filter(self, value):
+        if value:
+            match = re.search("step\s*=\s*([1-9]\d*)", value)
+            if not match:
+                raise serializers.ValidationError("Invalid frame filter expression")
+            return value
+        return ""
+
+    # pylint: disable=no-self-use
+    def validate_chunk_size(self, value):
+        if not value > 0:
+            raise serializers.ValidationError('Chunk size must be a positive integer')
+        return value
+
+    # pylint: disable=no-self-use
+    def validate(self, data):
+        if 'start_frame' in data and 'stop_frame' in data \
+            and data['start_frame'] > data['stop_frame']:
+            raise serializers.ValidationError('Stop frame must be more or equal start frame')
+        return data
+
+    # pylint: disable=no-self-use
+    def create(self, validated_data):
+        client_files = validated_data.pop('client_files')
+        server_files = validated_data.pop('server_files')
+        remote_files = validated_data.pop('remote_files')
+        platform_files = validated_data.pop('platform_files')
+        dataset_ids = validated_data.pop('dataset_ids')
+        validated_data.pop('use_zip_chunks')
+        validated_data.pop('use_cache')
+        db_data = models.Data.objects.create(**validated_data)
+
+        data_path = db_data.get_data_dirname()
+        if os.path.isdir(data_path):
+            shutil.rmtree(data_path)
+
+        os.makedirs(db_data.get_compressed_cache_dirname())
+        os.makedirs(db_data.get_original_cache_dirname())
+        os.makedirs(db_data.get_upload_dirname())
+
+        for f in client_files:
+            client_file = models.ClientFile(data=db_data, **f)
+            client_file.save()
+
+        for f in server_files:
+            server_file = models.ServerFile(data=db_data, **f)
+            server_file.save()
+
+        for f in remote_files:
+            remote_file = models.RemoteFile(data=db_data, **f)
+            remote_file.save()
+
+        for f in platform_files:
+            platform_file = models.PlatformFile(data=db_data, **f)
+            platform_file.save()
+
+        for f in dataset_ids:
+            dataset_id = models.DatasetId(data=db_data, **f)
+            dataset_id.save()
 
         db_data.save()
         return db_data

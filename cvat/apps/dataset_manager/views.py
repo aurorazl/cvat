@@ -4,6 +4,7 @@
 
 import os
 import os.path as osp
+import json
 import tempfile
 from datetime import timedelta
 
@@ -21,6 +22,13 @@ from .util import current_function_name
 from cvat.apps.dataset_manager.util import unzip_archive
 from django.utils.translation import gettext
 from cvat.apps.engine.utils import setup_language
+from django.conf import settings
+from cvat.apps.engine.utils import get_dataset_path_and_format_and_tag
+import cvat.apps.dataset_manager as dm
+from cvat.apps.engine.serializers import (
+    LabeledDataSerializer,
+)
+
 
 _MODULE_NAME = __package__ + '.' + osp.splitext(osp.basename(__file__))[0]
 def log_exception(logger=None, exc_info=True):
@@ -90,19 +98,27 @@ def export_task_as_dataset(task_id, dst_format=None, server_url=None,language=No
 def export_task_annotations(task_id, dst_format=None, server_url=None,language=None):
     return export_task(task_id, dst_format, server_url=server_url, save_images=False,language=language)
 
-def export_task_annotations_to_platform(task_id, dst_format=None, server_url=None,language=None):
+def export_task_annotations_to_platform(task_id, dst_format=None, server_url=None,language=None,dataset_id=None):
     if language:
         setup_language(language)
-    path = export_task(task_id, dst_format, server_url=server_url, save_images=False)
+    rel_path,format,tag = get_dataset_path_and_format_and_tag(dataset_id)
+    if not dst_format:
+        dst_format = format
+    archive_path = export_task(task_id, dst_format, server_url=server_url, save_images=False)
+    output_directory = os.path.join(settings.DATASET_MANAGER_STORAGE_PATH, rel_path,settings.DATASET_MANAGER_PLATFORM_PUSH_SUB_PATH)
+    unzip_archive(archive_path, output_directory)
+
     db_task = Task.objects.get(pk=task_id)
-    save_path = os.path.join(db_task.data.get_export_to_platform_dirname(),"format_{}".format(dst_format.lower().split(" ")[0]))
-    unzip_archive(path, save_path)
-    os.system("cp {}/annotations/instances_default.json {}/annotations/instance.json".format(save_path, save_path))
-    path = db_task.data.platform_files.first().file
-    os.system("ln -s {} {}".format(path, os.path.join(save_path, "images")))
     db_task.data.exported = 1
     db_task.data.save()
-    db_task.save()
+    # db_task.save()
+
+    data = dm.task.get_task_data(task_id)
+    serializer = LabeledDataSerializer(data=data)
+    if serializer.is_valid(raise_exception=True):
+        with open(os.path.join(output_directory,"platform.json"), 'w') as f:
+            f.write(json.dumps(serializer.data))
+
 
 def clear_export_cache(task_id, file_path, file_ctime):
     try:

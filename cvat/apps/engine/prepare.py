@@ -214,7 +214,7 @@ class UploadedMeta(PrepareInfo):
 
 def prepare_meta(media_file, upload_dir=None, meta_dir=None, chunk_size=None):
     paths = {
-        'source_path': os.path.join(upload_dir, media_file) if upload_dir else media_file,
+        'source_path': media_file,
         'meta_path': os.path.join(meta_dir, 'meta_info.txt') if meta_dir else os.path.join(upload_dir, 'meta_info.txt'),
     }
     analyzer = AnalyzeVideo(source_path=paths.get('source_path'))

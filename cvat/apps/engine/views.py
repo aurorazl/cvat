@@ -25,13 +25,14 @@ from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg import openapi
 from drf_yasg.inspectors import CoreAPICompatInspector, NotHandled
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import mixins, serializers, status, viewsets
+from rest_framework import mixins, serializers, status, viewsets,views,generics
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from sendfile import sendfile
+from django.forms.models import model_to_dict
 
 import cvat.apps.dataset_manager as dm
 import cvat.apps.dataset_manager.views # pylint: disable=unused-import
@@ -44,7 +45,7 @@ from cvat.apps.engine.serializers import (
     DataMetaSerializer, DataSerializer, ExceptionSerializer,
     FileInfoSerializer, JobSerializer, LabeledDataSerializer,
     LogEventSerializer, ProjectSerializer, RqStatusSerializer,
-    TaskSerializer, UserSerializer, PluginsSerializer,
+    TaskSerializer, UserSerializer, PluginsSerializer,ReloadDataSerializer
 )
 from cvat.apps.engine.utils import av_scan_paths
 import requests
@@ -321,6 +322,19 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
     filterset_class = TaskFilter
     ordering_fields = ("id", "name", "owner", "status", "assignee")
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        dataset_id = request.query_params.get("dataset_id")
+        if dataset_id:
+            queryset = queryset.filter(data__dataset_id=dataset_id)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
     def get_permissions(self):
         http_method = self.request.method
         permissions = [IsAuthenticated]
@@ -555,30 +569,42 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
 
     @action(detail=True, methods=['GET',],
             serializer_class=LabeledDataSerializer)
-    def save_to_platform(self, request, pk):
+    def publish(self, request, pk):
         db_task = self.get_object()  # force to call check_object_permissions
         if request.method == 'GET':
             format_name = request.query_params.get('format')
-            if format_name:
-                result = _export_annotations_return_file_path(db_task=db_task,
-                                           rq_id="/api/v1/tasks/{}/save_to_platform/{}".format(pk, format_name),
-                                           request=request,
-                                           action=request.query_params.get("action", "").lower(),
-                                           callback=dm.views.export_task_annotations_to_platform,
-                                           format_name=format_name,
-                                           filename=request.query_params.get("filename", "").lower(),
-                                           )
-                if isinstance(result,Response):
-                    return result
-            else:
-                data = dm.task.get_task_data(pk)
-                slogger.task[pk].info("export platform {}".format(data), exc_info=True)
-            return Response(status=status.HTTP_201_CREATED)
+            return _export_annotations_to_platform(db_task=db_task,
+                                       rq_id="/api/v1/tasks/{}/publish".format(pk),
+                                       request=request,
+                                       action=request.query_params.get("action", "").lower(),
+                                       callback=dm.views.export_task_annotations_to_platform,
+                                       format_name=format_name,
+                                       filename=request.query_params.get("filename", "").lower(),
+                                       )
 
     @swagger_auto_schema(method='get', operation_summary='When task is being created the method returns information about a status of the creation process')
     @action(detail=True, methods=['GET'], serializer_class=RqStatusSerializer)
     def status(self, request, pk):
-        self.get_object() # force to call check_object_permissions
+        db_task = self.get_object() # force to call check_object_permissions
+        if task.dataset_tag_had_change(db_task.data.dataset_id,db_task.data.tag):
+            # reload
+            data = model_to_dict(db_task.data)
+            if "dataset_id" in data and data["dataset_id"]:
+                data["dataset_ids"] = [data["dataset_id"]]
+            serializer = ReloadDataSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            db_data = serializer.save()
+            db_task.data = db_data
+            db_task.save()
+            data = {k: v for k, v in serializer.data.items()}
+            data['use_zip_chunks'] = serializer.validated_data['use_zip_chunks']
+            data['use_cache'] = serializer.validated_data['use_cache']
+            if data['use_cache']:
+                db_task.data.storage_method = StorageMethodChoice.CACHE
+            if 'stop_frame' not in serializer.validated_data:
+                data['stop_frame'] = None
+            task.create(pk, data, request.LANGUAGE_CODE)
+
         response = self._get_rq_response(queue="default",
             job_id="/api/{}/tasks/{}".format(request.version, pk))
         serializer = RqStatusSerializer(data=response)
@@ -674,15 +700,16 @@ class DataViewSet(viewsets.ViewSet):
         return Response(data=data)
 
 class DataSetViewSet(viewsets.ViewSet):
+    permission_classes = ()
 
-    def list(self, request):
-        req = urlrequest.Request("http://{}/ai_arts/api/datasets/?pageNum=1&pageSize=9999".format(settings.VIP_MASTER), headers={'User-Agent': 'Mozilla/5.0',"Authorization":"Bearer "+settings.AIART_TOKEN})
-        try:
-            response=urlrequest.urlopen(req)
-            content = json.loads(response.read().decode("utf-8"))
-            return Response(content)
-        except Exception as e:
-            return Response(data=str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    def retrieve(self, request,pk):
+        queryset = Task.objects.all().filter(data__dataset_id=pk).order_by("id")
+        task_ids = []
+        for one in queryset:
+            task_ids.append(one.id)
+        if not task_ids:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(data=task_ids)
 
 
 @method_decorator(name='retrieve', decorator=swagger_auto_schema(operation_summary='Method returns details of a job'))
@@ -958,22 +985,14 @@ def _export_annotations(db_task, rq_id, request, format_name, action, callback, 
     return Response(status=status.HTTP_202_ACCEPTED)
 
 
-def _export_annotations_return_file_path(db_task, rq_id, request, format_name, action, callback, filename):
+def _export_annotations_to_platform(db_task, rq_id, request, format_name, action, callback, filename):
     if action not in {"", "download"}:
         raise serializers.ValidationError(
             "Unexpected action specified for the request")
 
-    format_desc = {f.DISPLAY_NAME: f
-        for f in dm.views.get_export_formats()}.get(format_name)
-    if format_desc is None:
-        raise serializers.ValidationError(
-            "Unknown format specified for the request")
-    elif not format_desc.ENABLED:
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
     queue = django_rq.get_queue("default")
-
     rq_job = queue.fetch_job(rq_id)
+
     if rq_job:
         last_task_update_time = timezone.localtime(db_task.updated_date)
         request_time = rq_job.meta.get('request_time', None)
@@ -982,20 +1001,8 @@ def _export_annotations_return_file_path(db_task, rq_id, request, format_name, a
             rq_job.delete()
         else:
             if rq_job.is_finished:
-                file_path = rq_job.return_value
-                if action == "download" and osp.exists(file_path):
-                    rq_job.delete()
+                return Response(status=status.HTTP_201_CREATED)
 
-                    timestamp = datetime.strftime(last_task_update_time,
-                        "%Y_%m_%d_%H_%M_%S")
-                    filename = filename or \
-                        "task_{}-{}-{}{}".format(
-                        db_task.name, timestamp,
-                        format_name, osp.splitext(file_path)[1])
-                    return file_path
-                else:
-                    if osp.exists(file_path):
-                        return file_path
             elif rq_job.is_failed:
                 exc_info = str(rq_job.exc_info)
                 rq_job.delete()
@@ -1013,7 +1020,7 @@ def _export_annotations_return_file_path(db_task, rq_id, request, format_name, a
 
     ttl = dm.views.CACHE_TTL.total_seconds()
     queue.enqueue_call(func=callback,
-        args=(db_task.id, format_name, server_address,request.LANGUAGE_CODE), job_id=rq_id,
+        args=(db_task.id, format_name, server_address,request.LANGUAGE_CODE,db_task.data.dataset_id), job_id=rq_id,
         meta={ 'request_time': timezone.localtime() },
         result_ttl=ttl, failure_ttl=ttl)
     return Response(status=status.HTTP_202_ACCEPTED)

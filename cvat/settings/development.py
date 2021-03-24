@@ -83,7 +83,8 @@ CACHEOPS_REDIS = {
     'port': 6379,        # default redis port
     'db': 1,             # SELECT non-default redis database
 }
-KFSERVING_GATEWAY = "http://192.168.1.18"
-USER_MANAGER_CENTER = os.getenv('USER_MANAGER_CENTER', 'http://192.168.1.18/custom-user-dashboard-backend')
+KFSERVING_GATEWAY = "http://58.250.250.126:6688"
+USER_MANAGER_CENTER = os.getenv('USER_MANAGER_CENTER', 'http://58.250.250.126:6688/custom-user-dashboard-backend')
 CVAT_SERVERLESS = "True"
 RESTRICTIONS["reduce_task_visibility"] = True
+DATASET_MANAGER_STORAGE_PATH = os.getenv('DATASET_MANAGER_STORAGE_PATH', "/workstate/cvat/")

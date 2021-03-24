@@ -1,7 +1,7 @@
 # Copyright (C) 2018 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
-
+import os
 import zipfile
 from tempfile import TemporaryDirectory
 
@@ -31,6 +31,11 @@ def _import(src_file, task_data):
 
             dataset = dm_env.make_importer('coco')(tmp_dir).make_dataset()
             import_dm_annotations(dataset, task_data)
+
+    elif isinstance(src_file,str) and os.path.isdir(src_file):
+        dataset = dm_env.make_importer('coco')(src_file).make_dataset()
+        import_dm_annotations(dataset, task_data)
+
     else:
         dataset = dm_env.make_extractor('coco_instances', src_file.name)
         import_dm_annotations(dataset, task_data)

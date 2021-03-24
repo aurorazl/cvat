@@ -1,7 +1,7 @@
 # Copyright (C) 2020 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
-
+import os
 import os.path as osp
 from glob import glob
 
@@ -32,10 +32,17 @@ def _export(dst_file, task_data, save_images=False):
 
 @importer(name='ImageNet', ext='ZIP', version='1.0')
 def _import(src_file, task_data):
-    with TemporaryDirectory() as tmp_dir:
-        zipfile.ZipFile(src_file).extractall(tmp_dir)
-        if glob(osp.join(tmp_dir, '*.txt')):
-            dataset = dm_env.make_importer('imagenet_txt')(tmp_dir).make_dataset()
+    if isinstance(src_file,str) and os.path.isdir(src_file):
+        if glob(osp.join(src_file, '*.txt')):
+            dataset = dm_env.make_importer('imagenet_txt')(src_file).make_dataset()
         else:
-            dataset = dm_env.make_importer('imagenet')(tmp_dir).make_dataset()
+            dataset = dm_env.make_importer('imagenet')(src_file).make_dataset()
         import_dm_annotations(dataset, task_data)
+    else:
+        with TemporaryDirectory() as tmp_dir:
+            zipfile.ZipFile(src_file).extractall(tmp_dir)
+            if glob(osp.join(tmp_dir, '*.txt')):
+                dataset = dm_env.make_importer('imagenet_txt')(tmp_dir).make_dataset()
+            else:
+                dataset = dm_env.make_importer('imagenet')(tmp_dir).make_dataset()
+            import_dm_annotations(dataset, task_data)

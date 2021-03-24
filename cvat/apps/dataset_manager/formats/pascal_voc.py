@@ -31,36 +31,41 @@ def _export(dst_file, task_data, save_images=False):
 
 @importer(name='PASCAL VOC', ext='ZIP', version='1.1')
 def _import(src_file, task_data):
-    with TemporaryDirectory() as tmp_dir:
-        Archive(src_file.name).extractall(tmp_dir)
+    if isinstance(src_file,str) and os.path.isdir(src_file):
+        import_annotations(src_file,task_data)
+    else:
+        with TemporaryDirectory() as tmp_dir:
+            Archive(src_file.name).extractall(tmp_dir)
+            import_annotations(tmp_dir, task_data)
 
-        # put label map from the task if not present
-        labelmap_file = osp.join(tmp_dir, 'labelmap.txt')
-        if not osp.isfile(labelmap_file):
-            labels = (label['name'] + ':::'
-                for _, label in task_data.meta['task']['labels'])
-            with open(labelmap_file, 'w') as f:
-                f.write('\n'.join(labels))
+def import_annotations(tmp_dir,task_data):
+    # put label map from the task if not present
+    labelmap_file = osp.join(tmp_dir, 'labelmap.txt')
+    if not osp.isfile(labelmap_file):
+        labels = (label['name'] + ':::'
+            for _, label in task_data.meta['task']['labels'])
+        with open(labelmap_file, 'w') as f:
+            f.write('\n'.join(labels))
 
-        # support flat archive layout
-        anno_dir = osp.join(tmp_dir, 'Annotations')
-        if not osp.isdir(anno_dir):
-            anno_files = glob(osp.join(tmp_dir, '**', '*.xml'), recursive=True)
-            if len(anno_files)==0:
-                raise Exception(gettext("Failed to find 'voc' format annotation"))
-            subsets_dir = osp.join(tmp_dir, 'ImageSets', 'Main')
-            os.makedirs(subsets_dir, exist_ok=True)
-            with open(osp.join(subsets_dir, 'train.txt'), 'w') as subset_file:
-                for f in anno_files:
-                    subset_file.write(osp.splitext(osp.basename(f))[0] + '\n')
-
-            os.makedirs(anno_dir, exist_ok=True)
+    # support flat archive layout
+    anno_dir = osp.join(tmp_dir, 'Annotations')
+    if not osp.isdir(anno_dir):
+        anno_files = glob(osp.join(tmp_dir, '**', '*.xml'), recursive=True)
+        if len(anno_files)==0:
+            raise Exception(gettext("Failed to find 'voc' format annotation"))
+        subsets_dir = osp.join(tmp_dir, 'ImageSets', 'Main')
+        os.makedirs(subsets_dir, exist_ok=True)
+        with open(osp.join(subsets_dir, 'train.txt'), 'w') as subset_file:
             for f in anno_files:
-                shutil.move(f, anno_dir)
+                subset_file.write(osp.splitext(osp.basename(f))[0] + '\n')
+
+        os.makedirs(anno_dir, exist_ok=True)
+        for f in anno_files:
+            shutil.move(f, anno_dir)
 
 
 
-        dataset = dm_env.make_importer('voc')(tmp_dir).make_dataset()
-        masks_to_polygons = dm_env.transforms.get('masks_to_polygons')
-        dataset = dataset.transform(masks_to_polygons)
-        import_dm_annotations(dataset, task_data)
+    dataset = dm_env.make_importer('voc')(tmp_dir).make_dataset()
+    masks_to_polygons = dm_env.transforms.get('masks_to_polygons')
+    dataset = dataset.transform(masks_to_polygons)
+    import_dm_annotations(dataset, task_data)

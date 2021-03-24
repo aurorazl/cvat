@@ -572,6 +572,15 @@ def _import(src_file, task_data):
 
             for p in anno_paths:
                 load(p, task_data)
+
+    elif isinstance(src_file,str) and os.path.isdir(src_file):
+        anno_paths = glob(osp.join(src_file, '**', '*.xml'), recursive=True)
+        if len(anno_paths) == 0:
+            raise Exception(gettext("Failed to find 'cvat' annotation"))
+
+        for p in anno_paths:
+            load(p, task_data)
+
     else:
         if not src_file.endswith(".xml"):
             raise Exception(gettext("Failed to find 'cvat' annotation"))

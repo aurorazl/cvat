@@ -1,7 +1,7 @@
 # Copyright (C) 2019 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
-
+import os
 from tempfile import TemporaryDirectory
 
 from pyunpack import Archive
@@ -26,10 +26,17 @@ def _export(dst_file, task_data, save_images=False):
 
 @importer(name='LabelMe', ext='ZIP', version='3.0')
 def _import(src_file, task_data):
-    with TemporaryDirectory() as tmp_dir:
-        Archive(src_file.name).extractall(tmp_dir)
-
-        dataset = dm_env.make_importer('label_me')(tmp_dir).make_dataset()
+    if isinstance(src_file,str) and os.path.isdir(src_file):
+        dataset = dm_env.make_importer('label_me')(src_file).make_dataset()
         masks_to_polygons = dm_env.transforms.get('masks_to_polygons')
         dataset = dataset.transform(masks_to_polygons)
         import_dm_annotations(dataset, task_data)
+
+    else:
+        with TemporaryDirectory() as tmp_dir:
+            Archive(src_file.name).extractall(tmp_dir)
+
+            dataset = dm_env.make_importer('label_me')(tmp_dir).make_dataset()
+            masks_to_polygons = dm_env.transforms.get('masks_to_polygons')
+            dataset = dataset.transform(masks_to_polygons)
+            import_dm_annotations(dataset, task_data)

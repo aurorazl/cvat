@@ -1,7 +1,7 @@
 # Copyright (C) 2019 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
-
+import os
 from tempfile import TemporaryDirectory
 
 from pyunpack import Archive
@@ -34,8 +34,13 @@ def _export(dst_file, task_data, save_images=False):
 
 @importer(name='TFRecord', ext='ZIP', version='1.0', enabled=tf_available)
 def _import(src_file, task_data):
-    with TemporaryDirectory() as tmp_dir:
-        Archive(src_file.name).extractall(tmp_dir)
-
-        dataset = dm_env.make_importer('tf_detection_api')(tmp_dir).make_dataset()
+    if isinstance(src_file,str) and os.path.isdir(src_file):
+        dataset = dm_env.make_importer('tf_detection_api')(src_file).make_dataset()
         import_dm_annotations(dataset, task_data)
+
+    else:
+        with TemporaryDirectory() as tmp_dir:
+            Archive(src_file.name).extractall(tmp_dir)
+
+            dataset = dm_env.make_importer('tf_detection_api')(tmp_dir).make_dataset()
+            import_dm_annotations(dataset, task_data)
