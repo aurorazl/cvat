@@ -10,6 +10,7 @@ from re import findall
 import rq
 import re
 import shutil
+import requests
 from traceback import print_exception
 from urllib import error as urlerror
 from urllib import parse as urlparse
@@ -20,6 +21,7 @@ from cvat.apps.engine.models import DataChoice, StorageMethodChoice
 from cvat.apps.engine.utils import av_scan_paths,setup_language
 from cvat.apps.engine.prepare import prepare_meta
 from django.utils.translation import gettext
+import cvat.apps.dataset_manager as dm
 
 import django_rq
 from django.conf import settings
@@ -28,6 +30,7 @@ from distutils.dir_util import copy_tree
 
 from . import models
 from .log import slogger
+from .utils import get_dataset_path_and_format_and_tag,dataset_tag_had_change
 
 ############################# Low Level server API
 
@@ -104,6 +107,8 @@ def _save_task_to_db(db_task):
 
     segment_step -= db_task.overlap
 
+    models.Segment.objects.filter(task=db_task).delete()
+
     for start_frame in range(0, db_task.data.size, segment_step):
         stop_frame = min(start_frame + segment_size - 1, db_task.data.size - 1)
 
@@ -149,20 +154,18 @@ def _count_files(data, meta_info_file=None,upload_dir=None):
     platform_files = []
     for path in data["platform_files"]:
         path = os.path.normpath(path)
-        path = re.sub("^/home", "/dlws/home", path)
         if '..' in path.split(os.path.sep):
             raise ValueError("Don't use '..' inside file paths")
         if not os.path.isdir(path):
             raise ValueError("Only support directory")
-        files = [os.path.join(path,i) for i in os.listdir(path) if os.path.isfile(os.path.join(path,i))]
-        platform_files.extend(files)
+        platform_files.append(path)
     data['platform_files'] = platform_files
 
     def count_files(file_mapping, counter):
         for file_name, full_path in file_mapping.items():
             mime = get_mime(full_path)
             if mime in counter:
-                counter[mime].append(file_name)
+                counter[mime].append(full_path)
             elif findall('meta_info.txt$', file_name):
                 meta_info_file.append(file_name)
             else:
@@ -191,6 +194,7 @@ def _count_files(data, meta_info_file=None,upload_dir=None):
 def _validate_data(counter, meta_info_file=None):
     unique_entries = 0
     multiple_entries = 0
+
     for media_type, media_config in MEDIA_TYPES.items():
         if counter[media_type]:
             if media_config['unique']:
@@ -250,10 +254,30 @@ def _create_thread(tid, data,language):
     slogger.glob.info("create task #{}".format(tid))
     slogger.glob.info("create task #{}".format(data))
     setup_language(language)
+
     db_task = models.Task.objects.select_for_update().get(pk=tid)
     db_data = db_task.data
     if db_task.data.size != 0:
         raise NotImplementedError("Adding more data is not implemented")
+
+    # support for dataset ids
+    dataset_paths = []
+    FORMAT = None
+    tag = None
+
+    for dataset_id in data["dataset_ids"]:
+        rel_path,format,tag = get_dataset_path_and_format_and_tag(dataset_id)
+        if FORMAT and format and format!=FORMAT:
+            raise Exception(gettext('not support mutli format'))
+        FORMAT = format
+        dataset_paths.append(os.path.join(settings.DATASET_MANAGER_STORAGE_PATH,rel_path))
+        db_data.dataset_id = dataset_id
+
+    db_data.tag = tag
+
+    if "platform_files" not in data:
+        data["platform_files"] = []
+    data["platform_files"] += dataset_paths
 
     upload_dir = db_data.get_upload_dirname()
 
@@ -267,11 +291,11 @@ def _create_thread(tid, data,language):
         assert settings.USE_CACHE and db_data.storage_method == StorageMethodChoice.CACHE, \
             "File with meta information can be uploaded if 'Use cache' option is also selected"
 
-    if data['server_files']:
-        _copy_data_from_share(data['server_files'], upload_dir)
-
-    if data['platform_files']:
-        _copy_data_for_full_path_files(data['platform_files'], upload_dir)
+    # if data['server_files']:
+    #     _copy_data_from_share(data['server_files'], upload_dir)
+    #
+    # if data['platform_files']:
+    #     _copy_data_for_full_path_files(data['platform_files'], upload_dir)
 
     av_scan_paths(upload_dir)
 
@@ -287,7 +311,7 @@ def _create_thread(tid, data,language):
             if extractor is not None:
                 raise Exception(gettext('Combined data types are not supported'))
             extractor = MEDIA_TYPES[media_type]['extractor'](
-                source_path=[os.path.join(upload_dir, f) for f in media_files],
+                source_path=media_files,
                 step=db_data.get_frame_step(),
                 start=db_data.start_frame,
                 stop=data['stop_frame'],
@@ -346,7 +370,7 @@ def _create_thread(tid, data,language):
                                     os.path.join(upload_dir, meta_info_file[0]),
                                     db_data.get_meta_path()
                                 )
-                            meta_info = UploadedMeta(source_path=os.path.join(upload_dir, media_files[0]),
+                            meta_info = UploadedMeta(source_path=media_files[0],
                                                      meta_path=db_data.get_meta_path())
                             meta_info.check_seek_key_frames()
                             meta_info.check_frames_numbers()
@@ -375,7 +399,7 @@ def _create_thread(tid, data,language):
                     video_size = meta_info.frame_sizes
 
                     db_data.size = len(range(db_data.start_frame, min(data['stop_frame'] + 1 if data['stop_frame'] else all_frames, all_frames), db_data.get_frame_step()))
-                    video_path = os.path.join(upload_dir, media_files[0])
+                    video_path = media_files[0]
                 except Exception as ex:
                     db_data.storage_method = StorageMethodChoice.FILE_SYSTEM
                     if os.path.exists(db_data.get_meta_path()):
@@ -397,7 +421,8 @@ def _create_thread(tid, data,language):
 
                     db_images.extend([
                         models.Image(data=db_data,
-                            path=os.path.relpath(path, upload_dir),
+                            path=os.path.basename(path),
+                            full_path=path,
                             frame=frame, width=w, height=h)
                         for (path, frame), (w, h) in zip(chunk_paths, img_sizes)
                     ])
@@ -449,3 +474,10 @@ def _create_thread(tid, data,language):
 
     slogger.glob.info("Found frames {} for Data #{}".format(db_data.size, db_data.id))
     _save_task_to_db(db_task)
+
+    if dataset_paths:
+        try:
+            dm.task.import_task_annotations_by_path(tid, dataset_paths[0], FORMAT,language)
+        except Exception as e:
+            slogger.glob.exception(e)
+

@@ -68,6 +68,8 @@ class Data(models.Model):
         default=DataChoice.IMAGESET)
     storage_method = models.CharField(max_length=15, choices=StorageMethodChoice.choices(), default=StorageMethodChoice.FILE_SYSTEM)
     exported = models.PositiveIntegerField(default=0)
+    tag = models.CharField(max_length=256, default=None,blank=True,null=True)
+    dataset_id = models.PositiveIntegerField(default=None,blank=True,null=True)
 
     class Meta:
         default_permissions = ()
@@ -143,6 +145,7 @@ class Image(models.Model):
     frame = models.PositiveIntegerField()
     width = models.PositiveIntegerField()
     height = models.PositiveIntegerField()
+    full_path = models.CharField(max_length=1024, default='')
 
     class Meta:
         default_permissions = ()
@@ -244,6 +247,14 @@ class RemoteFile(models.Model):
 # For Platform
 class PlatformFile(models.Model):
     data = models.ForeignKey(Data, on_delete=models.CASCADE, null=True, related_name='platform_files')
+    file = models.CharField(max_length=1024)
+
+    class Meta:
+        default_permissions = ()
+
+# For Platform
+class DatasetId(models.Model):
+    data = models.ForeignKey(Data, on_delete=models.CASCADE, null=True, related_name='dataset_ids')
     file = models.CharField(max_length=1024)
 
     class Meta:

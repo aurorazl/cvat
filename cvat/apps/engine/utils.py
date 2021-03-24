@@ -87,3 +87,25 @@ def setup_language(user_language):
     if user_language:
         slogger.glob.info("set current thread to language: {}".format(user_language))
         translation.activate(user_language)
+
+
+def get_dataset_path_and_format_and_tag(dataset_id):
+    return "./data/data/8/raw","OCR 1.0","sdfasdasd1"
+    dataset_manager_url = settings.DATASET_MANAGER_URL
+    token = settings.AIART_TOKEN
+    if isinstance(token,bytes):
+        token = token.decode()
+    response = requests.get(url="{}/api/cv_datasets/{}".format(dataset_manager_url,dataset_id),headers={"Authorization": "Bearer " + token},timeout=5)
+    response.raise_for_status()
+    assert len(response.json()["cvDataset"])==1
+    assert "storagePath" in response.json()["cvDataset"][0]
+    assert "cvDatasetFormat" in response.json()["cvDataset"][0]
+    assert "tag" in response.json()["cvDataset"][0]
+    return response.json()["cvDataset"][0]["storagePath"],response.json()["cvDataset"][0]["cvDatasetFormat"],response.json()["cvDataset"][0]["tag"]
+
+def dataset_tag_had_change(dataset_id,saved_tag):
+    rel_path,format,tag = get_dataset_path_and_format_and_tag(dataset_id)
+    if saved_tag and tag != saved_tag:
+        slogger.glob.info("dataset {} change from {} to {}".format(dataset_id,saved_tag,tag))
+        return True
+    return False

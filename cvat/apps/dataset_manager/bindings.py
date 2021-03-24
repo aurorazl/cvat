@@ -31,7 +31,7 @@ class TaskData:
     Tag = namedtuple('Tag', 'frame, label, attributes, source, group')
     Tag.__new__.__defaults__ = (0, )
     Frame = namedtuple(
-        'Frame', 'idx, frame, name, width, height, labeled_shapes, tags')
+        'Frame', 'idx, frame, name, width, height, labeled_shapes, tags,full_path')
 
     def __init__(self, annotation_ir, db_task, host='', create_callback=None):
         self._annotation_ir = annotation_ir
@@ -126,6 +126,7 @@ class TaskData:
                 "path": db_image.path,
                 "width": db_image.width,
                 "height": db_image.height,
+                "full_path":db_image.full_path
             } for db_image in self._db_task.data.images.all()}
 
         self._frame_mapping = {
@@ -254,6 +255,7 @@ class TaskData:
                     idx=idx,
                     frame=frame,
                     name=frame_info['path'],
+                    full_path=frame_info['full_path'],
                     height=frame_info["height"],
                     width=frame_info["width"],
                     labeled_shapes=[],

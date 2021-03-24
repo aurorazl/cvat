@@ -340,7 +340,7 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = os.getenv('TZ', 'Etc/UTC')
 VIP_MASTER = os.getenv('VIP_MASTER', '127.0.0.1')
-AIART_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjMwMDAwLCJleHAiOjE5MTU2NzExODEsInVzZXJuYW1lIjoiYWRtaW4ifQ.JnyxZ5xOTyQeWFeRMH1badCzxpJ1rc3MF5Wk_eaLgAs"
+AIART_TOKEN = os.getenv("AIART_TOKEN","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjMwMDAwLCJleHAiOjE5MTU2NzExODEsInVzZXJuYW1lIjoiYWRtaW4ifQ.JnyxZ5xOTyQeWFeRMH1badCzxpJ1rc3MF5Wk_eaLgAs")
 
 USE_I18N = True
 
@@ -386,7 +386,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'standard': {
-            'format': '[%(asctime)s] %(levelname)s %(name)s: %(message)s'
+            'format': '[%(asctime)s] %(filename)s:%(lineno)d %(levelname)s %(name)s: %(message)s'
         }
     },
     'handlers': {
@@ -484,3 +484,7 @@ USER_MANAGER_CENTER = os.getenv('USER_MANAGER_CENTER', 'http://localhost/custom-
 KFSERVING_GATEWAY = os.getenv('KFSERVING_GATEWAY', "http://localhost")
 
 COMPRESS_OFFLINE = True
+
+DATASET_MANAGER_URL = os.getenv('DATASET_MANAGER_URL', "http://localhost")
+DATASET_MANAGER_STORAGE_PATH = os.getenv('DATASET_MANAGER_STORAGE_PATH', "/data")
+DATASET_MANAGER_PLATFORM_PUSH_SUB_PATH = os.getenv('DATASET_MANAGER_PLATFORM_PUSH_SUB_PATH', "annotations")

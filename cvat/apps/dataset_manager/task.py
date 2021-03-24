@@ -761,6 +761,14 @@ def import_task_annotations(task_id, src_file, format_name,language):
         task.import_annotations(f, importer)
 
 @transaction.atomic
+def import_task_annotations_by_path(task_id, src_path, format_name,language):
+    setup_language(language)
+    task = TaskAnnotation(task_id)
+    task.init_from_db()
+    importer = make_importer(format_name)
+    task.import_annotations(src_path, importer)
+
+@transaction.atomic
 def import_job_annotations(job_id, src_file, format_name,language):
     setup_language(language)
     job = JobAnnotation(job_id)
