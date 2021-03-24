@@ -885,21 +885,22 @@
             }
 
             // 获取数据集管理系统中指定数据集
-            async function getDatasetFromDM(id) {
+            async function getDatasetFromDM(dsId) {
                 const { dsBackendAPI } = config;
 
                 let response = null;
                 try {
-                    response = await Axios.get(`${dsBackendAPI}/cv_datasets/id/${id}`, {
+                    response = await Axios.get(`${dsBackendAPI}/cv_datasets/id/${dsId}`, {
                         proxy: config.proxy,
+                        // headers:{ 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjMwMDAxLCJ1c2VyTmFtZSI6Imppbmxtc2Z0IiwiZXhwIjozMDAwMDAwMDAwMDAsImlhdCI6MTU5NTg0NTY3MH0.gcgxtfiIa7VlaNMi9DWvvMX54SmxldWoqi257ta_U4Y' }
                     });
                 } catch (errorData) {
                     throw generateError(errorData);
                 }
 
-                return response.data.data.cvDataset;
+                return response.data.data;
 
-                // return [{ id: 1, itemCount: 100, name: 'ocr', annotType: 'ocr_detection', cvDatasetFormat: 'coco', tag: 0}]
+                // return { id: 1, itemCount: 100, name: 'ocr', annotType: 'ocr_detection', cvDatasetFormat: 'coco', tag: 0};
             }
 
             async function exportToPlatform(id) {

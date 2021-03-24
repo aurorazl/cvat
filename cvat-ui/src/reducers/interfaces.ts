@@ -545,5 +545,5 @@ export interface PlatformState {
     datasets: DatasetInfo[];
 }
 export interface DatasetState {
-    datasets: HwDatasetInfo[];
+    dataset: null | HwDatasetInfo;
 }

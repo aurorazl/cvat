@@ -52,7 +52,7 @@ interface Props {
     withRemote: boolean;
     treeData: TreeNodeNormal[];
     platformData: DatasetInfo[];
-    datasetData: HwDatasetInfo[];
+    datasetData: HwDatasetInfo | null;
     onLoadData: (key: string, success: () => void, failure: () => void) => void;
     onLoadPlatformData: (success: () => void, failure: () => void) => void;
     onChangeDataset(value: string): void;
@@ -313,9 +313,9 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
     }
 
     private renderDatasetSelector(): JSX.Element {
-        const { files } = this.state;
+        // const { files } = this.state;
         const { datasetData, t, dsId } = this.props;
-        const dsName = (datasetData && datasetData.length > 0) ? datasetData[0].name : '';
+        const dsName = datasetData ? datasetData.name : '';
 
         return (
             <Tabs.TabPane key='dataset' tab={t('Dataset')}>
@@ -323,10 +323,10 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
                     value={dsName}
                     disabled
                 />
-                {datasetData && datasetData.length > 0 && !!(datasetData[0].itemCount) && (
+                {datasetData && !!(datasetData.itemCount) && (
                     <>
                         <br />
-                        <Text className='cvat-text-color'>{t('${files.dataset.length} files selected').replace('${files.dataset.length}', `${datasetData[0].itemCount}`)}</Text>
+                        <Text className='cvat-text-color'>{t('${files.dataset.length} files selected').replace('${files.dataset.length}', `${datasetData.itemCount}`)}</Text>
                     </>
                 )}
             </Tabs.TabPane>
@@ -365,10 +365,10 @@ class FileManager extends React.PureComponent<Props & WithTranslation, State & S
             const { files } = this.state;
             const { datasetData } = this.props;
 
-            datasetData && datasetData[0] && this.setState({
+            datasetData && this.setState({
                 files: {
                     ...files,
-                    dataset: [datasetData[0].id],
+                    dataset: [datasetData.id],
                 },
             });
         }

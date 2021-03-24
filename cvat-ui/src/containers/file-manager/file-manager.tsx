@@ -21,7 +21,7 @@ interface OwnProps {
 interface StateToProps {
     treeData: TreeNodeNormal[];
     platformData: DatasetInfo[];
-    datasetData: HwDatasetInfo[],
+    datasetData: HwDatasetInfo | null,
     dsId: number | undefined;
 }
 
@@ -48,13 +48,13 @@ function mapStateToProps(state: CombinedState): StateToProps {
 
     const { root } = state.share;
     const { datasets } = state.platform;
-    const { datasets: hwDatasets } = state.dataset;
-    const dsId = hwDatasets.length > 0 ? hwDatasets[0].id : undefined;
+    const { dataset: hwDataset } = state.dataset;
+    const dsId = hwDataset ? hwDataset.id : undefined;
 
     return {
         treeData: convert([root], ''),
         platformData: datasets || [],
-        datasetData: hwDatasets || [],
+        datasetData: hwDataset || null,
         dsId,
     };
 }

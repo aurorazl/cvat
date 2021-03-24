@@ -17,7 +17,7 @@ export enum DatasetActionTypes {
 
 const datasetActions = {
     getDatasetData: () => createAction(DatasetActionTypes.GET_DS_DATA),
-    getDatasetDataSuccess: (values: HwDatasetInfo[]) =>
+    getDatasetDataSuccess: (values: HwDatasetInfo) =>
         createAction(DatasetActionTypes.GET_DATASET_DATA_SUCCESS, {
             values,
         }),
@@ -30,10 +30,10 @@ export function getDatasetDataAsync(dsId: number | undefined, success: () => voi
     return async (dispatch): Promise<void> => {
         try {
             dispatch(datasetActions.getDatasetData());
-            const values = await core.tasks.getDataset(dsId);
-            const datasets = values.map((d: any)=>({id: d.id, name: d.name, cvDatasetFormat: d.cvDatasetFormat, annotType: d.annotType, itemCount: d.itemCount, tag: d.tag}));
+            const {id, name, cvDatasetFormat, annotType, itemCount, tag } = await core.tasks.getDataset(dsId);
+            const dataset = {id, name, cvDatasetFormat, annotType, itemCount, tag };
             success();
-            dispatch(datasetActions.getDatasetDataSuccess(datasets as HwDatasetInfo[]));
+            dispatch(datasetActions.getDatasetDataSuccess(dataset as HwDatasetInfo));
         } catch (error) {
             failure();
             dispatch(datasetActions.getDatasetDataFailed(error));

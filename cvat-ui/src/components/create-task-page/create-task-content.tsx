@@ -37,24 +37,24 @@ interface Props extends WithTranslation {
 }
 
 interface StateToProps {
-    datasets: HwDatasetInfo[];
+    dataset: HwDatasetInfo | null;
 }
 
 interface DispatchToProps {
-    onFetchDsInfo: (dsId: number | undefined, success: () => void, failure: () => void) => HwDatasetInfo[];
+    onFetchDsInfo: (dsId: number | undefined, success: () => void, failure: () => void) => HwDatasetInfo;
 }
 
 function mapDispatchToProps(dispatch: any): DispatchToProps {
     return {
-        onFetchDsInfo: (dsId: number | undefined, success: () => void, failure: () => void): HwDatasetInfo[] => dispatch(getDatasetDataAsync(dsId, success, failure)),
+        onFetchDsInfo: (dsId: number | undefined, success: () => void, failure: () => void): HwDatasetInfo => dispatch(getDatasetDataAsync(dsId, success, failure)),
     };
 }
 
 function mapStateToProps(state: CombinedState, own: Props): StateToProps {
-    const { datasets } = state.dataset;
+    const { dataset } = state.dataset;
 
     return {
-        datasets,
+        dataset,
     };
 }
 
@@ -99,9 +99,9 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps<
             //         dataset: datasets,
             //     },
             // });
-            const { datasets } = this.props;
+            const { dataset } = this.props;
             // OCR默认label
-            if (datasets && datasets.length > 0 && (datasets[0].annotType.startsWith('ocr'))) {
+            if (dataset && dataset.annotType.startsWith('ocr')) {
                 this.setState({
                     labels: [
                         {
@@ -229,9 +229,7 @@ class CreateTaskContent extends React.PureComponent<Props & RouteComponentProps<
     };
 
     private renderBasicBlock(): JSX.Element {
-        const { datasets } = this.props;
-
-        const ds = datasets.length > 0 ? datasets[0] : null;
+        const { dataset: ds } = this.props;
 
         // 名称规则：需要将(多个)空格替换成_
         const name = ds ? `${ds.name}_${ds.annotType}_${ds.cvDatasetFormat}`.replace(/\s+_*/g, '_') : '';
