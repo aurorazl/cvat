@@ -8,7 +8,7 @@ import { AuthActionTypes, AuthActions } from 'actions/auth-actions';
 import { DatasetState } from './interfaces';
 
 const defaultState: DatasetState = {
-    datasets: [],
+    dataset: null,
 };
 
 export default function (
@@ -20,7 +20,7 @@ export default function (
             const { values } = action.payload;
 
             return {
-                datasets: values
+                dataset: values
             };
         }
         case BoundariesActionTypes.RESET_AFTER_ERROR:
