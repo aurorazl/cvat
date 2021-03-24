@@ -44,6 +44,14 @@ module.exports = {
                 changeOrigin: true,
                 secure: false,
             },
+            '/ipc_data/api': {
+                target: 'http://192.168.1.185:8018/api',
+                changeOrigin: true,
+                secure: false,
+                pathRewrite: {
+                    '^/ipc_data/api': '',
+                },
+            },
         },
     },
     resolve: {

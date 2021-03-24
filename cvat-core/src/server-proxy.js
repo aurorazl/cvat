@@ -892,7 +892,6 @@
                 try {
                     response = await Axios.get(`${dsBackendAPI}/cv_datasets/id/${dsId}`, {
                         proxy: config.proxy,
-                        // headers:{ 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjMwMDAxLCJ1c2VyTmFtZSI6Imppbmxtc2Z0IiwiZXhwIjozMDAwMDAwMDAwMDAsImlhdCI6MTU5NTg0NTY3MH0.gcgxtfiIa7VlaNMi9DWvvMX54SmxldWoqi257ta_U4Y' }
                     });
                 } catch (errorData) {
                     throw generateError(errorData);
