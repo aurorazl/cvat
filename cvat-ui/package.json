@@ -5,7 +5,7 @@
   "main": "src/index.tsx",
   "scripts": {
     "build": "webpack --config ./webpack.config.js",
-    "start": "cross-env REACT_APP_API_URL=http://58.250.250.126:6688 webpack-dev-server --config ./webpack.config.js --mode=development",
+    "start": "cross-env REACT_APP_API_URL=http://localhost:8001 webpack-dev-server --config ./webpack.config.js --mode=development",
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch",
     "lint": "eslint './src/**/*.{ts,tsx}'",

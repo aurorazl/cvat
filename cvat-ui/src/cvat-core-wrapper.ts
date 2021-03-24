@@ -6,13 +6,13 @@ import _cvat from 'cvat-core/src/api';
 
 const cvat: any = _cvat;
 
-// development
-cvat.config.backendAPI = '/annotations/api/v1';
+// // development
+// cvat.config.backendAPI = '/annotations/api/v1';
 // production
-// cvat.config.backendAPI =
-//     typeof process.env.REACT_APP_API_URL === 'undefined' ?
-//         '/annotations/api/v1' :
-//         `${process.env.REACT_APP_API_URL}/annotations/api/v1`;
+cvat.config.backendAPI =
+    typeof process.env.REACT_APP_API_URL === 'undefined' ?
+        '/annotations/api/v1' :
+        `${process.env.REACT_APP_API_URL}/annotations/api/v1`;
 
 export default function getCore(): any {
     return cvat;
