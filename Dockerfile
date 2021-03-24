@@ -53,10 +53,14 @@ RUN apt-get update && \
         poppler-utils \
         curl \
         unrar \
-        vim
+        vim \
+        sudo \
+        libgeos-dev \
+        postgresql-client-12\
+        postgresql-client-common
 
 RUN python3 -m pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/ && \
-    python3 -m pip install --no-cache-dir -U pip==20.0.1 setuptools==49.6.0 wheel==0.35.1 && \
+    python3 -m pip install --no-cache-dir -U pip setuptools wheel && \
     ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata && \
     rm -rf /var/lib/apt/lists/* && \
@@ -71,7 +75,8 @@ RUN adduser --shell /bin/bash --disabled-password --gecos "" ${USER} && \
         echo export "GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30\"" >> ${HOME}/.bashrc; \
     else \
         echo export "GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o ProxyCommand='nc -X 5 -x ${socks_proxy} %h %p'\"" >> ${HOME}/.bashrc; \
-    fi
+    fi && \
+    adduser ${USER} sudo && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Install and initialize CVAT, copy all necessary files
 COPY cvat/requirements/ /tmp/requirements/

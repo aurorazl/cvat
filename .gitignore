@@ -39,3 +39,5 @@ yarn-error.log*
 
 db.sqlite3*
 /tmp/
+.vscode
+cvat/settings/development.py

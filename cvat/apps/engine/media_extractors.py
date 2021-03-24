@@ -43,7 +43,7 @@ def delete_tmp_dir(tmp_dir):
 
 class IMediaReader(ABC):
     def __init__(self, source_path, step, start, stop):
-        self._source_path = [i.encode('cp437').decode('gbk') for i in sorted(source_path)]
+        self._source_path = [i for i in sorted(source_path)]
         self._step = step
         self._start = start
         self._stop = stop
