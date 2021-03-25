@@ -9,7 +9,7 @@ import sys
 import traceback
 import subprocess
 import os
-
+import requests
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.utils import translation
@@ -90,18 +90,17 @@ def setup_language(user_language):
 
 
 def get_dataset_path_and_format_and_tag(dataset_id):
-    return "./data/data/8/raw","OCR 1.0","sdfasdasd1"
     dataset_manager_url = settings.DATASET_MANAGER_URL
     token = settings.AIART_TOKEN
     if isinstance(token,bytes):
         token = token.decode()
-    response = requests.get(url="{}/api/cv_datasets/{}".format(dataset_manager_url,dataset_id),headers={"Authorization": "Bearer " + token},timeout=5)
+    response = requests.get(url="{}/api/cv_datasets/id/{}".format(dataset_manager_url,dataset_id),headers={"Authorization": "Bearer " + token},timeout=5)
     response.raise_for_status()
-    assert len(response.json()["cvDataset"])==1
-    assert "storagePath" in response.json()["cvDataset"][0]
-    assert "cvDatasetFormat" in response.json()["cvDataset"][0]
-    assert "tag" in response.json()["cvDataset"][0]
-    return response.json()["cvDataset"][0]["storagePath"],response.json()["cvDataset"][0]["cvDatasetFormat"],response.json()["cvDataset"][0]["tag"]
+    assert "storagePath" in response.json()["data"]
+    assert "cvDatasetFormat" in response.json()["data"]
+    assert "tag" in response.json()["data"]
+    bind_dataset(dataset_id)
+    return response.json()["data"]["storagePath"],response.json()["data"]["cvDatasetFormat"],response.json()["data"]["tag"]
 
 def dataset_tag_had_change(dataset_id,saved_tag):
     rel_path,format,tag = get_dataset_path_and_format_and_tag(dataset_id)
@@ -109,3 +108,17 @@ def dataset_tag_had_change(dataset_id,saved_tag):
         slogger.glob.info("dataset {} change from {} to {}".format(dataset_id,saved_tag,tag))
         return True
     return False
+
+def bind_dataset(dataset_id):
+    dataset_manager_url = settings.DATASET_MANAGER_URL
+    token = settings.AIART_TOKEN
+    response = requests.post(url="{}/api/cv_datasets/id/{}/bind".format(dataset_manager_url, dataset_id),
+                            headers={"Authorization": "Bearer " + token}, timeout=5)
+    response.raise_for_status()
+
+def unbind_dataset(dataset_id,labels):
+    dataset_manager_url = settings.DATASET_MANAGER_URL
+    token = settings.AIART_TOKEN
+    response = requests.post(url="{}/api/cv_datasets/id/{}/unbind".format(dataset_manager_url, dataset_id),
+                            headers={"Authorization": "Bearer " + token}, timeout=5,json={"labelList":labels})
+    response.raise_for_status()
