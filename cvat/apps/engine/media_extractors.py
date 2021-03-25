@@ -188,7 +188,7 @@ class ZipReader(ImageListReader):
         # self._zip_source.extractall(path=exctract_path)
         file_list = []
         for fn in self._zip_source.namelist():
-            ex_path = os.path.join(exctract_path,fn.encode('cp437').decode('gbk'))
+            ex_path = os.path.join(exctract_path,fn)
             extracted_path = Path(self._zip_source.extract(fn,path=exctract_path))
             extracted_path.rename(ex_path)
             if get_mime(ex_path) == 'image':
@@ -199,15 +199,15 @@ class ZipReader(ImageListReader):
         self._zip_source.close()
 
     def get_preview(self):
-        io_image = io.BytesIO(self._zip_source.read(self._source_path[0].encode('gbk').decode('cp437')))
+        io_image = io.BytesIO(self._zip_source.read(self._source_path[0]))
         return self._get_preview(io_image)
 
     def get_image_size(self, i):
-        img = Image.open(io.BytesIO(self._zip_source.read(self._source_path[i].encode('gbk').decode('cp437'))))
+        img = Image.open(io.BytesIO(self._zip_source.read(self._source_path[i])))
         return img.width, img.height
 
     def get_image(self, i):
-        return io.BytesIO(self._zip_source.read(self._source_path[i].encode('gbk').decode('cp437')))
+        return io.BytesIO(self._zip_source.read(self._source_path[i]))
 
     def get_path(self, i):
         if  self._zip_source.filename:
@@ -219,7 +219,7 @@ class ZipReader(ImageListReader):
         # self._zip_source.extractall(os.path.dirname(self._zip_source.filename))
         exctract_path = os.path.dirname(self._zip_source.filename)
         for fn in self._zip_source.namelist():
-            ex_path = os.path.join(exctract_path, fn.encode('cp437').decode('gbk'))
+            ex_path = os.path.join(exctract_path, fn)
             extracted_path = Path(self._zip_source.extract(fn, path=exctract_path))
             extracted_path.rename(ex_path)
         os.remove(self._zip_source.filename)
