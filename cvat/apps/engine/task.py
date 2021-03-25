@@ -154,8 +154,7 @@ def _count_files(data, meta_info_file=None,upload_dir=None):
             raise ValueError("Don't use '..' inside file paths")
         if not os.path.isdir(path):
             raise ValueError("Only support directory")
-        files = [os.path.join(path,i) for i in os.listdir(path) if os.path.isfile(os.path.join(path,i))]
-        platform_files.extend(files)
+        platform_files.append(path)
     data['platform_files'] = platform_files
 
     def count_files(file_mapping, counter):
