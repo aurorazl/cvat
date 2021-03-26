@@ -254,7 +254,7 @@ function HeaderContainer(props: Props): JSX.Element {
                 {/* <Icon className='cvat-logo-icon' component={ApulisLogo} /> */}
                 <h1 className='cvat-logo-h1'>{t('Apulis Data Annotation Platform')}</h1>
 
-                <Button
+                {/* <Button
                     className='cvat-header-button'
                     type='link'
                     value='tasks'
@@ -266,7 +266,7 @@ function HeaderContainer(props: Props): JSX.Element {
                     style={{marginLeft: 20}}
                 >
                     {t('Tasks')}
-                </Button>
+                </Button> */}
 
                 {isModelsPluginActive && (
                     <Button
