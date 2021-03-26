@@ -1777,7 +1777,7 @@
             server_files: this.serverFiles,
             remote_files: this.remoteFiles,
             platform_files: this.platformFiles,
-            dataset_files: this.datasetFiles,
+            dataset_ids: this.datasetFiles,
             image_quality: this.imageQuality,
             use_zip_chunks: this.useZipChunks,
             use_cache: this.useCache,
