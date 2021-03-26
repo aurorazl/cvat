@@ -415,6 +415,7 @@ export function createTaskAsync(data: any): ThunkAction<Promise<void>, {}, {}, A
         taskInstance.serverFiles = data.files.share;
         taskInstance.remoteFiles = data.files.remote;
         taskInstance.platformFiles = data.files.platform;
+        taskInstance.datasetFiles = data.files.dataset;
 
         if (data.advanced.repository) {
             const [gitPlugin] = (await cvat.plugins.list()).filter((plugin: any): boolean => plugin.name === 'Git');
