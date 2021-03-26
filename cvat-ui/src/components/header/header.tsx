@@ -268,7 +268,7 @@ function HeaderContainer(props: Props): JSX.Element {
                     {t('Tasks')}
                 </Button> */}
 
-                {isModelsPluginActive && (
+                {/* {isModelsPluginActive && (
                     <Button
                         className='cvat-header-button'
                         type='link'
@@ -281,8 +281,8 @@ function HeaderContainer(props: Props): JSX.Element {
                     >
                         {t('Models')}
                     </Button>
-                )}
-                {isAnalyticsPluginActive && (
+                )} */}
+                {/* {isAnalyticsPluginActive && (
                     <Button
                         className='cvat-header-button'
                         type='link'
@@ -296,7 +296,7 @@ function HeaderContainer(props: Props): JSX.Element {
                     >
                         {t('Analytics')}
                     </Button>
-                )}
+                )} */}
             </div>
             <div className='cvat-right-header'>
                 {/* <Button
