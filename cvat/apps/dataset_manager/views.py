@@ -13,7 +13,7 @@ from django.utils import timezone
 
 import cvat.apps.dataset_manager.task as task
 from cvat.apps.engine.log import slogger
-from cvat.apps.engine.models import Task
+from cvat.apps.engine.models import Task,Label
 from datumaro.cli.util import make_file_name
 from datumaro.util import to_snake_case
 
@@ -23,7 +23,7 @@ from cvat.apps.dataset_manager.util import unzip_archive
 from django.utils.translation import gettext
 from cvat.apps.engine.utils import setup_language
 from django.conf import settings
-from cvat.apps.engine.utils import get_dataset_path_and_format_and_tag
+from cvat.apps.engine.utils import get_dataset_path_and_format_and_tag,unbind_dataset
 import cvat.apps.dataset_manager as dm
 from cvat.apps.engine.serializers import (
     LabeledDataSerializer,
@@ -99,6 +99,7 @@ def export_task_annotations(task_id, dst_format=None, server_url=None,language=N
     return export_task(task_id, dst_format, server_url=server_url, save_images=False,language=language)
 
 def export_task_annotations_to_platform(task_id, dst_format=None, server_url=None,language=None,dataset_id=None):
+    labels = []
     if language:
         setup_language(language)
     rel_path,format,tag = get_dataset_path_and_format_and_tag(dataset_id)
@@ -113,12 +114,17 @@ def export_task_annotations_to_platform(task_id, dst_format=None, server_url=Non
     db_task.data.save()
     # db_task.save()
 
+
     data = dm.task.get_task_data(task_id)
     serializer = LabeledDataSerializer(data=data)
     if serializer.is_valid(raise_exception=True):
         with open(os.path.join(output_directory,"platform.json"), 'w') as f:
             f.write(json.dumps(serializer.data))
 
+    query = Label.objects.filter(task=db_task).all()
+    for one in query:
+        labels.append(one.name)
+    unbind_dataset(dataset_id,labels)
 
 def clear_export_cache(task_id, file_path, file_ctime):
     try:
