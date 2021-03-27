@@ -105,7 +105,10 @@ def export_task_annotations_to_platform(task_id, dst_format=None, server_url=Non
     rel_path,format,tag = get_dataset_path_and_format_and_tag(dataset_id)
     if not dst_format:
         dst_format = format
-    archive_path = export_task(task_id, dst_format, server_url=server_url, save_images=False)
+    save_images = False
+    if str(dst_format).lower().startswith("imagenet"):
+        save_images = True
+    archive_path = export_task(task_id, dst_format, server_url=server_url, save_images=save_images)
     output_directory = os.path.join(settings.DATASET_MANAGER_STORAGE_PATH, rel_path,settings.DATASET_MANAGER_PLATFORM_PUSH_SUB_PATH)
     unzip_archive(archive_path, output_directory)
 
