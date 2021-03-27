@@ -904,6 +904,7 @@
                 client_files: [],
                 remote_files: [],
                 platform_files: [],
+                dataset_files: [],
             });
 
             if (Array.isArray(initialData.segments)) {
@@ -1288,6 +1289,34 @@
                         }
 
                         Array.prototype.push.apply(data.files.platform_files, platformFiles);
+                    },
+                },
+                /**
+                    * List of files from ai platform
+                    * @name datasetFiles
+                    * @type {File[]}
+                    * @memberof module:API.cvat.classes.Task
+                    * @instance
+                    * @throws {module:API.cvat.exceptions.ArgumentError}
+                */
+                datasetFiles: {
+                    get: () => [...data.files.dataset_files],
+                    set: (datasetFiles) => {
+                        if (!Array.isArray(datasetFiles)) {
+                            throw new ArgumentError(
+                                i18next.t('Value must be an array. But ${typeof (datasetFiles)} has been got.', {typeofdatasetFiles: `${typeof (datasetFiles)}`}),
+                            );
+                        }
+
+                        for (const value of datasetFiles) {
+                            if (typeof (value) !== 'number') {
+                                throw new ArgumentError(
+                                    i18next.t('Array values must be a number. But ${typeof (value)} has been got.', {typeofvalue: `${typeof (value)}`}),
+                                );
+                            }
+                        }
+
+                        Array.prototype.push.apply(data.files.dataset_files, datasetFiles);
                     },
                 },
                 /**
@@ -1748,6 +1777,7 @@
             server_files: this.serverFiles,
             remote_files: this.remoteFiles,
             platform_files: this.platformFiles,
+            dataset_ids: this.datasetFiles,
             image_quality: this.imageQuality,
             use_zip_chunks: this.useZipChunks,
             use_cache: this.useCache,

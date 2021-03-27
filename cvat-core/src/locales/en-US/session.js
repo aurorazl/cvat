@@ -10,7 +10,7 @@ module.exports = {
     'Each array value must be an instance of Label. ': 'Each array value must be an instance of Label. ',
     '${typeof (label)} was found': '{{typeoflabel}} was found',
     'Value must be an array. But ${typeof (serverFiles)} has been got.': 'Value must be an array. But {{typeofserverFiles}} has been got.',
-    'Array values must be a string. But ${typeof (value)} has been got.': 'Array values must be a string. But {{typeofvalue}} has been got.',
+    'Array values must be a number. But ${typeof (value)} has been got.': 'Array values must be a number. But {{typeofvalue}} has been got.',
     'Value must be an array. But ${typeof (clientFiles)} has been got.': 'Value must be an array. But {{typeofclientFiles}} has been got.',
     'Array values must be a File. But ${value.constructor.name} has been got.': 'Array values must be a File. But {{valueconstructorname}} has been got.',
     'Value must be an array. But ${typeof (remoteFiles)} has been got.': 'Value must be an array. But {{typeofremoteFiles}} has been got.',

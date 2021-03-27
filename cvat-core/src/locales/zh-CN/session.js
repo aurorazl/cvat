@@ -10,7 +10,7 @@ module.exports = {
     'Each array value must be an instance of Label. ': '每个数组值必须是标签实例。',
     '${typeof (label)} was found': '当前是{{typeoflabel}}',
     'Value must be an array. But ${typeof (serverFiles)} has been got.': '值必须是数组. 当前是{{typeofserverFiles}}。',
-    'Array values must be a string. But ${typeof (value)} has been got.': '数组值必须是字符串. 当前是{{typeofvalue}}',
+    'Array values must be a number. But ${typeof (value)} has been got.': '数组值必须是数值. 当前是{{typeofvalue}}',
     'Value must be an array. But ${typeof (clientFiles)} has been got.': '值必须是数组。当前是{{typeofclientFiles}}。',
     'Array values must be a File. But ${value.constructor.name} has been got.': '数组值必须是文件。当前是{{valueconstructorname}}。',
     'Value must be an array. But ${typeof (remoteFiles)} has been got.': '值必须是数组。当前是{{typeofremoteFiles}}。',
