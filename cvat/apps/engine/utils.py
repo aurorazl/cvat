@@ -99,12 +99,11 @@ def get_dataset_path_and_format_and_tag(dataset_id):
     assert "storagePath" in response.json()["data"]
     assert "cvDatasetFormat" in response.json()["data"]
     assert "tag" in response.json()["data"]
-    bind_dataset(dataset_id)
     return response.json()["data"]["storagePath"],response.json()["data"]["cvDatasetFormat"],response.json()["data"]["tag"]
 
 def dataset_tag_had_change(dataset_id,saved_tag):
     rel_path,format,tag = get_dataset_path_and_format_and_tag(dataset_id)
-    if saved_tag and tag != saved_tag:
+    if saved_tag and tag and str(tag) != str(saved_tag):
         slogger.glob.info("dataset {} change from {} to {}".format(dataset_id,saved_tag,tag))
         return True
     return False
