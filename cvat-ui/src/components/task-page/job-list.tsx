@@ -92,18 +92,18 @@ function JobListComponent(props: Props & RouteComponentProps): JSX.Element {
             );
         },
     },
-    {
-        title: t('Annotated'),
-        dataIndex: 'annotated',
-        key: 'annotated',
-        className: 'cvat-text-color',
-    },
-    {
-        title: t('Unannotated'),
-        dataIndex: 'unannotated',
-        key: 'unannotated',
-        className: 'cvat-text-color',
-    },
+    // {
+    //     title: t('Annotated'),
+    //     dataIndex: 'annotated',
+    //     key: 'annotated',
+    //     className: 'cvat-text-color',
+    // },
+    // {
+    //     title: t('Unannotated'),
+    //     dataIndex: 'unannotated',
+    //     key: 'unannotated',
+    //     className: 'cvat-text-color',
+    // },
     {
         title: t('Started on'),
         dataIndex: 'started',
