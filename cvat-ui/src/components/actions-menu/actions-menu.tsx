@@ -21,6 +21,7 @@ import linkConsts from 'help-link-consts';
 interface Props {
     taskID: number;
     taskMode: string;
+    taskStatus: string;
     bugTracker: string;
     loaders: any[];
     dumpers: any[];
@@ -52,6 +53,7 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
     const {
         taskID,
         taskMode,
+        taskStatus,
         bugTracker,
         inferenceIsActive,
         pushActivity,
@@ -154,7 +156,7 @@ export default function ActionsMenuComponent(props: Props): JSX.Element {
                     {t('Automatic annotation')}
                 </Tooltip>
             </Menu.Item> */}
-            <Menu.Item key={Actions.EXPORT_TO_PLATFORM}>{t('Push to AI platform')}</Menu.Item>
+            {taskStatus === 'completed' && <Menu.Item key={Actions.EXPORT_TO_PLATFORM}>{t('Push to AI platform')}</Menu.Item>}
             {/* <hr />
             <Menu.Item key={Actions.DELETE_TASK}>{t('Delete')}</Menu.Item> */}
         </Menu>
