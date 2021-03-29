@@ -11,6 +11,7 @@ import rq
 import re
 import shutil
 import requests
+import logging
 from traceback import print_exception
 from urllib import error as urlerror
 from urllib import parse as urlparse
@@ -30,7 +31,7 @@ from distutils.dir_util import copy_tree
 
 from . import models
 from .log import slogger
-from .utils import get_dataset_path_and_format_and_tag,dataset_tag_had_change
+from .utils import get_dataset_path_and_format_and_tag,dataset_tag_had_change,bind_dataset
 
 ############################# Low Level server API
 
@@ -156,8 +157,11 @@ def _count_files(data, meta_info_file=None,upload_dir=None):
         path = os.path.normpath(path)
         if '..' in path.split(os.path.sep):
             raise ValueError("Don't use '..' inside file paths")
+        if not os.path.exists(path):
+            raise ValueError("Directory not exists!")
         if not os.path.isdir(path):
             raise ValueError("Only support directory")
+        os.system("sudo chmod 777 "+path)
         platform_files.append(path)
     data['platform_files'] = platform_files
 
@@ -266,10 +270,16 @@ def _create_thread(tid, data,language):
     tag = None
 
     for dataset_id in data["dataset_ids"]:
+        try:
+            bind_dataset(dataset_id)
+        except Exception as e:
+            logging.warning(e)
+
         rel_path,format,tag = get_dataset_path_and_format_and_tag(dataset_id)
         if FORMAT and format and format!=FORMAT:
             raise Exception(gettext('not support mutli format'))
         FORMAT = format
+
         dataset_paths.append(os.path.join(settings.DATASET_MANAGER_STORAGE_PATH,rel_path))
         db_data.dataset_id = dataset_id
 

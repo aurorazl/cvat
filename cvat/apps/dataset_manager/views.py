@@ -105,21 +105,25 @@ def export_task_annotations_to_platform(task_id, dst_format=None, server_url=Non
     rel_path,format,tag = get_dataset_path_and_format_and_tag(dataset_id)
     if not dst_format:
         dst_format = format
-    archive_path = export_task(task_id, dst_format, server_url=server_url, save_images=False)
+    save_images = False
+    if str(dst_format).lower().startswith("imagenet"):
+        save_images = True
+    archive_path = export_task(task_id, dst_format, server_url=server_url, save_images=save_images)
     output_directory = os.path.join(settings.DATASET_MANAGER_STORAGE_PATH, rel_path,settings.DATASET_MANAGER_PLATFORM_PUSH_SUB_PATH)
     unzip_archive(archive_path, output_directory)
+
+    archive_path = export_task(task_id, "CVAT for images 1.1", server_url=server_url, save_images=False)
+    output_directory = os.path.join(settings.DATASET_MANAGER_STORAGE_PATH, rel_path,settings.DATASET_MANAGER_PLATFORM_PUSH_SUB_PATH)
+    unzip_archive(archive_path, output_directory)
+    try:
+        os.replace(osp.join(output_directory,"annotations.xml"),osp.join(output_directory,"cvat_annotations.xml"))
+    except Exception:
+        print("rename file failed for cvat")
 
     db_task = Task.objects.get(pk=task_id)
     db_task.data.exported = 1
     db_task.data.save()
     # db_task.save()
-
-
-    data = dm.task.get_task_data(task_id)
-    serializer = LabeledDataSerializer(data=data)
-    if serializer.is_valid(raise_exception=True):
-        with open(os.path.join(output_directory,"platform.json"), 'w') as f:
-            f.write(json.dumps(serializer.data))
 
     query = Label.objects.filter(task=db_task).all()
     for one in query:

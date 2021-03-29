@@ -586,7 +586,7 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=['GET'], serializer_class=RqStatusSerializer)
     def status(self, request, pk):
         db_task = self.get_object() # force to call check_object_permissions
-        if task.dataset_tag_had_change(db_task.data.dataset_id,db_task.data.tag):
+        if db_task.data.dataset_id and task.dataset_tag_had_change(db_task.data.dataset_id,db_task.data.tag):
             # reload
             data = model_to_dict(db_task.data)
             if "dataset_id" in data and data["dataset_id"]:

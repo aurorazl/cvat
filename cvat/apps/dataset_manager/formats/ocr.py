@@ -19,6 +19,9 @@ from .registry import exporter, importer
 from django.utils.translation import gettext
 from django.conf import settings
 from cvat.apps.engine.utils import get_dataset_path_and_format_and_tag
+from cvat.apps.dataset_manager.bindings import CvatTaskDataExtractor
+from datumaro.components.project import Dataset
+from .registry import dm_env
 
 def dump_annotation(directory,task_data):
     attr_index = {}
@@ -65,7 +68,15 @@ def dump_data_as_ocr_format(dst_file, task_data, save_images=False):
         dump_annotation(temp_dir, task_data)
         make_zip_archive(temp_dir, dst_file)
 
-@exporter(name='OCR', ext='ZIP', version='1.0')
-def _export(dst_file, task_data, save_images=False):
+@exporter(name='OCR RECOGNITION', ext='ZIP', version='1.0')
+def _export_re(dst_file, task_data, save_images=False):
     dump_data_as_ocr_format(dst_file, task_data, save_images=save_images)
 
+@exporter(name='OCR DETECTION', ext='ZIP', version='1.0')
+def _export_de(dst_file, task_data, save_images=False):
+    extractor = CvatTaskDataExtractor(task_data, include_images=save_images)
+    extractor = Dataset.from_extractors(extractor)  # apply lazy transforms
+    with TemporaryDirectory() as temp_dir:
+        dm_env.converters.get('coco_instances').convert(extractor,
+                                                        save_dir=temp_dir, save_images=save_images)
+        make_zip_archive(temp_dir, dst_file)
