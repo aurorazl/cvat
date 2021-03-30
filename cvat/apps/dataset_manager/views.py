@@ -5,10 +5,16 @@
 import os
 import os.path as osp
 import tempfile
+import json
 from datetime import timedelta
+
+from urllib import request as urlrequest
+from urllib import parse as urlparse
 
 import django_rq
 from django.utils import timezone
+from rest_framework import settings
+from django.conf import settings as django_settings
 
 import cvat.apps.dataset_manager.task as task
 from cvat.apps.engine.log import slogger
@@ -103,6 +109,7 @@ def export_task_annotations_to_platform(task_id, dst_format=None, server_url=Non
 
     images_path = path.rstrip('/') + "/images"
 
+    # Export annotations dir to storage. Modify dir structs to [images, annotations]
     if os.path.isdir(images_path):
         os.system("ln -s {} {}".format(images_path, os.path.join(save_path, "images")))
         os.system("sudo cp -r {} {}/".format(anno_dir, path))
@@ -112,6 +119,14 @@ def export_task_annotations_to_platform(task_id, dst_format=None, server_url=Non
         os.system("sudo mkdir {}".format(path))
         os.system("sudo mv {} {}".format(tmp_path, path.rstrip('/') + '/images'))
         os.system("sudo cp -r {} {}/".format(anno_dir, path))
+
+    data = json.dumps({"path": path}).encode('utf-8')
+    req = urlrequest.Request("http://{}/ai_arts/api/dataset_management/set_translated".format(django_settings.VIP_MASTER), data=data, headers={'Authorization': 'Bear ' + django_settings.AIART_TOKEN, 'content-type': 'application/json; charset=utf-8'})
+    try:
+        response = urlrequest.urlopen(req)
+        content = json.loads(response.read().decode("utf-8"))
+    except Exception as e:
+        slogger.task[task_id].error("Post set_translated error")
 
     db_task.data.exported = 1
     db_task.data.save()
