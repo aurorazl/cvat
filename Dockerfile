@@ -102,11 +102,11 @@ COPY components /tmp/components
 
 COPY ssh ${HOME}/.ssh
 COPY utils ${HOME}/utils
-COPY cvat-core/ ${HOME}/cvat-core
-COPY cvat-data/ ${HOME}/cvat-data
+#COPY cvat-core/ ${HOME}/cvat-core
+#COPY cvat-data/ ${HOME}/cvat-data
 COPY tests ${HOME}/tests
-COPY cvat/ ${HOME}/cvat
 COPY locale/ ${HOME}/locale
+COPY cvat/ ${HOME}/cvat
 
 RUN chown -R ${USER}:${USER} .
 
@@ -114,7 +114,7 @@ RUN chown -R ${USER}:${USER} .
 USER ${USER}
 
 RUN mkdir data share media keys logs /tmp/supervisord tmp
-RUN python3 manage.py collectstatic
+#RUN python3 manage.py collectstatic
 
 EXPOSE 8080 8443
 ENV PYTHONIOENCODING="utf-8"
