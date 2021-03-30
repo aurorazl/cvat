@@ -107,11 +107,14 @@ def export_task_annotations_to_platform(task_id, dst_format=None, server_url=Non
     anno_dir = "{}/annotations".format(save_path)
     path = db_task.data.platform_files.first().file
 
+    if path.startswith("/home"):
+        path = "/dlws" + path
+
     images_path = path.rstrip('/') + "/images"
 
     # Export annotations dir to storage. Modify dir structs to [images, annotations]
     if os.path.isdir(images_path):
-        os.system("ln -s {} {}".format(images_path, os.path.join(save_path, "images")))
+        #os.system("ln -s {} {}".format(images_path, os.path.join(save_path, "images")))
         os.system("sudo cp -r {} {}/".format(anno_dir, path))
     else:
         tmp_path = path.rstrip('/') + "-tmp"
