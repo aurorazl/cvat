@@ -106,15 +106,16 @@ COPY utils ${HOME}/utils
 #COPY cvat-data/ ${HOME}/cvat-data
 COPY tests ${HOME}/tests
 COPY locale/ ${HOME}/locale
-COPY cvat/ ${HOME}/cvat
+COPY cvat/apps/documentation ${HOME}/cvat/apps/documentation
 
 RUN chown -R ${USER}:${USER} .
 
 # RUN all commands below as 'django' user
 USER ${USER}
-
 RUN mkdir data share media keys logs /tmp/supervisord tmp
-#RUN python3 manage.py collectstatic
+RUN python3 manage.py collectstatic
+
+COPY cvat/ ${HOME}/cvat
 
 EXPOSE 8080 8443
 ENV PYTHONIOENCODING="utf-8"
