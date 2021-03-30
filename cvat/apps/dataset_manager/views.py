@@ -98,8 +98,21 @@ def export_task_annotations_to_platform(task_id, dst_format=None, server_url=Non
     save_path = os.path.join(db_task.data.get_export_to_platform_dirname(),"format_{}".format(dst_format.lower().split(" ")[0]))
     unzip_archive(path, save_path)
     os.system("cp {}/annotations/instances_default.json {}/annotations/instance.json".format(save_path, save_path))
+    anno_dir = "{}/annotations".format(save_path)
     path = db_task.data.platform_files.first().file
-    os.system("ln -s {} {}".format(path, os.path.join(save_path, "images")))
+
+    images_path = path.rstrip('/') + "/images"
+
+    if os.path.isdir(images_path):
+        os.system("ln -s {} {}".format(images_path, os.path.join(save_path, "images")))
+        os.system("sudo cp -r {} {}/".format(anno_dir, path))
+    else:
+        tmp_path = path.rstrip('/') + "-tmp"
+        os.system("sudo mv {} {}".format(path.rstrip('/'), tmp_path))
+        os.system("sudo mkdir {}".format(path))
+        os.system("sudo mv {} {}".format(tmp_path, path.rstrip('/') + '/images'))
+        os.system("sudo cp -r {} {}/".format(anno_dir, path))
+
     db_task.data.exported = 1
     db_task.data.save()
     db_task.save()
