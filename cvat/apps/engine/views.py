@@ -573,6 +573,7 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
             else:
                 data = dm.task.get_task_data(pk)
                 slogger.task[pk].info("export platform {}".format(data), exc_info=True)
+
             return Response(status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(method='get', operation_summary='When task is being created the method returns information about a status of the creation process')
