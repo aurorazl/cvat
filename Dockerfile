@@ -107,13 +107,12 @@ COPY utils ${HOME}/utils
 COPY tests ${HOME}/tests
 COPY locale/ ${HOME}/locale
 COPY cvat ${HOME}/cvat
+RUN python3 manage.py collectstatic
 
-#RUN chown -R ${USER}:${USER} .
-
+RUN chown ${USER}:${USER} .
 # RUN all commands below as 'django' user
 USER ${USER}
 RUN mkdir data share media keys logs /tmp/supervisord tmp
-RUN python3 manage.py collectstatic
 
 EXPOSE 8080 8443
 ENV PYTHONIOENCODING="utf-8"
