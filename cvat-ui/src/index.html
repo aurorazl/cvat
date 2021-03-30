@@ -21,5 +21,19 @@
     <body>
         <div id="root"></div>
         <div id="layout-grid"></div>
+        <script type="text/javascript">
+            window.onload = function () {
+                var lang = window.localStorage.getItem('language');
+                if (lang) {
+                    document.title = lang === "zh-CN" ? '依瞳数据标注平台' : 'Apulis Data Annotation Platform';
+                    return;
+                }
+                var arr, reg = new RegExp("(^|)language=([^;]*)(;|$)");
+                lang = (arr = document.cookie.match(reg)) ? unescape(arr[2]) : null;
+                if (lang) {
+                    document.title = lang === "zh-CN" ? '依瞳数据标注平台' : 'Apulis Data Annotation Platform';
+                }
+            }
+        </script>
     </body>
 </html>
