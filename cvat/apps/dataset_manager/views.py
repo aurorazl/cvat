@@ -105,8 +105,9 @@ def export_task_annotations_to_platform(task_id, dst_format=None, server_url=Non
     unzip_archive(path, save_path)
     os.system("cp {}/annotations/instances_default.json {}/annotations/instance.json".format(save_path, save_path))
     anno_dir = "{}/annotations".format(save_path)
-    path = db_task.data.platform_files.first().file
+    storaged_path = db_task.data.platform_files.first().file # 数据库中存的位置
 
+    path = storaged_path # cvat容器内存放位置
     if path.startswith("/home"):
         path = "/dlws" + path
 
@@ -123,7 +124,7 @@ def export_task_annotations_to_platform(task_id, dst_format=None, server_url=Non
         os.system("sudo mv {} {}".format(tmp_path, path.rstrip('/') + '/images'))
         os.system("sudo cp -r {} {}/".format(anno_dir, path))
 
-    data = json.dumps({"path": path}).encode('utf-8')
+    data = json.dumps({"path": storaged_path}).encode('utf-8') # 使用数据库存的path更新数据集状态
     req = urlrequest.Request("http://{}/ai_arts/api/dataset_management/set_translated".format(django_settings.VIP_MASTER), data=data, headers={'Authorization': 'Bear ' + django_settings.AIART_TOKEN, 'content-type': 'application/json; charset=utf-8'})
     try:
         response = urlrequest.urlopen(req)
